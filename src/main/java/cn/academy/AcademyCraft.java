@@ -32,26 +32,29 @@ import java.util.Map.Entry;
 
 /**
  * Academy Craft Mod Main Class
- * 
- * @author acaly, WeathFolD, KS
  *
+ * @author acaly, WeathFolD, KS
  */
-@Mod(modid = "academy", name = "AcademyCraft", version = AcademyCraft.VERSION,
-     dependencies = "required-after:lambdalib2@@LAMBDA_LIB_VERSION@")
-@RegistryMod(rootPackage = "cn.academy.", resourceDomain = "academy")
+@Mod(
+        modid = Tags.MOD_ID,
+        name = Tags.MOD_NAME,
+        version = Tags.VERSION,
+        dependencies = "required-after:lambdalib2@[0.2.0,);"
+)
+@RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
 public class AcademyCraft {
 
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
 
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = Tags.VERSION;
 
     public static final boolean DEBUG_MODE = VERSION.startsWith("@");
 
-    public static final Logger log = LogManager.getLogger("AcademyCraft");
+    public static final Logger log = LogManager.getLogger(Tags.MOD_NAME);
 
-    static final String[] scripts = { "generic", "ability", "electromaster", "teleporter", "meltdowner",
-            "generic_skills" };
+    static final String[] scripts = {"generic", "ability", "electromaster", "teleporter", "meltdowner",
+            "generic_skills"};
 
     public static Configuration config;
 
@@ -76,8 +79,8 @@ public class AcademyCraft {
         recipes = new RecipeRegistry();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
-        Boolean analyticFlag = config.getBoolean("analysis","generic",true,"switch for analytic system");
-        if(analyticFlag){
+        Boolean analyticFlag = config.getBoolean("analysis", "generic", true, "switch for analytic system");
+        if (analyticFlag) {
             analyticDataListener = AnalyticDataListener.instance;
         }
     }
@@ -118,7 +121,7 @@ public class AcademyCraft {
         recipes = null; // Release and have fun GC
         config.save();
     }
-    
+
     @SideOnly(Side.CLIENT)
     @EventHandler
     public void postInit2(FMLPostInitializationEvent event) {
@@ -136,14 +139,14 @@ public class AcademyCraft {
 
     @SubscribeEvent
     public void onClientDisconnectionFromServer(
-        ClientDisconnectionFromServerEvent e)
-    {
+            ClientDisconnectionFromServerEvent e) {
         config.save();
     }
 
     public static void addToRecipe(Class klass) {
         CustomMappingHelper.addMapping(recipes, klass);
     }
+
     /**
      * Simply a fast route to print debug message.
      */

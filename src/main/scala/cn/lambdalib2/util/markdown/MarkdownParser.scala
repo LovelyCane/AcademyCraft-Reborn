@@ -40,8 +40,10 @@ object MarkdownParser {
   case class Tag(name: String, attrs: Map[String, String]) extends Instruction
   case class Text(text: String, attrs: Set[Attribute]) extends Instruction
 
-  def accept(content: String, target: MarkdownRenderer) = {
-    content.lines foreach (ln => parseLine(ln)(target))
+  def accept(content: String, target: MarkdownRenderer): Unit = {
+    content.linesIterator.foreach { ln =>
+      parseLine(ln)(target)
+    }
   }
 
   private def parseLine(ln : String)(implicit target: MarkdownRenderer) = {

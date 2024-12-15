@@ -32,6 +32,10 @@ public class EntityMarker extends EntityAdvanced
     }
 
     @Override
+    protected void entityInit() {
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if (target != null)

@@ -1,54 +1,51 @@
 package cn.academy.core.client.ui
 
-import java.util.function.Consumer
-
 import cn.academy.Resources
 import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.util.Color
+
+import java.util.function.Consumer
 //import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.energy.api.block.{IWirelessMatrix, IWirelessNode, IWirelessTile, IWirelessUser}
 //import cn.academy.event.node.UnlinkUserEvent
-import cn.academy.event.energy.{LinkNodeEvent, LinkUserEvent, UnlinkNodeEvent, UnlinkUserEvent}
 import cn.academy.energy.impl.{NodeConn, WirelessNet}
+import cn.academy.event.energy.{LinkNodeEvent, LinkUserEvent, UnlinkNodeEvent, UnlinkUserEvent}
 import cn.academy.util.LocalHelper
-import cn.lambdalib2.cgui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
-import cn.lambdalib2.cgui.{CGuiScreenContainer, Widget}
+import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.component.ProgressBar.Direction
-import cn.lambdalib2.cgui.component._
+import cn.lambdalib2.cgui.component.TextBox.{ChangeContentEvent, ConfirmInputEvent}
 import cn.lambdalib2.cgui.component.Transform.{HeightAlign, WidthAlign}
+import cn.lambdalib2.cgui.component._
 import cn.lambdalib2.cgui.event.{FrameEvent, GainFocusEvent, LeftClickEvent, LostFocusEvent}
 import cn.lambdalib2.cgui.loader.CGUIDocument
-import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
-import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
-import cn.lambdalib2.s11n.network.NetworkS11nType
-import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util._
+import cn.lambdalib2.cgui.{CGuiScreenContainer, Widget}
 import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraft.inventory.{Container, Slot}
+import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n, NetworkS11nType}
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable, SerializeStrategy}
+import cn.lambdalib2.util._
+import net.minecraft.inventory.Container
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
-import cn.lambdalib2.cgui.ScalaCGUI._
-import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
-
-import scala.collection.JavaConversions._
+import net.minecraftforge.fml.relauncher.Side
 import org.lwjgl.opengl.GL11._
 
-import collection.mutable
+import scala.collection.JavaConversions._
+import scala.collection.mutable
 
 private object Generic_ {
   def readxml(loc: String) = CGUIDocument.read(new ResourceLocation(s"academy:guis/rework/$loc.xml"))
 }
 
-import Generic_._
 import cn.academy.Resources.newTextBox
+import cn.academy.core.client.ui.Generic_._
 
 object TechUI {
 
@@ -99,7 +96,7 @@ object TechUI {
       for {
         i <- 0 until 3
         j <- 0 until 3
-      } quad(i, j, xs(i), ys(j), xs(i+1), ys(j+1))
+      } quad(i, j, xs(i), ys(j), xs(i + 1), ys(j + 1))
 
       glEnd()
 
@@ -107,8 +104,8 @@ object TechUI {
       RenderUtils.loadTexture(lineTex)
 
       val mrg = 3.2
-      HudUtils.rect(-mrg, -8.6, w + mrg*2, 12)
-      HudUtils.rect(-mrg, h - 2, w + mrg*2, 8)
+      HudUtils.rect(-mrg, -8.6, w + mrg * 2, 12)
+      HudUtils.rect(-mrg, h - 2, w + mrg * 2, 8)
     })
 
   }
@@ -134,10 +131,10 @@ object TechUI {
 
 
   /**
-    * Creates a tech UI with specified pages.
-    *
-    * @param pages The pages of this UI. Must not be empty.
-    */
+   * Creates a tech UI with specified pages.
+   *
+   * @param pages The pages of this UI. Must not be empty.
+   */
   def apply(pages: Page*) = new TechUIWidget(pages: _*)
 
   def breathe(widget: Widget) = {
@@ -151,8 +148,8 @@ object TechUI {
   }
 
   /**
-    * A global alpha value generator for producing uniform breathing effect.
-    */
+   * A global alpha value generator for producing uniform breathing effect.
+   */
   def breatheAlpha = {
     val time = GameTimer.getTime
     val sin = (1 + math.sin(time / 0.8)) * 0.5
@@ -242,11 +239,13 @@ object TechUI {
 
       this.listens[FrameEvent](() => {
         val dt = math.min(GameTimer.getTime - lastFrameTime, 0.5)
+
         def move(fr: Float, to: Float): Float = {
           val max: Float = dt.toFloat * 500
           val delta = to - fr
           fr + math.min(max, math.abs(delta)) * math.signum(delta)
         }
+
         transform.width = move(transform.width, expectWidth)
         transform.height = move(transform.height, expectHeight)
 
@@ -261,7 +260,7 @@ object TechUI {
 
       def histogram(elems: HistElement*) = {
         val widget = new Widget().size(210, 210).scale(0.4f)
-            .addComponent(blend(new DrawTexture(histogramTex)))
+          .addComponent(blend(new DrawTexture(histogramTex)))
 
         elems.zipWithIndex.foreach { case (elem, idx) => {
           val bar = new Widget().size(16, 120).pos(56 + idx * 40, 78)
@@ -275,7 +274,8 @@ object TechUI {
           bar :+ progress
 
           widget :+ bar
-        }}
+        }
+        }
 
         blank(-30)
         element(widget)
@@ -315,7 +315,7 @@ object TechUI {
         element(widget)
       }
 
-      def property[T](key: String, value: =>T,
+      def property[T](key: String, value: => T,
                       editCallback: String => Any = null,
                       password: Boolean = false,
                       colorChange: Boolean = true,
@@ -435,19 +435,26 @@ object TechUI {
         private val us = mutable.ArrayBuffer[T]()
 
         def add(obj: T) = us += obj
+
         def clear() = us.clear()
+
         def apply(alpha: Float): Unit = us foreach (x => apply(x, alpha))
+
         def apply(obj: T, alpha: Float): Unit
       }
+
       private implicit object DrawTexUpdater extends Updater[DrawTexture] {
         override def apply(obj: DrawTexture, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
       }
+
       private implicit object TextBoxUpdater extends Updater[TextBox] {
         override def apply(obj: TextBox, alpha: Float) = obj.option.color.setAlpha(Colors.f2i(alpha))
       }
+
       private implicit object ProgressBarUpdater extends Updater[ProgressBar] {
         override def apply(obj: ProgressBar, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
       }
+
       private val uas = List(DrawTexUpdater, TextBoxUpdater, ProgressBarUpdater)
 
       private def blend[T](obj: T)(implicit ua: Updater[T]) = {
@@ -470,8 +477,9 @@ object TechUI {
     def shouldDisplayInventory(page: Page): Boolean = page.id == "inv"
 
     override def isSlotActive = shouldDisplayInventory(main.currentPage)
-  }
 
+    override protected def drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) = ???
+  }
 }
 
 @NetworkS11nType
@@ -493,7 +501,7 @@ private class NodeResult {
 }
 
 @NetworkS11nType
-@SerializeStrategy(strategy=ExposeStrategy.ALL)
+@SerializeStrategy(strategy = ExposeStrategy.ALL)
 private class MatrixData {
   var x: Int = 0
   var y: Int = 0
@@ -508,7 +516,7 @@ private class MatrixData {
 }
 
 @NetworkS11nType
-@SerializeStrategy(strategy=ExposeStrategy.ALL)
+@SerializeStrategy(strategy = ExposeStrategy.ALL)
 private class NodeData {
   var x: Int = 0
   var y: Int = 0
@@ -548,6 +556,7 @@ object WirelessPage {
 
   trait AvailTarget extends Target {
     def connect(pass: String)
+
     def encrypted: Boolean
   }
 
@@ -621,16 +630,17 @@ object WirelessPage {
     val world = node.getWorld
 
     def rebuild(): Unit = {
-      def newFuture() = Future.create(new Consumer[Boolean]{
+      def newFuture() = Future.create(new Consumer[Boolean] {
         override def accept(b: Boolean) = rebuild()
       })
 
-      send(MSG_FIND_NETWORKS, node, Future.create(new Consumer[NodeResult]{
+      send(MSG_FIND_NETWORKS, node, Future.create(new Consumer[NodeResult] {
         override def accept(data: NodeResult) = {
           val linked = Option(data.linked).map(matrix => new LinkedTarget {
             override def disconnect() = {
               send(MSG_NODE_DISCONNECT, node, newFuture())
             }
+
             override def name = matrix.ssid
           })
           val avail = data.avail
@@ -641,7 +651,9 @@ object WirelessPage {
                   override def connect(pass: String): Unit = {
                     send(MSG_NODE_CONNECT, node, tile, pass, newFuture())
                   }
+
                   override def name: String = matrix.ssid
+
                   override def encrypted = matrix.encrypted
                 }
             }
@@ -669,18 +681,21 @@ object WirelessPage {
       send(MSG_FIND_NODES, user, Future.create2((result: UserResult) => {
         val linked = Option(result.linked).flatMap(_.tile(world)).map(node => new LinkedTarget {
           override def disconnect() = send(MSG_USER_DISCONNECT, user, newFuture())
+
           override def name: String = node.getNodeName
         })
 
         val avail = result.avail.toList.map(a => (a.tile(world), a.encrypted))
           .flatMap {
-          case (Some(node), enc) =>
-            Some[AvailTarget](new AvailTarget {
-              override def connect(pass: String): Unit = send(MSG_USER_CONNECT, user, node, pass, newFuture())
-              override def name: String = node.getNodeName
-              override def encrypted = enc
-            })
-          case _ => None
+            case (Some(node), enc) =>
+              Some[AvailTarget](new AvailTarget {
+                override def connect(pass: String): Unit = send(MSG_USER_CONNECT, user, node, pass, newFuture())
+
+                override def name: String = node.getNodeName
+
+                override def encrypted = enc
+              })
+            case _ => None
           }
 
         rebuildPage(ret.window, linked, avail)
@@ -702,6 +717,7 @@ object WirelessPage {
     val wlist = wirelessPanel.getWidget("zone_elementlist")
 
     def elist = wlist.getComponent(classOf[ElementList])
+
     wirelessPanel.getWidget("btn_arrowup").listens[LeftClickEvent](() => elist.progressLast())
     wirelessPanel.getWidget("btn_arrowdown").listens[LeftClickEvent](() => elist.progressNext())
 
@@ -722,6 +738,7 @@ object WirelessPage {
 }
 
 object WirelessNetDelegate {
+
   import WirelessPage._
 
   @StateEventCallback
@@ -729,7 +746,7 @@ object WirelessNetDelegate {
     NetworkS11n.addDirectInstance(WirelessNetDelegate)
   }
 
-  @Listener(channel=MSG_FIND_NODES, side=Array(Side.SERVER))
+  @Listener(channel = MSG_FIND_NODES, side = Array(Side.SERVER))
   private def hFindNodes(user: TileUser, fut: Future[UserResult]) = {
     def cvt(conn: NodeConn) = {
       val tile = conn.getNode.asInstanceOf[TileNode]
@@ -755,7 +772,7 @@ object WirelessNetDelegate {
     fut.sendResult(data)
   }
 
-  @Listener(channel=MSG_FIND_NETWORKS, side=Array(Side.SERVER))
+  @Listener(channel = MSG_FIND_NETWORKS, side = Array(Side.SERVER))
   private def hFindNetworks(node: TileNode, fut: Future[NodeResult]) = {
     val linked = Option(WirelessHelper.getWirelessNet(node))
 
@@ -773,8 +790,8 @@ object WirelessNetDelegate {
     }
 
     val networks = WirelessHelper.getNetInRange(node.getWorld,
-      node.getPos.getX, node.getPos.getY, node.getPos.getZ,
-      node.getRange, 20)
+        node.getPos.getX, node.getPos.getY, node.getPos.getZ,
+        node.getRange, 20)
       .filter(!linked.contains(_))
 
     val data = new NodeResult
@@ -785,18 +802,18 @@ object WirelessNetDelegate {
     fut.sendResult(data)
   }
 
-  @Listener(channel=MSG_USER_CONNECT, side=Array(Side.SERVER))
+  @Listener(channel = MSG_USER_CONNECT, side = Array(Side.SERVER))
   private def hUserConnect(user: TileUser,
-                       target: TileNode,
-                       password: String,
-                       fut: Future[Boolean]) = {
+                           target: TileNode,
+                           password: String,
+                           fut: Future[Boolean]) = {
     val evt = new LinkUserEvent(user, target, password)
     val result = !MinecraftForge.EVENT_BUS.post(evt)
 
     fut.sendResult(result)
   }
 
-  @Listener(channel=MSG_USER_DISCONNECT, side=Array(Side.SERVER))
+  @Listener(channel = MSG_USER_DISCONNECT, side = Array(Side.SERVER))
   private def hUserDisconnect(user: TileBase, fut: Future[Boolean]) = {
     val evt = new UnlinkUserEvent(user)
     val result = !MinecraftForge.EVENT_BUS.post(evt)
@@ -804,13 +821,13 @@ object WirelessNetDelegate {
     fut.sendResult(result)
   }
 
-  @Listener(channel=MSG_NODE_CONNECT, side=Array(Side.SERVER))
+  @Listener(channel = MSG_NODE_CONNECT, side = Array(Side.SERVER))
   private def hNodeConnect(node: TileNode, mat: TileMatrix, pwd: String, fut: Future[Boolean]) = {
     val result = !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, mat, pwd))
     fut.sendResult(result)
   }
 
-  @Listener(channel=MSG_NODE_DISCONNECT, side=Array(Side.SERVER))
+  @Listener(channel = MSG_NODE_DISCONNECT, side = Array(Side.SERVER))
   private def hNodeDisconnect(node: TileNode, fut: Future[Boolean]) = {
     MinecraftForge.EVENT_BUS.post(new UnlinkNodeEvent(node))
     fut.sendResult(true)

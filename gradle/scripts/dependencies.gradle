@@ -1,0 +1,80 @@
+apply from: 'gradle/scripts/helpers.gradle'
+
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name 'CurseMaven'
+                url 'https://cursemaven.com'
+            }
+        }
+        filter {
+            includeGroup 'curse.maven'
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name 'Modrinth'
+                url 'https://api.modrinth.com/maven'
+            }
+        }
+        filter {
+            includeGroup 'maven.modrinth'
+        }
+    }
+    mavenCentral()
+    mavenLocal()
+    maven {
+        name = "chickenbones"
+        url = "https://chickenbones.net/maven"
+    }
+    maven {
+        name = "private"
+        url = "https://jitpack.io"
+    }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        // The main host of CraftTweaker related libs
+        name = "jared"
+        url = "https://maven.blamejared.com"
+    }
+    maven {
+        name = "ic2"
+        url = "https://maven2.ic2.player.to/"
+    }
+    maven {
+        name 'CleanroomMC Maven'
+        url 'https://maven.cleanroommc.com'
+    }
+    maven {
+        name "outlandsReleases"
+        url "https://maven.outlands.top/releases"
+    }
+}
+
+dependencies {
+    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
+
+    implementation "com.github.LambdaInnovation:LambdaLib2:0.2.0"
+
+    implementation "codechicken:CodeChickenLib:1.12.2-3.2.3.358:universal"
+    implementation "mezz.jei:jei_1.12.2:4.16.1.302"
+    implementation "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
+    implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.685"
+    implementation "CraftTweaker2:CraftTweaker2-API:4.1.20.685"
+    implementation "CraftTweaker2:ZenScript:4.1.20.685"
+    implementation "net.industrial-craft:industrialcraft-2:2.8.222-ex112"
+
+    // i dkn why,but it work :) (may is compiler?)
+    implementation 'org.scala-lang:scala-compiler:2.11.1'
+    implementation 'org.scala-lang:scala-library:2.11.1'
+    implementation 'com.typesafe:config:1.4.3'
+    implementation 'org.typelevel:cats-core_2.11:2.0.0'
+    implementation 'org.typelevel:cats-kernel_2.11:2.0.0'
+    implementation 'org.typelevel:cats-free_2.11:2.0.0'
+}

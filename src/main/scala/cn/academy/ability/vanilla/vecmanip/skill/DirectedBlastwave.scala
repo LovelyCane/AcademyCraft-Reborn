@@ -2,18 +2,16 @@ package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
 import cn.academy.ability.context._
-import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
 import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
+import cn.academy.client.sound.ACSounds
 import cn.academy.datapart.HandRenderOverrideData
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import cn.lambdalib2.vis.animation.presets.CompTransformAnim
-import jdk.nashorn.internal.ir.BlockStatement
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
@@ -29,20 +27,21 @@ object DirectedBlastwave extends Skill("dir_blast", 3) {
 }
 
 private object BlastwaveContext {
-  final val MSG_EFFECT  = "effect"
+  final val MSG_EFFECT = "effect"
   final val MSG_PERFORM = "perform"
   final val MSG_ATTACK_ENTITY = "entity"
   final val MSG_GENERATE_EFFECT_BLOCKS = "effect_blocks"
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import BlastwaveContext._
+import cn.academy.ability.vanilla.vecmanip.skill.BlastwaveContext._
 import cn.academy.client.render.util.AnimPresets._
-import cn.academy.ability.AbilityPipeline._
 import cn.lambdalib2.util.RandUtils._
+
 import scala.collection.JavaConversions._
 
 class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) with IConsumptionProvider {
+
   import cn.lambdalib2.util.VecUtils._
 
   val MIN_TICKS = 6
@@ -55,7 +54,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   var punched = false
   var punchTicker = 0
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_KEYUP, side = Array(Side.CLIENT))
   def l_keyUp() = {
     if (ticker > MIN_TICKS && ticker < MAX_ACCEPTED_TICKS) {
       sendToServer(MSG_PERFORM, ticker.asInstanceOf[AnyRef])
@@ -64,10 +63,10 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     }
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_KEYABORT, side = Array(Side.CLIENT))
   def l_keyAbort() = terminate()
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_TICK, side = Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     ticker += 1
     if (ticker >= MAX_TOLERANT_TICKS) {
@@ -81,7 +80,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     }
   }
 
-  @Listener(channel=MSG_PERFORM, side=Array(Side.SERVER))
+  @Listener(channel = MSG_PERFORM, side = Array(Side.SERVER))
   def s_perform(ticks: Int) = {
     if (tryConsume()) {
       val trace: RayTraceResult = Raytrace.traceLiving(player, 4, EntitySelectors.living)
@@ -89,7 +88,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
         if (trace == null) {
           add(player.getPositionVector, multiply(player.getLookVec, 4))
         } else if (trace.typeOfHit == RayTraceResult.Type.BLOCK) {
-            new Vec3d(trace.getBlockPos.getX, trace.getBlockPos.getY, trace.getBlockPos.getZ)
+          new Vec3d(trace.getBlockPos.getX, trace.getBlockPos.getY, trace.getBlockPos.getZ)
         } else if (trace.typeOfHit == RayTraceResult.Type.ENTITY) {
           entityHeadPos(trace.entityHit)
         } else {
@@ -107,7 +106,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
         position.x, position.y, position.z,
         3, EntitySelectors.exclude(player)).toList
 
-      entities.foreach (entity => {
+      entities.foreach(entity => {
         ctx.attack(entity, damage)
         knockback(entity)
 
@@ -121,6 +120,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
       // Destroy blocks around
       {
         def ran(x: Int) = (x - 3) until (x + 3)
+
         val (x, y, z) = (math.round(position.x).floor.toInt, math.round(position.y).floor.toInt, math.round(position.z).floor.toInt)
 
         for {i <- ran(x)
@@ -134,11 +134,10 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
             val block = state.getBlock
             val meta = block.getMetaFromState(state)
             val hardness = block.getBlockHardness(state, world, null)
-            if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp==1f)
-            {
+            if (0 <= hardness && hardness <= breakHardness && ctx.getSkillExp == 1f) {
               if (ctx.canBreakBlock(player.world, bPos)) { //Can place
-                val itemStack=new ItemStack(block)
-                world.spawnEntity(new EntityItem(world,i,j,k,itemStack))
+                val itemStack = new ItemStack(block)
+                world.spawnEntity(new EntityItem(world, i, j, k, itemStack))
                 world.setBlockToAir(bPos)
               }
             }
@@ -157,7 +156,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
         }
       }
 
-      sendToClient(MSG_GENERATE_EFFECT_BLOCKS,new Vec3d(position.x, position.y, position.z))
+      sendToClient(MSG_GENERATE_EFFECT_BLOCKS, new Vec3d(position.x, position.y, position.z))
 
       ctx.addSkillExp(if (effective) 0.0025f else 0.0012f)
 
@@ -166,12 +165,12 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     }
   }
 
-  @Listener(channel=MSG_ATTACK_ENTITY, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_ATTACK_ENTITY, side = Array(Side.CLIENT))
   def c_effect(entities: Array[Entity]) = {
     entities.foreach(knockback)
   }
 
-  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_PERFORM, side = Array(Side.CLIENT))
   def c_perform(pos: Vec3d) = {
     sendToSelf(MSG_EFFECT, new Vec3d(pos.x, pos.y, pos.z))
 
@@ -205,7 +204,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   private def knockback(targ: Entity) = {
     var delta = subtract(entityHeadPos(player), entityHeadPos(targ))
     delta = delta.normalize()
-    delta = new Vec3d(delta.x, delta.y -0.4f, delta.z)
+    delta = new Vec3d(delta.x, delta.y - 0.4f, delta.z)
     delta = delta.normalize()
 
     targ.setPosition(targ.posX, targ.posY + 0.1, targ.posZ)
@@ -224,7 +223,7 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
 
   var timeProvider: () => Double = null
 
-  @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_EFFECT, side = Array(Side.CLIENT))
   private def effectAt(pos: Vec3d) = {
     ACSounds.playClient(world, pos.x, pos.y, pos.z, "vecmanip.directed_blast", SoundCategory.AMBIENT, 0.5f, 1.0f)
 
@@ -243,7 +242,7 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
 
 
   @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_MADEALIVE, side = Array(Side.CLIENT))
   def l_handEffectStart() = if (isLocal) {
     anim = createPrepareAnim()
 
@@ -264,13 +263,13 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
   }
 
   @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_TERMINATED, side = Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
     HandRenderOverrideData.get(player).stopInterrupt(handEffect)
   }
 
   @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_PERFORM, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_PERFORM, side = Array(Side.CLIENT))
   def l_effect() = if (isLocal) {
     val init = GameTimer.getTime
     timeProvider = () => {
