@@ -12,7 +12,7 @@ object GuiPhaseGen {
     val inventoryPage = InventoryPage("phasegen")
     val wirelessPage = WirelessPage.userPage(tile)
 
-    val ret = new ContainerUI(container,  inventoryPage, wirelessPage)
+    val ret = new ContainerUI(container)
     ret.infoPage.histogram(
       TechUI.histEnergy(() => tile.getEnergy, tile.bufferSize),
       TechUI.HistElement("IF", Colors.fromHexColor(0xffb983fb),

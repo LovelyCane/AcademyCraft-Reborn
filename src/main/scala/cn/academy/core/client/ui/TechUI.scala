@@ -224,6 +224,8 @@ object TechUI {
     xSize += 31
     ySize += 20
 
+    // idk why, but i need it
+
     class InfoArea extends Widget {
       this :+ new BlendQuad()
 
@@ -477,8 +479,6 @@ object TechUI {
     def shouldDisplayInventory(page: Page): Boolean = page.id == "inv"
 
     override def isSlotActive = shouldDisplayInventory(main.currentPage)
-
-    override protected def drawGuiContainerBackgroundLayer(partialTicks: Float, mouseX: Int, mouseY: Int) = ???
   }
 }
 

@@ -8,7 +8,7 @@ import com.typesafe.config.ConfigFactory;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -21,8 +21,8 @@ import java.io.Reader;
 import java.nio.file.Files;
 
 public final class ACConfig {
-
-    private ACConfig() {}
+    private ACConfig() {
+    }
 
     private static Config config;
 
@@ -56,20 +56,18 @@ public final class ACConfig {
         }
     }
 
-    public static void updateConfig(Config cfg)
-    {
-        if(cfg==null)
+    public static void updateConfig(Config cfg) {
+        if (cfg == null)
             __init();
         else
-            config=cfg;
+            config = cfg;
     }
 
 
     @StateEventCallback
     private static void __onInit(FMLInitializationEvent event) {
         instance();
-
-        FMLCommonHandler.instance().bus().register(new LoginEvents());
+        MinecraftForge.EVENT_BUS.register(new LoginEvents());
     }
 
     public static Config instance() {
@@ -100,7 +98,7 @@ public final class ACConfig {
                 evt.player.sendMessage(new TextComponentTranslation("ac.data_config_parse_fail"));
                 evt.player.sendMessage(new TextComponentTranslation(err));
             }
-            if(!evt.player.world.isRemote)
+            if (!evt.player.world.isRemote)
                 NetworkManager.sendTo(config, (EntityPlayerMP) evt.player);
         }
     }

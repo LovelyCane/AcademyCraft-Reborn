@@ -31,6 +31,7 @@ Development
 ===========
 
 Soon :)
+- Never use Scala :(
 
 ## Build
 

@@ -2,7 +2,6 @@ package cn.academy.ability.api
 
 // Global extenders for scala ability programming.
 object AbilityAPIExt {
-
   // Context message IDs
   // Note: Scala treats java's string iteral as non-constants, so we have to awkwardly repeat message id here. Shame!
 
@@ -14,5 +13,4 @@ object AbilityAPIExt {
   final val MSG_KEYUP = "keyup"
   final val MSG_KEYABORT = "keyabort"
   final val MSG_KEYTICK = "keytick"
-
 }

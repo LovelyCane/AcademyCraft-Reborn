@@ -1,15 +1,31 @@
 [
-{
-  "modid": "academy",
-  "name": "Academy Craft",
-  "description": "A mod about superability. Become an ESPer and alter your reality in Minecraft!",
-  "version": "${mod_version}",
-  "url": "https://ac.li-dev.cn/",
-  "updateUrl": "",
-  "authorList": ["Lambda Innovation"],
-  "credits": "All the players of the mod, like you",
-  "logoFile": "logo.png",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "academy",
+    "name": "Academy Craft",
+    "description": "A mod about superability. Become an ESPer and alter your reality in Minecraft!",
+    "version": "${mod_version}",
+    "url": "https://ac.li-dev.cn/",
+    "updateUrl": "",
+    "authorList": [
+      "Lambda Innovation"
+    ],
+    "credits": "All the players of the mod, like you",
+    "logoFile": "logo.png",
+    "screenshots": [],
+    "dependencies": []
+  },
+  {
+    "modid": "lambdalib2",
+    "name": "LambdaLib2",
+    "description": "A minecraft modding library.",
+    "version": "0.2.1",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "Lambda Innovation"
+    ],
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]

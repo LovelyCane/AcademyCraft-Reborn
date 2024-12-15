@@ -3,14 +3,15 @@ package cn.academy.energy.client.ui
 import cn.academy.Resources
 import cn.academy.block.container.ContainerWindGenBase
 import cn.academy.block.tileentity.TileWindGenBase
-import cn.academy.core.client.ui.TechUI.{ContainerUI, HistElement}
+import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
-import cn.lambdalib2.cgui.component.{DrawTexture, TextBox}
+import cn.lambdalib2.cgui.component.DrawTexture
 import cn.lambdalib2.cgui.event.FrameEvent
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.util.Colors
 
 object GuiWindGenBase {
+
   import cn.lambdalib2.cgui.ScalaCGUI._
 
   private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_windbase")).getWidget("main")
@@ -56,5 +57,4 @@ object GuiWindGenBase {
 
     ret
   }
-
 }

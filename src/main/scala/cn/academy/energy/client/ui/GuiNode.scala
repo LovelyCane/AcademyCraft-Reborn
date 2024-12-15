@@ -60,7 +60,7 @@ object GuiNode {
 
     val wirelessPage = WirelessPage.nodePage(tile)
 
-    val ret = new ContainerUI(container, invPage, wirelessPage)
+    val ret = new ContainerUI(container)
 
     {
       var load = 1

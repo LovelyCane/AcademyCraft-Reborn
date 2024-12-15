@@ -56,7 +56,7 @@ object GuiMetalFormer {
     val invPage = InventoryPage(invWidget)
     val wirelessPage = WirelessPage.userPage(tile)
 
-    val ret = new ContainerUI(container, invPage, wirelessPage)
+    val ret = new ContainerUI(container)
 
     ret.infoPage.histogram(TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy))
 

@@ -2,19 +2,15 @@ package cn.academy.ability.vanilla.vecmanip.client.effect
 
 import cn.academy.Resources
 import cn.academy.ability.context.Context.Status
-import cn.academy.entity.LocalEntity
 import cn.academy.ability.vanilla.vecmanip.skill.VecAccelContext
-import cn.lambdalib2.registry.StateEventCallback
+import cn.academy.entity.LocalEntity
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.render.legacy.ShaderSimple
 import cn.lambdalib2.util.{MathUtils, RenderUtils, VecUtils}
-import net.minecraft.client.renderer.entity.{Render, RenderManager}
-import net.minecraft.entity.Entity
-import net.minecraft.util.ResourceLocation
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.Vec3d
-import net.minecraftforge.fml.client.registry.RenderingRegistry
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL20._
@@ -38,20 +34,18 @@ class ParabolaEffect(val ctx: VecAccelContext) extends LocalEntity(ctx.player.ge
     }
   }
 
-  override def shouldRenderInPass(pass: Int) = pass == 1
-
+  override def shouldRenderInPass(pass: Int): Boolean = pass == 1
 }
 
 @SideOnly(Side.CLIENT)
 @RegEntityRender(classOf[ParabolaEffect])
 class ParabolaRenderer(m: RenderManager) extends Render[ParabolaEffect](m) {
-
   val texture = Resources.getTexture("effects/glow_line")
 
   val vertices = ArrayBuffer[Vec3d]()
 
-  override def doRender(entity : ParabolaEffect, x : Double, y : Double, z : Double,
-                        partialTicks : Float, wtf : Float): Unit = {
+  override def doRender(entity: ParabolaEffect, x: Double, y: Double, z: Double,
+                        partialTicks: Float, wtf: Float): Unit = {
     if (Minecraft.getMinecraft.gameSettings.thirdPersonView == 0) {
       entity match {
         case eff: ParabolaEffect =>
@@ -122,5 +116,5 @@ class ParabolaRenderer(m: RenderManager) extends Render[ParabolaEffect](m) {
     }
   }
 
-  override def getEntityTexture(entity : ParabolaEffect): ResourceLocation = null
+  override def getEntityTexture(entity: ParabolaEffect): ResourceLocation = null
 }

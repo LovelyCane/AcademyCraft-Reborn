@@ -20,7 +20,7 @@ object GuiImagFusor {
 
     val invPage = InventoryPage(template.copy())
 
-    val ret = new ContainerUI(container, invPage, WirelessPage.userPage(tile))
+    val ret = new ContainerUI(container)
 
     { // Work progress display
       val progWidget = invPage.window.getWidget("progress")
