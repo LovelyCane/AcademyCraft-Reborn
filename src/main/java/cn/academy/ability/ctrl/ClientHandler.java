@@ -86,6 +86,7 @@ public final class ClientHandler {
 
         @Override
         public void onKeyUp() {
+            if (Minecraft.getMinecraft().player.isSpectator()) return;
             double delta = GameTimer.getTime() - lastKeyDown;
             if (delta < 0.300) {
                 EntityPlayer player = getPlayer();
@@ -101,6 +102,7 @@ public final class ClientHandler {
 
         @Override
         public void onKeyDown() {
+            if (Minecraft.getMinecraft().player.isSpectator()) return;
             lastKeyDown = GameTimer.getTime();
             CPBar.instance.startDisplayNumbers();
         }
