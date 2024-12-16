@@ -57,10 +57,8 @@ public final class ACConfig {
     }
 
     public static void updateConfig(Config cfg) {
-        if (cfg == null)
-            __init();
-        else
-            config = cfg;
+        if (cfg == null) __init();
+        else config = cfg;
     }
 
 
@@ -98,8 +96,7 @@ public final class ACConfig {
                 evt.player.sendMessage(new TextComponentTranslation("ac.data_config_parse_fail"));
                 evt.player.sendMessage(new TextComponentTranslation(err));
             }
-            if (!evt.player.world.isRemote)
-                NetworkManager.sendTo(config, (EntityPlayerMP) evt.player);
+            if (!evt.player.world.isRemote) NetworkManager.sendTo(config, (EntityPlayerMP) evt.player);
         }
     }
 

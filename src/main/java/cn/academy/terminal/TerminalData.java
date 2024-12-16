@@ -2,17 +2,17 @@ package cn.academy.terminal;
 
 import cn.academy.event.AppInstalledEvent;
 import cn.academy.event.TerminalInstalledEvent;
+import cn.lambdalib2.datapart.DataPart;
+import cn.lambdalib2.datapart.EntityData;
+import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.datapart.DataPart;
-import cn.lambdalib2.datapart.EntityData;
-import cn.lambdalib2.datapart.RegDataPart;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  */
 @RegDataPart(EntityPlayer.class)
 public class TerminalData extends DataPart<EntityPlayer> {
-
     public static TerminalData get(EntityPlayer player) {
         return EntityData.get(player).getPart(TerminalData.class);
     }
@@ -92,14 +91,13 @@ public class TerminalData extends DataPart<EntityPlayer> {
         NBTS11n.write(tag, this);
     }
 
-    @Listener(channel="terminal_inst", side=Side.CLIENT)
+    @Listener(channel = "terminal_inst", side = Side.CLIENT)
     private void informTerminalInstall() {
         MinecraftForge.EVENT_BUS.post(new TerminalInstalledEvent(getEntity()));
     }
 
-    @Listener(channel="app_inst", side=Side.CLIENT)
+    @Listener(channel = "app_inst", side = Side.CLIENT)
     private void informAppInstall(String appName) {
         MinecraftForge.EVENT_BUS.post(new AppInstalledEvent(getEntity(), AppRegistry.getByName(appName)));
     }
-
 }

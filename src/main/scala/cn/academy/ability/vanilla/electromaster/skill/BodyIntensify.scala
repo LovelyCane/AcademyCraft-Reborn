@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.auxgui.CurrentChargingHUD
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
@@ -69,14 +70,14 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
 
   private var overload = 0f
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_consume() = {
     val overload = lerpf(200, 120, ctx.getSkillExp)
     ctx.consume(overload, 0)
     this.overload = ctx.cpData.getOverload
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     if(ctx.cpData.getOverload < overload) ctx.cpData.setOverload(overload)
     tick += 1
@@ -121,12 +122,12 @@ class IntensifyContext(p: EntityPlayer) extends Context(p, BodyIntensify) {
     }
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
     sendToServer(MSG_END)
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
     sendToSelf(MSG_EFFECT_END, false.asInstanceOf[AnyRef])
     terminate()
@@ -142,7 +143,7 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
 
   var hud: CurrentChargingHUD = _
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_startEffect() = {
     if(isLocal) {
       loopSound = new FollowEntitySound(player, LOOP_SOUND, SoundCategory.AMBIENT).setLoop()
@@ -165,7 +166,7 @@ class IntensifyContextC(par: IntensifyContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_terminated() = {
     if(loopSound != null) loopSound.stop()
     if(hud != null) hud.startBlend(false)

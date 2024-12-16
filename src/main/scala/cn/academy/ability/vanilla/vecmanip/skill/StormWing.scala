@@ -1,27 +1,26 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
+import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
+import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.context.ClientRuntime.IActivateHandler
-import cn.academy.ability.context.{DelegateState, _}
+import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.StormWingEffect
+import cn.academy.ability.vanilla.vecmanip.skill.StormWingContext._
+import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.util.{EnumParticleTypes, ResourceLocation, SoundCategory}
-import org.lwjgl.input.Keyboard
-import StormWingContext._
-import cn.academy.ability.Skill
-import cn.academy.ability.api.AbilityAPIExt._
-import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.util.RandUtils._
 import cn.lambdalib2.util.{EntitySelectors, Raytrace, VecUtils, WorldUtils}
-import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.ParticleBlockDust
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Blocks
 import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
+import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object StormWing extends Skill("storm_wing", 3) {
 
@@ -66,6 +65,7 @@ object StormWingContext {
 
 class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   import cn.lambdalib2.util.RandUtils._
+
   import scala.collection.JavaConversions._
 
   private var currentDir: Option[() => Vec3d] = None
@@ -77,20 +77,20 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
 
   private var prevAllowFlying: Boolean = _
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_makeAlive() = {
     prevAllowFlying = player.capabilities.allowFlying
     player.capabilities.allowFlying = true
   }
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_keyDown(dir: () => Vec3d, _keyid: Int) = if (state == STATE_ACTIVE) {
     currentDir = Some(dir)
     keyid = _keyid
     l_syncState()
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_keyUp(_keyid: Int) = currentDir match {
     case Some(cur) if keyid == _keyid =>
       currentDir = None
@@ -121,7 +121,7 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     applying = _applying
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def l_tick() = if (isLocal) {
     currentDir match {
       case Some(dir) =>
@@ -160,18 +160,18 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
   }
 
   @SideOnly(Side.CLIENT)
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_tick() = {
     stateTick += 1
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_terminate() = {
     player.capabilities.allowFlying = prevAllowFlying
     ctx.setCooldown(lerpf(30, 10, ctx.getSkillExp).toInt)
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_tick() = {
     player.fallDistance = 0
 
@@ -212,10 +212,10 @@ class StormWingContext(p: EntityPlayer) extends Context(p, StormWing) {
     def defkey(idx: Int, key: Int, dirFactory: () => Vec3d) = {
       rt.addKey(KEY_GROUP, key, new KeyDelegate {
         override def onKeyDown() = {
-          sendToSelf(MSG_KEYDOWN, dirFactory, key.asInstanceOf[AnyRef])
+          sendToSelf(AbilityAPIExt.MSG_KEYDOWN, dirFactory, key.asInstanceOf[AnyRef])
         }
         override def onKeyUp() = {
-          sendToSelf(MSG_KEYUP, key.asInstanceOf[AnyRef])
+          sendToSelf(AbilityAPIExt.MSG_KEYUP, key.asInstanceOf[AnyRef])
         }
         override def onKeyAbort() = onKeyUp()
         override def getIcon: ResourceLocation = StormWing.getHintIcon
@@ -289,7 +289,7 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
 
   private var loopSound: FollowEntitySound = _
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_makeAlive() = if(isLocal) {
     activateHandler = new IActivateHandler {
       override def handles(player: EntityPlayer): Boolean = true
@@ -299,13 +299,13 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
     clientRuntime.addActivateHandler(activateHandler)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def l_terminate() = if(isLocal) {
     clientRuntime.clearKeys(KEY_GROUP)
     clientRuntime.removeActiveHandler(activateHandler)
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_makealive() = {
     world.spawnEntity(new StormWingEffect(par))
 
@@ -313,12 +313,12 @@ class StormWingContextC(par: StormWingContext) extends ClientContext(par) {
     ACSounds.playClient(loopSound)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_terminate() = {
     loopSound.stop()
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_tick() = {
     for (i <- 0 until 12) { // Particles that surround the player
     val theta = ranged(0, math.Pi * 2)

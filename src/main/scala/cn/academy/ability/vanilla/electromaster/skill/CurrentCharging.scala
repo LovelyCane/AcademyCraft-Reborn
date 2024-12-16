@@ -1,21 +1,21 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
 import cn.academy.client.render.util.{ACRenderingHelper, ArcPatterns}
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
+import cn.academy.entity.EntitySurroundArc.ArcType
 import cn.academy.entity.{EntityArc, EntitySurroundArc}
 import cn.academy.support.{EnergyBlockHelper, EnergyItemHelper}
-import cn.academy.entity.EntitySurroundArc.ArcType
-import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.util.{Debug, Raytrace, VecUtils}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.JavaConversions._
 
@@ -38,8 +38,8 @@ object ChargingBlockContext {
 
 }
 
-import ChargingBlockContext._
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.academy.ability.vanilla.electromaster.skill.ChargingBlockContext._
 import cn.lambdalib2.util.MathUtils._
 
 class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
@@ -55,13 +55,13 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
   private val exp = ctx.getSkillExp
   private val isItem = ctx.player.getHeldEquipment.exists(!_.isEmpty)
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
     ctx.consume(getOverload(exp), 0)
     overload = ctx.cpData.getOverload
   }
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_onStart() = {
     sendToServer(MSG_EFFECT_START, isItem.asInstanceOf[AnyRef])
   }
@@ -77,7 +77,7 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
     terminate()
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     if(ctx.cpData.getOverload < overload) ctx.cpData.setOverload(overload)
     if(!isItem) {
@@ -132,12 +132,12 @@ class ChargingContext(p: EntityPlayer) extends Context(p, CurrentCharging) {
     }
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
     sendToServer(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
     sendToServer(MSG_EFFECT_END, isItem.asInstanceOf[AnyRef])
   }
@@ -181,7 +181,7 @@ class ChargingContextC(par: ChargingContext) extends ClientContext(par) {
     this.isItem = isItem
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_updateEffects(): Unit = {
     if (isItem)
       return

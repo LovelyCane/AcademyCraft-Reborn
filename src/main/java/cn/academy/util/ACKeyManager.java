@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ACKeyManager extends KeyManager {
-
     public static KeyManager instance = new ACKeyManager();
 
     @Override
@@ -23,8 +22,7 @@ public class ACKeyManager extends KeyManager {
 
     @SubscribeEvent
     public void onConfigModified(ConfigModifyEvent event) {
-        if (event.property.isIntValue())
-            resetBindingKey(event.property.getName(), event.property.getInt());
+        if (event.property.isIntValue()) resetBindingKey(event.property.getName(), event.property.getInt());
     }
 
     @Override
@@ -33,5 +31,6 @@ public class ACKeyManager extends KeyManager {
         SettingsUI.addProperty(PropertyElements.KEY, "keys", name, defKeyID, false);
     }
 
-    private ACKeyManager() {}
+    private ACKeyManager() {
+    }
 }

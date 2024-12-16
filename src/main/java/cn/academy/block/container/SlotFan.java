@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 /**
  * @author WeAthFolD
  */
-public class SlotFan extends Slot {
 
+public class SlotFan extends Slot {
     public SlotFan(IInventory p_i1824_1_, int p_i1824_2_, int p_i1824_3_,
             int p_i1824_4_) {
         super(p_i1824_1_, p_i1824_2_, p_i1824_3_, p_i1824_4_);
@@ -17,7 +17,6 @@ public class SlotFan extends Slot {
     
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return (stack != null && stack.getItem() == ACItems.windgen_fan);
+        return stack.getItem() == ACItems.windgen_fan;
     }
-
 }

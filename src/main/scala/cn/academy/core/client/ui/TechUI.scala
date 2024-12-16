@@ -158,10 +158,13 @@ object TechUI {
   }
 
   class TechUIWidget(pages: Page*) extends Widget {
-
     size(172, 187)
     centered()
 
+    // 检查页面是否为空
+    require(pages.nonEmpty, "页面列表不能为空")
+
+    // 初始设置：选择第一个页面
     private var currentPage_ = pages.head
 
     pages.zipWithIndex.foreach { case (page, idx) =>
@@ -172,29 +175,39 @@ object TechUI {
       buttonTex.setTex(Resources.getTexture("guis/icons/icon_" + page.id))
       button.scale(0.7f)
       button.pos(-20, idx * 22)
+
+      // 设置按钮点击事件
       button.listens[LeftClickEvent](() => {
         pages.foreach(_.window.transform.doesDraw = false)
         page.window.transform.doesDraw = true
         currentPage_ = page
       })
-      button.listens((evt: FrameEvent) => {
-        val a1 = if (evt.hovering || currentPage_ == page) 1.0f else 0.8f
-        val a2 = if (currentPage_ == page) 1.0f else 0.8f
-        buttonTex.color.setAlpha(Colors.f2i(a1))
-        buttonTex.color.setRed(Colors.f2i(a2))
-        buttonTex.color.setGreen(Colors.f2i(a2))
-        buttonTex.color.setBlue(Colors.f2i(a2))
-      })
 
+      // 设置按钮的颜色变化效果
+      button.listens((evt: FrameEvent) => updateButtonColor(evt, page, buttonTex))
+
+      // 默认隐藏其他页面
       page.window.transform.doesDraw = false
 
       this :+ button
       this :+ page.window
     }
 
+    // 显示第一个页面
     pages.head.window.transform.doesDraw = true
 
     def currentPage = currentPage_
+
+    // 更新按钮颜色的辅助方法
+    private def updateButtonColor(evt: FrameEvent, page: Page, buttonTex: DrawTexture): Unit = {
+      val alpha = if (evt.hovering || currentPage_ == page) 1.0f else 0.8f
+      val colorFactor = if (currentPage_ == page) 1.0f else 0.8f
+
+      buttonTex.color.setAlpha(Colors.f2i(alpha))
+      buttonTex.color.setRed(Colors.f2i(colorFactor))
+      buttonTex.color.setGreen(Colors.f2i(colorFactor))
+      buttonTex.color.setBlue(Colors.f2i(colorFactor))
+    }
   }
 
   case class HistElement(id: String, color: Color,

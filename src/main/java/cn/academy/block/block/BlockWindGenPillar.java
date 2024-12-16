@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 /**
  * @author WeAthFolD
  */
-public class BlockWindGenPillar extends ACBlockContainer {
 
+public class BlockWindGenPillar extends ACBlockContainer {
     public BlockWindGenPillar() {
         super(Material.ROCK, null);
         setHardness(4.0f);
@@ -32,5 +32,4 @@ public class BlockWindGenPillar extends ACBlockContainer {
     public TileEntity createNewTileEntity(World world, int meta) {
         return new TileWindGenPillar();
     }
-
 }

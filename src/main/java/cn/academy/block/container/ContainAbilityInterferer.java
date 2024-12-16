@@ -14,10 +14,8 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by Paindar on 2017/3/31.
  */
-public class ContainAbilityInterferer extends TechUIContainer<TileAbilityInterferer>
-{
-    class SlotAIItem extends Slot
-    {
+public class ContainAbilityInterferer extends TechUIContainer<TileAbilityInterferer> {
+    static class SlotAIItem extends Slot {
         private int slot;
 
         public SlotAIItem(IInventory inv, int _slot, int x, int y) {
@@ -26,11 +24,9 @@ public class ContainAbilityInterferer extends TechUIContainer<TileAbilityInterfe
         }
 
         @Override
-        public boolean isItemValid(ItemStack stack)
-        {
+        public boolean isItemValid(ItemStack stack) {
             return slot == 0 && stack.getItem() == ACItems.energy_unit;
         }
-
     }
 
     public ContainAbilityInterferer(TileAbilityInterferer _tile, EntityPlayer _player) {
@@ -43,14 +39,14 @@ public class ContainAbilityInterferer extends TechUIContainer<TileAbilityInterfe
         this.addSlotToContainer(new SlotAIItem(tile, 0, 139, 25));
         InventoryPlayer inv = player.inventory;
 
-        for(int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inv, i, 6 + i*18, 163));
+        for (int i = 0; i < 9; ++i) {
+            addSlotToContainer(new Slot(inv, i, 6 + i * 18, 163));
         }
 
         SlotGroup gInv = gRange(0, 7), gMachine = gSlots(0);
 
         addTransferRule(gMachine, gInv);
-        addTransferRule(gInv, EnergyItemHelper::isSupported, gSlots(AbilityInterf.SLOT_BATTERY()));
+        addTransferRule(gInv, EnergyItemHelper::isSupported, gSlots(AbilityInterf.SLOT_BATTERY));
     }
 
 }

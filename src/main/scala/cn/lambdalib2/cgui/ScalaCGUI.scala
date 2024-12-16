@@ -1,11 +1,13 @@
+
 package cn.lambdalib2.cgui
 
 /**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of LambdaLib modding library.
-* https://github.com/LambdaInnovation/LambdaLib
-* Licensed under MIT, see project root for more information.
-*/
+ * Copyright (c) Lambda Innovation, 2013-2016
+ * This file is part of LambdaLib modding library.
+ * https://github.com/LambdaInnovation/LambdaLib
+ * Licensed under MIT, see project root for more information.
+ */
+
 import cn.lambdalib2.cgui.component.Component
 import cn.lambdalib2.cgui.event.{GuiEvent, IGuiEventHandler}
 
@@ -56,17 +58,17 @@ class RichComponent(val c: Component) extends AnyVal {
   }
 
   def listens[T <: GuiEvent](handler: T => Any)(implicit tag: ClassTag[T]): Unit = {
-    listens((_, e:T) => handler(e))
+    listens((_, e: T) => handler(e))
   }
 
   def listens[T <: GuiEvent](handler: () => Any)(implicit tag: ClassTag[T]): Unit = {
-    listens((_, _:T) => handler())
+    listens((_, _: T) => handler())
   }
 }
 
 /**
-  * CGUI scala extensions to reduce syntax burden.
-  */
+ * CGUI scala extensions to reduce syntax burden.
+ */
 object ScalaCGUI {
 
   implicit def toWrapper(w: Widget): RichWidget = new RichWidget(w)

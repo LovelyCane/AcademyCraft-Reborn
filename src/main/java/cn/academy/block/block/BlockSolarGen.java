@@ -22,7 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 public class BlockSolarGen extends ACBlockMulti {
-
     @RegGuiHandler
     public static final GuiHandlerBase handler = new GuiHandlerBase() {
         @SideOnly(Side.CLIENT)
@@ -83,5 +82,4 @@ public class BlockSolarGen extends ACBlockMulti {
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
-
 }

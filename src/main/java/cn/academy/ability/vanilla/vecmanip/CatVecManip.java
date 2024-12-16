@@ -13,11 +13,11 @@ public class CatVecManip extends Category {
         DirectedShock.setPosition(16, 45);
         Groundshock.setPosition(64, 85);
         VecAccel.setPosition(76, 40);
-        VecDeviation.setPosition(145, 53);
+    //    VecDeviation.setPosition(145, 53);
         DirectedBlastwave.setPosition(136, 80);
         StormWing.setPosition(130, 20);
         BloodRetrograde.setPosition(204, 83);
-        VecReflection.setPosition(210, 50);
+   //     VecReflection.setPosition(210, 50);
         PlasmaCannon.setPosition(175, 14);
 
         // Level 1
@@ -26,7 +26,7 @@ public class CatVecManip extends Category {
 
         // 2
         addSkill(VecAccel$.MODULE$);
-        addSkill(VecDeviation$.MODULE$);
+      //  addSkill(VecDeviation$.MODULE$);
 
         // 3
         addSkill(DirectedBlastwave$.MODULE$);
@@ -34,18 +34,20 @@ public class CatVecManip extends Category {
 
         // 4
         addSkill(BloodRetrograde$.MODULE$);
-        addSkill(VecReflection$.MODULE$);
+
+
+       // addSkill(VecReflection$.MODULE$);
 
         // 5
         addSkill(PlasmaCannon$.MODULE$);
 
         Groundshock.setParent(DirectedShock$.MODULE$);
         VecAccel.setParent(DirectedShock$.MODULE$);
-        VecDeviation.setParent(VecAccel$.MODULE$);
+      //  VecDeviation.setParent(VecAccel$.MODULE$);
         DirectedBlastwave.setParent(Groundshock$.MODULE$);
         StormWing.setParent(VecAccel$.MODULE$);
         BloodRetrograde.setParent(DirectedBlastwave$.MODULE$);
-        VecReflection.setParent(VecDeviation$.MODULE$);
+       // VecReflection.setParent(VecDeviation$.MODULE$);
         PlasmaCannon.setParent(StormWing$.MODULE$);
 
         VanillaCategories.addGenericSkills(this);

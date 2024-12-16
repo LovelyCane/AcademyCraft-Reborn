@@ -1,18 +1,19 @@
 package cn.academy.ability.vanilla.teleporter.skill;
 
+import cn.academy.Resources;
 import cn.academy.ability.Skill;
+import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.ClientRuntime.ActivateHandlers;
 import cn.academy.ability.context.ClientRuntime.IActivateHandler;
 import cn.academy.ability.context.Context;
 import cn.academy.ability.context.ContextManager;
 import cn.academy.ability.context.KeyDelegate;
-import cn.academy.event.ability.FlushControlEvent;
-import cn.academy.Resources;
-import cn.academy.client.sound.ACSounds;
-import cn.academy.entity.EntityTPMarking;
 import cn.academy.ability.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper;
+import cn.academy.client.sound.ACSounds;
+import cn.academy.entity.EntityTPMarking;
+import cn.academy.event.ability.FlushControlEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.MathUtils;
@@ -263,7 +264,7 @@ public class Flashing extends Skill {
             }
         }
 
-        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @Listener(channel= AbilityAPIExt.MSG_TERMINATED, side=Side.CLIENT)
         @SideOnly(Side.CLIENT)
         void localTerminate() {
             if (isLocal()) {
@@ -273,7 +274,7 @@ public class Flashing extends Skill {
             }
         }
 
-        @Listener(channel=MSG_TERMINATED, side=Side.SERVER)
+        @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Side.SERVER)
         void serverTerminated() {
             ctx.setCooldown(cooldown_time);
         }

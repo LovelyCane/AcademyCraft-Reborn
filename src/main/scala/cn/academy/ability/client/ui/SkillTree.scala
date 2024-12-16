@@ -1,56 +1,51 @@
 package cn.academy.ability.client.ui
 
-import java.util
-import java.util.function.Consumer
-
-import cn.academy.{ACItems, AcademyCraft, Resources}
-import cn.academy.ability.{AbilityLocalization, Skill}
-import cn.lambdalib2.registry.StateEventCallback
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import cn.academy.ability.client.ui.Common.{Cover, RebuildEvent, TreeScreen}
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
-import cn.academy.core.client.ui.{TechUI, WirelessPage}
-import cn.academy.energy.api.WirelessHelper
+import cn.academy.ability.{AbilityLocalization, Skill}
 import cn.academy.block.tileentity.TileDeveloper
+import cn.academy.core.client.ui.WirelessPage
 import cn.academy.datapart.{AbilityData, CPData}
+import cn.academy.energy.api.WirelessHelper
 import cn.academy.util.LocalHelper
-import cn.lambdalib2.cgui.{CGui, CGuiScreen, Widget}
-import cn.lambdalib2.cgui.loader.CGUIDocument
-import net.minecraft.client.Minecraft
+import cn.academy.{ACItems, AcademyCraft, Resources}
 import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
-import cn.lambdalib2.cgui.component.Transform.{HeightAlign, WidthAlign}
 import cn.lambdalib2.cgui.component._
 import cn.lambdalib2.cgui.event._
+import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.cgui.{CGui, CGuiScreen, Widget}
+import cn.lambdalib2.input.{KeyHandler, KeyManager}
+import cn.lambdalib2.registry.StateEventCallback
+import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
+import cn.lambdalib2.render.legacy.{LegacyShaderProgram, ShaderMono}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
-import cn.lambdalib2.render.font.IFont.{FontAlign, FontOption}
-import net.minecraft.util.EnumHand
-import cn.lambdalib2.util.{HudUtils, RenderUtils}
-import cn.lambdalib2.input.{KeyHandler, KeyManager}
-import cn.lambdalib2.render.legacy.{LegacyShaderProgram, ShaderMono}
-import org.lwjgl.input.Keyboard
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.RandUtils
-import cn.lambdalib2.util.{Colors, GameTimer}
+import cn.lambdalib2.util._
+import net.minecraft.client.Minecraft
+import net.minecraft.util.{ChatAllowedCharacters, EnumHand, ResourceLocation}
+import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraft.util.{ChatAllowedCharacters, ResourceLocation}
+import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL13._
 import org.lwjgl.opengl.GL20._
 
+import java.util
+import java.util.function.Consumer
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 @SideOnly(Side.CLIENT)
 object DeveloperUI {
-
   def apply(tile: IDeveloper): CGuiScreen = {
     val ret = new TreeScreen {
       override def onGuiClosed() = tile.onGuiClosed()
+
       // Close the link page if we are opening that, otherwise delegate down
       override def keyTyped(ch: Char, key: Int) = {
         if (key == Keyboard.KEY_ESCAPE) {
@@ -176,7 +171,7 @@ private object Common {
   private val texViewOutlineGlow = Resources.preloadMipmapTexture("guis/developer/skill_view_outline_glow")
   private val texButtonLearn = Resources.getTexture("guis/button/button_learn")
   private val texButtonReset = Resources.getTexture("guis/button/button_reset")
-  private val texButton      = Resources.getTexture("guis/developer/button")
+  private val texButton = Resources.getTexture("guis/developer/button")
 
   private val foSkillTitle = new FontOption(12, FontAlign.CENTER)
   private val foSkillDesc = new FontOption(9, FontAlign.CENTER)
@@ -283,8 +278,8 @@ private object Common {
           val blendOffset = idx * 0.08 + 0.1
 
           val mAlpha = (learned, if (skill.getParent == null) true else aData.isSkillLearned(skill.getParent)) match {
-            case (true, _)  => 1.0
-            case (_, true)  => 0.7
+            case (true, _) => 1.0
+            case (_, true) => 0.7
             case (_, false) => 0.25
           }
 
@@ -295,7 +290,7 @@ private object Common {
             val (pcx, pcy) = center(parent.guiX, parent.guiY)
             val (px, py) = (pcx - cx, pcy - cy)
             val norm = math.sqrt(px * px + py * py)
-            val (dx, dy) = (px/norm*12.2, py/norm*12.2)
+            val (dx, dy) = (px / norm * 12.2, py / norm * 12.2)
 
             drawLine(px + WidgetSize / 2 - dx, py + WidgetSize / 2 - dy,
               WidgetSize / 2 + dx, WidgetSize / 2 + dy, 5.5, mAlpha * (if (learned) 1.0 else 0.4))
@@ -336,9 +331,9 @@ private object Common {
 
             glTranslated(DrawAlign, DrawAlign, 10)
 
-            glTranslated(TotalSize/2, TotalSize/2, 0)
+            glTranslated(TotalSize / 2, TotalSize / 2, 0)
             glScaled(scale, scale, 1)
-            glTranslated(-TotalSize/2, -TotalSize/2, 0)
+            glTranslated(-TotalSize / 2, -TotalSize / 2, 0)
 
             // Draw back without depth writing
             glColor4d(1, 1, 1, backAlpha)
@@ -449,7 +444,7 @@ private object Common {
 
       {
         val cpData = CPData.get(player)
-        panel.child("text_exp").component[TextBox].setContent("EXP " + (aData.getLevelProgress * 100).toInt+"%")
+        panel.child("text_exp").component[TextBox].setContent("EXP " + (aData.getLevelProgress * 100).toInt + "%")
 
       }
 
@@ -483,8 +478,10 @@ private object Common {
         progRate.progress = developer.getType.syncRate
         developer match {
           case tile: TileDeveloper =>
-            send(NetDelegate.MSG_GET_NODE, tile, Future.create(new Consumer[String]{
-              override def accept(result: String): Unit = {panel.child("button_wireless/text_nodename").component[TextBox].content = if (result != null) result else "N/A"}
+            send(NetDelegate.MSG_GET_NODE, tile, Future.create(new Consumer[String] {
+              override def accept(result: String): Unit = {
+                panel.child("button_wireless/text_nodename").component[TextBox].content = if (result != null) result else "N/A"
+              }
             }))
             panel.child("button_wireless").listens[LeftClickEvent](() => {
               val wirelessPage = WirelessPage.userPage(tile).window.centered()
@@ -511,10 +508,10 @@ private object Common {
   }
 
   private def drawLine(x0: Double, y0: Double, x1: Double, y1: Double,
-                       width: Double, alpha: Double): (Double)=>Any = {
+                       width: Double, alpha: Double): (Double) => Any = {
     val (dx, dy) = (x1 - x0, y1 - y0)
     val norm = math.sqrt(dx * dx + dy * dy)
-    val (nx, ny) = (-dy/norm/2*width, dx/norm/2*width)
+    val (nx, ny) = (-dy / norm / 2 * width, dx / norm / 2 * width)
 
     (progress) => {
       val (xx, yy) = (lerp(x0, x1, progress), lerp(y0, y1, progress))
@@ -567,13 +564,13 @@ private object Common {
       var canClose: Boolean = true
       var shouldRebuild = false
 
-      val icon = Resources.getTexture("abilities/condition/any" + (data.getLevel+1))
+      val icon = Resources.getTexture("abilities/condition/any" + (data.getLevel + 1))
 
       wid.listens[FrameEvent](() => {
         drawActionIcon(icon, progress, glow = progress == 1)
       })
 
-      val lvltext = local.getFormatted("uplevel", AbilityLocalization.instance.levelDesc(data.getLevel+1))
+      val lvltext = local.getFormatted("uplevel", AbilityLocalization.instance.levelDesc(data.getLevel + 1))
       val reqtext = local.get("req") + " %.0f".format(estmCons)
       textArea.listens[FrameEvent](() => {
         Font.draw(lvltext, 0, 3, foLevelTitle)
@@ -631,7 +628,7 @@ private object Common {
   }
 
   private def skillViewArea(skill: Skill)
-                           (implicit data: AbilityData, gui: CGui, developer: IDeveloper=null): Widget = {
+                           (implicit data: AbilityData, gui: CGui, developer: IDeveloper = null): Widget = {
     val ret = blackCover(gui)
 
     {
@@ -645,7 +642,7 @@ private object Common {
       val textArea = new Widget().size(0, 10).centered().pos(0, 25)
       if (learned) {
         skillWid.listens[FrameEvent](() => {
-          drawActionIcon(skill.getHintIcon, 0, glow=false)
+          drawActionIcon(skill.getHintIcon, 0, glow = false)
         })
         textArea.listens[FrameEvent](() => {
           FontBold.draw(skill.getDisplayName, 0, 3, foSkillTitle)
@@ -657,7 +654,7 @@ private object Common {
         var message: Option[String] = None
 
         skillWid.listens[FrameEvent](() => {
-          drawActionIcon(skill.getHintIcon, progress, glow=progress == 1)
+          drawActionIcon(skill.getHintIcon, progress, glow = progress == 1)
         })
 
         val skillNameText = skill.getDisplayName + s" (LV ${skill.getLevel})"
@@ -676,14 +673,14 @@ private object Common {
           val len = CondIconStep * conditions.size
 
           textArea.listens[FrameEvent](() => {
-            Font.draw(local.get("req"), -len/2 - 2, 28, foSkillReq)
+            Font.draw(local.get("req"), -len / 2 - 2, 28, foSkillReq)
           })
 
           case class CondTag(cond: IDevCondition, accepted: Boolean) extends Component("CondTag")
 
           conditions.zipWithIndex foreach { case (cond, idx) =>
             val widget = new Widget().size(CondIconSize, CondIconSize)
-              .pos(-len/2 + CondIconStep * idx, 25).size(CondIconSize, CondIconSize)
+              .pos(-len / 2 + CondIconStep * idx, 25).size(CondIconSize, CondIconSize)
 
             val tex = new DrawTexture(cond.getIcon)
             val accepted = cond.accepts(data, developer, skill)
@@ -704,7 +701,7 @@ private object Common {
                 val tag = Option(w.component[CondTag])
                 tag match {
                   case Some(CondTag(cond, accepted)) =>
-                    Font.draw(s"(${cond.getHintText})", len/2 + 3, 27, if (accepted) foSkillReqDetail else foSkillReqDetail2)
+                    Font.draw(s"(${cond.getHintText})", len / 2 + 3, 27, if (accepted) foSkillReqDetail else foSkillReqDetail2)
                   case _ =>
                 }
               case _ =>
@@ -832,9 +829,11 @@ private object Common {
 
         console.enqueue(new Task {
           override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
+
           override def update() = {
-            console.output("\b\b\b" + fmt((data.getDevelopProgress*100).toInt) + "%")
+            console.output("\b\b\b" + fmt((data.getDevelopProgress * 100).toInt) + "%")
           }
+
           override def finish() = {
             console.outputln()
             if (data.getState == DevState.DONE) {
@@ -865,9 +864,11 @@ private object Common {
 
         console.enqueue(new Task {
           override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
+
           override def update() = {
-            console.output("\b\b\b" + fmt((data.getDevelopProgress*100).toInt) + "%")
+            console.output("\b\b\b" + fmt((data.getDevelopProgress * 100).toInt) + "%")
           }
+
           override def finish() = {
             console.outputln()
             if (data.getState == DevState.DONE) {
@@ -948,14 +949,18 @@ private object Common {
 
   class Console(val emergency: Boolean, val hasDeveloper: Boolean)
     extends Component("Console") {
+
     import Console._
 
     private implicit val _self = this
 
     private val inputTask = new Task {
       override def finish(): Unit = {}
+
       override def update(): Unit = {}
+
       override def isFinished: Boolean = false
+
       override def begin(): Unit = {
         output(ConsoleHead)
       }
@@ -970,15 +975,15 @@ private object Common {
     enqueue(slowPrintTask(localized("init", player.getName)))
     pause(0.4)
 
-    val numSeq =  (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
+    val numSeq = (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
       ((64 + RandUtils.nextInt(4)) + "%") :: localized("boot_failed") :: Nil
 
     animSequence(0.3, numSeq: _*)
 
     {
       val startupText: String = (emergency, hasDeveloper) match {
-        case (true, _)  => localized("override")
-        case (_, true)  => localized("invalid_cat") + localized("learn_hint")
+        case (true, _) => localized("override")
+        case (_, true) => localized("invalid_cat") + localized("learn_hint")
         case (_, false) => localized("invalid_cat")
       }
       enqueue(slowPrintTask(startupText))
@@ -1009,7 +1014,7 @@ private object Common {
 
       outputs.zipWithIndex foreach { case (line, idx) =>
         if (idx == outputs.size() - 1 && currentTask == inputTask) {
-          font.draw(line + input + (if (((GameTimer.getTime*1000).toInt % 1000) < 500) "_" else ""), x, y, FO)
+          font.draw(line + input + (if (((GameTimer.getTime * 1000).toInt % 1000) < 500) "_" else ""), x, y, FO)
         } else {
           font.draw(line, x, y, FO)
         }
@@ -1097,10 +1102,11 @@ private object Common {
 
     def enqueueRebuild() = enqueue(new Task {
       override def isFinished: Boolean = true
+
       override def begin(): Unit = widget.getGui.postEvent(new RebuildEvent)
     })
 
-    def += (command: Command) = {
+    def +=(command: Command) = {
       commands += command
     }
 
@@ -1113,14 +1119,18 @@ private object Common {
 
   }
 
-  case class Command(name: String, callback: ()=>Any)
+  case class Command(name: String, callback: () => Any)
+
   trait Task {
     def begin(): Unit = {}
+
     def update(): Unit = {}
+
     def finish(): Unit = {}
 
     def isFinished: Boolean
   }
+
   trait TimedTask extends Task {
     def life: Double
 
@@ -1137,6 +1147,7 @@ private object Common {
     override def begin(): Unit = {
       console.output(str)
     }
+
     override def isFinished = true
   }
 
@@ -1144,7 +1155,7 @@ private object Common {
     val PerCharTime = 0.01
 
     private var idx = 0
-    private var last :Double = -1
+    private var last: Double = -1
 
     override def finish(): Unit = {}
 
@@ -1183,17 +1194,17 @@ private object NetDelegate {
     NetworkS11n.addDirectInstance(NetDelegate)
   }
 
-  @Listener(channel=MSG_START_SKILL, side=Array(Side.SERVER))
+  @Listener(channel = MSG_START_SKILL, side = Array(Side.SERVER))
   private def hStartSkill(data: DevelopData, developer: IDeveloper, skill: Skill) = {
     data.startDeveloping(developer, new DevelopActionSkill(skill))
   }
 
-  @Listener(channel=MSG_START_LEVEL, side=Array(Side.SERVER))
+  @Listener(channel = MSG_START_LEVEL, side = Array(Side.SERVER))
   private def hStartLevel(data: DevelopData, developer: IDeveloper) = {
     data.startDeveloping(developer, new DevelopActionLevel())
   }
 
-  @Listener(channel=MSG_GET_NODE, side=Array(Side.SERVER))
+  @Listener(channel = MSG_GET_NODE, side = Array(Side.SERVER))
   private def hGetLinkNodeName(tile: TileDeveloper, future: Future[String]) = {
     future.sendResult(WirelessHelper.getNodeConn(tile) match {
       case null => null
@@ -1201,9 +1212,8 @@ private object NetDelegate {
     })
   }
 
-  @Listener(channel=MSG_RESET, side=Array(Side.SERVER))
+  @Listener(channel = MSG_RESET, side = Array(Side.SERVER))
   private def hStartReset(data: DevelopData, developer: IDeveloper) = {
     data.startDeveloping(developer, new DevelopActionReset)
   }
-
 }

@@ -60,7 +60,7 @@ repositories {
 dependencies {
     runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
 
-    implementation(files('jars/LambdaLib2-PluginLoader.jar'))
+   // implementation(files('jars/LambdaLib2-PluginLoader.jar'))
 
     implementation "codechicken:CodeChickenLib:1.12.2-3.2.3.358:universal"
     implementation "mezz.jei:jei_1.12.2:4.16.1.302"

@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
 import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
@@ -54,7 +55,7 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
   var punched = false
   var punchTicker = 0
 
-  @Listener(channel = MSG_KEYUP, side = Array(Side.CLIENT))
+  @Listener(channel = AbilityAPIExt.MSG_KEYUP, side = Array(Side.CLIENT))
   def l_keyUp() = {
     if (ticker > MIN_TICKS && ticker < MAX_ACCEPTED_TICKS) {
       sendToServer(MSG_PERFORM, ticker.asInstanceOf[AnyRef])
@@ -63,10 +64,10 @@ class BlastwaveContext(p: EntityPlayer) extends Context(p, DirectedBlastwave) wi
     }
   }
 
-  @Listener(channel = MSG_KEYABORT, side = Array(Side.CLIENT))
+  @Listener(channel = AbilityAPIExt.MSG_KEYABORT, side = Array(Side.CLIENT))
   def l_keyAbort() = terminate()
 
-  @Listener(channel = MSG_TICK, side = Array(Side.CLIENT))
+  @Listener(channel =AbilityAPIExt. MSG_TICK, side = Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     ticker += 1
     if (ticker >= MAX_TOLERANT_TICKS) {
@@ -242,7 +243,7 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
 
 
   @SideOnly(Side.CLIENT)
-  @Listener(channel = MSG_MADEALIVE, side = Array(Side.CLIENT))
+  @Listener(channel =AbilityAPIExt.MSG_MADEALIVE, side = Array(Side.CLIENT))
   def l_handEffectStart() = if (isLocal) {
     anim = createPrepareAnim()
 
@@ -263,7 +264,7 @@ class BlastwaveContextC(par: BlastwaveContext) extends ClientContext(par) {
   }
 
   @SideOnly(Side.CLIENT)
-  @Listener(channel = MSG_TERMINATED, side = Array(Side.CLIENT))
+  @Listener(channel = AbilityAPIExt.MSG_TERMINATED, side = Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
     HandRenderOverrideData.get(player).stopInterrupt(handEffect)
   }

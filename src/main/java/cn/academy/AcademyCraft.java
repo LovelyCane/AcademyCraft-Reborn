@@ -4,13 +4,9 @@ import cn.academy.analytic.AnalyticDataListener;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.util.Debug;
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -22,8 +18,6 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnection
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map.Entry;
 
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
 @RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
@@ -70,32 +64,8 @@ public class AcademyCraft {
     public void postInit(FMLPostInitializationEvent event) {
         recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
-        if (DEBUG_MODE) {
-            logRecipeMappingsForDebug();
-        }
         recipes = null; // Recipes are no longer needed
         config.save();
-    }
-
-    private void logRecipeMappingsForDebug() {
-        Debug.log("|-------------------------------------------------------");
-        Debug.log("| AC Recipe Name Mappings");
-        Debug.log("|--------------------------|----------------------------");
-        Debug.log(String.format("| %-25s| Object Name", "Recipe Name"));
-        Debug.log("|--------------------------|----------------------------");
-
-        for (Entry<String, Object> entry : recipes.getNameMappingForDebug().entrySet()) {
-            Object obj = entry.getValue();
-            String str1 = entry.getKey();
-            String str2 = obj instanceof Item ?
-                    LanguageMap.instance.translateKey(((Item) obj).getTranslationKey() + ".name") :
-                    obj instanceof Block ?
-                            LanguageMap.instance.translateKey(((Block) obj).getTranslationKey() + ".name") :
-                            obj.toString();
-            Debug.log(String.format("| %-25s| %s", str1, str2));
-        }
-
-        Debug.log("|-------------------------------------------------------");
     }
 
     @EventHandler

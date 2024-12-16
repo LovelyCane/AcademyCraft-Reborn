@@ -5,8 +5,8 @@ import cn.academy.block.AbilityInterf
 import cn.academy.block.container.ContainAbilityInterferer
 import cn.academy.core.client.ui.TechUI.{ContainerUI, Page}
 import cn.lambdalib2.cgui.Widget
-import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
+import cn.lambdalib2.cgui.component.{Component, DrawTexture, ElementList, TextBox}
 import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.util.{Colors, MathUtils}
@@ -17,9 +17,9 @@ import org.lwjgl.util.Color
 @SideOnly(Side.CLIENT)
 object GuiAbilityInterferer {
 
-  import cn.lambdalib2.cgui.ScalaCGUI._
-  import cn.academy.core.client.ui._
   import AbilityInterf._
+  import cn.academy.core.client.ui._
+  import cn.lambdalib2.cgui.ScalaCGUI._
 
   lazy val template = CGUIDocument.read(Resources.getGui("rework/page_interfere")).getWidget("main")
 
@@ -146,7 +146,7 @@ object GuiAbilityInterferer {
 
     val invPage = InventoryPage(window)
     val wirelessPage: Page = WirelessPage.userPage(tile)
-    val ret = new ContainerUI(container)
+    val ret = new ContainerUI(container, invPage)
     ret.infoPage.histogram(TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy))
     ret
 

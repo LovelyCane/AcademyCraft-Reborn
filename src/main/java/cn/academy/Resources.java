@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 public class Resources {
-
     // PUBLICLY USED RESOURCES
     // TODO Move textures that are not public to their own place
 

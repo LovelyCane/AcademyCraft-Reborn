@@ -1,8 +1,8 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
 import java.util.function.Consumer
-
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.render.util.ACRenderingHelper
@@ -55,25 +55,25 @@ class MDContext(player: EntityPlayer) extends Context(player, Meltdowner) {
 
   private var overloadKeep = 0f
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
     val overload = lerpf(200, 170, exp)
     ctx.consume(overload, 0)
     overloadKeep = ctx.cpData.getOverload
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_keyUp() {
     if(ticks >= MDContext.TICKS_MIN) sendToServer(MSG_PERFORM)
     else terminate()
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_keyAbort() {
     terminate()
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT, Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT, Side.SERVER))
   private def g_tick() {
     ticks += 1
     if(!isRemote) {
@@ -146,19 +146,19 @@ class MDContextC(par: MDContext) extends ClientContext(par) {
     world.spawnEntity(ray)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_terminate() {
     if(isLocal) ctx.player.capabilities.setPlayerWalkSpeed(0.1f)
     sound.stop()
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_start() {
     sound = new FollowEntitySound(ctx.player, "md.md_charge", SoundCategory.AMBIENT).setVolume(1.0f)
     ACSounds.playClient(sound)
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_tick() {
     ticks += 1
     if(isLocal) ctx.player.capabilities.setPlayerWalkSpeed(0.1f - ticks * 0.001f)

@@ -1,57 +1,54 @@
 package cn.academy.block.tileentity;
 
 import cn.academy.block.block.BlockNode;
-import cn.academy.client.render.block.RenderDynamicBlock;
+import cn.academy.block.block.BlockNode.NodeType;
 import cn.academy.energy.api.IFItemManager;
 import cn.academy.energy.api.WirelessHelper;
 import cn.academy.energy.api.block.IWirelessNode;
-import cn.academy.block.block.BlockNode.NodeType;
 import cn.academy.energy.impl.WirelessNet;
 import cn.lambdalib2.registry.mc.RegTileEntity;
-import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
+import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * @author WeathFolD
- *
  */
+
 @RegTileEntity
-public class TileNode extends TileInventory implements IWirelessNode, IInventory, ITickable  {
-    
+public class TileNode extends TileInventory implements IWirelessNode, IInventory, ITickable {
     static IFItemManager itemManager = IFItemManager.instance;
 
     static final String MSG_SYNC = "sync";
 
     protected double energy;
-    
+
     private int updateTicker;
 
     private String password = "";
-    
+
     /**
      * Client-only flag. Only *roughly* indicates whether the block is linked.
      * Used for just rendering.
      */
     public boolean enabled = false;
-    
+
     public boolean chargingIn = false;
-    
+
     public boolean chargingOut = false;
 
     private String placerName = "";
-    
+
     public TileNode() {
         super("wireless_node", 2);
     }
@@ -63,12 +60,12 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public String getPlacerName() {
         return placerName;
     }
-    
+
     @Override
     public void update() {
-        if(!getWorld().isRemote) {
+        if (!getWorld().isRemote) {
             ++updateTicker;
-            if(updateTicker == 10) {
+            if (updateTicker == 10) {
                 updateTicker = 0;
 
                 WirelessNet net = WirelessHelper.getWirelessNet(this);
@@ -79,38 +76,38 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
                         enabled, chargingIn, chargingOut, energy, name, password, placerName);
                 rebuildBlockState();
             }
-            
+
             updateChargeIn();
             updateChargeOut();
         }
     }
-    
+
     public void setPassword(String _pass) {
         password = _pass;
     }
-    
+
     private void updateChargeIn() {
         ItemStack stack = this.getStackInSlot(0);
-        if(stack != null && itemManager.isSupported(stack)) {
+        if (stack != null && itemManager.isSupported(stack)) {
             //Charge into the node.
             double req = Math.min(getBandwidth(), getMaxEnergy() - energy);
             double pull = itemManager.pull(stack, req, false);
-            
+
             chargingIn = pull != 0;
             this.setEnergy(energy + pull);
         } else {
             chargingIn = false;
         }
     }
-    
+
     private void updateChargeOut() {
         ItemStack stack = this.getStackInSlot(1);
-        if(stack != null && itemManager.isSupported(stack)) {
+        if (stack != null && itemManager.isSupported(stack)) {
             double cur = getEnergy();
-            if(cur > 0) {
+            if (cur > 0) {
                 cur = Math.min(getBandwidth(), cur);
                 double left = itemManager.charge(stack, cur);
-                
+
                 chargingOut = left != cur;
                 this.setEnergy(getEnergy() - (cur - left));
             }
@@ -164,11 +161,11 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     public double getRange() {
         return getType().range;
     }
-    
+
     public NodeType getType() {
         return NodeType.values()[getBlockMetadata()];
     }
-    
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
@@ -177,7 +174,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         password = tag.getString("password");
         placerName = tag.getString("placer");
     }
-    
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
@@ -189,7 +186,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
     }
 
     String name = "Unnamed";
-    
+
     @Override
     public String getNodeName() {
         return name;
@@ -204,7 +201,7 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         this.name = name;
     }
 
-    @Listener(channel=MSG_SYNC, side=Side.CLIENT)
+    @Listener(channel = MSG_SYNC, side = Side.CLIENT)
     void hSync(boolean enabled, boolean chargingIn, boolean chargingOut,
                double energy, String name, String pass, String placerName) {
         this.enabled = enabled;

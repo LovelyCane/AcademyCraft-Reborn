@@ -1,27 +1,26 @@
 package cn.academy.energy.client.ui
 
 import cn.academy.Resources
-import cn.academy.core.client.ui.TechUI.ContainerUI
-import cn.academy.energy.api.WirelessHelper
-import cn.academy.block.block.BlockNode.NodeType
 import cn.academy.block.container.ContainerNode
 import cn.academy.block.tileentity.TileNode
+import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
+import cn.academy.energy.api.WirelessHelper
 import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.Widget
 import cn.lambdalib2.cgui.event.FrameEvent
 import cn.lambdalib2.registry.StateEventCallback
-import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n, NetworkS11nType}
 import cn.lambdalib2.util.{GameTimer, HudUtils, RenderUtils}
-import net.minecraftforge.fml.relauncher.Side
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.Side
 import org.lwjgl.opengl.GL11
 
 object GuiNode {
+
   import NodeNetworkProxy._
 
   val STATE_LINKED = 0
@@ -38,6 +37,7 @@ object GuiNode {
     val thePlayer = Minecraft.getMinecraft.player
 
     var state = STATE_UNLINKED
+
     def getState = states(state)
 
     val invPage = InventoryPage("node")
@@ -60,7 +60,7 @@ object GuiNode {
 
     val wirelessPage = WirelessPage.nodePage(tile)
 
-    val ret = new ContainerUI(container)
+    val ret = new ContainerUI(container, invPage)
 
     {
       var load = 1
@@ -71,14 +71,14 @@ object GuiNode {
         .histogram(
           TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy),
           TechUI.histCapacity(() => load, tile.getCapacity))
-          .seplineInfo()
-          .property("range", tile.getRange)
-          .property("owner", tile.getPlacerName)
+        .seplineInfo()
+        .property("range", tile.getRange)
+        .property("owner", tile.getPlacerName)
 
-      if (tile.getPlacerName == thePlayer.getName) {
+      if (tile.getPlacerName != null && tile.getPlacerName == thePlayer.getName) {
         ret.infoPage
           .property("node_name", tile.getNodeName, newName => send(MSG_RENAME, thePlayer, tile, newName))
-          .property("password", tile.getPassword, newPass => send(MSG_CHANGE_PASS, thePlayer, tile, newPass), password=true)
+          .property("password", tile.getPassword, newPass => send(MSG_CHANGE_PASS, thePlayer, tile, newPass), password = true)
       } else {
         ret.infoPage
           .property("node_name", tile.getNodeName)
@@ -90,7 +90,9 @@ object GuiNode {
       ret.main.listens[FrameEvent](() => {
         val dt = GameTimer.getTime - time
         if (dt > 2) {
-          send(MSG_QUERY_LINK, tile, Future.create2((res: Boolean) => state = if (res) STATE_LINKED else STATE_UNLINKED))
+          send(MSG_QUERY_LINK, tile, Future.create2((res: Boolean) => {
+            state = if (res) STATE_LINKED else STATE_UNLINKED
+          }))
           time = GameTimer.getTime
         }
       })
@@ -118,12 +120,15 @@ object GuiNode {
 
       RenderUtils.loadTexture(animTexture)
       GL11.glColor4d(1, 1, 1, TechUI.breatheAlpha)
+
+      // 使用 animArea 的位置和大小进行绘制
       HudUtils.rawRect(0, 0,
         0, texFrame.toDouble / ALL_FRAMES,
         w, h,
         1, 1.0 / ALL_FRAMES)
     }
   }
+
   case class State(begin: Int, frames: Int, frameTime: Long)
 
 }
@@ -132,7 +137,7 @@ object GuiNode {
 object NodeNetworkProxy {
   final val MSG_RENAME = "rename"
   final val MSG_CHANGE_PASS = "repass"
-  final val MSG_INIT   = "init"
+  final val MSG_INIT = "init"
   final val MSG_QUERY_LINK = "query_link"
 
   @StateEventCallback
@@ -140,29 +145,30 @@ object NodeNetworkProxy {
     NetworkS11n.addDirectInstance(NodeNetworkProxy)
   }
 
-  @Listener(channel=MSG_RENAME, side=Array(Side.SERVER))
+  @Listener(channel = MSG_RENAME, side = Array(Side.SERVER))
   def rename(player: EntityPlayer, node: TileNode, name: String) = {
+    println(s"Received rename request from ${player.getName} for node ${node.getNodeName} to $name")
     if (player.getName == node.getPlacerName) {
       node.setNodeName(name)
     }
   }
 
-  @Listener(channel=MSG_CHANGE_PASS, side=Array(Side.SERVER))
+  @Listener(channel = MSG_CHANGE_PASS, side = Array(Side.SERVER))
   def changePassword(player: EntityPlayer, node: TileNode, name: String) = {
+    println(s"Received password change request from ${player.getName} for node ${node.getNodeName} to $name")
     if (player.getName == node.getPlacerName) {
       node.setPassword(name)
     }
   }
 
-  @Listener(channel=MSG_QUERY_LINK, side=Array(Side.SERVER))
+  @Listener(channel = MSG_QUERY_LINK, side = Array(Side.SERVER))
   def queryIsLinked(node: TileNode, future: Future[Boolean]) = {
     future.sendResult(WirelessHelper.isNodeLinked(node))
   }
 
-  @Listener(channel=MSG_INIT, side=Array(Side.SERVER))
+  @Listener(channel = MSG_INIT, side = Array(Side.SERVER))
   def init(node: TileNode, future: Future[Int]) = {
     val conn = WirelessHelper.getNodeConn(node)
     future.sendResult(conn.getLoad)
   }
-
 }

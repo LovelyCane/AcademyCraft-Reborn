@@ -65,7 +65,7 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
     ctx.consume(overload, cp)
   }
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_onKeyDown() = {
     sendToServer(MSG_EXECUTE)
   }

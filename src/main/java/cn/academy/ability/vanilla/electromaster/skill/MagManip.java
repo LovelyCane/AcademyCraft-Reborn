@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.electromaster.skill;
 
 import cn.academy.ability.Skill;
+import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientContext;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
@@ -11,7 +12,10 @@ import cn.academy.client.sound.FollowEntitySound;
 import cn.academy.entity.MagManipEntityBlock;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.util.*;
+import cn.lambdalib2.util.EntitySelectors;
+import cn.lambdalib2.util.MathUtils;
+import cn.lambdalib2.util.Raytrace;
+import cn.lambdalib2.util.VecUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.state.IBlockState;
@@ -25,6 +29,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import static cn.lambdalib2.util.VecUtils.*;
 
 
@@ -256,7 +261,7 @@ public class MagManip extends Skill
             ACSounds.playClient(loopSound);
         }
 
-        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @Listener(channel= AbilityAPIExt.MSG_TERMINATED, side=Side.CLIENT)
         public void c_terminate()
         {
             loopSound.stop();

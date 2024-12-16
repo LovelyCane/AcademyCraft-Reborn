@@ -1,21 +1,22 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
-import cn.academy.ability.context.{DelegateState, _}
+import cn.academy.ability.api.AbilityAPIExt
+import cn.academy.ability.context._
 import cn.academy.ability.vanilla.generic.client.effect.SmokeEffect
 import cn.academy.ability.vanilla.util.HandlerLifePeroidEvent
 import cn.academy.client.sound.ACSounds
 import cn.academy.util.Plotter
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{EntitySelectors, RandUtils, VecUtils, WorldUtils}
+import cn.lambdalib2.util.{EntitySelectors, RandUtils, WorldUtils}
 import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.particle.ParticleDigging
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, SoundEvents}
-import net.minecraft.util.{EnumFacing, EnumParticleTypes, SoundCategory}
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos, Vec3d}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes, SoundCategory}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -32,16 +33,18 @@ private object GroundshockContext {
 
 }
 
-import GroundshockContext._
-import collection.mutable
+import cn.academy.ability.vanilla.vecmanip.skill.GroundshockContext._
+
+import scala.collection.mutable
 
 class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with IConsumptionProvider with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
-  import scala.collection.JavaConversions._
   import cn.lambdalib2.util.MathUtils._
+
+  import scala.collection.JavaConversions._
   var localTick = 0
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = {
     localTick += 1
 
@@ -55,7 +58,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
     player.rotationPitch -= pitchDelta * 0.2f
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
     if (localTick >= 5) {
       sendToServer(MSG_PERFORM)
@@ -64,7 +67,7 @@ class GroundshockContext(p: EntityPlayer) extends Context(p, Groundshock) with I
     }
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   def l_keyAbort() = {
     terminate()
   }

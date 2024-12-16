@@ -3,17 +3,16 @@ package cn.academy.ability.vanilla.meltdowner;
 import cn.academy.ability.Category;
 import cn.academy.ability.Skill;
 import cn.academy.ability.vanilla.VanillaCategories;
-import cn.academy.ability.vanilla.meltdowner.passiveskill.RadiationIntensify$;
+import cn.academy.ability.vanilla.meltdowner.passiveskill.RadiationIntensify;
 import cn.academy.ability.vanilla.meltdowner.skill.*;
 
 /**
  * @author WeAthFolD
  */
 public class CatMeltdowner extends Category {
-
     public static final Skill
         electronBomb = ElectronBomb.Instance,
-        radIntensify = RadiationIntensify$.MODULE$,
+        radIntensify = RadiationIntensify.INSTANCE,
         rayBarrage = RayBarrage$.MODULE$,
         scatterBomb = ScatterBomb$.MODULE$,
         lightShield = LightShield.INSTANCE,
@@ -21,7 +20,7 @@ public class CatMeltdowner extends Category {
         jetEngine = JetEngine$.MODULE$,
         mineRayBasic = MineRayBasic$.MODULE$,
         mineRayExpert = MineRayExpert$.MODULE$,
-        mineRayLuck = MineRayLuck$.MODULE$,
+        mineRayLuck = MineRayLuck.instance,
         electronMissile = ElectronMissile$.MODULE$;
 
     public CatMeltdowner() {
@@ -76,5 +75,4 @@ public class CatMeltdowner extends Category {
         mineRayLuck.setParent(mineRayExpert, 1.0f);
         electronMissile.setParent(jetEngine, 0.3f);
     }
-
 }

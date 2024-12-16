@@ -1,23 +1,24 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
-import java.util.function.Predicate
-
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.util.ArcPatterns
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityArc
-import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
+import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}
 import cn.lambdalib2.util._
 import cn.lambdalib2.util.entityx.handlers.Life
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import java.util.function.Predicate
 
 /**
   * @author WeAthFolD, KSkun
@@ -38,10 +39,11 @@ object ThunderBoltContext {
 
 }
 
-import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import ThunderBolt._
-import ThunderBoltContext._
+import cn.academy.ability.vanilla.electromaster.skill.ThunderBolt._
+import cn.academy.ability.vanilla.electromaster.skill.ThunderBoltContext._
+import cn.lambdalib2.util.MathUtils._
+
 import scala.collection.JavaConversions._
 
 class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
@@ -57,7 +59,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
     ctx.consume(overload, cp)
   }
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_onKeyDown() = {
     sendToServer(MSG_PERFORM)
   }
@@ -123,7 +125,7 @@ class ThunderBoltContext(p: EntityPlayer) extends Context(p, ThunderBolt) {
 
 }
 
-import ThunderBoltContext._
+import cn.academy.ability.vanilla.electromaster.skill.ThunderBoltContext._
 
 @SideOnly(Side.CLIENT)
 @RegClientContext(classOf[ThunderBoltContext])

@@ -1,17 +1,17 @@
 package cn.academy.ability.vanilla.teleporter.skill;
 
 import cn.academy.ACItems;
-import cn.academy.AcademyCraft;
 import cn.academy.ability.Skill;
+import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientContext;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
 import cn.academy.ability.context.RegClientContext;
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper;
-import cn.academy.advancements.ACAdvancements;
 import cn.academy.client.render.misc.TPParticleFactory;
 import cn.academy.client.sound.ACSounds;
 import cn.academy.entity.EntityMarker;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -22,7 +22,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import org.lwjgl.util.Color;
 
 import static cn.lambdalib2.util.MathUtils.lerpf;
@@ -173,7 +172,7 @@ public class ThreateningTeleport extends Skill
             this.par = par;
         }
 
-        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @Listener(channel= AbilityAPIExt.MSG_TERMINATED, side=Side.CLIENT)
         public void l_terminated()
         {
             if(isLocal() && marker != null) marker.setDead();

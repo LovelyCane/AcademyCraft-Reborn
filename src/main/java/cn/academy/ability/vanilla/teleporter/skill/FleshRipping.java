@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.teleporter.skill;
 
 import cn.academy.ability.Skill;
+import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientContext;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
@@ -155,7 +156,7 @@ public class FleshRipping extends Skill
         private Color DISABLED_COLOR  = new Color(74, 74, 74, 160);
         private Color THREATENING_COLOR = new Color(185, 25, 25, 180);
 
-        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @Listener(channel= AbilityAPIExt.MSG_TERMINATED, side=Side.CLIENT)
         private void l_terminated(){
             if(marker != null)
                 marker.setDead();

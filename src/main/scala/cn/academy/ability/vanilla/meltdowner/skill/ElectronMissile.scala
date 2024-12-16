@@ -1,18 +1,18 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.client.render.util.ACRenderingHelper
 import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{MathUtils, VecUtils}
 import cn.lambdalib2.util.MathUtils._
-import cn.lambdalib2.util.{EntitySelectors, WorldUtils}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.util.{EntitySelectors, MathUtils, VecUtils, WorldUtils}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.Vec3d
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * @author WeAthFolD, KSkun
@@ -32,9 +32,10 @@ object EMContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.academy.ability.vanilla.meltdowner.skill.EMContext._
 import cn.lambdalib2.util.RandUtils._
+
 import scala.collection.JavaConversions._
-import EMContext._
 
 class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
 
@@ -52,24 +53,24 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
 
   private var overloadKeep = 0f
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
     terminate()
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
     terminate()
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_madeAlive() = {
     ctx.consume(overload_keep, 0)
     overloadKeep = ctx.cpData.getOverload
     active = new java.util.LinkedList[EntityMdBall]()
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     if (!ctx.consume(0, consumption)) terminate()
@@ -126,7 +127,7 @@ class EMContext(p: EntityPlayer) extends Context(p, ElectronMissile) {
     }
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     val cooldown: Int = MathUtils.clampi(700, 400, exp.toInt)
     ctx.setCooldown(cooldown)

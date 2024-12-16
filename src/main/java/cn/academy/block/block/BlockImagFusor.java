@@ -147,7 +147,7 @@ public class BlockImagFusor extends ACBlockContainer {
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             TileImagFusor te = check(world, new BlockPos(x, y, z));
-            return te == null ? null : GuiImagFusor.apply(new ContainerImagFusor(te, player));
+            return GuiImagFusor.apply(new ContainerImagFusor(te, player));
         }
 
         @Override

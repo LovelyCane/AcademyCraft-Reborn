@@ -24,7 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 public class BlockWindGenBase extends ACBlockMulti {
-
     @RegGuiHandler
     public static GuiHandlerBase guiHandler = new GuiHandlerBase() {
         @SideOnly(Side.CLIENT)

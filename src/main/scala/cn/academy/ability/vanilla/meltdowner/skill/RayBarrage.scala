@@ -1,18 +1,19 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
-import java.util.function.Predicate
-
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.entity.{EntityBarrageRayPre, EntityMdRayBarrage, EntitySilbarn}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.entityx.event.CollideEvent
-import cn.lambdalib2.util._
 import cn.lambdalib2.util.VecUtils._
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.util._
+import cn.lambdalib2.util.entityx.event.CollideEvent
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.math.{AxisAlignedBB, MathHelper, RayTraceResult, Vec3d}
+import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import java.util.function.Predicate
 
 /**
   * @author WeAthFolD, KSkun
@@ -35,9 +36,9 @@ object RBContext {
 
 }
 
-import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import RBContext._
+import cn.academy.ability.vanilla.meltdowner.skill.RBContext._
+import cn.lambdalib2.util.MathUtils._
 
 class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
 
@@ -51,7 +52,7 @@ class RBContext(p: EntityPlayer) extends Context(p, RayBarrage) {
 
   private def getScatteredDamage(exp: Float): Float = lerpf(10, 18, exp)
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_onKeyDown() = {
     sendToServer(MSG_START)
   }

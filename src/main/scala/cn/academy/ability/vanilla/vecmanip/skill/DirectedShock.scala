@@ -1,8 +1,8 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.advancements.ACAdvancements
 import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
 import cn.academy.client.sound.ACSounds
 import cn.academy.datapart.HandRenderOverrideData
@@ -45,7 +45,7 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
   private var punched = false
   private var punchTicker = 0
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
     if (ticker > MIN_TICKS && ticker < MAX_ACCEPTED_TICKS) {
       sendToServer(MSG_PERFORM, ticker.asInstanceOf[AnyRef])
@@ -54,10 +54,10 @@ class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
     }
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   def l_keyAbort() = terminate()
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     ticker += 1
     if (ticker >= MAX_TOLERANT_TICKS) {
@@ -154,7 +154,7 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
     ACSounds.playClient(player, "vecmanip.directed_shock", SoundCategory.AMBIENT, 0.5f)
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   def l_handEffectStart() = if (isLocal) {
     anim = createPrepareAnim()
 
@@ -174,7 +174,7 @@ class ShockContextC(par: ShockContext) extends ClientContext(par) {
     HandRenderOverrideData.get(player).addInterrupt(handEffect)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_handEffectTerminate() = if (isLocal) {
     HandRenderOverrideData.get(player).stopInterrupt(handEffect)
   }

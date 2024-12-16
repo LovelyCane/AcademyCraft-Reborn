@@ -1,15 +1,16 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
-import cn.academy.client.sound.ACSounds
 import cn.academy.ability.vanilla.vecmanip.client.effect.ParabolaEffect
+import cn.academy.client.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.SoundCategory
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object VecAccel extends Skill("vec_accel", 2) {
 
@@ -29,9 +30,10 @@ object VecAccelContext {
 }
 
 import cn.academy.ability.api.AbilityAPIExt._
-import VecAccelContext._
+import cn.academy.ability.vanilla.vecmanip.skill.VecAccelContext._
 import cn.lambdalib2.util.MathUtils._
-import Math._
+
+import java.lang.Math._
 
 class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsumptionProvider {
 
@@ -41,13 +43,13 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
 
   var canPerform = true
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = l_perform()
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   def l_keyAbort() = terminate()
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   def l_tickHandler() = if (isLocal) {
     ticker += 1
 
@@ -115,7 +117,7 @@ class VecAccelContext(p: EntityPlayer) extends Context(p, VecAccel) with IConsum
 @RegClientContext(classOf[VecAccelContext])
 class VecAccelContextC(par: VecAccelContext) extends ClientContext(par) {
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   def l_makeAlive() = if (isLocal) {
     world().spawnEntity(new ParabolaEffect(par))
   }

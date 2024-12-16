@@ -6,13 +6,12 @@ import cn.academy.core.client.ui._
 import cn.lambdalib2.util.Colors
 
 object GuiPhaseGen {
-
   def apply(container: ContainerPhaseGen) = {
     val tile = container.tile
     val inventoryPage = InventoryPage("phasegen")
     val wirelessPage = WirelessPage.userPage(tile)
 
-    val ret = new ContainerUI(container)
+    val ret = new ContainerUI(container, inventoryPage)
     ret.infoPage.histogram(
       TechUI.histEnergy(() => tile.getEnergy, tile.bufferSize),
       TechUI.HistElement("IF", Colors.fromHexColor(0xffb983fb),
@@ -20,5 +19,4 @@ object GuiPhaseGen {
 
     ret
   }
-
 }

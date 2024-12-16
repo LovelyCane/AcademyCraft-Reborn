@@ -1,17 +1,18 @@
 package cn.academy.ability.vanilla.teleporter.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.sound.ACSounds
-import cn.academy.entity.EntityTPMarking
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
+import cn.academy.client.sound.ACSounds
 import cn.academy.datapart.CPData
+import cn.academy.entity.EntityTPMarking
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{Raytrace, VecUtils}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraft.util.{EnumFacing, SoundCategory}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * @author WeAthFolD, KSkun
@@ -30,9 +31,9 @@ object MTContext {
 
 }
 
-import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import MTContext._
+import cn.academy.ability.vanilla.teleporter.skill.MTContext._
+import cn.lambdalib2.util.MathUtils._
 
 class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
 
@@ -41,13 +42,13 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
   private var ticks: Int = 0
   private val exp: Float = ctx.getSkillExp
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onKeyUp = sendToServer(MSG_EXECUTE)
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onKeyAbort = terminate()
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_tick() = {
     ticks += 1
   }
@@ -141,7 +142,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
   private var mark: EntityTPMarking = _
   private var ticks = 0
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_start() = {
     if(isLocal) {
       mark = new EntityTPMarking(player)
@@ -149,7 +150,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def l_update() = {
     if(mark == null) terminate()
 
@@ -158,7 +159,7 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
     if(isLocal) mark.setPosition(dest.x, dest.y, dest.z)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def l_end() = {
     if(isLocal) mark.setDead()
   }

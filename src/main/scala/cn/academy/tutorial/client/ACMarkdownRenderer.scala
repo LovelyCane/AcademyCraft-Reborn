@@ -10,14 +10,15 @@ import cn.lambdalib2.util.markdown.{GLMarkdownRenderer, MarkdownParser}
 import scala.collection.Map
 
 /**
-  * This class renderers markdown with keyid display support.
-  */
-class ACMarkdownRenderer extends GLMarkdownRenderer {
+ * This class renderers markdown with keyid display support.
+ */
 
+class ACMarkdownRenderer extends GLMarkdownRenderer {
   private val tutLocal = LocalHelper.at("ac.tutorial")
 
   override def onTag(name: String, attr: Map[String, String]) = {
     super.onTag(name, attr)
+
     def render(keyName: String) = onTextContent(keyName, Set(MarkdownParser.Reference()))
 
     if (name == "key") {
@@ -36,5 +37,4 @@ class ACMarkdownRenderer extends GLMarkdownRenderer {
       onTextContent(name, Set(MarkdownParser.Strong()))
     }
   }
-
 }

@@ -189,6 +189,4 @@ public enum CGUIDocument {
             Debug.error("Can't write CGUI document", e);
         }
     }
-
-
 }

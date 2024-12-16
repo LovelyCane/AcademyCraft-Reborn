@@ -2,8 +2,8 @@ package cn.academy.energy.client.ui
 
 import cn.academy.Resources
 import cn.academy.block.container.ContainerSolarGen
-import cn.academy.core.client.ui.{InventoryPage, TechUI, WirelessPage}
 import cn.academy.block.tileentity.TileSolarGen.SolarStatus
+import cn.academy.core.client.ui.{InventoryPage, TechUI, WirelessPage}
 import cn.lambdalib2.cgui.event.FrameEvent
 import cn.lambdalib2.cgui.loader.CGUIDocument
 import cn.lambdalib2.util.{HudUtils, RenderUtils}
@@ -43,9 +43,8 @@ object GuiSolarGen {
     ret.infoPage
       .histogram(TechUI.histBuffer(() => tile.getEnergy, tile.bufferSize))
       .seplineInfo()
-      .property("gen_speed",f"${tile.getGeneration(1024)}%.2fIF/T")
+      .property("gen_speed", f"${tile.getGeneration(1024)}%.2fIF/T")
 
     ret
   }
-
 }

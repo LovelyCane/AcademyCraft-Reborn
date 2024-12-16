@@ -656,5 +656,4 @@ public enum ContextManager {
             }
         });
     }
-
 }

@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.meltdowner.skill;
 
 import cn.academy.ability.Skill;
+import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
 import cn.academy.ability.context.ContextManager;
@@ -125,7 +126,7 @@ public class LightShield extends Skill
         }
     }
 
-        @Listener(channel=MSG_TERMINATED, side=Side.SERVER) 
+        @Listener(channel= AbilityAPIExt.MSG_TERMINATED, side=Side.SERVER)
         private void s_onEnd(){ 
 
         player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 100, 1));
@@ -209,7 +210,7 @@ public class LightShield extends Skill
         }
 
         @SideOnly(Side.CLIENT)
-        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Side.CLIENT)
         private void c_end(){
             shield.setDead();
             loopSound.stop();

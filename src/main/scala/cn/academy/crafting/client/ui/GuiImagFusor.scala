@@ -1,7 +1,7 @@
 package cn.academy.crafting.client.ui
 
-import cn.academy.block.container.ContainerImagFusor
 import cn.academy.Resources
+import cn.academy.block.container.ContainerImagFusor
 import cn.academy.core.client.ui.TechUI.ContainerUI
 import cn.academy.core.client.ui._
 import cn.academy.util.LocalHelper
@@ -20,7 +20,7 @@ object GuiImagFusor {
 
     val invPage = InventoryPage(template.copy())
 
-    val ret = new ContainerUI(container)
+    val ret = new ContainerUI(container, invPage)
 
     { // Work progress display
       val progWidget = invPage.window.getWidget("progress")

@@ -17,7 +17,6 @@ public class SlotIFItem extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return (stack != null && IFItemManager.instance.isSupported(stack));
+        return IFItemManager.instance.isSupported(stack);
     }
-
 }

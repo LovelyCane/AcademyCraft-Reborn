@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.entity.{EntityDiamondShield, EntityRippleMark}
@@ -39,13 +40,13 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
   private val consumption: Float = lerpf(170, 140, exp)
   private val overload: Float = lerpf(60, 50, exp)
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = if(!ctx.canConsumeCP(consumption)) terminate()
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onKeyUp() = sendToServer(MSG_MARK_END)
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onKeyAbort() = {
     sendToSelf(MSG_MARK_END)
     terminate()
@@ -95,7 +96,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
     }
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_triggerTick() = {
     if(isTriggering) {
       val pos: RayTraceResult = Raytrace.perform(world,
@@ -106,7 +107,7 @@ class JEContext(p: EntityPlayer) extends Context(p, JetEngine) {
     }
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_triggerTick(): Unit = {
     if(isLocal && isTriggering) {
       if (ticks >= LIFETIME)
@@ -137,7 +138,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
   private var isMarking = false
   private var ticks: Int = 0
   
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def l_spawnMark() = {
     if(isLocal) {
       isMarking = true
@@ -147,7 +148,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
     }
   }
   
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def l_updateMark() = {
     if(isLocal && isMarking) {
       val dest: Vec3d = getDest
@@ -177,7 +178,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
     world.spawnEntity(entity)
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_tUpdateEffect() = {
     if(isTriggering) {
       ticks += 1
@@ -192,7 +193,7 @@ class JEContextC(par: JEContext) extends ClientContext(par) {
     }
   }
   
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_tEndEffect() = {
     if(mark != null) mark.setDead()
 

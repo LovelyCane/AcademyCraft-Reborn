@@ -38,8 +38,8 @@ import java.util.function.Function;
  *
  * @author WeAthFolD
  */
-public abstract class Skill extends Controllable {
 
+public abstract class Skill extends Controllable {
     private Category category;
 
     private final List<IDevCondition> learningConditions = new ArrayList<>();

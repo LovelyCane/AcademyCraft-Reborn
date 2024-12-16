@@ -7,23 +7,24 @@ import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class has ability to create a SkillInstance to override
  * a specific ability key. Used in Skill for indexing.
- * @author WeAthFolD
  *
+ * @author WeAthFolD
+ * <p>
  * SkillInstance has been removed.  --Paindar
  */
-public abstract class Controllable {
 
+public abstract class Controllable {
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
         NetworkS11n.addDirect(Controllable.class, new NetS11nAdaptor<Controllable>() {
@@ -42,10 +43,7 @@ public abstract class Controllable {
         NBTS11n.addBase(Controllable.class, new BaseSerializer<NBTBase, Controllable>() {
             @Override
             public NBTBase write(Controllable value) {
-                return new NBTTagByteArray(new byte[] {
-                        (byte) value.getCategory().getCategoryID(),
-                        (byte) value.getControlID()
-                });
+                return new NBTTagByteArray(new byte[]{(byte) value.getCategory().getCategoryID(), (byte) value.getControlID()});
             }
 
             @Override
@@ -59,46 +57,48 @@ public abstract class Controllable {
 
     private Category category;
     private int id;
-    
-    public Controllable() {}
-    
+
+    public Controllable() {
+    }
+
     final void addedControllable(Category _category, int _id) {
         category = _category;
         id = _id;
     }
-    
+
     public final Category getCategory() {
         return category;
     }
-    
+
     public final int getControlID() {
         return id;
     }
 
     /**
      * Invoked when given {@link Controllable} was activated. (e.g. The skill was in the switched preset),
-     *  register the KeyDelegates into the runtime.
+     * register the KeyDelegates into the runtime.
      *
-     *  @param keyID The key ID associated with the skill currently
+     * @param keyID The key ID associated with the skill currently
      */
     @SideOnly(Side.CLIENT)
-    public /*abstract*/ void activate(ClientRuntime rt, int keyID) {}
-    
+    public /*abstract*/ void activate(ClientRuntime rt, int keyID) {
+    }
+
     /**
      * Return the icon of this controllable. Used in KeyHint display UI.
      */
     public abstract ResourceLocation getHintIcon();
-    
+
     /**
      * Return the hint text of the controllable. Used in KeyHint display UI.
      */
     public abstract String getHintText();
-    
+
     /**
      * @return Whether this controllable should override the vanilla key control.
      */
     public boolean shouldOverrideKey() {
         return true;
     }
-    
+
 }

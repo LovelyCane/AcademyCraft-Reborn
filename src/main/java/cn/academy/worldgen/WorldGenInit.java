@@ -9,20 +9,20 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 /**
  * This is the main registry of all the crafting materials. Oredict name and
  * Recipe script names are all provided here.
- * 
+ *
  * @author WeAthFolD, Shielian, KS
  */
 public class WorldGenInit {
-    
+
     // CONFIGS
     public static boolean GENERATE_ORES, GENERATE_PHASE_LIQUID;
 
     //@RegWorldGen(2)
     @StateEventCallback
-    public static void preInit(FMLPreInitializationEvent event)
-    {
-        GameRegistry.registerWorldGenerator(worldGen,2);
+    public static void preInit(FMLPreInitializationEvent event) {
+        GameRegistry.registerWorldGenerator(worldGen, 2);
     }
+
     public static final ACWorldGen worldGen = new ACWorldGen();
 
     @StateEventCallback

@@ -1,21 +1,21 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
-import cn.academy.AcademyCraft
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
+import cn.academy.ability.vanilla.electromaster.CatElectromaster
 import cn.academy.client.render.util.{ACRenderingHelper, ArcPatterns}
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
-import cn.academy.entity.EntityArc
-import cn.academy.ability.vanilla.electromaster.CatElectromaster
 import cn.academy.datapart.AbilityData
+import cn.academy.entity.EntityArc
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{MathUtils, Raytrace}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.SoundCategory
-import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * @author WeAthFolD, KSkun
@@ -54,10 +54,10 @@ object MovementContext {
 
 }
 
-import MagMovement._
-import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
-import MovementContext._
+import cn.academy.ability.vanilla.electromaster.skill.MagMovement._
+import cn.academy.ability.vanilla.electromaster.skill.MovementContext._
+import cn.lambdalib2.util.MathUtils._
 
 class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
 
@@ -83,7 +83,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     if(d > 0) from + ACCEL else from - ACCEL
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER, Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER, Side.CLIENT))
   private def g_onStart() = {
     ctx.consume(overload, 0)
     overloadKeep = ctx.cpData.getOverload
@@ -111,7 +111,7 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     sendToClient(MSG_EFFECT_UPDATE, Vec3d)
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_onTick() = {
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     if(canSpawnEffect) {
@@ -147,12 +147,12 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     }
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     if((target != null && !target.alive()) || !ctx.consume(0, cp)) terminate()
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     val traveledDistance = MathUtils.distance(sx, sy, sz, player.posX, player.posY, player.posZ)
     ctx.addSkillExp(getExpIncr(traveledDistance))
@@ -160,12 +160,12 @@ class MovementContext(p: EntityPlayer) extends Context(p, MagMovement) {
     player.fallDistance = 0.0f
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
     terminate()
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
     terminate()
   }
@@ -199,7 +199,7 @@ class MovementContextC(par: MovementContext) extends ClientContext(par) {
       target.y, target.z)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_endEffect() = {
     if(arc != null) arc.setDead()
     if(sound != null) sound.stop()

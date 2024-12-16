@@ -2,6 +2,7 @@ package cn.academy.ability.vanilla.teleporter.skill;
 
 import cn.academy.ability.AbilityContext;
 import cn.academy.ability.Skill;
+import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientContext;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
@@ -11,8 +12,8 @@ import cn.academy.client.render.misc.TPParticleFactory;
 import cn.academy.datapart.AbilityData;
 import cn.academy.entity.EntityMarker;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.util.*;
 import cn.lambdalib2.util.EntitySelectors;
+import cn.lambdalib2.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -290,7 +291,7 @@ public class ShiftTeleport extends Skill
             }
         }
 
-        @Listener(channel=MSG_TERMINATED, side=Side.CLIENT)
+        @Listener(channel= AbilityAPIExt.MSG_TERMINATED, side=Side.CLIENT)
         private void l_terminated(){
             if(isLocal()) {
                 for(Entity em : targetMarkers)

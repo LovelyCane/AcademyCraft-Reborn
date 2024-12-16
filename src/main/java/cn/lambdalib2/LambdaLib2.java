@@ -3,7 +3,6 @@ package cn.lambdalib2;
 import cn.lambdalib2.multiblock.MsgBlockMulti;
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.impl.RegistryManager;
-import cn.lambdalib2.registry.impl.RegistryTransformer;
 import cn.lambdalib2.s11n.network.NetworkEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.util.DebugDraw;
@@ -23,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 public class LambdaLib2
 {
     public static final String MODID = "lambdalib2";
-    public static final String VERSION = "@LAMBDA_LIB_VERSION@";
+    public static final String VERSION = "0.2.1";
 
     /**
      * Whether we are in development (debug) mode.

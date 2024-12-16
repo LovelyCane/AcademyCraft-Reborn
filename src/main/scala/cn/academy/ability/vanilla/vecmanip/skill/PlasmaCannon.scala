@@ -1,22 +1,21 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.Context.Status
-import cn.academy.ability.context.{DelegateState, _}
+import cn.academy.ability.context._
+import cn.academy.ability.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
 import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.LocalEntity
-import cn.academy.ability.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.util.{EntitySelectors, Raytrace, SideUtils, WorldUtils}
-import net.minecraftforge.fml.client.registry.RenderingRegistry
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import cn.lambdalib2.util.{EntitySelectors, Raytrace, WorldUtils}
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.RayTraceResult
 import net.minecraft.util.{ResourceLocation, SoundCategory}
 import net.minecraft.world.Explosion
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object PlasmaCannon extends Skill("plasma_cannon", 5) {
 
@@ -36,11 +35,12 @@ object PlasmaCannonContext {
   val MOVING_SPEED   = 1
 }
 
-import PlasmaCannonContext._
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.academy.ability.vanilla.vecmanip.skill.PlasmaCannonContext._
 import cn.lambdalib2.util.MathUtils._
-import scala.collection.JavaConversions._
 import net.minecraft.util.math.Vec3d
+
+import scala.collection.JavaConversions._
 
 class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with IStateProvider {
   import cn.academy.ability.api.AbilityAPIExt._
@@ -54,7 +54,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
   var chargePosition = add(player.getPositionVector, new Vec3d(0.0, 15.0, 0.0))
   var destination: Vec3d = null
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
     if (localTicker >= chargeTime) {
       sendToServer(MSG_PERFORM)
@@ -63,10 +63,10 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     }
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   def l_keyAbort() = terminate()
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     localTicker += 1
 
@@ -79,7 +79,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     }
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   def s_madeAlive() = {
     ctx.consume(overloadToKeep, 0)
     overloadKeep = ctx.cpData.getOverload
@@ -107,7 +107,7 @@ class PlasmaCannonContext(p: EntityPlayer) extends Context(p, PlasmaCannon) with
     chargePosition=pos
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   def s_tick() = {
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     localTicker += 1
@@ -251,7 +251,7 @@ class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self
 
   private var effect: PlasmaBodyEffect = _
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
   private def c_begin() = {
     effect = new PlasmaBodyEffect(world, self)
     effect.setPosition(self.chargePosition.x, self.chargePosition.y, self.chargePosition.z)
@@ -263,12 +263,12 @@ class PlasmaCannonContextC(self: PlasmaCannonContext) extends ClientContext(self
     ACSounds.playClient(sound)
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_terminate() = {
     sound.stop()
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_tick() = {
     if (self.state == STATE_GO) {
       self.tryMove()

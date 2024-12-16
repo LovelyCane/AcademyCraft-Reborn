@@ -1,23 +1,20 @@
 package cn.academy.ability.vanilla.meltdowner.skill
 
-import java.util
-import java.util.function.Predicate
-
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientRuntime, Context}
-import cn.academy.client.render.util.ACRenderingHelper
-import cn.academy.entity.{EntityMdBall, EntityMdRaySmall}
-import cn.academy.network.NetworkManager
-import cn.lambdalib2.registry.StateEventCallback
+import cn.academy.entity.EntityMdBall
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.{NetworkMessage, NetworkS11n, NetworkS11nType, TargetPoints}
+import cn.lambdalib2.s11n.network.{NetworkMessage, TargetPoints}
 import cn.lambdalib2.util._
-import net.minecraft.client.Minecraft
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraft.entity.{Entity, EntityLiving, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLiving}
 import net.minecraft.util.DamageSource
 import net.minecraft.util.math.{RayTraceResult, Vec3d}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import java.util
+import java.util.function.Predicate
 
 /**
   * @author WeAthFolD, KSkun, Paindar
@@ -29,8 +26,8 @@ object ScatterBomb extends Skill("scatter_bomb", 2) {
 
 }
 
-import cn.lambdalib2.util.MathUtils._
 import cn.academy.ability.api.AbilityAPIExt._
+import cn.lambdalib2.util.MathUtils._
 
 class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
 
@@ -46,24 +43,24 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
 
   private var overloadKeep = 0f
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onKeyUp() = {
     terminate()
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
     terminate()
   }
 
-  @Listener(channel=MSG_MADEALIVE, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.SERVER))
   private def s_onStart() = {
     val overload: Float = lerpf(80, 60, exp)
     ctx.consume(overload, 0)
     overloadKeep = ctx.cpData.getOverload
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     if(ctx.cpData.getOverload < overloadKeep) ctx.cpData.setOverload(overloadKeep)
     ticks += 1
@@ -83,7 +80,7 @@ class SBContext(p: EntityPlayer) extends Context(p, ScatterBomb) {
     }
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.SERVER))
   private def s_onEnd() = {
     import scala.collection.JavaConversions._
     var autoCount = if (exp > 0.5) (balls.size().toFloat * exp).toInt else 0

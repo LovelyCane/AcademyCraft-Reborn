@@ -11,12 +11,10 @@ Player
 
 Forge dependencies:
 1. JDK/JRE 1.8
-2. Lambdalib2
 
 Cleanroom dependencies:
 1. JRE/JDK 21 or 1.8
-2. Lambdalib2
-3. Scalar-1.12.2-2.11.1
+2Scalar-1.12.2-2.11.1
 
 Recommend mods:
 1. Vintagium
@@ -30,8 +28,9 @@ Soon :)
 Development
 ===========
 
-Soon :)
-- Never use Scala :(
+- I need some time :)
+- Don't use Scala.
+- Removing .scala file :)
 
 ## Build
 

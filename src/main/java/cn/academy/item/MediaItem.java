@@ -1,11 +1,9 @@
 package cn.academy.item;
 
 import cn.academy.AcademyCraft;
-import cn.academy.ability.Category;
-import cn.academy.ability.CategoryManager;
 import cn.academy.misc.media.Media;
 import cn.academy.misc.media.MediaAcquireData;
-import cn.academy.misc.media.MediaApp$;
+import cn.academy.misc.media.MediaApp;
 import cn.academy.misc.media.MediaManager;
 import cn.academy.terminal.TerminalData;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,38 +22,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class MediaItem extends Item
-{
-    public MediaItem()
-    {
+public class MediaItem extends Item {
+    public MediaItem() {
         setMaxStackSize(1);
         hasSubtypes = true;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
-    {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!world.isRemote)
-        {
+        if (!world.isRemote) {
             MediaAcquireData acquireData = MediaAcquireData.apply(player);
             TerminalData tData = TerminalData.get(player);
 
             Media media = getMedia(stack.getItemDamage());
 
-            if (!tData.isInstalled(MediaApp$.MODULE$))
-            {
+            if (!tData.isInstalled(new MediaApp())) {
                 player.sendMessage(new TextComponentTranslation("ac.media.notinstalled"));
-            }
-            else if (acquireData.isInstalled(media))
-            {
+            } else if (acquireData.isInstalled(media)) {
                 player.sendMessage(new TextComponentTranslation("ac.media.haveone", media.name()));
-            }
-            else
-            {
+            } else {
                 acquireData.install(media);
-                if (!player.capabilities.isCreativeMode)
-                {
+                if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }
                 player.sendMessage(new TextComponentTranslation("ac.media.acquired", media.name()));
@@ -66,32 +54,27 @@ public class MediaItem extends Item
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack)
-    {
+    public String getItemStackDisplayName(ItemStack stack) {
         return getMedia(stack.getItemDamage()).name();
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag)
-    {
+    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
         tooltip.add(getMedia(stack.getItemDamage()).desc());
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
-    {
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (tab == AcademyCraft.cct) {
             List<Media> medias = scala.collection.JavaConversions.seqAsJavaList(MediaManager.internalMedias());
-            for(int i=0;i<medias.size();i++)
-            {
+            for (int i = 0; i < medias.size(); i++) {
                 items.add(new ItemStack(this, 1, i));
             }
         }
     }
 
-    private Media getMedia(int damage)
-    {
+    private Media getMedia(int damage) {
         return MediaManager.allMedias().apply(damage);
     }
 }

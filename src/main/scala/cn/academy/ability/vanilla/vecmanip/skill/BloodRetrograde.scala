@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.vecmanip.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityBloodSplash
@@ -33,7 +34,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
 
   var tick = 0
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   def l_keyUp() = {
     val trace: RayTraceResult = Raytrace.traceLiving(p, 2)
     trace.typeOfHit match {
@@ -56,7 +57,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
     terminate()
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   def l_tick() = if (isLocal) {
     tick += 1
 
@@ -67,7 +68,7 @@ class BloodRetroContext(p: EntityPlayer) extends Context(p, BloodRetrograde) {
     }
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   def l_terminate() = if (isLocal) {
     player.capabilities.setPlayerWalkSpeed(0.1f)
   }

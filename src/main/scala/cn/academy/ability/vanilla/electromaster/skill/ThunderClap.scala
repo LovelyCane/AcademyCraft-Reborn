@@ -1,6 +1,7 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
 import cn.academy.ability.Skill
+import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.entity.EntitySurroundArc.ArcType
 import cn.academy.entity.{EntityRippleMark, EntitySurroundArc}
@@ -48,7 +49,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
   var ticks = 0
   var hitX, hitY, hitZ = 0d
 
-  @Listener(channel=MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
   private def l_onKeyDown() = {
     sendToServer(MSG_START)
   }
@@ -61,7 +62,7 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
     ctx.consume(overload, 0)
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.SERVER))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
   private def s_onTick() = {
     val DISTANCE = 40.0
     val pos = Raytrace.traceLiving(player, 40.0, EntitySelectors.nothing())
@@ -99,12 +100,12 @@ class ThunderClapContext(p: EntityPlayer) extends Context(p, ThunderClap) {
     terminate()
   }
 
-  @Listener(channel=MSG_KEYUP, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
   private def l_onEnd() = {
     terminate()
   }
 
-  @Listener(channel=MSG_KEYABORT, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
   private def l_onAbort() = {
     terminate()
   }
@@ -136,7 +137,7 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_TICK, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
   private def c_updateEffect() = {
     if(canTicking) {
       val DISTANCE = 40.0
@@ -162,7 +163,7 @@ class ThunderClapContextC(par: ThunderClapContext) extends ClientContext(par) {
     }
   }
 
-  @Listener(channel=MSG_TERMINATED, side=Array(Side.CLIENT))
+  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
   private def c_terminated() = {
     canTicking = false
     player.capabilities.setPlayerWalkSpeed(0.1f)

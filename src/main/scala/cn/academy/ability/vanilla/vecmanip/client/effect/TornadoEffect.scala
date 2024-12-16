@@ -1,15 +1,13 @@
 package cn.academy.ability.vanilla.vecmanip.client.effect
 
-import java.util.Random
-
 import cn.academy.Resources
-import javax.vecmath.Vector2d
 import cn.academy.util.ImprovedNoise._
 import cn.lambdalib2.util.{GameTimer, RenderUtils}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11._
 
-import collection.mutable
+import javax.vecmath.Vector2d
+import scala.collection.mutable
 
 @SideOnly(Side.CLIENT)
 object TornadoEffect_ {
@@ -18,9 +16,10 @@ object TornadoEffect_ {
 
 }
 
-import TornadoEffect_._
+import cn.academy.ability.vanilla.vecmanip.client.effect.TornadoEffect_._
 
 class TornadoEffect(val ht: Double, val sz: Double, val density: Double = 1.0, val dscale: Double = 1.0) {
+
   import cn.lambdalib2.util.RandUtils._
 
   case class Ring(y: Double, width: Double, phase: Double = RNG.nextDouble() * 360, sizeScale: Double = 1.0)
@@ -47,6 +46,7 @@ class TornadoEffect(val ht: Double, val sz: Double, val density: Double = 1.0, v
   }
 
   def time(): Double = GameTimer.getTime * 4.0 - timeOffest
+
   def getRings: Seq[Ring] = rings
 
 }
@@ -68,9 +68,11 @@ object TornadoRenderer {
     target.update(0, noise(ny, t) * (0.3 + math.pow(ny * 2, 1.4)))
     target.update(1, noise(ny, t, 1) * (0.3 + math.pow(ny * 2, 1.4)))
   }
+
   private def r(ny: Double, t: Double) = {
     (0.5 + 0.3 * noise(ny, 0.2 * t)) + 0.5 * math.pow(1.5 * ny, 2) + noise(ny)
   }
+
   private def rot(ny: Double, t: Double) = {
     0.1 * (1 + 0.5 * ny) * t
   }
@@ -82,15 +84,15 @@ object TornadoRenderer {
 
     for (idx <- 0 until div) {
       val v0 = circleData(idx)
-      val v1 = circleData((idx+1) % div)
+      val v1 = circleData((idx + 1) % div)
 
-      val x0 = v0.x*r
-      val z0 = v0.y*r
-      val x1 = v1.x*r
-      val z1 = v1.y*r
+      val x0 = v0.x * r
+      val z0 = v0.y * r
+      val x1 = v1.x * r
+      val z1 = v1.y * r
 
-      val y0 = y + w/2
-      val y1 = y - w/2
+      val y0 = y + w / 2
+      val y1 = y - w / 2
       val u0 = uStep * idx - rot
       val u1 = u0 + uStep
       glTexCoord2d(u0, 0)
@@ -125,9 +127,9 @@ object TornadoRenderer {
     eff.getRings.foreach(ring => {
       val ny = ring.y / eff.ht
       calcdx(ny, time, vdx)
-      vdx.update(0, vdx(0)*eff.sz*eff.dscale)
-      vdx.update(1, vdx(1)*eff.sz*eff.dscale)
-      val vr  = r(ny, time) * eff.sz * ring.sizeScale
+      vdx.update(0, vdx(0) * eff.sz * eff.dscale)
+      vdx.update(1, vdx(1) * eff.sz * eff.dscale)
+      val vr = r(ny, time) * eff.sz * ring.sizeScale
       drawRing(ring.y, ring.width, vdx, vr, rot(ny, time) + ring.phase)
     })
 
