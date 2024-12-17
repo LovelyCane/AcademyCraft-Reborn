@@ -20,19 +20,19 @@ public final class Colors {
 
     public static Color fromRGB32(int col) {
         return new Color(
-            (col >> 16) & 0xFF,
-            (col >> 8) & 0xFF,
-            (col) & 0xFF,
-            255
+                (col >> 16) & 0xFF,
+                (col >> 8) & 0xFF,
+                (col) & 0xFF,
+                255
         );
     }
 
     public static Color fromRGBA32(int col) {
         return new Color(
-            (col >> 24) & 0xFF,
-            (col >> 16) & 0xFF,
-            (col >> 8) & 0xFF,
-            (col) & 0xFF
+                (col >> 24) & 0xFF,
+                (col >> 16) & 0xFF,
+                (col >> 8) & 0xFF,
+                (col) & 0xFF
         );
     }
 

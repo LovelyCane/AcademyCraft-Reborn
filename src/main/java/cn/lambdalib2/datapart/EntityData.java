@@ -9,20 +9,19 @@ import cn.lambdalib2.util.Debug;
 import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.nbt.NBTBase;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class EntityData<Ent extends Entity> implements IEntityData {
-
     private static final String ID = "LL_EntityData";
 
     private static final List<RegData> regList = new ArrayList<>();
@@ -44,9 +42,9 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
      */
     @SuppressWarnings("unchecked")
     static <T extends Entity> void register(
-        Class<? extends DataPart<T>> type,
-        EnumSet<Side> sides,
-        Predicate<Class<? extends T>> pred) {
+            Class<? extends DataPart<T>> type,
+            EnumSet<Side> sides,
+            Predicate<Class<? extends T>> pred) {
         Debug.assert2(!_baked, "Can't register DataPart type after EntityData is used");
 
         RegData add = new RegData();
@@ -83,17 +81,18 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         IntStream.range(0, bothSideList.size()).forEach(i -> bothSideList.get(i).networkID = (byte) i);
 
         Debug.log("EntityData baked, network participants: " +
-            bothSideList.stream().map(x -> x.type.getCanonicalName()).collect(Collectors.toList()));
-        
+                bothSideList.stream().map(x -> x.type.getCanonicalName()).collect(Collectors.toList()));
+
         _baked = true;
     }
 
-    private static Capability<IEntityData> getCapability(){
+    private static Capability<IEntityData> getCapability() {
         return Debug.assertNotNull(CapDataPartHandler.DATA_PART_CAPABILITY);
     }
 
     /**
      * Get entity's EntityData. By get it you can get other data by getPart().
+     *
      * @param entity can't be null.
      */
     @SuppressWarnings("unchecked")
@@ -103,16 +102,16 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         if (!needEntityDataFor(entity.getClass()))
             return null;
 
-        IEntityData ret = entity.getCapability(getCapability(),null);
+        IEntityData ret = entity.getCapability(getCapability(), null);
         if (!(ret instanceof EntityData)) {
-            throw new RuntimeException("Failed to get EntityData of "+entity+" ret="+ret);
+            throw new RuntimeException("Failed to get EntityData of " + entity + " ret=" + ret);
         }
 
         ((EntityData) ret).checkInit();
 
-        return (EntityData)ret;
+        return (EntityData) ret;
     }
-    
+
     // ---------------------------------------------------------
 
     private final ImmutableMap<Class, DataPart> constructed;
@@ -127,7 +126,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
 
         // Construct all DataParts
         Map<Class, DataPart> map = new HashMap<>();
-        for(RegData data : regList) {
+        for (RegData data : regList) {
             if (data.isApplicable(entity)) {
                 try {
                     DataPart instance = data.type.newInstance();
@@ -151,7 +150,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
             dp.wake();
         }
     }
-    
+
     public boolean isInitialized() {
         return entity != null;
     }
@@ -164,8 +163,8 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
     public <T extends DataPart<?>>
     T getPart(Class<T> type) {
         return Debug.assertNotNull(
-            (T) constructed.get(type),
-            () -> "No DataPart of type " + type + " in " + this
+                (T) constructed.get(type),
+                () -> "No DataPart of type " + type + " in " + this
         );
     }
 
@@ -187,16 +186,15 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         Debug.assert2(isInitialized());
         NBTTagCompound tag = new NBTTagCompound();
         constructed.values().forEach(part -> {
-            if (part.needNBTStorage)
-            {
+            if (part.needNBTStorage) {
                 NBTTagCompound partTag = new NBTTagCompound();
                 part.toNBT(partTag);
                 tag.setTag(_partNBTID(part), partTag);
             }
         });
-        if(tag_.hasKey(ID))
-            Debug.warn("Find existed log:"+ID+" when storage NBTTag in EntityData:172.");
-        tag_.setTag(ID,tag);
+        if (tag_.hasKey(ID))
+            Debug.warn("Find existed log:" + ID + " when storage NBTTag in EntityData:172.");
+        tag_.setTag(ID, tag);
     }
 
     @Override
@@ -229,7 +227,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         return bothSideList.get(id).type;
     }
 
-    private boolean needSyncDataPart (DataPart part) {
+    private boolean needSyncDataPart(DataPart part) {
         boolean need = false;
         for (RegData data : bothSideList) {
             if (data.type == part.getClass() && data.pred.test(this.entity.getClass())) {
@@ -239,12 +237,13 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         }
         return need;
     }
+
     private void tick() {
         checkInit();
         for (DataPart part : constructed.values()) {
             // some Entity DataPart pair only exist in client
 //            if (needSyncDataPart(part)) {
-                part.callTick();
+            part.callTick();
 //            }
         }
     }
@@ -253,7 +252,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         instance;
 
         @StateEventCallback
-        public static void preInit(FMLPreInitializationEvent event){
+        public static void preInit(FMLPreInitializationEvent event) {
             MinecraftForge.EVENT_BUS.register(instance);
         }
 
@@ -292,6 +291,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         public void write(ByteBuf buf, EntityData obj) {
             NetworkS11n.serializeWithHint(buf, obj.getEntity(), Entity.class);
         }
+
         @Override
         public EntityData read(ByteBuf buf) throws ContextException {
             Entity living = NetworkS11n.deserializeWithHint(buf, Entity.class);
@@ -310,6 +310,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
             NetworkS11n.serializeWithHint(buf, obj.getData(), EntityData.class);
             buf.writeByte(getNetworkID(obj.getClass()));
         }
+
         @Override
         public DataPart read(ByteBuf buf) throws ContextException {
             EntityData data = NetworkS11n.deserializeWithHint(buf, EntityData.class);
@@ -323,7 +324,6 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
 }
 
 class RegData {
-
     Class<? extends DataPart<?>> type;
     EnumSet<Side> sides;
     Predicate<Class<? extends Entity>> pred;
@@ -334,5 +334,4 @@ class RegData {
         final Side runtimeSide = SideUtils.getRuntimeSide();
         return sides.contains(runtimeSide) && pred.test(ent.getClass());
     }
-
 }

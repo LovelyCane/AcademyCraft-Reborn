@@ -1,29 +1,6 @@
 apply from: 'gradle/scripts/helpers.gradle'
 
 repositories {
-    mavenLocal()
-    exclusiveContent {
-        forRepository {
-            maven {
-                name 'CurseMaven'
-                url 'https://cursemaven.com'
-            }
-        }
-        filter {
-            includeGroup 'curse.maven'
-        }
-    }
-    exclusiveContent {
-        forRepository {
-            maven {
-                name 'Modrinth'
-                url 'https://api.modrinth.com/maven'
-            }
-        }
-        filter {
-            includeGroup 'maven.modrinth'
-        }
-    }
     mavenCentral()
     maven {
         name = "chickenbones"
@@ -48,19 +25,18 @@ repositories {
         url = "https://maven2.ic2.player.to/"
     }
     maven {
-        name 'CleanroomMC Maven'
+        name = 'CleanroomMC Maven'
         url 'https://maven.cleanroommc.com'
     }
     maven {
-        name "outlandsReleases"
+        name = "outlandsReleases"
         url "https://maven.outlands.top/releases"
     }
+    mavenLocal()
 }
 
 dependencies {
     runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
-
-   // implementation(files('jars/LambdaLib2-PluginLoader.jar'))
 
     implementation "codechicken:CodeChickenLib:1.12.2-3.2.3.358:universal"
     implementation "mezz.jei:jei_1.12.2:4.16.1.302"

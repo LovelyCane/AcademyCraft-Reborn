@@ -1,7 +1,5 @@
 package cn.academy.ability.vanilla.electromaster.skill
 
-import java.util
-
 import cn.academy.Resources
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
@@ -25,11 +23,12 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.Color
 
+import java.util
 import scala.collection.JavaConversions._
 
 /**
-  * @author WeAthFolD, KSkun
-  */
+ * @author WeAthFolD, KSkun
+ */
 object MineDetect extends Skill("mine_detect", 3) {
 
   final val TIME = 100

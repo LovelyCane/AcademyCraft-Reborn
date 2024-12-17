@@ -1,10 +1,8 @@
 package cn.lambdalib2.datapart;
 
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.util.Debug;
 import cn.lambdalib2.util.ReflectionUtils;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -18,7 +16,6 @@ import java.util.EnumSet;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegDataPart {
-
     /**
      * @return The type that this DataPart applies on. Also applies for all subclasses.
      */
@@ -27,12 +24,10 @@ public @interface RegDataPart {
     /**
      * @return At what sides this DataPart should be constructed
      */
-    Side[] side() default { Side.CLIENT, Side.SERVER };
-
+    Side[] side() default {Side.CLIENT, Side.SERVER};
 }
 
 class RegDataPartImpl {
-
     @SuppressWarnings("unchecked")
     @StateEventCallback
     private static void init(FMLPreInitializationEvent ev) {
@@ -40,12 +35,11 @@ class RegDataPartImpl {
             RegDataPart anno = type.getAnnotation(RegDataPart.class);
             Class<? extends Entity> regType = anno.value();
             EntityData.register(
-                (Class) type,
-                EnumSet.copyOf(Arrays.asList(anno.side())),
-                regType::isAssignableFrom
+                    (Class) type,
+                    EnumSet.copyOf(Arrays.asList(anno.side())),
+                    regType::isAssignableFrom
             );
         });
         EntityData.bake();
     }
-
 }

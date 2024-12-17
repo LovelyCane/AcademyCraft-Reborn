@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 /**
  * @author WeAthFolD
  */
+
 @RegDataPart(EntityPlayer.class)
 public class TerminalData extends DataPart<EntityPlayer> {
     public static TerminalData get(EntityPlayer player) {
