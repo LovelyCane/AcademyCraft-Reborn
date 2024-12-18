@@ -4,7 +4,6 @@ import cn.academy.ACConfig;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
-import cn.academy.analytic.events.AnalyticLevelUpEvent;
 import cn.academy.event.ability.*;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
  */
 @RegDataPart(EntityPlayer.class)
 public class AbilityData extends DataPart<EntityPlayer> {
-
-
     public static AbilityData get(EntityPlayer player) {
         return EntityData.get(player).getPart(AbilityData.class);
     }
@@ -47,7 +44,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
     private int level;
     @SerializeIncluded
     private float expAddedThisLevel;
-    
+
     private int updateTicker = 0;
 
     public AbilityData() {
@@ -58,27 +55,28 @@ public class AbilityData extends DataPart<EntityPlayer> {
         setNBTStorage();
         setClientNeedSync();
     }
-    
+
     /**
      * Server only. Changes player's category.
+     *
      * @param c The category. If null, sets player to no category.
      */
     public void setCategory(Category c) {
         checkSide(Side.SERVER);
 
         int id = c == null ? -1 : c.getCategoryID();
-        if(id != catID) {
+        if (id != catID) {
             catID = id;
 
             // Resets the level
-            if(catID != -1 && level == 0) {
+            if (catID != -1 && level == 0) {
                 level = 1;
             }
-            if(catID == -1 && level != 0) {
+            if (catID == -1 && level != 0) {
                 level = 0;
             }
 
-            for(int i = 0; i < skillExps.length; ++i) {
+            for (int i = 0; i < skillExps.length; ++i) {
                 skillExps[i] = 0.0f;
             }
             learnedSkills.set(0, learnedSkills.size(), false);
@@ -119,6 +117,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 
     /**
      * Server only. Sets player's current level.
+     *
      * @param lv The new level, currently must be in [1, 5]
      * @throws IllegalStateException if in client
      */
@@ -126,10 +125,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
         checkSide(Side.SERVER);
         checkLearned();
 
-        if(level != lv) {
-            if(level<lv){
-                MinecraftForge.EVENT_BUS.post(new AnalyticLevelUpEvent(getEntity()));
-            }
+        if (level != lv) {
             level = lv;
             expAddedThisLevel = 0;
             MinecraftForge.EVENT_BUS.post(new LevelChangeEvent(getEntity()));
@@ -144,21 +140,21 @@ public class AbilityData extends DataPart<EntityPlayer> {
         expAddedThisLevel = 100;
         sync();
     }
-    
+
     /**
      * Get all the learned skills.
      */
     public List<Skill> getLearnedSkillList() {
         return getSkillListFiltered(this::isSkillLearned);
     }
-    
+
     /**
      * Get all the learned and controllable skills.
      */
     public List<Skill> getControllableSkillList() {
         return getSkillListFiltered(s -> (s.canControl() && isSkillLearned(s)));
     }
-    
+
     /**
      * Server only. Learn the specified skill.
      */
@@ -189,7 +185,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
         sync();
     }
 
-    @Listener(channel=MSG_SKILL_LEARNED, side=Side.CLIENT)
+    @Listener(channel = MSG_SKILL_LEARNED, side = Side.CLIENT)
     private void fireSkillLearn(Skill s) {
         MinecraftForge.EVENT_BUS.post(new SkillLearnEvent(getEntity(), s));
     }
@@ -234,7 +230,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
     public boolean canLevelUp() {
         return getLevel() < 5 && getLevelProgress() == 1;
     }
-    
+
     /**
      * Brutely set the skill exp. This should only used by commands.
      */
@@ -243,7 +239,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
         checkSkill(skill);
         if (isSkillLearned(skill)) {
             skillExps[skill.getID()] = exp;
-            if(!isClient()) {
+            if (!isClient()) {
                 MinecraftForge.EVENT_BUS.post(new SkillExpChangedEvent(getEntity(), skill));
                 scheduleUpdate(25);
             }
@@ -256,7 +252,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
     public void learnAllSkills() {
         checkSide(Side.SERVER);
 
-        if(hasCategory()) {
+        if (hasCategory()) {
             learnedSkills.set(0, getCategory().getSkillCount(), true);
             sync();
         }
@@ -279,11 +275,11 @@ public class AbilityData extends DataPart<EntityPlayer> {
                     .collect(Collectors.toList());
         }
     }
-    
+
     private void scheduleUpdate(int ticks) {
-        if(updateTicker == 0)
+        if (updateTicker == 0)
             updateTicker = ticks;
-        else if(updateTicker != 1)
+        else if (updateTicker != 1)
             updateTicker -= 1;
     }
 
@@ -317,16 +313,16 @@ public class AbilityData extends DataPart<EntityPlayer> {
         Preconditions.checkState(hasCategory(), "Player doesn't have category");
     }
 
-    @Listener(channel=MSG_CAT_CHANGE, side={Side.CLIENT,Side.SERVER})
+    @Listener(channel = MSG_CAT_CHANGE, side = {Side.CLIENT, Side.SERVER})
     private void informCategoryChange() {
         MinecraftForge.EVENT_BUS.post(new CategoryChangeEvent(getEntity()));
     }
 
     @Override
     public void tick() {
-        if(!isClient()) {
-            if(updateTicker > 0) {
-                if(--updateTicker == 0) {
+        if (!isClient()) {
+            if (updateTicker > 0) {
+                if (--updateTicker == 0) {
                     sync();
                 }
             }

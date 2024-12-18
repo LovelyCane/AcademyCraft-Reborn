@@ -15,7 +15,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ public class RecipeRegistry {
     public RecipeRegistry() {
         ModContainer mc = Loader.instance().activeModContainer();
         PREFIX = mc == null || (mc instanceof InjectedModContainer &&
-                ((InjectedModContainer) mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
+                ((InjectedModContainer)mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
         registerRecipeType("shaped", new ShapedOreRegistry(this));
         registerRecipeType("shaped_s", new ShapedOreRegistry(this));
         registerRecipeType("shapeless", new ShapelessOreRegistry(this));
@@ -66,7 +65,7 @@ public class RecipeRegistry {
             return key.substring(1);
         }
         String fullName = key;
-        if (!key.contains(":"))
+        if(!key.contains(":"))
             fullName = "minecraft:" + key;
         ResourceLocation resLoc = new ResourceLocation(fullName);
 
@@ -76,9 +75,10 @@ public class RecipeRegistry {
             return Block.REGISTRY.getObject(resLoc);
 
         List<ItemStack> items = OreDictionary.getOres(key);
-        if (!items.isEmpty()) {
+        if(!items.isEmpty())
+        {
             ItemStack[] stacks = new ItemStack[items.size()];
-            for (int i = 0; i < items.size(); i++)
+            for(int i=0;i<items.size();i++)
                 stacks[i] = items.get(i);
             return Ingredient.fromStacks(stacks);
         }
@@ -100,33 +100,32 @@ public class RecipeRegistry {
         } else if (o instanceof Block) {
             return new ItemStack((Block) o, element.amount, element.data);
         } else {
-            return o;
+            return (String) o;
         }
     }
 
     private ItemStack getOutputObject(ParsedRecipeElement element) {
         Object o = getNamedObject(element.name);
-        switch (o) {
-            case null -> throw new RuntimeException("Registry object " + element.name + " can't be nil");
-            case Item item -> {
-                return new ItemStack(item, element.amount, element.data);
-            }
-            case Block block -> {
-                return new ItemStack(block, element.amount, element.data);
-            }
-            default -> {
-                ItemStack outputstack = OreDictionary.getOres(element.name).getFirst().copy();
-                outputstack.setCount(element.amount);
-                return outputstack;
-            }
+        if (o == null)
+            throw new RuntimeException("Registry object " + element.name + " can't be nil");
+        if (o instanceof Item) {
+            return new ItemStack((Item) o, element.amount, element.data);
+        } else if (o instanceof Block) {
+            return new ItemStack((Block) o, element.amount, element.data);
+        } else {
+            ItemStack outputstack = OreDictionary.getOres(element.name).get(0).copy();
+            outputstack.setCount(element.amount);
+            return outputstack;
         }
     }
 
     /**
      * Assign a registry to the type given
      *
-     * @param type     The type
-     * @param registry The registry
+     * @param type
+     *            The type
+     * @param registry
+     *            The registry
      */
     public void registerRecipeType(String type, IRecipeRegistry registry) {
         if (map.containsKey(type))
@@ -137,7 +136,8 @@ public class RecipeRegistry {
     /**
      * Add all recipes from a file. The recipe's type must be registered before.
      *
-     * @param path The path of the file containing recipes
+     * @param path
+     *            The path of the file containing recipes
      */
     public void addRecipeFromFile(String path) {
         addRecipeFromFile(new File(path));
@@ -146,7 +146,8 @@ public class RecipeRegistry {
     /**
      * Add all recipes from a file. The recipe's type must be registered before.
      *
-     * @param file The file containing recipes
+     * @param file
+     *            The file containing recipes
      */
     public void addRecipeFromFile(File file) {
         RecipeParser parser = null;
@@ -162,7 +163,7 @@ public class RecipeRegistry {
 
     public void addRecipeFromResourceLocation(ResourceLocation src) {
         try {
-            addRecipeFromString(IOUtils.toString(ResourceUtils.getResourceStream(src), StandardCharsets.UTF_8));
+            addRecipeFromString(IOUtils.toString(ResourceUtils.getResourceStream(src), "UTF-8"));
         } catch (Throwable e) {
             Debug.error("Failed to load recipes from file: " + src, e);
             e.printStackTrace();
@@ -173,7 +174,8 @@ public class RecipeRegistry {
      * Add all recipes from a string. The recipe's type must be registered
      * before.
      *
-     * @param recipes The string specifying recipes
+     * @param recipes
+     *            The string specifying recipes
      */
     public void addRecipeFromString(String recipes) {
         RecipeParser parser = null;
@@ -223,5 +225,4 @@ public class RecipeRegistry {
     public static String reprStack(ItemStack stack) {
         return stack.getItem().getTranslationKey() + "*" + stack.getCount() + "#" + stack.getItemDamage();
     }
-
 }

@@ -1,6 +1,5 @@
 package cn.academy;
 
-import cn.academy.analytic.AnalyticDataListener;
 import cn.lambdalib2.crafting.RecipeRegistry;
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.StateEventCallback;
@@ -30,13 +29,11 @@ public class AcademyCraft {
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
     public static final String VERSION = Tags.VERSION;
-    public static final boolean DEBUG_MODE = VERSION.startsWith("@");
+    public static final boolean DEBUG_MODE = false;
     public static final Logger log = LogManager.getLogger(Tags.MOD_NAME);
 
     public static Configuration config;
     public static RecipeRegistry recipes;
-
-    public static AnalyticDataListener analyticDataListener;
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override
@@ -55,10 +52,6 @@ public class AcademyCraft {
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-
-        if (config.getBoolean("analysis", "generic", true, "switch for analytic system")) {
-            AnalyticDataListener analyticDataListener = AnalyticDataListener.instance;
-        }
     }
 
     @EventHandler

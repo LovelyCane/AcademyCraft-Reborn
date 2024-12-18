@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ObjModel {
-
     public final List<Vertex> vertices = new ArrayList<>();
     public final Multimap<String, Face> faces = HashMultimap.create();
 
@@ -31,7 +30,6 @@ public class ObjModel {
     }
 
     public static class Face {
-
         public final int i0, i1, i2;
         public final Vector3f tangent = new Vector3f();
         public final Vector3f normal = new Vector3f();

@@ -16,6 +16,7 @@ import java.io.IOException;
  * A simple wrapper for fast {@link CGui} deploy as GuiScreen.
  * @author WeAthFolD
  */
+
 public class CGuiScreen extends GuiScreen {
     protected CGui gui;
     
@@ -31,15 +32,7 @@ public class CGuiScreen extends GuiScreen {
     public CGuiScreen() {
         this(new CGui());
     }
-    
-    /**
-     * Set whether the black background should be drawed.
-     */
-    public CGuiScreen setDrawBack(boolean flag) {
-        drawBack = flag;
-        return this;
-    }
-    
+
     @Override
     public void drawScreen(int mx, int my, float w) {
         gui.resize(width, height);

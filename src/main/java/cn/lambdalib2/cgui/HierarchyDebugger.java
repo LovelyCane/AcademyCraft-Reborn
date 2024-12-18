@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
  * This widget prints hierarchy debug information of widget last time mouse hovered when press LSHIFT+D.
  */
 public class HierarchyDebugger extends Widget {
-
     Widget focus;
 
     {
@@ -31,16 +30,14 @@ public class HierarchyDebugger extends Widget {
     }
 
     private static final FontOption option = new FontOption(10);
+
     private float drawHierarchy(float x, float y, Widget w, String name, float fsize) {
         IFont font = TrueTypeFont.defaultFont;
 
         StringBuilder sb = new StringBuilder();
         sb.append("·").append(name).append(" [");
 
-        String compns = Joiner.on(',').join(w.getComponentList().stream()
-                .filter(c -> !(c instanceof Transform))
-                .map(c -> c.name)
-                .collect(Collectors.toList()));
+        String compns = Joiner.on(',').join(w.getComponentList().stream().filter(c -> !(c instanceof Transform)).map(c -> c.name).collect(Collectors.toList()));
         sb.append(compns);
         sb.append("]");
 

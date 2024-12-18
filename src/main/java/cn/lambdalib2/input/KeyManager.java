@@ -1,16 +1,10 @@
 package cn.lambdalib2.input;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import cn.lambdalib2.util.ClientUtils;
 import cn.lambdalib2.util.Debug;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -19,25 +13,31 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * The instance of this class handles a set of KeyHandlers, and restore their key bindings
  * from a configuration. (If any)
+ *
  * @author WeAthFolD
  */
+
 @SideOnly(Side.CLIENT)
 public class KeyManager {
-
     /**
      * The most commonly used KeyManager. Use this if you don't want to use any config on keys.
      */
     public static final KeyManager dynamic = new KeyManager();
-    
-    public static final int 
-        MOUSE_LEFT = -100, MOUSE_MIDDLE = -98, MOUSE_RIGHT = -99,
-        MWHEELDOWN = -50, MWHEELUP = -49;
+
+    public static final int
+            MOUSE_LEFT = -100, MOUSE_MIDDLE = -98, MOUSE_RIGHT = -99,
+            MWHEELDOWN = -50, MWHEELUP = -49;
 
     public static String getKeyName(int keyid) {
-        if(keyid >= 0) {
+        if (keyid >= 0) {
             String ret = Keyboard.getKeyName(keyid);
             return ret == null ? "undefined" : ret;
         } else {
@@ -47,7 +47,7 @@ public class KeyManager {
     }
 
     public static boolean getKeyDown(int keyID) {
-        if(keyID > 0) {
+        if (keyID > 0) {
             return Keyboard.isKeyDown(keyID);
         }
 
@@ -96,17 +96,18 @@ public class KeyManager {
 
     /**
      * Add a key handler.
-     * @param keyDesc Description of the key in the configuration file
+     *
+     * @param keyDesc  Description of the key in the configuration file
      * @param defKeyID Default key ID in config file
-     * @param global If global=true, this key will have callback even if opening GUI.
+     * @param global   If global=true, this key will have callback even if opening GUI.
      */
     public void addKeyHandler(String name, String keyDesc, int defKeyID, boolean global, KeyHandler handler) {
-        if(_bindingMap.containsKey(name))
+        if (_bindingMap.containsKey(name))
             throw new RuntimeException("Duplicate key: " + name + " of object " + handler);
-        
+
         Configuration conf = getConfig();
         int keyID = defKeyID;
-        if(conf != null) {
+        if (conf != null) {
             keyID = conf.getInt(name, "keys", defKeyID, -1000, 1000, keyDesc);
         }
         KeyHandlerState kb = new KeyHandlerState(handler, keyID, global);
@@ -118,23 +119,23 @@ public class KeyManager {
      */
     public void removeKeyHandler(String name) {
         KeyHandlerState kb = _bindingMap.get(name);
-        if(kb != null)
+        if (kb != null)
             kb.dead = true;
     }
 
     public void resetBindingKey(String name, int newKey) {
         KeyHandlerState kb = _bindingMap.get(name);
-        if(kb != null) {
+        if (kb != null) {
             Configuration cfg = getConfig();
-            if(cfg != null) {
+            if (cfg != null) {
                 Property p = cfg.get("keys", name, kb.keyID);
                 p.set(newKey);
             }
-            
+
             kb.keyID = newKey;
-            if(kb.keyDown)
+            if (kb.keyDown)
                 kb.handler.onKeyAbort();
-            
+
             kb.keyDown = false;
         }
     }
@@ -144,13 +145,13 @@ public class KeyManager {
     }
 
     private void tick() {
-        Iterator< Entry<String, KeyHandlerState> > iter = _bindingMap.entrySet().iterator();
+        Iterator<Entry<String, KeyHandlerState>> iter = _bindingMap.entrySet().iterator();
         boolean shouldAbort = !ClientUtils.isPlayerInGame();
 
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Entry<String, KeyHandlerState> entry = iter.next();
             KeyHandlerState kb = entry.getValue();
-            if(kb.dead) {
+            if (kb.dead) {
                 iter.remove();
             } else {
                 boolean down = getKeyDown(kb.keyID);
@@ -179,8 +180,8 @@ public class KeyManager {
     }
 
     private KeyHandlerState getKeyBinding(KeyHandler handler) {
-        for(KeyHandlerState kb : _bindingMap.values()) {
-            if(kb.handler == handler)
+        for (KeyHandlerState kb : _bindingMap.values()) {
+            if (kb.handler == handler)
                 return kb;
         }
         return null;
@@ -188,7 +189,7 @@ public class KeyManager {
 
     @SubscribeEvent
     public void _onEvent(ClientTickEvent event) {
-        if(event.phase == Phase.START && active) {
+        if (event.phase == Phase.START && active) {
             tick();
         }
     }
@@ -210,5 +211,4 @@ public class KeyManager {
             isGlobal = g;
         }
     }
-
 }

@@ -1,14 +1,7 @@
 package cn.lambdalib2.multiblock;
 
-import static net.minecraft.util.EnumFacing.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.lambdalib2.util.Debug;
-import cn.lambdalib2.util.VecUtils;
 import cn.lambdalib2.util.WorldUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,11 +19,16 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static net.minecraft.util.EnumFacing.*;
+
 /**
  * @author WeathFolD
  */
-public abstract class BlockMulti extends BlockContainer {
 
+public abstract class BlockMulti extends BlockContainer {
     private final List<SubBlockPos> subList = new ArrayList<>();
     List<SubBlockPos>[] buffer;
 

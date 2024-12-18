@@ -3,6 +3,9 @@ package cn.academy.datapart;
 import cn.academy.ability.Controllable;
 import cn.academy.event.ability.CategoryChangeEvent;
 import cn.academy.event.ability.PresetUpdateEvent;
+import cn.lambdalib2.datapart.DataPart;
+import cn.lambdalib2.datapart.EntityData;
+import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.s11n.SerializeIncluded;
@@ -12,27 +15,25 @@ import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
-import cn.lambdalib2.datapart.DataPart;
-import cn.lambdalib2.datapart.EntityData;
-import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Preconditions;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
  * Handles preset.
+ *
  * @author WeAthFolD
  */
 @RegDataPart(EntityPlayer.class)
@@ -52,6 +53,7 @@ public class PresetData extends DataPart<EntityPlayer> {
                 });
                 return tag;
             }
+
             @Override
             public Preset read(NBTBase tag_, Class<? extends Preset> type) {
                 NBTTagCompound tag = (NBTTagCompound) tag_;
@@ -81,6 +83,7 @@ public class PresetData extends DataPart<EntityPlayer> {
                     }
                 });
             }
+
             @Override
             public Preset read(ByteBuf buf) throws ContextException {
                 Preset ret = new Preset();
@@ -98,8 +101,8 @@ public class PresetData extends DataPart<EntityPlayer> {
     public static final int MAX_PRESETS = 4;
 
     private static final String
-        MSG_SYNC_SWITCH = "switch",
-        MSG_SYNC_UPDATE = "update";
+            MSG_SYNC_SWITCH = "switch",
+            MSG_SYNC_UPDATE = "update";
 
     @SerializeIncluded
     int presetID = 0;
@@ -107,7 +110,7 @@ public class PresetData extends DataPart<EntityPlayer> {
     Preset[] presets = new Preset[4];
 
     public PresetData() {
-        for(int i = 0; i < MAX_PRESETS; ++i) {
+        for (int i = 0; i < MAX_PRESETS; ++i) {
             presets[i] = new Preset();
         }
 
@@ -120,7 +123,7 @@ public class PresetData extends DataPart<EntityPlayer> {
     public void clear() {
         checkSide(Side.SERVER);
 
-        for(int i = 0; i < 4; ++i)
+        for (int i = 0; i < 4; ++i)
             presets[i] = new Preset();
 
         sync();
@@ -170,7 +173,7 @@ public class PresetData extends DataPart<EntityPlayer> {
     public int getCurrentID() {
         return presetID;
     }
-    
+
     public Preset getCurrentPreset() {
         return presets[presetID];
     }
@@ -187,12 +190,12 @@ public class PresetData extends DataPart<EntityPlayer> {
         NBTS11n.write(tag, this);
     }
 
-    @Listener(channel=MSG_SYNC_SWITCH, side=Side.SERVER)
+    @Listener(channel = MSG_SYNC_SWITCH, side = Side.SERVER)
     private void handleSwitch(int idx) {
         switchCurrent(idx);
     }
 
-    @Listener(channel=MSG_SYNC_UPDATE, side=Side.SERVER)
+    @Listener(channel = MSG_SYNC_UPDATE, side = Side.SERVER)
     private void handleSet(int idx, Preset mapping) {
         setPreset(idx, mapping);
         firePresetUpdate();
@@ -200,7 +203,7 @@ public class PresetData extends DataPart<EntityPlayer> {
 
     @Override
     protected void onSynchronized() {
-        debug("OnSynchronized " + isClient() + " " + getCurrentPreset());
+        //   debug("OnSynchronized " + isClient() + " " + getCurrentPreset());
         firePresetUpdate();
     }
 
@@ -215,7 +218,7 @@ public class PresetData extends DataPart<EntityPlayer> {
     public static class Preset {
 
         private final Controllable[] data;
-        
+
         public Preset(Controllable[] _data) {
             data = Arrays.copyOf(_data, MAX_KEYS);
         }
@@ -224,7 +227,7 @@ public class PresetData extends DataPart<EntityPlayer> {
             data = new Controllable[MAX_KEYS];
             Arrays.fill(data, null);
         }
-        
+
         public boolean hasMapping(int key) {
             return getControllable(key) != null;
         }
@@ -235,7 +238,7 @@ public class PresetData extends DataPart<EntityPlayer> {
         public Controllable getControllable(int key) {
             return key >= data.length ? null : data[key];
         }
-        
+
         public boolean hasControllable(Controllable c) {
             for (Controllable cc : data) {
                 if (cc == c) {
@@ -248,7 +251,7 @@ public class PresetData extends DataPart<EntityPlayer> {
         public Controllable[] copyData() {
             return Arrays.copyOf(data, MAX_KEYS);
         }
-        
+
         @Override
         public String toString() {
             ToStringHelper helper = MoreObjects.toStringHelper(this);
@@ -259,20 +262,20 @@ public class PresetData extends DataPart<EntityPlayer> {
 
             return helper.toString();
         }
-        
+
     }
 
     public static enum Events {
         @RegEventHandler()
         instance;
-        
+
         @SubscribeEvent
         public void onCategoryChanged(CategoryChangeEvent event) {
             if (!SideUtils.isClient()) {
                 PresetData.get(event.player).clear();
             }
         }
-        
+
     }
 
 }

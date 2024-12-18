@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 
 public class IFNodeManager implements IEnergyBlockManager {
-
     public static IFNodeManager instance = new IFNodeManager();
 
     @StateEventCallback
@@ -58,5 +57,4 @@ public class IFNodeManager implements IEnergyBlockManager {
         node.setEnergy(node.getEnergy() - pull);
         return pull;
     }
-
 }

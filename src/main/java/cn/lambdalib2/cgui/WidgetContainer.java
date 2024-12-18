@@ -6,21 +6,21 @@
 */
 package cn.lambdalib2.cgui;
 
-import java.util.*;
-
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.*;
 
 /**
  * A class that has capability to store widgets. Used by CGui and Widget.
  * Every widget is associated with a name. You can use that name to lookup a widget.
  * @author WeAthFolD
  */
+
 @SideOnly(Side.CLIENT)
 public class WidgetContainer implements Iterable<Widget> {
-    
     HashBiMap<String, Widget> widgets = HashBiMap.create();
     LinkedList<Widget> widgetList = new LinkedList<>(); //List sorted in non-descending widget zOrder.
     
@@ -305,5 +305,4 @@ public class WidgetContainer implements Iterable<Widget> {
         } while(hasWidget(res));
         return res;
     }
-    
 }

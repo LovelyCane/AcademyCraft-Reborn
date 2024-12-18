@@ -7,27 +7,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class KeyHandler {
+    public void onKeyDown() {
+    }
 
-    public void onKeyDown() {}
-    
-    public void onKeyUp() {}
-    
+    public void onKeyUp() {
+    }
+
     /**
-     * This happens when the KeyBinding is a non-global one, 
+     * This happens when the KeyBinding is a non-global one,
      * and player opens any GUI or jumps out of the game.
      */
-    public void onKeyAbort() {}
-    
-    public void onKeyTick() {}
-    
+    public void onKeyAbort() {
+    }
+
+    public void onKeyTick() {
+    }
+
     @SideOnly(Side.CLIENT)
     protected Minecraft getMC() {
         return Minecraft.getMinecraft();
     }
-    
+
     @SideOnly(Side.CLIENT)
     protected EntityPlayer getPlayer() {
         return getMC().player;
     }
-    
 }

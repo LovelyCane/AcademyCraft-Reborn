@@ -5,7 +5,6 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import java.util.Map;
 
 public class CorePlugin implements IFMLLoadingPlugin {
-
     private static boolean deobfEnabled;
 
     public static boolean isDeobfEnabled() {

@@ -1,17 +1,14 @@
 package cn.lambdalib2.particle;
 
 import cn.lambdalib2.registry.mc.RegEntityRender;
-import cn.lambdalib2.util.RenderUtils;
-import net.minecraft.client.renderer.entity.RenderManager;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * A delegator renderer for Sprite and Entities that implements ISpriteEntity.
- * 
+ *
  * @author WeAthFolD
  */
 @RegEntityRender(Particle.class)
@@ -26,12 +23,8 @@ public class RenderParticle<T extends Particle> extends Render<T> {
 
     @Override
     public void doRender(T ent, double x, double y, double z, float a, float b) {
-        if (RenderUtils.isInShadowPass())
-            return;
-
         Particle ish = (Particle) ent;
-        if (!ish.updated)
-            return;
+        if (!ish.updated) return;
 
         ish.updateSprite(sprite);
 

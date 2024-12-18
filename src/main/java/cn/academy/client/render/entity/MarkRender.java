@@ -1,14 +1,13 @@
 package cn.academy.client.render.entity;
 
-import cn.academy.client.render.util.SimpleModelBiped;
 import cn.academy.Resources;
+import cn.academy.client.render.util.SimpleModelBiped;
 import cn.academy.entity.EntityTPMarking;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,8 +33,6 @@ public class MarkRender extends Render<EntityTPMarking> {
 
     @Override
     public void doRender(EntityTPMarking mark, double x, double y, double z, float var8, float var9) {
-        if (RenderUtils.isInShadowPass())
-            return;
         if (!mark.firstUpdated())
             return;
 

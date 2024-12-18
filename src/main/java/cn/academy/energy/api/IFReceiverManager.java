@@ -10,8 +10,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 /**
  * @author WeAthFolD
  */
-public class IFReceiverManager implements IEnergyBlockManager {
 
+public class IFReceiverManager implements IEnergyBlockManager {
     public static IFReceiverManager instance = new IFReceiverManager();
 
     @StateEventCallback
@@ -46,5 +46,4 @@ public class IFReceiverManager implements IEnergyBlockManager {
     public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
         return ((IWirelessReceiver) tile).pullEnergy(amt);
     }
-
 }

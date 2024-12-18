@@ -19,18 +19,13 @@ import java.io.IOException;
  * A simple wrapper for fast {@link CGui} deploy as GuiContainer.
  * @author WeAthFolD
  */
-public class CGuiScreenContainer extends GuiContainer {
 
+public class CGuiScreenContainer extends GuiContainer {
     protected CGui gui;
 
     public CGuiScreenContainer(Container c) {
         super(c);
         gui = new CGui();
-    }
-
-    public CGuiScreenContainer(Container c, CGui _gui) {
-        super(c);
-        gui = _gui;
     }
 
     public CGui getGui() {

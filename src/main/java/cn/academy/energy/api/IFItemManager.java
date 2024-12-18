@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 /**
  * @author WeathFolD
  */
-public final class IFItemManager implements EnergyItemManager {
 
+public final class IFItemManager implements EnergyItemManager {
     public static IFItemManager instance = new IFItemManager();
 
     private IFItemManager() {
@@ -89,5 +89,4 @@ public final class IFItemManager implements EnergyItemManager {
 
         return give;
     }
-
 }

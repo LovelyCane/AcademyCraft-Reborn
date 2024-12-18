@@ -37,8 +37,6 @@ public class RailgunHandEffect extends PlayerRenderHook {
 
     @Override
     public void renderHand(boolean firstPerson) {
-        if(RenderUtils.isInShadowPass()) return;
-        
         double dt = getElapsedTime();
         if(dt >= PER_FRAME * COUNT) {
             dispose();

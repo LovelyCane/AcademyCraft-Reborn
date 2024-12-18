@@ -15,34 +15,8 @@ apply from: 'gradle/scripts/publishing.gradle'
 apply from: 'gradle/scripts/extra.gradle'
 apply from: 'gradle/scripts/dependencies.gradle'
 
-// Early Assertions
-assertProperty 'mod_version'
-assertProperty 'root_package'
-assertProperty 'mod_id'
-assertProperty 'mod_name'
-
-assertSubProperties 'use_tags', 'tag_class_name'
-assertSubProperties 'use_access_transformer', 'access_transformer_locations'
-assertSubProperties 'use_mixins', 'mixin_booter_version', 'mixin_refmap'
-assertSubProperties 'use_asset_mover', 'asset_mover_version'
-
-setDefaultProperty 'use_modern_java_syntax', false, false
-setDefaultProperty 'generate_sources_jar', true, false
-setDefaultProperty 'generate_javadocs_jar', true, false
-setDefaultProperty 'mapping_channel', true, 'stable'
-setDefaultProperty 'mapping_version', true, '39'
-setDefaultProperty 'use_dependency_at_files', true, true
-setDefaultProperty 'minecraft_username', true, 'Developer'
-setDefaultProperty 'extra_jvm_args', false, ''
-setDefaultProperty 'extra_tweak_classes', false, ''
-setDefaultProperty 'change_minecraft_sources', false, false
-
 version = propertyString('mod_version')
 group = propertyString('root_package')
-
-base {
-    archivesName.set(propertyString('mod_id'))
-}
 
 tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources')
 
@@ -59,9 +33,6 @@ minecraft {
     useDependencyAccessTransformers.set(propertyBool('use_dependency_at_files'))
 
     username.set(propertyString('minecraft_username'))
-
-    // Add any additional tweaker classes here
-    extraTweakClasses.addAll(propertyStringList('extra_tweak_classes'))
 
     // Add various JVM arguments here for runtime
     def args = ['-ea:' + group]
@@ -103,10 +74,6 @@ dependencies {
             transitive = false
         }
     }
-    if (propertyBool('enable_junit_testing')) {
-        testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    }
 }
 
 // Adds Access Transformer files to tasks
@@ -127,8 +94,7 @@ processResources {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     filesMatching(filterList) { fcd ->
-        fcd.expand(
-                'mod_id': propertyString('mod_id'),
+        fcd.expand('mod_id': propertyString('mod_id'),
                 'mod_name': propertyString('mod_name'),
                 'mod_version': propertyString('mod_version'),
                 'mod_description': propertyString('mod_description'),
@@ -138,8 +104,7 @@ processResources {
                 'mod_update_json': propertyString('mod_update_json'),
                 'mod_logo_path': propertyString('mod_logo_path'),
                 'mixin_refmap': propertyString('mixin_refmap'),
-                'mixin_package': propertyString('mixin_package')
-        )
+                'mixin_package': propertyString('mixin_package'))
     }
 
     if (propertyBool('use_access_transformer')) {
@@ -152,28 +117,8 @@ jar {
     archiveVersion = mod_version + "-Java" + JavaVersion.current().toString()
 
     manifest {
-        attributes(
-                'FMLCorePluginContainsFMLMod': true,
-                'FMLCorePlugin': 'cn.lambdalib2.CorePlugin'
-        )
-    }
-    // Add all embedded dependencies into the jar
-    from(provider { configurations.embed.collect { it.isDirectory() ? it : zipTree(it) } })
-}
-
-compileTestJava {
-    sourceCompatibility = targetCompatibility = 8
-}
-
-test {
-    useJUnitPlatform()
-    javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(8)
-    })
-    if (propertyBool('show_testing_output')) {
-        testLogging {
-            showStandardStreams = true
-        }
+        attributes('FMLCorePluginContainsFMLMod': true,
+                'FMLCorePlugin': 'cn.lambdalib2.CorePlugin')
     }
 }
 
@@ -191,12 +136,6 @@ tasks.register('generateMixinJson') {
             def file = file("src/main/resources/mixins.${mixinConfig}.json")
             file << """{\n\t"package": "",\n\t"required": true,\n\t"refmap": "${propertyString('mixin_refmap')}",\n\t"target": "@env(DEFAULT)",\n\t"minVersion": "0.8.5",\n\t"compatibilityLevel": "JAVA_8",\n\t"mixins": [],\n\t"server": [],\n\t"client": []\n}"""
         }
-    }
-}
-
-if (propertyBool('use_modern_java_syntax')) {
-    tasks.withType(Javadoc).configureEach {
-        sourceCompatibility = 21
     }
 }
 
@@ -221,6 +160,7 @@ tasks.register('prioritizeCoremods') {
         }
     }
 }
+
 tasks.withType(ScalaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -254,9 +194,7 @@ idea {
             compiler.javac {
                 afterEvaluate {
                     javacAdditionalOptions = "-encoding utf8"
-                    moduleJavacAdditionalOptions = [
-                            (project.name + ".main"): tasks.compileJava.options.compilerArgs.collect { '"' + it + '"' }.join(' ')
-                    ]
+                    moduleJavacAdditionalOptions = [(project.name + ".main"): tasks.compileJava.options.compilerArgs.collect { '"' + it + '"' }.join(' ')]
                 }
             }
         }

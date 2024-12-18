@@ -17,3 +17,13 @@
 
 ### Changed
 - Fixed some bug.
+
+## [1.1.6-pre1] - 2024-12-18
+
+### Changed
+- Idk :)
+
+## [1.1.7-pre1] - 2024-12-18
+
+### Changed
+- Removed some code.

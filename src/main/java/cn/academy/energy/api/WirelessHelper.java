@@ -16,20 +16,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import cn.lambdalib2.util.MathUtils;
-//import cn.lambdalib2.util.BlockPos;
-//import cn.lambdalib2.util.mc.IBlockSelector;
-//import cn.lambdalib2.util.mc.WorldUtils;
-
 /**
  * All kinds of funcs about wireless system.
  *
  * @author WeAthFolD
  */
+
 public class WirelessHelper {
-
     //-----WirelessNetwork
-
     public static WirelessNet getWirelessNet(IWirelessMatrix matrix) {
         TileEntity tile = (TileEntity) matrix;
         return WiWorldData.get(tile.getWorld()).getNetwork(matrix);
@@ -117,5 +111,4 @@ public class WirelessHelper {
 
         return ret;
     }
-
 }

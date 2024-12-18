@@ -18,20 +18,17 @@ public @interface RegDynamicKeyHandler {
 }
 
 class RegDynKeyHandlerImpl {
-
     @StateEventCallback
     @SideOnly(Side.CLIENT)
     private static void init(FMLInitializationEvent ev) {
-        ReflectionUtils.getFields(RegDynamicKeyHandler.class)
-            .forEach(field -> {
-                field.setAccessible(true);
-                RegDynamicKeyHandler anno = field.getAnnotation(RegDynamicKeyHandler.class);
-                try {
-                    KeyManager.dynamic.addKeyHandler(anno.keyID(), (KeyHandler) field.get(null));
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        ReflectionUtils.getFields(RegDynamicKeyHandler.class).forEach(field -> {
+            field.setAccessible(true);
+            RegDynamicKeyHandler anno = field.getAnnotation(RegDynamicKeyHandler.class);
+            try {
+                KeyManager.dynamic.addKeyHandler(anno.keyID(), (KeyHandler) field.get(null));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
-
 }

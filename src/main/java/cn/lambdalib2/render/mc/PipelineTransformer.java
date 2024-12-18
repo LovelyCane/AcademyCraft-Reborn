@@ -80,5 +80,4 @@ public class PipelineTransformer implements IClassTransformer {
         }
 
     }
-
 }
