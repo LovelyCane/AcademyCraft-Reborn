@@ -6,7 +6,6 @@ import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -19,8 +18,14 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
-@RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
+/**
+ * Academy Craft Mod Main Class
+ *
+ * @author acaly, WeathFolD, KS
+ */
+
+@Mod(modid = "academy", name = "AcademyCraft", version = AcademyCraft.VERSION, dependencies = "required-after:lambdalib2@@LAMBDA_LIB_VERSION@")
+@RegistryMod(rootPackage = "cn.academy.", resourceDomain = "academy")
 public class AcademyCraft {
     @Instance("academy-craft")
     public static AcademyCraft INSTANCE;
@@ -29,7 +34,7 @@ public class AcademyCraft {
     public static final Logger log = LogManager.getLogger(Tags.MOD_NAME);
 
     public static Configuration config;
-    private static RecipeRegistry recipes;
+    public static RecipeRegistry recipes;
 
     public static AnalyticDataListener analyticDataListener;
 
@@ -47,7 +52,9 @@ public class AcademyCraft {
         log.info("https://ac.li-dev.cn/");
 
         recipes = new RecipeRegistry();
+
         config = new Configuration(event.getSuggestedConfigurationFile());
+        config.load();
 
         if (config.getBoolean("analysis", "generic", true, "switch for analytic system")) {
             AnalyticDataListener analyticDataListener = AnalyticDataListener.instance;
@@ -62,7 +69,6 @@ public class AcademyCraft {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
 
         recipes = null; // Recipes are no longer needed
         config.save();
