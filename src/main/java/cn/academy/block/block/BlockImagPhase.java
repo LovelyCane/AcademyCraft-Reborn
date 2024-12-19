@@ -43,5 +43,4 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
             ACItems.matter_unit.setMaterial(stack, ItemMatterUnit.MAT_PHASE_LIQUID);
         }
     }
-    
 }

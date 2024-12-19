@@ -6,7 +6,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class GuiHandlerBase {
-
     private Object mod;
     private int guiId;
 
@@ -28,8 +27,7 @@ public abstract class GuiHandlerBase {
      * Side check is enforced.
      */
     public final void openGuiContainer(EntityPlayer player, World world, int x, int y, int z) {
-        if (!world.isRemote)
-            player.openGui(mod, guiId, world, x, y, z);
+        if (!world.isRemote) player.openGui(mod, guiId, world, x, y, z);
     }
 
     /*

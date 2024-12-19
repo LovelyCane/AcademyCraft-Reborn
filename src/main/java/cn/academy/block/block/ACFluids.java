@@ -5,7 +5,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class ACFluids {
-
     public static Fluid fluidImagProj = new Fluid(
         "imagproj",
         // Note: All render effects are implemented by RenderImagPhaseLiquid
@@ -18,5 +17,4 @@ public class ACFluids {
         fluidImagProj.setLuminosity(8).setDensity(7000).setViscosity(6000).setTemperature(0).setDensity(1);
         FluidRegistry.registerFluid(fluidImagProj);
     }
-
 }

@@ -6,9 +6,6 @@
 */
 package cn.lambdalib2.cgui.component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.event.GuiEvent;
 import cn.lambdalib2.cgui.event.IGuiEventHandler;
@@ -16,6 +13,9 @@ import cn.lambdalib2.s11n.CopyHelper;
 import cn.lambdalib2.s11n.SerializeExcluded;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <summary>
@@ -80,7 +80,7 @@ public class Component {
         return CopyHelper.instance.copy(this);
     }
     
-    private List<Node> addedHandlers = new ArrayList<>();
+    private final List<Node> addedHandlers = new ArrayList<>();
 
     @SideOnly(Side.CLIENT)
     private final class EHWrapper<T extends GuiEvent> implements IGuiEventHandler<T> {
@@ -105,6 +105,5 @@ public class Component {
         IGuiEventHandler handler;
         int prio;
     }
-    
 }
 

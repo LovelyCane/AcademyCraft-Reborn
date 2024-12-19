@@ -1,14 +1,12 @@
 package cn.lambdalib2.auxgui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RenderUtils;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
@@ -16,11 +14,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.common.MinecraftForge;
-import org.lwjgl.opengl.GL14;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author WeathFolD
@@ -28,17 +25,16 @@ import org.lwjgl.opengl.GL14;
  */
 @SideOnly(Side.CLIENT)
 public class AuxGuiHandler {
+    private static final AuxGuiHandler INSTANCE = new AuxGuiHandler();
 
-    private static AuxGuiHandler instance = new AuxGuiHandler();
-    
     private AuxGuiHandler() {
         MinecraftForge.EVENT_BUS.register(this);
     }
-    
+
     private static boolean iterating;
-    private static List<AuxGui> auxGuiList = new LinkedList<>();
-    private static List<AuxGui> toAddList = new ArrayList<>();
-    
+    private static final List<AuxGui> auxGuiList = new LinkedList<>();
+    private static final List<AuxGui> toAddList = new ArrayList<>();
+
     public static void register(AuxGui gui) {
         if(!iterating)
             doAdd(gui);
@@ -59,18 +55,18 @@ public class AuxGuiHandler {
         MinecraftForge.EVENT_BUS.post(new OpenAuxGuiEvent(gui));
         gui.onEnable();
     }
-    
+
     private static void startIterating() {
         iterating = true;
     }
-    
+
     private static void endIterating() {
         iterating = false;
     }
-    
+
     @SubscribeEvent(receiveCanceled = true)
     public void drawHudEvent(RenderGameOverlayEvent event) {
-        if(event.getType() == ElementType.EXPERIENCE) {
+        if(event.getType() == ElementType.CROSSHAIRS) {
             doRender(event);
         }
     }
@@ -102,47 +98,41 @@ public class AuxGuiHandler {
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         GL11.glColor4f(1,1,1,1);
     }
-    
+
     @SubscribeEvent
     public void clientTick(ClientTickEvent event) {
-        if(!Minecraft.getMinecraft().isGamePaused()) {
-            for(AuxGui gui : toAddList)
+        if (!Minecraft.getMinecraft().isGamePaused()) {
+            for (AuxGui gui : toAddList) {
                 doAdd(gui);
+            }
             toAddList.clear();
-            
-            Iterator<AuxGui> iter = auxGuiList.iterator();
+
             startIterating();
-            while(iter.hasNext()) {
+            Iterator<AuxGui> iter = auxGuiList.iterator();
+            while (iter.hasNext()) {
                 AuxGui gui = iter.next();
-                
-                if(gui.disposed) {
+                if (gui.disposed) {
                     gui.onDisposed();
-                    gui.lastFrameActive = false;
                     iter.remove();
-                } else if(gui.requireTicking) {
-                    if(!gui.lastFrameActive)
-                        gui.lastActivateTime = GameTimer.getTime();
+                } else if (gui.requireTicking) {
                     gui.onTick();
-                    gui.lastFrameActive = true;
                 }
             }
             endIterating();
         }
     }
-    
+
     @SubscribeEvent
     public void disconnected(ClientDisconnectionFromServerEvent event) {
         startIterating();
         Iterator<AuxGui> iter = auxGuiList.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             AuxGui gui = iter.next();
-            if(!gui.consistent) {
+            if (!gui.consistent) {
                 gui.onDisposed();
                 iter.remove();
             }
         }
         endIterating();
     }
-    
-
 }

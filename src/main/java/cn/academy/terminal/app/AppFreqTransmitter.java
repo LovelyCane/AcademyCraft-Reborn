@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
+
 public class AppFreqTransmitter extends App {
-    
     @RegApp
     public static AppFreqTransmitter instance = new AppFreqTransmitter();
 

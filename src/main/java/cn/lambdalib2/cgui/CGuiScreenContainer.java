@@ -65,7 +65,7 @@ public class CGuiScreenContainer extends GuiContainer {
     @Override
     protected void mouseClickMove(int mx, int my, int btn, long time) {
         if(isSlotActive()) super.mouseClickMove(mx, my, btn, time);
-        gui.mouseClickMove(mx, my, btn, time);
+        gui.mouseClickMove(mx, my, btn);
     }
 
     @Override

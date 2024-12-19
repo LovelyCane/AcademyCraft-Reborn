@@ -3,7 +3,6 @@ package cn.academy.block.block;
 import cn.academy.AcademyCraft;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.util.StackUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
@@ -14,8 +13,8 @@ import net.minecraft.world.World;
 /**
  * @author WeAthFolD
  */
-public abstract class ACBlockMulti extends BlockMulti {
 
+public abstract class ACBlockMulti extends BlockMulti {
     public ACBlockMulti(Material mat) {
         super(mat);
         setCreativeTab(AcademyCraft.cct);
@@ -31,5 +30,4 @@ public abstract class ACBlockMulti extends BlockMulti {
         }
         super.breakBlock(world, pos, state);
     }
-    
 }

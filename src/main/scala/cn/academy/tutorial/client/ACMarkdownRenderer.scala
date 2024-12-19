@@ -16,10 +16,10 @@ import scala.collection.Map
 class ACMarkdownRenderer extends GLMarkdownRenderer {
   private val tutLocal = LocalHelper.at("ac.tutorial")
 
-  override def onTag(name: String, attr: Map[String, String]) = {
+  override def onTag(name: String, attr: Map[String, String]): Unit = {
     super.onTag(name, attr)
 
-    def render(keyName: String) = onTextContent(keyName, Set(MarkdownParser.Reference()))
+    def render(keyName: String): Unit = onTextContent(keyName, Set(MarkdownParser.Reference()))
 
     if (name == "key") {
       val keyid = attr("id")

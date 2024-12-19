@@ -53,5 +53,4 @@ public class ItemTerminalInstaller extends Item  {
     private static void install() {
         AuxGuiHandler.register(new TerminalInstallEffect());
     }
-
 }

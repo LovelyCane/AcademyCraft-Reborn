@@ -16,9 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -26,9 +24,7 @@ import java.util.Map;
 public @interface RegGuiHandler {
 }
 
-
 class RegGuiHandlerImpl {
-
     private static final Map<Object, ModGuiHandler> modHandlers = new HashMap<>();
 
     private static void addHandler(Object mod, GuiHandlerBase handler, int hash) {
@@ -62,7 +58,6 @@ class RegGuiHandlerImpl {
     }
 
     private static class ModGuiHandler implements IGuiHandler {
-
         public final Object mod;
 
         // Path hash -> handler
@@ -89,6 +84,5 @@ class RegGuiHandlerImpl {
             }
             return subHandlers.get(ID).getClientContainer(player, world, x, y, z);
         }
-
     }
 }

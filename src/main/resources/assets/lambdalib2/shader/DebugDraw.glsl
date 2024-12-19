@@ -1,11 +1,11 @@
 Properties {
     Uniform {
-        uMVP = mat4;
-        uColor = vec4(0, 0, 0, 0);
-    }
-    VertexLayout {
-        aPosition = POSITION;
-    }
+    uMVP = mat4;
+    uColor = vec4(0, 0, 0, 0);
+}
+VertexLayout {
+aPosition = POSITION;
+}
 }
 
 Settings {
@@ -28,11 +28,11 @@ void main() {
 Fragment {
 #version 330 core
 
-uniform vec4 uColor;
+    uniform vec4 uColor;
 
-out vec4 fragColor;
+    out vec4 fragColor;
 
-void main() {
+    void main() {
     fragColor = uColor;
 }
 }

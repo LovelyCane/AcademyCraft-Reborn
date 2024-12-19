@@ -32,7 +32,7 @@ public abstract class BlockMulti extends BlockContainer {
     private final List<SubBlockPos> subList = new ArrayList<>();
     List<SubBlockPos>[] buffer;
 
-    private AxisAlignedBB[] renderBB = new AxisAlignedBB[8];
+    private final AxisAlignedBB[] renderBB = new AxisAlignedBB[8];
 
     @SideOnly(Side.CLIENT)
     double[][] rotCenters;
@@ -65,7 +65,7 @@ public abstract class BlockMulti extends BlockContainer {
     }
 
     /**
-     * Accept a int[][3] array, add all the array element as a single subPos
+     * Accept an int[][3] array, add all the array element as a single subPos
      * inside the list.
      */
     public void addSubBlock(int[][] data) {
@@ -92,9 +92,8 @@ public abstract class BlockMulti extends BlockContainer {
         }
 
         AxisAlignedBB box = renderBB[dir.ordinal()];
-        int x= pos.getX(), y = pos.getY(), z = pos.getZ();
-        return new AxisAlignedBB(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y,
-                box.maxZ + z);
+        int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+        return new AxisAlignedBB(box.minX + x, box.minY + y, box.minZ + z, box.maxX + x, box.maxY + y, box.maxZ + z);
     }
 
     /**
@@ -115,8 +114,7 @@ public abstract class BlockMulti extends BlockContainer {
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
             double[] arr = getRotCenter();
-            rotCenters = new double[][] { {}, {}, { arr[0], arr[1], arr[2] }, { -arr[0], arr[1], -arr[2] },
-                    { arr[2], arr[1], -arr[0] }, { -arr[2], arr[1], arr[0] } };
+            rotCenters = new double[][]{{}, {}, {arr[0], arr[1], arr[2]}, {-arr[0], arr[1], -arr[2]}, {arr[2], arr[1], -arr[0]}, {-arr[2], arr[1], arr[0]}};
         }
 
         // Finished, set the flag and encapsulate the instance.
@@ -125,17 +123,12 @@ public abstract class BlockMulti extends BlockContainer {
 
     // Rotation API
     // Some lookup tables
-    private static final EnumFacing[] rotMap = {
-        NORTH, // -Z,
-        EAST, // +X,
-        SOUTH, // +Z,
-        WEST // -X
-    };
-    
-    private static final double[] drMap = { 0, 0, 180, 0, -90, 90 };
-    private static final double[][] offsetMap = { { 0, 0 }, // placeholder
-            { 0, 0 }, // placeholder
-            { 0, 0 }, { 1, 1 }, { 0, 1 }, { 1, 0 } };
+    private static final EnumFacing[] rotMap = {NORTH, EAST, SOUTH, WEST};
+
+    private static final double[] drMap = {0, 0, 180, 0, -90, 90};
+    private static final double[][] offsetMap = {{0, 0}, // placeholder
+            {0, 0}, // placeholder
+            {0, 0}, {1, 1}, {0, 1}, {1, 0}};
 
     public double[] getPivotOffset(InfoBlockMulti info) {
         return getPivotOffset(info.dir);
@@ -145,13 +138,6 @@ public abstract class BlockMulti extends BlockContainer {
         return rotMap[l];
     }
 
-    /**
-     * Get the whole structure's (minX, minZ) point coord, in [dir = 0] (a.k.a:
-     * facing z-) point of view.
-     * 
-     * @param dir
-     * @return
-     */
     public double[] getPivotOffset(EnumFacing dir) {
         return offsetMap[dir.ordinal()];
     }
@@ -159,23 +145,8 @@ public abstract class BlockMulti extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public abstract double[] getRotCenter();
 
-    /**
-     * Build a multiblock at the given coordinate.
-     */
-    public void setMultiBlock(World world, BlockPos pos, EnumFacing dir) {
-        world.setBlockToAir(pos);
-
-        IBlockState state = this.blockState.getBaseState();
-        world.setBlockState(pos, state);
-        updateDirInfo(world, pos, dir);
-    }
-
-    // Placement API
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-//        if (world.isRemote)
-//            return;
-
         int l = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         EnumFacing dir = rotMap[l];
         updateDirInfo(world, pos, dir);
@@ -207,8 +178,7 @@ public abstract class BlockMulti extends BlockContainer {
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        if (world.isRemote)
-            return;
+        if (world.isRemote) return;
 
         TileEntity te = world.getTileEntity(pos);
         if (!(te instanceof IMultiTile)) {
@@ -217,8 +187,7 @@ public abstract class BlockMulti extends BlockContainer {
         }
         InfoBlockMulti info = ((IMultiTile) te).getBlockInfo();
         BlockPos origin = getOrigin(te);
-        if (origin == null)
-            return;
+        if (origin == null) return;
 
         List<SubBlockPos> rotatedList = buffer[info.dir.ordinal()];
         for (SubBlockPos sbp : rotatedList) {
@@ -226,16 +195,13 @@ public abstract class BlockMulti extends BlockContainer {
         }
     }
 
-    // A series of getOrigin funcs.
-
     public BlockPos getOrigin(World world, BlockPos pos) {
         return getOrigin(world.getTileEntity(pos));
     }
 
     public BlockPos getOrigin(TileEntity te) {
         TileEntity ret = getOriginTile(te);
-        //Debug.assertNotNull(ret);
-        return ret==null?null: ret.getPos();
+        return ret == null ? null : ret.getPos();
     }
 
     public TileEntity getOriginTile(World world, BlockPos pos) {
@@ -248,27 +214,24 @@ public abstract class BlockMulti extends BlockContainer {
             return null;
         }
         InfoBlockMulti info = ((IMultiTile) now).getBlockInfo();
-        if (info == null || !info.isLoaded())
-            return null;
+        if (info == null || !info.isLoaded()) return null;
         SubBlockPos sbp = buffer[info.dir.ordinal()].get(info.subID);
-        TileEntity ret = validate(
-                now.getWorld().getTileEntity(now.getPos().add(-sbp.dx, -sbp.dy, -sbp.dz)));
-        return ret;
+        return validate(now.getWorld().getTileEntity(now.getPos().add(-sbp.dx, -sbp.dy, -sbp.dz)));
     }
 
     // Internal
-    public static final SubBlockPos rotate(SubBlockPos s, EnumFacing dir) {
+    public static SubBlockPos rotate(SubBlockPos s, EnumFacing dir) {
         switch (dir) {
-        case EAST:
-            return new SubBlockPos(-s.dz, s.dy, s.dx);
-        case WEST:
-            return new SubBlockPos(s.dz, s.dy, -s.dx);
-        case SOUTH:
-            return new SubBlockPos(-s.dx, s.dy, -s.dz);
-        case NORTH:
-            return new SubBlockPos(s.dx, s.dy, s.dz);
-        default:
-            throw new RuntimeException("Invalid rotate direction");
+            case EAST:
+                return new SubBlockPos(-s.dz, s.dy, s.dx);
+            case WEST:
+                return new SubBlockPos(s.dz, s.dy, -s.dx);
+            case SOUTH:
+                return new SubBlockPos(-s.dx, s.dy, -s.dz);
+            case NORTH:
+                return new SubBlockPos(s.dx, s.dy, s.dz);
+            default:
+                throw new RuntimeException("Invalid rotate direction");
         }
     }
 

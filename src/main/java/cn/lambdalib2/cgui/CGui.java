@@ -8,17 +8,11 @@ package cn.lambdalib2.cgui;
 
 import cn.lambdalib2.cgui.component.Transform;
 import cn.lambdalib2.cgui.event.*;
-import cn.lambdalib2.render.font.IFont;
-import cn.lambdalib2.render.font.IFont.FontOption;
-import cn.lambdalib2.render.font.TrueTypeFont;
 import cn.lambdalib2.util.Debug;
 import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.MathUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
-
-import java.util.Iterator;
 
 /**
  * @author WeathFolD
@@ -36,17 +30,11 @@ public class CGui extends WidgetContainer {
 
     private final GuiEventBus eventBus = new GuiEventBus();
 
-    private double lastStartTime, lastDragTime;
+    private double lastDragTime;
     private Widget draggingNode;
     private float xOffset, yOffset;
 
-    private boolean debug;
-
     private double lastFrameTime = -1;
-
-    public float getDeltaTime() {
-        return (float) deltaTime;
-    }
 
     private double deltaTime = 0;
 
@@ -88,10 +76,6 @@ public class CGui extends WidgetContainer {
         return height;
     }
 
-    public void setDebug() {
-        debug = true;
-    }
-
     //---Event callback---
 
     /**
@@ -113,26 +97,12 @@ public class CGui extends WidgetContainer {
 
         drawTraverse(mx, my, null, this, getTopWidget(mx, my));
 
-        if (debug) {
-            Widget hovering = getHoveringWidget();
-            if (hovering != null) {
-                GL11.glColor4f(1, .5f, .5f, .8f);
-                HudUtils.drawRectOutline(hovering.x, hovering.y,
-                        hovering.transform.width * hovering.scale,
-                        hovering.transform.height * hovering.scale, 3);
-                IFont font = TrueTypeFont.defaultFont;
-                font.draw(hovering.getFullName(), hovering.x, hovering.y - 10, new FontOption(10));
-            }
-
-        }
-
         GL11.glEnable(GL11.GL_ALPHA_TEST);
     }
 
     @Override
     public boolean addWidget(String name, Widget w) {
-        if (this.hasWidget(name))
-            return false;
+        if (this.hasWidget(name)) return false;
         super.addWidget(name, w);
         eventBus.postEvent(null, new AddWidgetEvent(w));
         return true;
@@ -144,26 +114,21 @@ public class CGui extends WidgetContainer {
      * @param mx
      * @param my
      * @param btn the mouse button ID.
-     * @param dt  how long is this button being pressed(ms)
      */
-    public boolean mouseClickMove(int mx, int my, int btn, long dt) {
+    public void mouseClickMove(int mx, int my, int btn) {
         updateMouse(mx, my);
         if (btn == 0) {
             double time = GameTimer.getAbsTime();
             if (draggingNode == null) {
-                lastStartTime = time;
                 draggingNode = getTopWidget(mx, my);
                 //    System.out.println("StartDragging " + draggingNode);
-                if (draggingNode == null)
-                    return false;
+                if (draggingNode == null) return;
                 xOffset = mx - draggingNode.x;
                 yOffset = my - draggingNode.y;
             }
             lastDragTime = time;
             draggingNode.post(new DragEvent(xOffset, yOffset));
-            return true;
         }
-        return false;
     }
 
     private void postMouseEv(Widget target, GuiEventBus bus, int mx, int my, int bid, boolean local) {
@@ -174,18 +139,14 @@ public class CGui extends WidgetContainer {
         }
 
         bus.postEvent(target, new MouseClickEvent(x, y, bid));
-        if (bid == 0)
-            bus.postEvent(target, new LeftClickEvent(x, y));
-        if (bid == 1)
-            bus.postEvent(target, new RightClickEvent(x, y));
+        if (bid == 0) bus.postEvent(target, new LeftClickEvent(x, y));
+        if (bid == 1) bus.postEvent(target, new RightClickEvent(x, y));
     }
 
     /**
      * Standard GuiScreen mouseClicked callback.
-     *
-     * @return if any action was performed on a widget.
      */
-    public boolean mouseClicked(int mx, int my, int bid) {
+    public void mouseClicked(int mx, int my, int bid) {
         updateMouse(mx, my);
 
         postMouseEv(null, eventBus, mx, my, bid, false);
@@ -198,9 +159,7 @@ public class CGui extends WidgetContainer {
                 removeFocus();
             }
             postMouseEv(top, top.eventBus(), mx, my, bid, true);
-            return true;
         }
-        return false;
     }
 
     public void removeFocus() {
@@ -283,11 +242,6 @@ public class CGui extends WidgetContainer {
         widget.dirty = true;
     }
 
-    public Widget getDraggingWidget() {
-        return Math.abs(GameTimer.getAbsTime() - lastDragTime) > DRAG_TIME_TOLE ||
-                draggingNode == null ? null : draggingNode;
-    }
-
     public Widget getFocus() {
         return focus;
     }
@@ -331,13 +285,9 @@ public class CGui extends WidgetContainer {
             widget.scale = transform.scale;
         }
 
-        widget.x = tx +
-                (tw - transform.width * widget.scale) * transform.alignWidth.factor +
-                transform.x * parentScale;
+        widget.x = tx + (tw - transform.width * widget.scale) * transform.alignWidth.factor + transform.x * parentScale;
 
-        widget.y = ty +
-                (th - transform.height * widget.scale) * transform.alignHeight.factor +
-                transform.y * parentScale;
+        widget.y = ty + (th - transform.height * widget.scale) * transform.alignHeight.factor + transform.y * parentScale;
 
         widget.dirty = false;
 
@@ -353,10 +303,8 @@ public class CGui extends WidgetContainer {
     private void frameUpdate() {
         double time = GameTimer.getAbsTime();
 
-        if (lastFrameTime == -1)
-            deltaTime = 0;
-        else
-            deltaTime = MathUtils.clampd(0f, 0.1f, GameTimer.getAbsTime() - lastFrameTime);
+        if (lastFrameTime == -1) deltaTime = 0;
+        else deltaTime = MathUtils.clampd(0f, 0.1f, GameTimer.getAbsTime() - lastFrameTime);
 
         lastFrameTime = time;
 
@@ -367,7 +315,6 @@ public class CGui extends WidgetContainer {
                 draggingNode = null;
             }
         }
-        //
 
         updateTraverse(null, this);
         this.update();
@@ -381,9 +328,7 @@ public class CGui extends WidgetContainer {
             }
         }
 
-        Iterator<Widget> iter = set.iterator();
-        while (iter.hasNext()) {
-            Widget widget = iter.next();
+        for (Widget widget : set) {
             if (!widget.disposed) {
                 updateTraverse(widget, widget);
                 widget.update();
@@ -421,9 +366,7 @@ public class CGui extends WidgetContainer {
         }
 
         if (cur == null || cur.isVisible()) {
-            Iterator<Widget> iter = set.iterator();
-            while (iter.hasNext()) {
-                Widget wn = iter.next();
+            for (Widget wn : set) {
                 drawTraverse(mx, my, wn, wn, top);
             }
         }
@@ -432,9 +375,7 @@ public class CGui extends WidgetContainer {
     protected Widget gtnTraverse(float x, float y, Widget node, WidgetContainer set) {
         Widget res = null;
         boolean checkSub = node == null || node.isVisible();
-        if (node != null && node.isVisible()
-                && node.transform.doesListenKey
-                && node.isPointWithin(x, y)) {
+        if (node != null && node.isVisible() && node.transform.doesListenKey && node.isPointWithin(x, y)) {
             res = node;
         }
 
@@ -443,8 +384,7 @@ public class CGui extends WidgetContainer {
         Widget next = null;
         for (Widget wn : set) {
             Widget tmp = gtnTraverse(x, y, wn, wn);
-            if (tmp != null)
-                next = tmp;
+            if (tmp != null) next = tmp;
         }
         return next == null ? res : next;
     }
@@ -471,12 +411,12 @@ public class CGui extends WidgetContainer {
      * Event bus delegator, will post every widget inside this CGui. <br>
      * Note that this might impact peformance when used incorectlly.
      */
-    public void postEventHierarchically(GuiEvent event) {
+/*    public void postEventHierarchically(GuiEvent event) {
         eventBus.postEvent(null, event);
         for (Widget w : getDrawList()) {
             hierPostEvent(w, event);
         }
-    }
+    }*/
 
     private void hierPostEvent(Widget w, GuiEvent event) {
         w.post(event);

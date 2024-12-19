@@ -48,7 +48,6 @@ import cn.academy.Resources.newTextBox
 import cn.academy.core.client.ui.Generic_._
 
 object TechUI {
-
   private lazy val pageButtonTemplate = readxml("pageselect").getWidget("main")
   private val blendQuadTex = Resources.getTexture("guis/blend_quad")
   private val histogramTex = Resources.getTexture("guis/histogram")
@@ -237,8 +236,6 @@ object TechUI {
     xSize += 31
     ySize += 20
 
-    // idk why, but i need it
-
     class InfoArea extends Widget {
       this :+ new BlendQuad()
 
@@ -277,7 +274,7 @@ object TechUI {
         val widget = new Widget().size(210, 210).scale(0.4f)
           .addComponent(blend(new DrawTexture(histogramTex)))
 
-        elems.zipWithIndex.foreach { case (elem, idx) => {
+        elems.zipWithIndex.foreach { case (elem, idx) =>
           val bar = new Widget().size(16, 120).pos(56 + idx * 40, 78)
           val progress = blend(new ProgressBar)
           progress.color = elem.color
@@ -289,7 +286,6 @@ object TechUI {
           bar :+ progress
 
           widget :+ bar
-        }
         }
 
         blank(-30)
@@ -797,7 +793,7 @@ object WirelessNetDelegate {
       ret.y = mat.getPos.getY
       ret.z = mat.getPos.getZ
       ret.ssid = net.getSSID
-      ret.encrypted = !net.getPassword.isEmpty
+      ret.encrypted = net.getPassword.nonEmpty
 
       ret
     }

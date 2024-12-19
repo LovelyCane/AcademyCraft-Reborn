@@ -52,7 +52,7 @@ public class CGuiScreen extends GuiScreen {
     
     @Override
     protected void mouseClickMove(int mx, int my, int btn, long time) {
-        gui.mouseClickMove(mx, my, btn, time);
+        gui.mouseClickMove(mx, my, btn);
     }
     
     @Override
