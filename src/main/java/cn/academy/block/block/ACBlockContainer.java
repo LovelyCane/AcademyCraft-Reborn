@@ -20,6 +20,7 @@ import net.minecraft.world.World;
  *
  * @author WeAthFolD
  */
+
 public abstract class ACBlockContainer extends BlockContainer {
 
     final GuiHandlerBase guiHandler;
@@ -33,10 +34,6 @@ public abstract class ACBlockContainer extends BlockContainer {
         guiHandler = _guiHandler;
         setCreativeTab(AcademyCraft.cct);
     }
-
-//    protected IIcon ricon(IIconRegister ir, String name) {
-//        return ir.registerIcon("academy:" + name);
-//    }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -63,5 +60,4 @@ public abstract class ACBlockContainer extends BlockContainer {
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
-
 }

@@ -12,8 +12,8 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author WeAthFolD
  */
-public class RenderDeveloperNormal extends RenderBlockMulti<TileDeveloper> {
 
+public class RenderDeveloperNormal extends RenderBlockMulti<TileDeveloper> {
     @RegTileEntityRender(TileDeveloper.Normal.class)
     public static final RenderDeveloperNormal instance = new RenderDeveloperNormal();
 
@@ -31,5 +31,4 @@ public class RenderDeveloperNormal extends RenderBlockMulti<TileDeveloper> {
         mdl.renderAll();
         GL11.glEnable(GL11.GL_CULL_FACE);
     }
-
 }

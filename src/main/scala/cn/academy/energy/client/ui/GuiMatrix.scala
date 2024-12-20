@@ -3,23 +3,21 @@ package cn.academy.energy.client.ui
 import cn.academy.block.container.ContainerMatrix
 import cn.academy.block.tileentity.TileMatrix
 import cn.academy.core.client.ui.TechUI.ContainerUI
+import cn.academy.core.client.ui._
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.event.energy.{ChangePassEvent, CreateNetworkEvent}
-import cn.academy.core.client.ui._
-import cn.lambdalib2.cgui.Widget
+import cn.lambdalib2.cgui.ScalaCGUI._
 import cn.lambdalib2.cgui.component.TextBox
-import cn.lambdalib2.s11n.{SerializeNullable, SerializeStrategy}
+import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.s11n.SerializeStrategy.ExposeStrategy
-import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
-import cn.lambdalib2.s11n.network.NetworkS11nType
-import net.minecraftforge.fml.relauncher.Side
+import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n, NetworkS11nType}
+import cn.lambdalib2.s11n.{SerializeNullable, SerializeStrategy}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.common.MinecraftForge
-import cn.lambdalib2.cgui.ScalaCGUI._
-import cn.lambdalib2.registry.StateEventCallback
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.Side
 
 object GuiMatrix2 {
   import MatrixNetProxy._
@@ -160,5 +158,4 @@ private object MatrixNetProxy {
       }
     }
   }
-
 }

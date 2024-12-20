@@ -42,8 +42,7 @@ public class BlockWindGenBase extends ACBlockMulti {
         private TileWindGenBase locate(World world, int x, int y, int z) {
             BlockPos pos = new BlockPos(x, y, z);
             Block b = world.getBlockState(pos).getBlock();
-            if (b != ACBlocks.windgen_base)
-                return null;
+            if (b != ACBlocks.windgen_base) return null;
 
             TileEntity te = ACBlocks.windgen_base.getOriginTile(world, pos);
             return te instanceof TileWindGenBase ? (TileWindGenBase) te : null;
@@ -54,9 +53,7 @@ public class BlockWindGenBase extends ACBlockMulti {
         super(Material.ROCK);
         setHardness(4.0f);
         setHarvestLevel("pickaxe", 2);
-        addSubBlock(new int[][]{
-                {0, 1, 0}
-        });
+        addSubBlock(new int[][]{{0, 1, 0}});
         finishInit();
     }
 
@@ -73,8 +70,7 @@ public class BlockWindGenBase extends ACBlockMulti {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getItem() == ACBlocks.item_windgen_pillar)
-            return false;
+        if (stack.getItem() == ACBlocks.item_windgen_pillar) return false;
 
         if (!player.isSneaking()) {
             if (!world.isRemote) {

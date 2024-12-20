@@ -4,17 +4,17 @@ import cn.academy.Resources
 import cn.academy.client.auxgui.ACHud
 import cn.academy.client.auxgui.ACHud.Condition
 import cn.academy.misc.media.MediaBackend.PlayInfo
-import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.component.DragBar.DraggedEvent
+import cn.lambdalib2.cgui.component.TextBox.ConfirmInputEvent
 import cn.lambdalib2.cgui.component._
 import cn.lambdalib2.cgui.event.{FrameEvent, LeftClickEvent, LostFocusEvent}
-import cn.lambdalib2.cgui.{CGuiScreen, Widget, WidgetContainer}
 import cn.lambdalib2.cgui.loader.CGUIDocument
+import cn.lambdalib2.cgui.{CGuiScreen, Widget, WidgetContainer}
 import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.util.{Colors, GameTimer}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 private object MediaGuiInit {
 
@@ -23,9 +23,11 @@ private object MediaGuiInit {
 }
 
 /**
-  * @author WeAthFolD
-  */
+ * @author WeAthFolD
+ */
+
 class MediaGui extends CGuiScreen {
+
   import MediaGuiInit._
   import cn.lambdalib2.cgui.ScalaCGUI._
 
@@ -99,7 +101,8 @@ class MediaGui extends CGuiScreen {
         case Some(media) => backend.play(media); updatePlayDisplay()
         case _ =>
           if (allInstalled.nonEmpty) {
-            backend.play(allInstalled.head); updatePlayDisplay()
+            backend.play(allInstalled.head);
+            updatePlayDisplay()
           }
       }
     }
@@ -159,8 +162,8 @@ class MediaGui extends CGuiScreen {
   }
 
   /**
-    * Fetches current playing info and updates it to all GUI elements.
-    */
+   * Fetches current playing info and updates it to all GUI elements.
+   */
   def updatePlayDisplay() = {
     val playTimeText = pageMain.child("play_time").component[TextBox]
     val progress = pageMain.child("progress").component[ProgressBar]
@@ -168,7 +171,7 @@ class MediaGui extends CGuiScreen {
     val popTexture = pageMain.child("pop").component[DrawTexture]
 
     currentPlaying match {
-      case Some(a @ PlayInfo(media, paused, time)) =>
+      case Some(a@PlayInfo(media, paused, time)) =>
         playTimeText.setContent(a.displayTime)
         progress.progress = time / media.lengthSecs
         title.setContent(media.name)
@@ -190,6 +193,7 @@ class MediaGui extends CGuiScreen {
 
 @SideOnly(Side.CLIENT)
 private object MediaAuxGui {
+
   import cn.lambdalib2.cgui.ScalaCGUI._
 
   @StateEventCallback
@@ -202,7 +206,7 @@ private object MediaAuxGui {
 
     val progress = base.child("progress").component[ProgressBar]
     val title = base.child("title").component[TextBox]
-    val timetext  = base.child("time").component[TextBox]
+    val timetext = base.child("time").component[TextBox]
 
     var lastTest = GameTimer.getTime
     base.listens[FrameEvent](() => {
@@ -212,7 +216,7 @@ private object MediaAuxGui {
 
         val backend = MediaBackend()
         backend.currentPlaying match {
-          case Some(a @ PlayInfo(media, paused, playedTime)) =>
+          case Some(a@PlayInfo(media, paused, playedTime)) =>
             progress.progress = playedTime / media.lengthSecs
             title.setContent(media.name)
             timetext.setContent(a.displayTime)
@@ -224,5 +228,4 @@ private object MediaAuxGui {
       }
     })
   }
-
 }

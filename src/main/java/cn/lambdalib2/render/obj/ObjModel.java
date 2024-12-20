@@ -46,12 +46,7 @@ public class ObjModel {
 
         @Override
         public String toString() {
-            return "Face{" +
-                    "i0=" + i0 +
-                    ", i1=" + i1 +
-                    ", i2=" + i2 +
-                    '}';
+            return "Face{" + "i0=" + i0 + ", i1=" + i1 + ", i2=" + i2 + '}';
         }
     }
-
 }

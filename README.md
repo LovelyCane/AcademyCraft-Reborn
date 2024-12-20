@@ -15,7 +15,7 @@ but its content extends beyond the original background.
 ### Cleanroom Dependencies:
 
 1. JRE/JDK 21 or 1.8
-2. Scalar-1.12.2-2.11.1
+2. [Scalar]
 
 ### Recommended Mods:
 
@@ -89,3 +89,5 @@ Yes.
 Many people inquire whether or how much the mod relates to _A Certain Magical Index_. While AcademyCraft is inspired by
 _Railgun_, a spinoff of _Index_, the mod focuses solely on the science side of the story. It aims to provide an engaging
 experience around the concept of **superability**, without delving deeply into the _Index_ storyline.
+
+[Scalar]: https://github.com/CleanroomMC/Scalar/releases/tag/2.11.1

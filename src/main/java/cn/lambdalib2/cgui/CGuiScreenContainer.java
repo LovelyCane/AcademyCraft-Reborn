@@ -9,7 +9,6 @@ package cn.lambdalib2.cgui;
 import cn.lambdalib2.cgui.component.TextBox;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -17,6 +16,7 @@ import java.io.IOException;
 
 /**
  * A simple wrapper for fast {@link CGui} deploy as GuiContainer.
+ *
  * @author WeAthFolD
  */
 
@@ -28,13 +28,8 @@ public class CGuiScreenContainer extends GuiContainer {
         gui = new CGui();
     }
 
-    public CGui getGui() {
-        return gui;
-    }
-
     @Override
-    protected void drawGuiContainerBackgroundLayer(float var1, int var2,
-                                                   int var3) {
+    protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         gui.resize(width, height);
@@ -43,7 +38,7 @@ public class CGuiScreenContainer extends GuiContainer {
 
     @Override
     public void drawScreen(int a, int b, float c) {
-        if(isSlotActive()) {
+        if (isSlotActive()) {
             this.drawDefaultBackground();
             super.drawScreen(a, b, c);
             renderHoveredToolTip(a, b);
@@ -58,13 +53,13 @@ public class CGuiScreenContainer extends GuiContainer {
 
     @Override
     protected void mouseClicked(int par1, int par2, int par3) throws IOException {
-        if(isSlotActive()) super.mouseClicked(par1, par2, par3);
+        if (isSlotActive()) super.mouseClicked(par1, par2, par3);
         gui.mouseClicked(par1, par2, par3);
     }
 
     @Override
     protected void mouseClickMove(int mx, int my, int btn, long time) {
-        if(isSlotActive()) super.mouseClickMove(mx, my, btn, time);
+        if (isSlotActive()) super.mouseClickMove(mx, my, btn, time);
         gui.mouseClickMove(mx, my, btn);
     }
 
@@ -75,7 +70,7 @@ public class CGuiScreenContainer extends GuiContainer {
 
     @Override
     protected void mouseReleased(int a, int b, int c) {
-        if(isSlotActive()) {
+        if (isSlotActive()) {
             super.mouseReleased(a, b, c);
         }
     }
@@ -83,8 +78,7 @@ public class CGuiScreenContainer extends GuiContainer {
     @Override
     public void keyTyped(char ch, int key) throws IOException {
         gui.keyTyped(ch, key);
-        if(containerAcceptsKey(key) || key == Keyboard.KEY_ESCAPE)
-            super.keyTyped(ch, key);
+        if (containerAcceptsKey(key) || key == Keyboard.KEY_ESCAPE) super.keyTyped(ch, key);
     }
 
     /**
@@ -93,9 +87,7 @@ public class CGuiScreenContainer extends GuiContainer {
     protected boolean containerAcceptsKey(int key) {
         // Don't delegate key event if current editing TextBox. Surely dirty hack, find a better route later
         TextBox temp;
-        return (gui.focus == null ||
-                (temp = gui.focus.getComponent(TextBox.class)) == null ||
-                !temp.canEdit);
+        return (gui.focus == null || (temp = gui.focus.getComponent(TextBox.class)) == null || !temp.canEdit);
     }
 
     /**

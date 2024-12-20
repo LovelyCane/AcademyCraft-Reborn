@@ -5,6 +5,7 @@ import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -58,6 +59,7 @@ public class AcademyCraft {
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         OreDictionary.registerOre("plateIron", ACItems.reinforced_iron_plate);
+        OBJLoader.INSTANCE.addDomain("academy");
     }
 
     @EventHandler

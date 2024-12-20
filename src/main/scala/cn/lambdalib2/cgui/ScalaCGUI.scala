@@ -13,7 +13,7 @@ import cn.lambdalib2.cgui.event.{GuiEvent, IGuiEventHandler}
 
 import scala.reflect.ClassTag
 
-class RichWidget(val w: Widget) extends AnyVal {
+class RichWidget(val w: Widget) extends Widget {
 
   def listens[T <: GuiEvent](handler: (Widget, T) => Any, priority: Int = 0)(implicit evidence: ClassTag[T]): Widget = {
     w.listen[T](evidence.runtimeClass.asInstanceOf[Class[T]], priority, new IGuiEventHandler[T] {

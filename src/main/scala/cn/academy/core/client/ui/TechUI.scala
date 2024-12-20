@@ -1,12 +1,14 @@
 package cn.academy.core.client.ui
 
 import cn.academy.Resources
+import cn.academy.block.tileentity.TileGeneratorBase
 import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import org.lwjgl.util.Color
 
 import java.util.function.Consumer
+import scala.collection.JavaConverters.asScalaBufferConverter
 //import cn.academy.core.Resources
 import cn.academy.core.client.ui.TechUI.Page
 import cn.academy.energy.api.WirelessHelper
@@ -134,7 +136,15 @@ object TechUI {
    *
    * @param pages The pages of this UI. Must not be empty.
    */
+
   def apply(pages: Page*) = new TechUIWidget(pages: _*)
+
+  def applyJava(pages: java.util.List[TechUI.Page]) = {
+    val scalaPages: Seq[TechUI.Page] = pages.asScala
+
+    val ret = apply(scalaPages: _*)
+    ret
+  }
 
   def breathe(widget: Widget) = {
     Option(widget.getComponent(classOf[DrawTexture])) match {
@@ -209,8 +219,7 @@ object TechUI {
     }
   }
 
-  case class HistElement(id: String, color: Color,
-                         value: () => Double, desc: () => String)
+  case class HistElement(id: String, color: Color, value: () => Double, desc: () => String)
 
   def histEnergy(energy: () => Double, max: Double) = {
     val color = Colors.fromHexColor(0xff25c4ff)
@@ -232,248 +241,254 @@ object TechUI {
     HistElement(localHist.get("capacity"), color, () => amt().toDouble / max, () => s"${amt()}/$max")
   }
 
+  class InfoArea extends Widget {
+    this :+ new BlendQuad()
+
+    private val keyLength = 40
+
+    private val expectWidth = 100.0f
+    private var expectHeight = 50.0f
+
+    this.size(expectWidth, 0)
+
+    private var lastFrameTime = GameTimer.getTime
+    private val blendStartTime = GameTimer.getTime
+
+    this.listens[FrameEvent](() => {
+      val dt = math.min(GameTimer.getTime - lastFrameTime, 0.5)
+
+      def move(fr: Float, to: Float): Float = {
+        val max: Float = dt.toFloat * 500
+        val delta = to - fr
+        fr + math.min(max, math.abs(delta)) * math.signum(delta)
+      }
+
+      transform.width = move(transform.width, expectWidth)
+      transform.height = move(transform.height, expectHeight)
+
+      val balpha: Float = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 0.3) / 0.3).toFloat
+      uas foreach (ua => ua(balpha))
+
+      lastFrameTime = GameTimer.getTime
+    })
+
+    private var elemY: Float = 10
+    private val elements = mutable.ArrayBuffer[Widget]()
+
+    def histogramTile(tile: TileGeneratorBase) = {
+      val elems = TechUI.histBuffer(tile.getEnergy, tile.bufferSize)
+      val ret = histogram(elems)
+      ret
+    }
+
+    def histogram(elems: HistElement*) = {
+      val widget = new Widget().size(210, 210).scale(0.4f)
+        .addComponent(blend(new DrawTexture(histogramTex)))
+
+      elems.zipWithIndex.foreach { case (elem, idx) =>
+        val bar = new Widget().size(16, 120).pos(56 + idx * 40, 78)
+        val progress = blend(new ProgressBar)
+        progress.color = elem.color
+        progress.dir = Direction.UP
+
+        bar.listens[FrameEvent](() => {
+          progress.progress = MathUtils.clampd(0.03, 1, elem.value())
+        })
+        bar :+ progress
+
+        widget :+ bar
+      }
+
+      blank(-30)
+      element(widget)
+
+      elems foreach histProperty
+
+      this
+    }
+
+    def sepline(id: String) = {
+      val widget = new Widget(expectWidth - 3, 8).pos(3, 0)
+      widget :+ blend(newTextBox(new FontOption(6, Colors.monoBlend(1, 0.6f)))).setContent(localSep.get(id))
+
+      blank(3)
+      element(widget)
+
+      this
+    }
+
+    def seplineInfo() = sepline("info")
+
+    def button(name: String, callback: () => Any) = {
+      val textBox = newTextBox(new FontOption(9, FontAlign.CENTER)).setContent(name)
+      val len = textBox.font.getTextWidth(name, textBox.option)
+
+      val widget = new Widget().walign(WidthAlign.CENTER).size(math.max(50, len + 5), 8)
+      widget.listens((evt: FrameEvent) => {
+        val lum = if (evt.hovering) 1.0f else 0.8f
+        val color = textBox.option.color
+        color.setRed(Colors.f2i(lum))
+        color.setGreen(Colors.f2i(lum))
+        color.setBlue(Colors.f2i(lum))
+      })
+      widget.listens[LeftClickEvent](callback)
+      widget :+ blend(textBox)
+
+      element(widget)
+    }
+
+    def property[T](key: String, value: T,
+                    editCallback: String => Any = null,
+                    password: Boolean = false,
+                    colorChange: Boolean = true,
+                    contentCell: Array[TextBox] = null) = { // Content cell is a temp hack to get the text component
+      val (idleColor, editColor) = (Colors.fromHexColor(0xffffffff), Colors.fromHexColor(0xff2180d8))
+
+      val textBox = blend(newTextBox(new FontOption(8))).setContent(value.toString)
+      val valueArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
+
+      if (editCallback != null) {
+        textBox.allowEdit = true
+        textBox.option.color.setColor(idleColor)
+        valueArea.listens[ConfirmInputEvent](() => {
+          if (colorChange) {
+            textBox.option.color.setColor(idleColor)
+          }
+          editCallback(textBox.content)
+        })
+        valueArea.listens[ChangeContentEvent](() => {
+          if (colorChange) {
+            textBox.option.color.setColor(editColor)
+          }
+        })
+
+        def box(ch: String) = {
+          val ret = new Widget().size(10, 8)
+            .halign(HeightAlign.CENTER)
+            .addComponent(blend(newTextBox(new FontOption(8)).setContent(ch)))
+          ret
+        }
+
+        val (box0, box1) = (box("[").pos(-4, 0), box("]").pos(valueArea.transform.width + 2, 0))
+        box0.transform.doesListenKey = false
+        box1.transform.doesListenKey = false
+        valueArea :+ box0
+        valueArea :+ box1
+      } else {
+        valueArea.listens[FrameEvent](() => textBox.content = value.toString)
+      }
+
+      if (password) {
+        textBox.doesEcho = true
+      }
+
+      valueArea :+ textBox
+
+      kvpair(key, valueArea)
+
+      if (contentCell != null) {
+        contentCell.update(0, textBox)
+      }
+
+      this
+    }
+
+    private def histProperty(elem: HistElement) = {
+      val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
+
+      val keyArea = new Widget().pos(4, 0).size(32, 8).halign(HeightAlign.CENTER)
+        .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.id))
+      val icon = new Widget().size(6, 6)
+        .halign(HeightAlign.CENTER).pos(-3, .5f)
+        .addComponents(blend(new DrawTexture(null).setColor(elem.color)))
+      val valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(HeightAlign.CENTER)
+        .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.desc()))
+
+      valueArea.listens[FrameEvent](() => {
+        valueArea.component[TextBox].content = elem.desc()
+      })
+
+      widget :+ keyArea
+      widget :+ icon
+      widget :+ valueArea
+
+      element(widget)
+    }
+
+    private def kvpair(key: String, value: Widget) = {
+      val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
+      val keyArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
+        .addComponent(blend(newTextBox(new FontOption(8))).setContent(localProperty.get(key)))
+      value.pos(keyLength, 0)
+
+      widget :+ keyArea
+      widget :+ value
+
+      element(widget)
+    }
+
+    def element(elem: Widget) = {
+      elem.transform.y = elemY
+      elemY += elem.transform.height * elem.transform.scale
+
+      elements += elem
+      expectHeight = math.max(50.0f, elemY + 8)
+      this :+ elem
+
+      this
+    }
+
+    def blank(ht: Double) = {
+      elemY += ht.toFloat
+
+      this
+    }
+
+    def reset() = {
+      elements foreach (_.dispose())
+      elements.clear()
+      elemY = 10
+      uas foreach (_.clear())
+
+      this
+    }
+
+    private trait Updater[T] {
+      private val us = mutable.ArrayBuffer[T]()
+
+      def add(obj: T) = us += obj
+
+      def clear() = us.clear()
+
+      def apply(alpha: Float): Unit = us foreach (x => apply(x, alpha))
+
+      def apply(obj: T, alpha: Float): Unit
+    }
+
+    private implicit object DrawTexUpdater extends Updater[DrawTexture] {
+      override def apply(obj: DrawTexture, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
+    }
+
+    private implicit object TextBoxUpdater extends Updater[TextBox] {
+      override def apply(obj: TextBox, alpha: Float) = obj.option.color.setAlpha(Colors.f2i(alpha))
+    }
+
+    private implicit object ProgressBarUpdater extends Updater[ProgressBar] {
+      override def apply(obj: ProgressBar, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
+    }
+
+    private val uas = List(DrawTexUpdater, TextBoxUpdater, ProgressBarUpdater)
+
+    private def blend[T](obj: T)(implicit ua: Updater[T]) = {
+      ua.add(obj)
+      obj
+    }
+
+  }
+
   class ContainerUI(container: Container, pages: Page*) extends CGuiScreenContainer(container) {
     xSize += 31
     ySize += 20
-
-    class InfoArea extends Widget {
-      this :+ new BlendQuad()
-
-      private val keyLength = 40
-
-      private val expectWidth = 100.0f
-      private var expectHeight = 50.0f
-
-      this.size(expectWidth, 0)
-
-      private var lastFrameTime = GameTimer.getTime
-      private val blendStartTime = GameTimer.getTime
-
-      this.listens[FrameEvent](() => {
-        val dt = math.min(GameTimer.getTime - lastFrameTime, 0.5)
-
-        def move(fr: Float, to: Float): Float = {
-          val max: Float = dt.toFloat * 500
-          val delta = to - fr
-          fr + math.min(max, math.abs(delta)) * math.signum(delta)
-        }
-
-        transform.width = move(transform.width, expectWidth)
-        transform.height = move(transform.height, expectHeight)
-
-        val balpha: Float = MathUtils.clampd(0, 1, (GameTimer.getTime - blendStartTime - 0.3) / 0.3).toFloat
-        uas foreach (ua => ua(balpha))
-
-        lastFrameTime = GameTimer.getTime
-      })
-
-      private var elemY: Float = 10
-      private val elements = mutable.ArrayBuffer[Widget]()
-
-      def histogram(elems: HistElement*) = {
-        val widget = new Widget().size(210, 210).scale(0.4f)
-          .addComponent(blend(new DrawTexture(histogramTex)))
-
-        elems.zipWithIndex.foreach { case (elem, idx) =>
-          val bar = new Widget().size(16, 120).pos(56 + idx * 40, 78)
-          val progress = blend(new ProgressBar)
-          progress.color = elem.color
-          progress.dir = Direction.UP
-
-          bar.listens[FrameEvent](() => {
-            progress.progress = MathUtils.clampd(0.03, 1, elem.value())
-          })
-          bar :+ progress
-
-          widget :+ bar
-        }
-
-        blank(-30)
-        element(widget)
-
-        elems foreach histProperty
-
-        this
-      }
-
-      def sepline(id: String) = {
-        val widget = new Widget(expectWidth - 3, 8).pos(3, 0)
-        widget :+ blend(newTextBox(new FontOption(6, Colors.monoBlend(1, 0.6f)))).setContent(localSep.get(id))
-
-        blank(3)
-        element(widget)
-
-        this
-      }
-
-      def seplineInfo() = sepline("info")
-
-      def button(name: String, callback: () => Any) = {
-        val textBox = newTextBox(new FontOption(9, FontAlign.CENTER)).setContent(name)
-        val len = textBox.font.getTextWidth(name, textBox.option)
-
-        val widget = new Widget().walign(WidthAlign.CENTER).size(math.max(50, len + 5), 8)
-        widget.listens((evt: FrameEvent) => {
-          val lum = if (evt.hovering) 1.0f else 0.8f
-          val color = textBox.option.color
-          color.setRed(Colors.f2i(lum))
-          color.setGreen(Colors.f2i(lum))
-          color.setBlue(Colors.f2i(lum))
-        })
-        widget.listens[LeftClickEvent](callback)
-        widget :+ blend(textBox)
-
-        element(widget)
-      }
-
-      def property[T](key: String, value: => T,
-                      editCallback: String => Any = null,
-                      password: Boolean = false,
-                      colorChange: Boolean = true,
-                      contentCell: Array[TextBox] = null) = { // Content cell is a temp hack to get the text component
-        val (idleColor, editColor) = (Colors.fromHexColor(0xffffffff), Colors.fromHexColor(0xff2180d8))
-
-        val textBox = blend(newTextBox(new FontOption(8))).setContent(value.toString)
-        val valueArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
-
-        if (editCallback != null) {
-          textBox.allowEdit = true
-          textBox.option.color.setColor(idleColor)
-          valueArea.listens[ConfirmInputEvent](() => {
-            if (colorChange) {
-              textBox.option.color.setColor(idleColor)
-            }
-            editCallback(textBox.content)
-          })
-          valueArea.listens[ChangeContentEvent](() => {
-            if (colorChange) {
-              textBox.option.color.setColor(editColor)
-            }
-          })
-
-          def box(ch: String) = {
-            val ret = new Widget().size(10, 8)
-              .halign(HeightAlign.CENTER)
-              .addComponent(blend(newTextBox(new FontOption(8)).setContent(ch)))
-            ret
-          }
-
-          val (box0, box1) = (box("[").pos(-4, 0), box("]").pos(valueArea.transform.width + 2, 0))
-          box0.transform.doesListenKey = false
-          box1.transform.doesListenKey = false
-          valueArea :+ box0
-          valueArea :+ box1
-        } else {
-          valueArea.listens[FrameEvent](() => textBox.content = value.toString)
-        }
-
-        if (password) {
-          textBox.doesEcho = true
-        }
-
-        valueArea :+ textBox
-
-        kvpair(key, valueArea)
-
-        if (contentCell != null) {
-          contentCell.update(0, textBox)
-        }
-
-        this
-      }
-
-      private def histProperty(elem: HistElement) = {
-        val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
-
-        val keyArea = new Widget().pos(4, 0).size(32, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.id))
-        val icon = new Widget().size(6, 6)
-          .halign(HeightAlign.CENTER).pos(-3, .5f)
-          .addComponents(blend(new DrawTexture(null).setColor(elem.color)))
-        val valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(newTextBox(new FontOption(8))).setContent(elem.desc()))
-
-        valueArea.listens[FrameEvent](() => {
-          valueArea.component[TextBox].content = elem.desc()
-        })
-
-        widget :+ keyArea
-        widget :+ icon
-        widget :+ valueArea
-
-        element(widget)
-      }
-
-      private def kvpair(key: String, value: Widget) = {
-        val widget = new Widget(expectWidth - 10, 8).pos(6, 0)
-        val keyArea = new Widget().size(40, 8).halign(HeightAlign.CENTER)
-          .addComponent(blend(newTextBox(new FontOption(8))).setContent(localProperty.get(key)))
-        value.pos(keyLength, 0)
-
-        widget :+ keyArea
-        widget :+ value
-
-        element(widget)
-      }
-
-      def element(elem: Widget) = {
-        elem.transform.y = elemY
-        elemY += elem.transform.height * elem.transform.scale
-
-        elements += elem
-        expectHeight = math.max(50.0f, elemY + 8)
-        this :+ elem
-
-        this
-      }
-
-      def blank(ht: Double) = {
-        elemY += ht.toFloat
-
-        this
-      }
-
-      def reset() = {
-        elements foreach (_.dispose())
-        elements.clear()
-        elemY = 10
-        uas foreach (_.clear())
-
-        this
-      }
-
-      private trait Updater[T] {
-        private val us = mutable.ArrayBuffer[T]()
-
-        def add(obj: T) = us += obj
-
-        def clear() = us.clear()
-
-        def apply(alpha: Float): Unit = us foreach (x => apply(x, alpha))
-
-        def apply(obj: T, alpha: Float): Unit
-      }
-
-      private implicit object DrawTexUpdater extends Updater[DrawTexture] {
-        override def apply(obj: DrawTexture, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
-      }
-
-      private implicit object TextBoxUpdater extends Updater[TextBox] {
-        override def apply(obj: TextBox, alpha: Float) = obj.option.color.setAlpha(Colors.f2i(alpha))
-      }
-
-      private implicit object ProgressBarUpdater extends Updater[ProgressBar] {
-        override def apply(obj: ProgressBar, alpha: Float) = obj.color.setAlpha(Colors.f2i(alpha))
-      }
-
-      private val uas = List(DrawTexUpdater, TextBoxUpdater, ProgressBarUpdater)
-
-      private def blend[T](obj: T)(implicit ua: Updater[T]) = {
-        ua.add(obj)
-        obj
-      }
-
-    }
 
     val main = TechUI(pages: _*)
     main.pos(-18, 0)
