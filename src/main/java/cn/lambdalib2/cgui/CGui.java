@@ -406,22 +406,4 @@ public class CGui extends WidgetContainer {
     public void postEvent(GuiEvent event) {
         eventBus.postEvent(null, event);
     }
-
-    /**
-     * Event bus delegator, will post every widget inside this CGui. <br>
-     * Note that this might impact peformance when used incorectlly.
-     */
-/*    public void postEventHierarchically(GuiEvent event) {
-        eventBus.postEvent(null, event);
-        for (Widget w : getDrawList()) {
-            hierPostEvent(w, event);
-        }
-    }*/
-
-    private void hierPostEvent(Widget w, GuiEvent event) {
-        w.post(event);
-        for (Widget ww : w.widgetList) {
-            hierPostEvent(ww, event);
-        }
-    }
 }
