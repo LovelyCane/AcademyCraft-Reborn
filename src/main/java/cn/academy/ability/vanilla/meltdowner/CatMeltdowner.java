@@ -9,19 +9,20 @@ import cn.academy.ability.vanilla.meltdowner.skill.*;
 /**
  * @author WeAthFolD
  */
+
 public class CatMeltdowner extends Category {
     public static final Skill
-        electronBomb = ElectronBomb.Instance,
-        radIntensify = RadiationIntensify.INSTANCE,
-        rayBarrage = RayBarrage$.MODULE$,
-        scatterBomb = ScatterBomb$.MODULE$,
-        lightShield = LightShield.INSTANCE,
-        meltdowner = Meltdowner$.MODULE$,
-        jetEngine = JetEngine$.MODULE$,
-        mineRayBasic = MineRayBasic$.MODULE$,
-        mineRayExpert = MineRayExpert$.MODULE$,
-        mineRayLuck = MineRayLuck.instance,
-        electronMissile = ElectronMissile$.MODULE$;
+            electronBomb = ElectronBomb.Instance,
+            radIntensify = RadiationIntensify.INSTANCE,
+            rayBarrage = RayBarrage$.MODULE$,
+            scatterBomb = ScatterBomb$.MODULE$,
+            lightShield = LightShield.INSTANCE,
+            meltdowner = Meltdowner$.MODULE$,
+            jetEngine = JetEngine$.MODULE$,
+            mineRayBasic = MineRayBasic.INSTANCE,
+            mineRayExpert = MineRayExpert.INSTANCE,
+            mineRayLuck = MineRayLuck.instance,
+            electronMissile = ElectronMissile$.MODULE$;
 
     public CatMeltdowner() {
         super("meltdowner");

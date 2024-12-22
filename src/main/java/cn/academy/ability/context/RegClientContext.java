@@ -17,6 +17,7 @@ import java.lang.reflect.Constructor;
  * client, but will receive all the context messages all the same. You can use this feature to reduce side dependency
  * issue (@SideOnly) and make code more clear.
  */
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegClientContext {
@@ -25,14 +26,12 @@ public @interface RegClientContext {
 
 @SideOnly(Side.CLIENT)
 class RegClientContextImpl {
-
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
         ReflectionUtils.getClasses(RegClientContext.class).forEach(type -> {
             RegClientContext anno = type.getAnnotation(RegClientContext.class);
             for (Constructor ctor : type.getDeclaredConstructors()) {
-                if (ctor.getParameterCount() == 1 &&
-                    Context.class.isAssignableFrom(ctor.getParameterTypes()[0])) {
+                if (ctor.getParameterCount() == 1 && Context.class.isAssignableFrom(ctor.getParameterTypes()[0])) {
                     ctor.setAccessible(true);
                     ClientContext.clientTypes.put(anno.value(), ctx -> {
                         try {
@@ -48,5 +47,4 @@ class RegClientContextImpl {
             throw new IllegalArgumentException("No appropriate constructor found for " + type);
         });
     }
-
 }

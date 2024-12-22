@@ -4,7 +4,6 @@ import cn.academy.Resources
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.ability.vanilla.electromaster.CatElectromaster
 import cn.academy.client.sound.ACSounds
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.render.legacy.{LegacyMeshUtils, RenderStage, SimpleMaterial, Tessellator}
@@ -45,7 +44,6 @@ object MDContext {
 
 }
 
-import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.vanilla.electromaster.skill.MDContext._
 import cn.academy.ability.vanilla.electromaster.skill.MineDetect._
 import cn.lambdalib2.util.MathUtils._
@@ -64,14 +62,14 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
     ctx.consume(overload, cp)
   }
 
-  @Listener(channel=AbilityAPIExt.MSG_KEYDOWN, side=Array(Side.CLIENT))
+  @Listener(channel = AbilityAPIExt.MSG_KEYDOWN, side = Array(Side.CLIENT))
   private def l_onKeyDown() = {
     sendToServer(MSG_EXECUTE)
   }
 
-  @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
+  @Listener(channel = MSG_EXECUTE, side = Array(Side.SERVER))
   private def s_execute() = {
-    if(consume()) {
+    if (consume()) {
       player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("blindness"), TIME))
       ctx.addSkillExp(0.008f)
       sendToClient(MSG_EFFECT, range.asInstanceOf[AnyRef], isAdvanced.asInstanceOf[AnyRef])
@@ -89,9 +87,9 @@ class MDContext(p: EntityPlayer) extends Context(p, MineDetect) {
 @RegClientContext(classOf[MDContext])
 class MDContextC(par: MDContext) extends ClientContext(par) {
 
-  @Listener(channel=MSG_EFFECT, side=Array(Side.CLIENT))
+  @Listener(channel = MSG_EFFECT, side = Array(Side.CLIENT))
   private def c_spawnEffects(range: Float, advanced: Boolean) = {
-    if(isLocal) {
+    if (isLocal) {
       player.getEntityWorld.spawnEntity(
         new HandlerEntity(player, TIME, range, advanced))
       ACSounds.playClient(player, "em.minedetect", SoundCategory.AMBIENT, 0.5f)
@@ -112,7 +110,8 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
 
   final val blockFilter: IBlockSelector = new IBlockSelector {
     override def accepts(world: World, x: Int, y: Int, z: Int, block: Block): Boolean = {
-      CatElectromaster.isOreBlock(block)
+      // soon
+      false
     }
   }
 
@@ -133,7 +132,9 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
   setPosition(target.posX, target.posY, target.posZ)
 
   override def shouldRenderInPass(pass: Int) = pass == 1
+
   override def onFirstUpdate() = updateBlocks()
+
   override def onUpdate() = {
     super.onUpdate()
 
@@ -141,7 +142,7 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
     if (ticksExisted % 5 == 0)
       updateBlocks()
 
-    if(ticksExisted > lifeTime) {
+    if (ticksExisted > lifeTime) {
       setDead()
     }
   }
@@ -152,7 +153,7 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
 
     aliveSims.clear()
     blockPosBuffer.foreach(bp => aliveSims.add(new MineElem(bp.getX, bp.getY, bp.getZ,
-      if(isAdvanced) Math.min(3, world.getBlockState(bp).getBlock.getHarvestLevel(world.getBlockState(bp)) + 1) else 0)))
+      if (isAdvanced) Math.min(3, world.getBlockState(bp).getBlock.getHarvestLevel(world.getBlockState(bp)) + 1) else 0)))
 
     lastX = posX
     lastY = posY
@@ -160,6 +161,7 @@ class HandlerEntity(_target: EntityPlayer, _time: Int, _range: Double, _advanced
   }
 
   override def writeEntityToNBT(p_70014_1_ : NBTTagCompound) = {}
+
   override def readEntityFromNBT(p_70037_1_ : NBTTagCompound) = {}
 
   override protected def entityInit() = ???
@@ -180,7 +182,7 @@ class HandlerRender(m: RenderManager) extends Render[HandlerEntity](m) {
     new Color(235, 109, 84, 0)
   )
 
-  override def doRender(entity: HandlerEntity, var2 : Double, var3 : Double, var4 : Double, var5 : Float, var6 : Float) = {
+  override def doRender(entity: HandlerEntity, var2: Double, var3: Double, var4: Double, var5: Float, var6: Float) = {
 
     val t = Tessellator.instance
     GL11.glDisable(GL11.GL_DEPTH_TEST)

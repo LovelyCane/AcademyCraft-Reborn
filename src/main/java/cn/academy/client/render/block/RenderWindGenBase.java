@@ -7,8 +7,6 @@ import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RenderWindGenBase extends RenderBlockMulti<TileWindGenBase> {
 
@@ -26,5 +24,4 @@ public class RenderWindGenBase extends RenderBlockMulti<TileWindGenBase> {
         RenderUtils.loadTexture(te.isComplete() ? TEX_NORMAL : TEX_DISABLED);
         mdl.renderAll();
     }
-
 }

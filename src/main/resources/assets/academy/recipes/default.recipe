@@ -266,10 +266,6 @@ shapeless(academy:wafer) {
     [academy:imag_silicon_ingot]
 }
 
-shapeless(academy:tutorial) {
-	[book, academy:crystal_low]
-}
-
 shaped(academy:magnetic_coil) {
     [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]
     [academy:constraint_plate, academy:reso_crystal, academy:constraint_plate]

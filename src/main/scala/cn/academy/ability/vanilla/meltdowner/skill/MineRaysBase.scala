@@ -206,5 +206,4 @@ abstract class MRContextC(par: MRContext) extends ClientContext(par) {
       world.spawnEntity(p)
     }
   }
-
 }

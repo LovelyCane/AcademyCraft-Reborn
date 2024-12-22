@@ -41,7 +41,6 @@ public class ACItems {
     public static final net.minecraft.item.Item resonance_component = new net.minecraft.item.Item();
     public static final cn.academy.item.ItemSilbarn silbarn = new cn.academy.item.ItemSilbarn();
     public static final cn.academy.item.ItemTerminalInstaller terminal_installer = new cn.academy.item.ItemTerminalInstaller();
-    public static final cn.academy.item.ItemTutorial tutorial = new cn.academy.item.ItemTutorial();
     public static final net.minecraft.item.Item wafer = new net.minecraft.item.Item();
     public static final net.minecraft.item.Item windgen_fan = new net.minecraft.item.Item();
 
@@ -175,10 +174,6 @@ public class ACItems {
         terminal_installer.setTranslationKey("ac_terminal_installer");
         terminal_installer.setCreativeTab(cn.academy.AcademyCraft.cct);
         event.getRegistry().register(terminal_installer);
-        tutorial.setRegistryName("academy:tutorial");
-        tutorial.setTranslationKey("ac_tutorial");
-        tutorial.setCreativeTab(cn.academy.AcademyCraft.cct);
-        event.getRegistry().register(tutorial);
         wafer.setRegistryName("academy:wafer");
         wafer.setTranslationKey("ac_wafer");
         wafer.setCreativeTab(cn.academy.AcademyCraft.cct);
@@ -232,7 +227,6 @@ public class ACItems {
         ModelLoader.setCustomModelResourceLocation(reso_crystal, 0, new ModelResourceLocation("academy:reso_crystal", "inventory"));
         ModelLoader.setCustomModelResourceLocation(resonance_component, 0, new ModelResourceLocation("academy:resonance_component", "inventory"));
         ModelLoader.setCustomModelResourceLocation(terminal_installer, 0, new ModelResourceLocation("academy:terminal_installer", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(tutorial, 0, new ModelResourceLocation("academy:tutorial", "inventory"));
         ModelLoader.setCustomModelResourceLocation(wafer, 0, new ModelResourceLocation("academy:wafer", "inventory"));
         ModelLoader.setCustomModelResourceLocation(windgen_fan, 0, new ModelResourceLocation("academy:windgen_fan", "inventory"));
     }

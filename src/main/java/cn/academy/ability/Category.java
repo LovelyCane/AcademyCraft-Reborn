@@ -74,10 +74,6 @@ public class Category {
         skill.addedSkill(this, skillList.size() - 1);
     }
 
-    public int getSkillID(Skill s) {
-        return skillList.indexOf(s);
-    }
-
     public int getSkillCount() {
         return skillList.size();
     }
@@ -86,14 +82,9 @@ public class Category {
         return (id >= skillList.size() || id < 0) ? null : skillList.get(id);
     }
 
-    public boolean containsSkill(Skill skill) {
-        return skill == getSkill(skill.getID());
-    }
-
     public Skill getSkill(String name) {
         for (Skill s : skillList)
-            if (s.getName().equals(name))
-                return s;
+            if (s.getName().equals(name)) return s;
         return null;
     }
 
@@ -107,8 +98,7 @@ public class Category {
     public List<Skill> getSkillsOfLevel(int level) {
         List<Skill> ret = new ArrayList<>();
         for (Skill s : skillList)
-            if (s.getLevel() == level)
-                ret.add(s);
+            if (s.getLevel() == level) ret.add(s);
         return ret;
     }
 
@@ -125,10 +115,8 @@ public class Category {
      * Get the controllable with given id.
      */
     public Controllable getControllable(int id) {
-        if (id < 0)
-            return null;
-        if (ctrlList.size() > id)
-            return ctrlList.get(id);
+        if (id < 0) return null;
+        if (ctrlList.size() > id) return ctrlList.get(id);
         return null;
     }
 
@@ -136,12 +124,6 @@ public class Category {
         return (float) Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name)).getDouble("common.prog_incr_rate");
     }
 
-    /**
-     * Get the immutable controllable list of this category.
-     */
-    public List<Controllable> getControllableList() {
-        return ImmutableList.copyOf(ctrlList);
-    }
 
     public ResourceLocation getIcon() {
         return icon;

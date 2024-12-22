@@ -70,9 +70,7 @@ class RichComponent(val c: Component) extends AnyVal {
  * CGUI scala extensions to reduce syntax burden.
  */
 object ScalaCGUI {
-
   implicit def toWrapper(w: Widget): RichWidget = new RichWidget(w)
 
   implicit def toComponentWrapper(c: Component): RichComponent = new RichComponent(c)
-
 }

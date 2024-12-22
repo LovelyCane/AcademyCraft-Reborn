@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLStateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -104,8 +103,8 @@ public enum RegistryManager {
             HashMap<Method, Integer> priorityMap = new HashMap<>();
 
             registryMods = ReflectionUtils.getClasses(RegistryMod.class)
-                .stream()
-                .collect(Collectors.toMap(Class::getCanonicalName, this::createModContext));
+                    .stream()
+                    .collect(Collectors.toMap(Class::getCanonicalName, this::createModContext));
 
             // Process all state event callbacks
             List<Method> allStateEventCallbacks = ReflectionUtils.getMethods(StateEventCallback.class);

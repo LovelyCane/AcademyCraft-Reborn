@@ -1,13 +1,13 @@
 package cn.academy.util;
 
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 
 /**
  * This class wraps around Minecraft localization with namespace helper support.
  * All localization codes should not reference MC code and use this.
  */
-public class LocalHelper {
 
+public class LocalHelper {
     public static final LocalHelper root = at("");
 
     public static LocalHelper at(String path) {
@@ -17,11 +17,11 @@ public class LocalHelper {
     private final String path;
 
     public String get(String id) {
-        return I18n.translateToLocal(path + id);
+        return I18n.format(path + id);
     }
 
-    public String getFormatted(String id, Object ...args) {
-        return I18n.translateToLocalFormatted(path + id, args);
+    public String getFormatted(String id, Object... args) {
+        return I18n.format(path + id, args);
     }
 
     public LocalHelper subPath(String id) {
@@ -35,5 +35,4 @@ public class LocalHelper {
             path = _path + ".";
         }
     }
-
 }

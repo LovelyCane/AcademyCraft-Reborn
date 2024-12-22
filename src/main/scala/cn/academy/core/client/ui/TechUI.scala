@@ -1,7 +1,7 @@
 package cn.academy.core.client.ui
 
 import cn.academy.Resources
-import cn.academy.block.tileentity.TileGeneratorBase
+import cn.academy.block.tileentity.{TileGeneratorBase, TileImagFusor, TileNode, TileReceiverBase}
 import cn.lambdalib2.registry.StateEventCallback
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -275,9 +275,29 @@ object TechUI {
     private var elemY: Float = 10
     private val elements = mutable.ArrayBuffer[Widget]()
 
+    def histogram1(tile: TileReceiverBase) = {
+      val elems = TechUI.histBuffer(tile.getEnergy, tile.getMaxEnergy)
+      val ret = histogram(elems)
+      ret
+    }
+
     def histogramTile(tile: TileGeneratorBase) = {
       val elems = TechUI.histBuffer(tile.getEnergy, tile.bufferSize)
       val ret = histogram(elems)
+      ret
+    }
+
+    def histogramNode(tile: TileNode, load: Int) = {
+      val elems1 = TechUI.histEnergy(() => tile.getEnergy, tile.getMaxEnergy)
+      val elems2 = TechUI.histCapacity(() => load, tile.getCapacity)
+      val ret = histogram(elems1, elems2)
+      ret
+    }
+
+    def histogramImagFusor(tile: TileImagFusor) = {
+      val elems1 = TechUI.histEnergy(() => tile.getEnergyForDisplay, tile.getMaxEnergy)
+      val elems2 = TechUI.histPhaseLiquid(() => tile.getLiquidAmount, tile.getTankSize)
+      val ret = histogram(elems1, elems2)
       ret
     }
 
@@ -555,7 +575,7 @@ private class NodeData {
 
 object WirelessPage {
   type TileUser = TileEntity with IWirelessUser
-  type TileNode = TileEntity with IWirelessNode
+//  type TileNode = TileEntity with IWirelessNode
   type TileBase = TileEntity with IWirelessTile
   type TileMatrix = TileEntity with IWirelessMatrix
 
@@ -766,12 +786,12 @@ object WirelessNetDelegate {
   import WirelessPage._
 
   @StateEventCallback
-  def __init(ev: FMLInitializationEvent) = {
+  def __init(ev: FMLInitializationEvent): Unit = {
     NetworkS11n.addDirectInstance(WirelessNetDelegate)
   }
 
   @Listener(channel = MSG_FIND_NODES, side = Array(Side.SERVER))
-  private def hFindNodes(user: TileUser, fut: Future[UserResult]) = {
+  private def hFindNodes(user: TileUser, fut: Future[UserResult]): Unit = {
     def cvt(conn: NodeConn) = {
       val tile = conn.getNode.asInstanceOf[TileNode]
       val ret = new NodeData
@@ -797,7 +817,7 @@ object WirelessNetDelegate {
   }
 
   @Listener(channel = MSG_FIND_NETWORKS, side = Array(Side.SERVER))
-  private def hFindNetworks(node: TileNode, fut: Future[NodeResult]) = {
+  private def hFindNetworks(node: TileNode, fut: Future[NodeResult]): Unit = {
     val linked = Option(WirelessHelper.getWirelessNet(node))
 
     def cvt(net: WirelessNet) = {
@@ -830,7 +850,7 @@ object WirelessNetDelegate {
   private def hUserConnect(user: TileUser,
                            target: TileNode,
                            password: String,
-                           fut: Future[Boolean]) = {
+                           fut: Future[Boolean]): Unit = {
     val evt = new LinkUserEvent(user, target, password)
     val result = !MinecraftForge.EVENT_BUS.post(evt)
 
@@ -838,7 +858,7 @@ object WirelessNetDelegate {
   }
 
   @Listener(channel = MSG_USER_DISCONNECT, side = Array(Side.SERVER))
-  private def hUserDisconnect(user: TileBase, fut: Future[Boolean]) = {
+  private def hUserDisconnect(user: TileBase, fut: Future[Boolean]): Unit = {
     val evt = new UnlinkUserEvent(user)
     val result = !MinecraftForge.EVENT_BUS.post(evt)
 
@@ -846,17 +866,16 @@ object WirelessNetDelegate {
   }
 
   @Listener(channel = MSG_NODE_CONNECT, side = Array(Side.SERVER))
-  private def hNodeConnect(node: TileNode, mat: TileMatrix, pwd: String, fut: Future[Boolean]) = {
+  private def hNodeConnect(node: TileNode, mat: TileMatrix, pwd: String, fut: Future[Boolean]): Unit = {
     val result = !MinecraftForge.EVENT_BUS.post(new LinkNodeEvent(node, mat, pwd))
     fut.sendResult(result)
   }
 
   @Listener(channel = MSG_NODE_DISCONNECT, side = Array(Side.SERVER))
-  private def hNodeDisconnect(node: TileNode, fut: Future[Boolean]) = {
+  private def hNodeDisconnect(node: TileNode, fut: Future[Boolean]): Unit = {
     MinecraftForge.EVENT_BUS.post(new UnlinkNodeEvent(node))
     fut.sendResult(true)
   }
-
 }
 
 object InventoryPage {

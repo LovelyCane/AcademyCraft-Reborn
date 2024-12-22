@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
+
 public class AppSkillTree extends App {
-    
     @RegApp
     public static AppSkillTree instance = new AppSkillTree();
 
@@ -31,5 +31,4 @@ public class AppSkillTree extends App {
             }
         };
     }
-
 }

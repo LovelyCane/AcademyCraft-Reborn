@@ -162,11 +162,7 @@ public abstract class Skill extends Controllable {
      * @return The configuration object for this skill.
      */
     public Config getConfig() {
-        Config config = ACConfig.instance()
-                .getConfig("ac.ability.category")
-                .getConfig(getCategoryLocation())
-                .getConfig("skills")
-                .getConfig(getName());
+        Config config = ACConfig.instance().getConfig("ac.ability.category").getConfig(getCategoryLocation()).getConfig("skills").getConfig(getName());
 
         Preconditions.checkNotNull(config);
         return config;
@@ -274,8 +270,7 @@ public abstract class Skill extends Controllable {
      * Scala version
      */
     @SideOnly(Side.CLIENT)
-    protected void activateSingleKey(ClientRuntime rt, int keyID,
-                                     Function1<EntityPlayer, Context> contextSupplier) {
+    protected void activateSingleKey(ClientRuntime rt, int keyID, Function1<EntityPlayer, Context> contextSupplier) {
         activateSingleKey2(rt, keyID, contextSupplier::apply);
     }
 
@@ -285,8 +280,7 @@ public abstract class Skill extends Controllable {
     }
 
     public void setParent(Skill skill, float requiredExp) {
-        if (parent != null)
-            throw new IllegalStateException("You can't set the parent twice!");
+        if (parent != null) throw new IllegalStateException("You can't set the parent twice!");
         if (skill.isEnabled()) {
             parent = skill;
             this.addDevCondition(new DevConditionDep(parent, requiredExp));

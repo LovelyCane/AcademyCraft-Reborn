@@ -33,22 +33,16 @@ import java.util.stream.Stream;
 /**
  * Global manager of {@link Context}. Connections are handled through it.
  */
+
 public enum ContextManager {
     instance;
 
     private static final boolean DEBUG_LOG = false;
 
-    private static final double
-            T_KA_TOL = 1.5, // Tile tolerance of receiving keepAlive packets
+    private static final double T_KA_TOL = 1.5, // Tile tolerance of receiving keepAlive packets
             T_KA = 0.5; // Time interval between sending KeepAlive packets
 
-    private static final String
-        M_BEGIN_LINK="l",
-        M_ESTABLISH_LINK="ld",
-        M_MAKEALIVE="m",
-        M_TERM_ATLOCAL="tl",
-        M_TERM_ATSERVER="ts",
-        M_KEEPALIVE="ka";
+    private static final String M_BEGIN_LINK = "l", M_ESTABLISH_LINK = "ld", M_MAKEALIVE = "m", M_TERM_ATLOCAL = "tl", M_TERM_ATSERVER = "ts", M_KEEPALIVE = "ka";
 
     //API
 
@@ -98,11 +92,10 @@ public enum ContextManager {
 
     @SuppressWarnings("unchecked")
     private <T> Optional<T> findIn(Stream<Context> stream, Class<T> type) {
-        return (Optional) stream.filter(type::isInstance)
-                .findAny();
+        return (Optional) stream.filter(type::isInstance).findAny();
     }
 
-    void mToSelf(Context ctx, String channel, Object ...args) {
+    void mToSelf(Context ctx, String channel, Object... args) {
         if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToSelf(ctx, channel, args);
@@ -111,35 +104,37 @@ public enum ContextManager {
         } else throw wrongSide();
     }
 
-    void mToServer(Context ctx, String channel, Object ...args) {
+    void mToServer(Context ctx, String channel, Object... args) {
         if (!checkStatus(ctx)) return;
         if (ctx.isLocal()) {
             LocalManager.instance.mToServer(ctx, channel, args);
         } else throw wrongSide();
     }
 
-    void mToLocal(Context ctx, String channel, Object ...args) {
+    void mToLocal(Context ctx, String channel, Object... args) {
         if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToLocal(ctx, channel, args);
         } else throw wrongSide();
     }
 
-    void mToClient(Context ctx, String channel, Object ...args) {
+    void mToClient(Context ctx, String channel, Object... args) {
         if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToClient(ctx, channel, args);
         } else throw wrongSide();
     }
 
-    void mToExceptLocal(Context ctx, String channel, Object ...args) {
+    void mToExceptLocal(Context ctx, String channel, Object... args) {
         if (!checkStatus(ctx)) return;
         if (!ctx.isRemote()) {
             ServerManager.instance.mToExceptLocal(ctx, channel, args);
         } else throw wrongSide();
     }
 
-    private boolean checkStatus(Context ctx) { return ctx.getStatus() != Status.TERMINATED; }
+    private boolean checkStatus(Context ctx) {
+        return ctx.getStatus() != Status.TERMINATED;
+    }
 
     private static IllegalStateException wrongSide() {
         return new IllegalStateException("Wrong context side!");
@@ -154,13 +149,12 @@ public enum ContextManager {
     }
 
     private static void log(Object msg) {
-        if (AcademyCraft.DEBUG_MODE && DEBUG_LOG)
-             AcademyCraft.log.info("CM: " + msg);
+        if (AcademyCraft.DEBUG_MODE && DEBUG_LOG) AcademyCraft.log.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")
     private static Class<? extends Context> readContextType(Object in) {
-        try  {
+        try {
             return (Class) Class.forName((String) in);
         } catch (ClassNotFoundException ex) {
             throw Throwables.propagate(ex);
@@ -186,8 +180,7 @@ public enum ContextManager {
             data.ctx = ctx;
 
             suspended.put(nextClientID, data);
-            NetworkMessage.sendToServer(ServerManager.instance, M_BEGIN_LINK,
-                    writeContextType(ctx.getClass()), player(), nextClientID);
+            NetworkMessage.sendToServer(ServerManager.instance, M_BEGIN_LINK, writeContextType(ctx.getClass()), player(), nextClientID);
 
             nextClientID += 1;
 
@@ -195,15 +188,17 @@ public enum ContextManager {
         }
 
         void terminate(Context ctx) {
-            for (ContextData data : alive) if (data.ctx == ctx) {
+            for (ContextData data : alive)
+                if (data.ctx == ctx) {
                     data.disposed = true;
                     return;
                 }
 
-            for (ContextData data : suspended.values()) if (data.ctx == ctx) {
-                data.disposed = true;
-                return;
-            }
+            for (ContextData data : suspended.values())
+                if (data.ctx == ctx) {
+                    data.disposed = true;
+                    return;
+                }
 
             throw new IllegalStateException("Not found");
         }
@@ -246,7 +241,7 @@ public enum ContextManager {
             return Minecraft.getMinecraft().player;
         }
 
-        @Listener(channel=M_ESTABLISH_LINK, side=Side.CLIENT)
+        @Listener(channel = M_ESTABLISH_LINK, side = Side.CLIENT)
         private void hEstablishLink(int clientID, int serverID) {
             ContextData data = suspended.remove(clientID);
             if (data != null) {
@@ -265,14 +260,14 @@ public enum ContextManager {
             }
         }
 
-        @Listener(channel=M_TERM_ATSERVER, side=Side.CLIENT)
+        @Listener(channel = M_TERM_ATSERVER, side = Side.CLIENT)
         private void hTerminate(int serverID) {
             Optional.ofNullable(findOrNull(serverID)).ifPresent(x -> x.disposed = true);
 
             log("[LOC] Terminate At Server");
         }
 
-        @Listener(channel=M_KEEPALIVE, side=Side.CLIENT)
+        @Listener(channel = M_KEEPALIVE, side = Side.CLIENT)
         private void hKeepAlive(int serverID) {
             ContextData data = findOrNull(serverID);
             if (data != null) {
@@ -347,7 +342,7 @@ public enum ContextManager {
 
         @SubscribeEvent
         public void __onDisconnect(ClientDisconnectionFromServerEvent evt) {
-            for(ContextData data:alive){
+            for (ContextData data : alive) {
                 NetworkMessage.sendToSelf(data.ctx, Context.MSG_TERMINATED);
             }
             alive.clear();
@@ -369,9 +364,10 @@ public enum ContextManager {
         int nextServerID;
 
         void terminate(Context ctx) {
-            for (ContextData data : alive) if (data.ctx == ctx) {
-                data.disposed = true;
-            }
+            for (ContextData data : alive)
+                if (data.ctx == ctx) {
+                    data.disposed = true;
+                }
         }
 
         void mToSelf(Context ctx, String channel, Object[] args) {
@@ -395,13 +391,14 @@ public enum ContextManager {
         }
 
         private ContextData find(Context ctx) {
-            for (ContextData data : alive) if (data.ctx == ctx) {
-                return data;
-            }
+            for (ContextData data : alive)
+                if (data.ctx == ctx) {
+                    return data;
+                }
             throw new IllegalStateException("ContextData not present");
         }
 
-        @Listener(channel=M_BEGIN_LINK, side=Side.SERVER)
+        @Listener(channel = M_BEGIN_LINK, side = Side.SERVER)
         @SuppressWarnings("unchecked")
         private void hBeginLink(Object typein, EntityPlayerMP player, int clientID) {
             try {
@@ -423,8 +420,7 @@ public enum ContextManager {
                 NetworkMessage.sendToSelf(data.ctx, Context.MSG_MADEALIVE);
 
                 NetworkMessage.sendTo(player, LocalManager.instance, M_ESTABLISH_LINK, clientID, nextServerID);
-                NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_MAKEALIVE,
-                        writeContextType(ctx.getClass()), player, nextServerID);
+                NetworkMessage.sendToPlayers(data.targets, ClientManager.instance, M_MAKEALIVE, writeContextType(ctx.getClass()), player, nextServerID);
                 nextServerID += 1;
 
                 log("[SVR] BeginLink");
@@ -433,12 +429,12 @@ public enum ContextManager {
             }
         }
 
-        @Listener(channel=M_TERM_ATLOCAL, side=Side.SERVER)
+        @Listener(channel = M_TERM_ATLOCAL, side = Side.SERVER)
         private void hTerminate(int serverID) {
             Optional.ofNullable(findOrNull(serverID)).ifPresent(x -> x.disposed = true);
         }
 
-        @Listener(channel=M_KEEPALIVE, side=Side.SERVER)
+        @Listener(channel = M_KEEPALIVE, side = Side.SERVER)
         private void hKeepAlive(int serverID) {
             ContextData data = findOrNull(serverID);
             if (data != null) {
@@ -508,9 +504,10 @@ public enum ContextManager {
         }
 
         private void disposePlayer(EntityPlayer p) {
-            for (ContextData d : alive) if (d.ctx.player.equals(p)) {
-                d.disposed = true;
-            }
+            for (ContextData d : alive)
+                if (d.ctx.player.equals(p)) {
+                    d.disposed = true;
+                }
         }
 
         private class ContextData {
@@ -538,7 +535,7 @@ public enum ContextManager {
 
         List<ContextData> alive = new LinkedList<>();
 
-        @Listener(channel=M_MAKEALIVE, side=Side.CLIENT)
+        @Listener(channel = M_MAKEALIVE, side = Side.CLIENT)
         private void hMakeAlive(Object typein, EntityPlayer player, int serverID) {
             try {
                 Class<? extends Context> type = readContextType(typein);
@@ -560,7 +557,7 @@ public enum ContextManager {
             }
         }
 
-        @Listener(channel=M_KEEPALIVE, side=Side.CLIENT)
+        @Listener(channel = M_KEEPALIVE, side = Side.CLIENT)
         private void hKeepAlive(int serverID) {
             ContextData data = findOrNull(serverID);
             if (data != null) {
@@ -570,7 +567,7 @@ public enum ContextManager {
             }
         }
 
-        @Listener(channel=M_TERM_ATSERVER, side=Side.CLIENT)
+        @Listener(channel = M_TERM_ATSERVER, side = Side.CLIENT)
         private void hTerminate(int serverID) {
             Optional.ofNullable(findOrNull(serverID)).ifPresent(x -> x.disposed = true);
             log("[CLI] TerminateAtServer");
@@ -635,6 +632,7 @@ public enum ContextManager {
                 Preconditions.checkState(obj.serverID != -1);
                 buf.writeInt(obj.serverID);
             }
+
             @Override
             public Context read(ByteBuf buf) throws ContextException {
                 int serverID = buf.readInt();
