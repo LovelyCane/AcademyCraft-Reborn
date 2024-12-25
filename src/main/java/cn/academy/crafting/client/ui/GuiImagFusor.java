@@ -4,8 +4,9 @@ import cn.academy.Resources;
 import cn.academy.block.container.ContainerImagFusor;
 import cn.academy.block.tileentity.TileImagFusor;
 import cn.academy.core.client.ui.AcademyContainerUI;
+import cn.academy.core.client.ui.HistElement;
 import cn.academy.core.client.ui.InventoryPage;
-import cn.academy.core.client.ui.TechUI;
+import cn.academy.core.client.ui.Page;
 import cn.academy.crafting.ImagFusorRecipes;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.ProgressBar;
@@ -18,19 +19,19 @@ public class GuiImagFusor {
     public static AcademyContainerUI apply(ContainerImagFusor container) {
         TileImagFusor tile = container.tile;
 
-        TechUI.Page invPage = InventoryPage.apply(template);
+        Page invPage = InventoryPage.apply(template);
 
         AcademyContainerUI ret = new AcademyContainerUI(container, invPage);
 
         {
-            Widget progWidget = invPage.window().getWidget("progress");
+            Widget progWidget = invPage.getWindow().getWidget("progress");
             ProgressBar bar = progWidget.getComponent(ProgressBar.class);
 
             bar.progress = tile.getWorkProgress();
         }
 
         {
-            Widget reqWidget = invPage.window().getWidget("text_imagneeded");
+            Widget reqWidget = invPage.getWindow().getWidget("text_imagneeded");
             TextBox text = reqWidget.getComponent(TextBox.class);
 
             text.content = "IDLE";
@@ -38,8 +39,7 @@ public class GuiImagFusor {
             ImagFusorRecipes.IFRecipe recipe = tile.getCurrentRecipe();
             text.setContent(recipe == null ? "IDLE" : String.valueOf(recipe.consumeLiquid));
         }
-
-        ret.infoPage.histogramImagFusor(tile);
+        ret.infoPage.histogram(HistElement.histEnergy(tile.getEnergy(), tile.getMaxEnergy()), HistElement.histPhaseLiquid(tile.getLiquidAmount(), tile.getTankSize()));
 
         return ret;
     }

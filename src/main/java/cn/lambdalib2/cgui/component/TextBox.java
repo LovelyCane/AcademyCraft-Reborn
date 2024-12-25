@@ -1,44 +1,45 @@
 package cn.lambdalib2.cgui.component;
 
-import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
-import cn.lambdalib2.util.ClientUtils;
-import net.minecraft.client.resources.I18n;
-
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.s11n.SerializeIncluded;
-import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.render.font.Fonts;
-import cn.lambdalib2.render.font.IFont;
-import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
 import cn.lambdalib2.cgui.component.Transform.HeightAlign;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.GuiEvent;
 import cn.lambdalib2.cgui.event.KeyEvent;
 import cn.lambdalib2.cgui.event.LeftClickEvent;
+import cn.lambdalib2.render.font.Fonts;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.s11n.SerializeIncluded;
+import cn.lambdalib2.util.ClientUtils;
+import cn.lambdalib2.util.GameTimer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
 /**
  * Textbox displays text on the widget area, it might also be edited. TextBox is designed to handle single-line texts.
+ *
  * @author WeAthFolD
  */
+
 @CGuiEditorComponent
 public class TextBox extends Component {
-    
     /**
      * Fired each time the TextBox's content is being edited.
      */
-    public static class ChangeContentEvent implements GuiEvent {}
-    
+    public static class ChangeContentEvent implements GuiEvent {
+    }
+
     /**
      * Fired each time the TextBox's input is confirmed. (a.k.a. User presses enter)
      */
-    public static class ConfirmInputEvent implements GuiEvent {}
-    
+    public static class ConfirmInputEvent implements GuiEvent {
+    }
+
     public String content = "";
 
     @SerializeIncluded
@@ -50,7 +51,7 @@ public class TextBox extends Component {
 
     /**
      * Only activated when doesn't allow edit. If activated, The display string will be
-     *  <code>StatCollector.translateToLocal(content).</code>
+     * <code>StatCollector.translateToLocal(content).</code>
      */
     public boolean localized = false;
 
@@ -66,7 +67,7 @@ public class TextBox extends Component {
 
     public boolean doesEcho = false;
     public char echoChar = '*';
-    
+
     public float zLevel = 0;
 
     public float xOffset, yOffset;
@@ -194,12 +195,12 @@ public class TextBox extends Component {
             checkCaretRegion();
         });
     }
-    
+
     public TextBox allowEdit() {
         allowEdit = true;
         return this;
     }
-    
+
     public TextBox setContent(String str) {
         content = str;
         return this;
@@ -227,10 +228,7 @@ public class TextBox extends Component {
     }
 
     private Vector2f origin() {
-        return new Vector2f(
-            (float) (widget.transform.width * option.align.lenOffset + xOffset),
-            (float) (Math.max(0, widget.transform.height - option.fontSize) * heightAlign.factor + yOffset)
-        );
+        return new Vector2f((float) (widget.transform.width * option.align.lenOffset + xOffset), (float) (Math.max(0, widget.transform.height - option.fontSize) * heightAlign.factor + yOffset));
     }
 
     private boolean shouldLocalize() {
@@ -281,5 +279,4 @@ public class TextBox extends Component {
     public static TextBox get(Widget w) {
         return w.getComponent(TextBox.class);
     }
-
 }

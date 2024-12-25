@@ -3,24 +3,19 @@ package cn.academy.core.client.ui;
 import cn.lambdalib2.cgui.CGuiScreenContainer;
 import net.minecraft.inventory.Container;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class AcademyContainerUI extends CGuiScreenContainer {
-    public TechUI.TechUIWidget main;
-    public TechUI.InfoArea infoPage;
+    public TechUIWidget main;
+    public InfoArea infoPage;
 
-    public AcademyContainerUI(Container container, TechUI.Page... pages) {
+    public AcademyContainerUI(Container container, Page... pages) {
         super(container);
         this.xSize += 31;
         this.ySize += 20;
 
-        List<TechUI.Page> pageList = Arrays.asList(pages);
-
-        main = TechUI.applyJava(pageList);
+        main = new TechUIWidget(pages);
         main.pos(-18, 0);
 
-        infoPage = new TechUI.InfoArea();
+        infoPage = new InfoArea();
         infoPage.pos(main.transform.width + 7, 5);
 
         main.addWidget(infoPage);
@@ -28,12 +23,12 @@ public class AcademyContainerUI extends CGuiScreenContainer {
         gui.addWidget(main);
     }
 
-    public boolean shouldDisplayInventory(TechUI.Page page) {
-        return "inv".equals(page.id());
+    public boolean shouldDisplayInventory(Page page) {
+        return "inv".equals(page.getId());
     }
 
     @Override
     public boolean isSlotActive() {
-        return shouldDisplayInventory(main.currentPage());
+        return shouldDisplayInventory(main.getCurrentPage());
     }
 }

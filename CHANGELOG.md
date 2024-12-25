@@ -33,11 +33,12 @@
 ### Changed
 - idk,i think it's better
 
-## [1.1.7-pre3]
+## [1.1.7-pre3] - 2024-12-23
 
 ### Changed
-- kill some obj renderer(improve render)
-- kill some scala code(better stability)
-- delete some res(size be lite)
-- Refactor config system :)
-- delete Tutorial and Misaka Cloud (of no use and will have better)
+- Removed some obj model renderers (improved rendering performance).
+- Removed some Scala code (improved stability).
+- Deleted some resources (reduced size).
+- Refactored the configuration system.
+- Deleted Tutorial and Misaka Cloud (no longer needed, better alternatives will come).
+- Removed some elements from Node's UI and changed the name to the block's position.

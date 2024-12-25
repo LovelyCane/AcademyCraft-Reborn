@@ -3,9 +3,7 @@ package cn.academy.crafting.client.ui;
 import cn.academy.Resources;
 import cn.academy.block.container.ContainerMetalFormer;
 import cn.academy.block.tileentity.TileMetalFormer;
-import cn.academy.core.client.ui.AcademyContainerUI;
-import cn.academy.core.client.ui.InventoryPage;
-import cn.academy.core.client.ui.TechUI;
+import cn.academy.core.client.ui.*;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.ProgressBar;
@@ -46,16 +44,16 @@ public class GuiMetalFormer {
                 IFont.FontOption option = new IFont.FontOption(10, IFont.FontAlign.CENTER, Colors.fromHexColor(0xaaffffff));
                 template.getWidget("icon_mode").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> {
                     if (evt.hovering) {
-                        TechUI.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
+                        InfoArea.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
                     }
                 });
             }
         }
 
-        TechUI.Page invPage = InventoryPage.apply(template);
+        Page invPage = InventoryPage.apply(template);
         AcademyContainerUI ret = new AcademyContainerUI(container, invPage);
 
-        ret.infoPage.histogram1(tile);
+        ret.infoPage.histogram(HistElement.histBuffer(tile.getEnergy(), tile.getMaxEnergy()));
 
         return ret;
     }

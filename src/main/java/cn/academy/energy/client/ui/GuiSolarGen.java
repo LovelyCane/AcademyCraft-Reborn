@@ -3,17 +3,13 @@ package cn.academy.energy.client.ui;
 import cn.academy.Resources;
 import cn.academy.block.container.ContainerSolarGen;
 import cn.academy.block.tileentity.TileSolarGen;
-import cn.academy.core.client.ui.AcademyContainerUI;
-import cn.academy.core.client.ui.InventoryPage;
-import cn.academy.core.client.ui.TechUI;
-import cn.academy.core.client.ui.WirelessPage;
+import cn.academy.core.client.ui.*;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.ResourceLocation;
-
 
 public class GuiSolarGen {
     private static final Widget template = CGUIDocument.read(Resources.getGui("rework/page_solar")).getWidget("main");
@@ -43,12 +39,11 @@ public class GuiSolarGen {
             HudUtils.rawRect(0, 0, 0, v, animFrame.transform.width, animFrame.transform.height, 1, 1.0 / 3.0);
         });
 
-        TechUI.Page invPage = InventoryPage.apply(main);
-        TechUI.Page wirelessPage = WirelessPage.userPage(tile);
+        Page invPage = InventoryPage.apply(main);
+        Page wirelessPage = WirelessPage.userPage(tile);
 
         AcademyContainerUI academyContainerUI = new AcademyContainerUI(container, invPage, wirelessPage);
-
-        academyContainerUI.infoPage.histogramTile(tile).seplineInfo().property("gen_speed", String.format("%.2fIF/T", tile.getGeneration(1024)), null, false, true, null);
+        academyContainerUI.infoPage.histogram(HistElement.histBuffer(tile.getEnergy(), tile.bufferSize)).sepline("info").property("gen_speed", String.format("%.2fIF/T", tile.getGeneration(1024)), null, false, true);
 
         return academyContainerUI;
     }

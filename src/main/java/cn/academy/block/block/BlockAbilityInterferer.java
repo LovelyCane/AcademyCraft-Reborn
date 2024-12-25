@@ -2,7 +2,6 @@ package cn.academy.block.block;
 
 import cn.academy.block.TileAbilityInterferer;
 import cn.academy.block.container.ContainAbilityInterferer;
-import cn.academy.crafting.client.ui.GuiAbilityInterferer;
 import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
 import net.minecraft.block.material.Material;
@@ -32,7 +31,7 @@ public class BlockAbilityInterferer extends ACBlockContainer {
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainAbilityInterferer container = (ContainAbilityInterferer) getServerContainer(player, world, x, y, z);
-            return GuiAbilityInterferer.apply(container);
+            return null;
         }
 
         @Override

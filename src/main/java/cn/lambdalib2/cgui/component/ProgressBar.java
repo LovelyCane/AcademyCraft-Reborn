@@ -6,26 +6,24 @@
  */
 package cn.lambdalib2.cgui.component;
 
+import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
+import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.MathUtils;
-import org.lwjgl.opengl.GL11;
-
-import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.cgui.event.FrameEvent;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
- *
  */
+
 @CGuiEditorComponent
 public class ProgressBar extends Component {
-
-    public enum Direction { RIGHT, LEFT, UP, DOWN };
+    public enum Direction {RIGHT, LEFT, UP, DOWN}
 
     public boolean illustrating = false;
     public ResourceLocation texture;
@@ -36,7 +34,7 @@ public class ProgressBar extends Component {
     public ProgressBar() {
         super("ProgressBar");
         listen(FrameEvent.class, (wi, e) -> {
-            if(illustrating) {
+            if (illustrating) {
                 progress = 0.5 * (1 + Math.sin(GameTimer.getAbsTime()));
             }
 
@@ -45,7 +43,7 @@ public class ProgressBar extends Component {
 
                 double x, y, u = 0, v = 0, w, h, tw, th;
                 double width = wi.transform.width, height = wi.transform.height;
-                switch(dir) {
+                switch (dir) {
                     case RIGHT:
                         w = width * disp;
                         h = height;
@@ -90,7 +88,7 @@ public class ProgressBar extends Component {
                     default:
                         throw new RuntimeException("niconiconi, WTF??");
                 }
-                if(texture != null && !texture.getPath().equals("<null>")) {
+                if (texture != null && !texture.getPath().equals("<null>")) {
                     HudUtils.loadTexture(texture);
                 } else {
                     GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -111,5 +109,4 @@ public class ProgressBar extends Component {
     public static ProgressBar get(Widget w) {
         return w.getComponent(ProgressBar.class);
     }
-
 }

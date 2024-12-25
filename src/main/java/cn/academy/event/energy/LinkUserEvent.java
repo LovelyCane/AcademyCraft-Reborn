@@ -8,11 +8,12 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 /**
  * Fired whenever a wireless user(receiver or generator) is to be linked to a node.
  * Canceled if not correctly linked.
+ *
  * @author WeathFolD
  */
+
 @Cancelable
 public class LinkUserEvent extends WirelessUserEvent {
-
     public final IWirelessNode node;
     public final String password;
     public final boolean needAuth;
@@ -30,5 +31,4 @@ public class LinkUserEvent extends WirelessUserEvent {
         password = "invalid";
         needAuth = false;
     }
-
 }

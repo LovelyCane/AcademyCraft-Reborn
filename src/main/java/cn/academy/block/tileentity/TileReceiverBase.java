@@ -14,8 +14,8 @@ import net.minecraftforge.fml.relauncher.Side;
  * This class will automatically sync its energy field to client side.
  * @author WeAthFolD
  */
+
 public class TileReceiverBase extends TileInventory implements IWirelessReceiver, ITickable {
-    
     private static final int UPDATE_WAIT = 20;
 
     int updateTicker = 0;
@@ -39,17 +39,6 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
             }
         }
     }
-
-//    @Override
-//    public void onLoad()
-//    {
-//        super.onLoad();
-//        if(!world.isRemote)
-//        {
-//            NetworkMessage.sendToAllAround(TargetPoints.convert(this, 25),
-//                    this, ".tile.sync", writeToNBT(new NBTTagCompound()));
-//        }
-//    }
 
     @Override
     public NBTTagCompound getUpdateTag() {
@@ -116,5 +105,4 @@ public class TileReceiverBase extends TileInventory implements IWirelessReceiver
         energy -= a;
         return a;
     }
-
 }

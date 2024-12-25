@@ -3,10 +3,7 @@ package cn.academy.energy.client.ui;
 import cn.academy.Resources;
 import cn.academy.block.container.ContainerWindGenBase;
 import cn.academy.block.tileentity.TileWindGenBase;
-import cn.academy.core.client.ui.AcademyContainerUI;
-import cn.academy.core.client.ui.InventoryPage;
-import cn.academy.core.client.ui.TechUI;
-import cn.academy.core.client.ui.WirelessPage;
+import cn.academy.core.client.ui.*;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
@@ -35,11 +32,12 @@ public class GuiWindGenBase {
         iconMain.getComponent(DrawTexture.class).color.setAlpha(Colors.f2i(amain));
         iconMiddle.getComponent(DrawTexture.class).color.setAlpha(Colors.f2i(amiddle));
 
-        TechUI.Page inventoryPage = InventoryPage.apply(main);
-        TechUI.Page wirelessPage = WirelessPage.userPage(tileWindGenBase);
+        Page inventoryPage = InventoryPage.apply(main);
+        Page wirelessPage = WirelessPage.userPage(tileWindGenBase);
 
         AcademyContainerUI academyContainerUI = new AcademyContainerUI(containerWindGenBase, inventoryPage, wirelessPage);
-        academyContainerUI.infoPage.histogramTile(tileWindGenBase).seplineInfo().property("altitude", tileWindGenBase.getPos().getY(), null, false, true, null);
+
+        academyContainerUI.infoPage.histogram(HistElement.histBuffer(tileWindGenBase.getEnergy(), tileWindGenBase.bufferSize)).sepline("info").property("altitude", tileWindGenBase.getPos().getY(), null, false, true);
 
         return academyContainerUI;
     }

@@ -1,0 +1,22 @@
+package cn.academy.core.client.ui;
+
+import cn.academy.Resources;
+import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.component.DrawTexture;
+import cn.lambdalib2.cgui.loader.CGUIDocument;
+import net.minecraft.util.ResourceLocation;
+
+public class InventoryPage {
+    private static final Widget template = CGUIDocument.read(new ResourceLocation("academy:guis/rework/" + "page_inv" + ".xml")).getWidget("main");
+
+    public static Page apply(String name) {
+        Widget ret = template.copy();
+        ret.getWidget("ui_block").getComponent(DrawTexture.class)
+                .setTex(Resources.getTexture("guis/ui/ui_" + name));
+        return apply(ret);
+    }
+
+    public static Page apply(Widget ret) {
+        return new Page("inv", ret);
+    }
+}

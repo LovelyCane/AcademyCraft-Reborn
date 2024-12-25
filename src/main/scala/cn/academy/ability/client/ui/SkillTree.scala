@@ -484,9 +484,9 @@ private object Common {
               }
             }))
             panel.child("button_wireless").listens[LeftClickEvent](() => {
-              val wirelessPage = WirelessPage.userPage(tile).window.centered()
+            //  val wirelessPage = WirelessPage.userPage(tile).window.centered()
               val cover = blackCover(gui)
-              cover :+ wirelessPage
+           //   cover :+ wirelessPage
 
               cover.listens[LeftClickEvent](() => cover.component[Cover].end())
               cover.listens[CloseEvent](() => gui.postEvent(new RebuildEvent))

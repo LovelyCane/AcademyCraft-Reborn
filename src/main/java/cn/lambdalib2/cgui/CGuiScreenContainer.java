@@ -28,6 +28,7 @@ public class CGuiScreenContainer extends GuiContainer {
         gui = new CGui();
     }
 
+    // call in super class's drawScreen
     @Override
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
         GL11.glEnable(GL11.GL_BLEND);
