@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 
 @SideOnly(Side.CLIENT)
 public class CustomizeUI extends CGuiScreen {
-
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
         SettingsUI.addCallback("edit_ui", "misc", () -> {
@@ -99,8 +98,7 @@ public class CustomizeUI extends CGuiScreen {
             node.getPreview().dirty = true;
         }, prevPos[1]);
 
-        edit.pos(button.x + button.transform.width*button.scale + 5,
-                button.y + button.transform.height*button.scale/2 - edit.transform.height / 2);
+        edit.pos(button.x + button.transform.width * button.scale + 5, button.y + button.transform.height * button.scale / 2 - edit.transform.height / 2);
 
         gui.addWidget(edit);
     }
@@ -127,5 +125,4 @@ public class CustomizeUI extends CGuiScreen {
             throw new NumberFormatException();
         }
     }
-
 }

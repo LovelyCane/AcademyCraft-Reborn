@@ -9,12 +9,10 @@ import cn.academy.event.WirelessEvent;
  * @author WeathFolD
  */
 public class UnlinkNodeEvent extends WirelessEvent {
-    
     public final IWirelessNode node;
 
     public UnlinkNodeEvent(IWirelessTile _node) {
         super(_node);
         node = (IWirelessNode) _node;
     }
-
 }

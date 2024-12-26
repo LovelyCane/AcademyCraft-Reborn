@@ -7,7 +7,7 @@ import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
 import cn.academy.ability.{AbilityLocalization, Skill}
 import cn.academy.block.tileentity.TileDeveloper
-import cn.academy.core.client.ui.WirelessPage
+import cn.academy.core.client.ui.WirelessPageJava
 import cn.academy.datapart.{AbilityData, CPData}
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.util.LocalHelper
@@ -484,9 +484,9 @@ private object Common {
               }
             }))
             panel.child("button_wireless").listens[LeftClickEvent](() => {
-            //  val wirelessPage = WirelessPage.userPage(tile).window.centered()
+              val wirelessPage = WirelessPageJava.userPage(tile).window.centered()
               val cover = blackCover(gui)
-           //   cover :+ wirelessPage
+              cover :+ wirelessPage
 
               cover.listens[LeftClickEvent](() => cover.component[Cover].end())
               cover.listens[CloseEvent](() => gui.postEvent(new RebuildEvent))

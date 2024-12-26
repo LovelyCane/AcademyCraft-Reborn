@@ -10,60 +10,52 @@ import cn.lambdalib2.cgui.loader.CGUIDocument;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TechUIWidget extends Widget {
-    private Page currentPage;
-    private static final Widget pageButtonTemplate = CGUIDocument.read(new ResourceLocation("academy:guis/rework/pageselect.xml")).getWidget("main");
+    public Page currentPage;
 
     public TechUIWidget(Page... pages) {
+        List<Page> pageList = Arrays.asList(pages);
+        this.currentPage = pageList.get(0);
+
         this.size(172, 187);
         this.centered();
 
-        if (pages.length == 0) {
-            throw new IllegalArgumentException("页面列表不能为空");
-        }
+        for (int idx = 0; idx < pageList.size(); idx++) {
+            Page page = pageList.get(idx);
 
-        this.currentPage = pages[0];
-
-        for (int idx = 0; idx < pages.length; idx++) {
-            Page page = pages[idx];
-
-            Widget button = pageButtonTemplate.copy();
+            Widget button = CGUIDocument.read(new ResourceLocation("academy:guis/rework/pageselect.xml")).getWidget("main");
             button.walign(Transform.WidthAlign.LEFT).halign(Transform.HeightAlign.TOP);
 
             DrawTexture buttonTex = button.getComponent(DrawTexture.class);
-            buttonTex.setTex(Resources.getTexture("guis/icons/icon_" + page.getId()));
+            buttonTex.setTex(Resources.getTexture("guis/icons/icon_" + page.id));
             button.scale(0.7f);
             button.pos(-20, idx * 22);
 
-            button.listen(LeftClickEvent.class, () -> {
+            button.listen(LeftClickEvent.class, (widget, event) -> {
                 for (Page p : pages) {
-                    p.getWindow().transform.doesDraw = false;
+                    p.window.transform.doesDraw = false;
                 }
-                page.getWindow().transform.doesDraw = true;
+                page.window.transform.doesDraw = true;
                 currentPage = page;
             });
 
-            // 设置按钮的颜色变化效果
-            button.listen(FrameEvent.class, (widget,evt) -> updateButtonColor(evt, page, buttonTex));
+            button.listen(FrameEvent.class, (widget, event) -> updateButtonColor(event, page, buttonTex));
+            page.window.transform.doesDraw = false;
 
-            // 默认隐藏其他页面
-            page.getWindow().transform.doesDraw = false;
-
-            // 添加按钮和页面窗口到当前组件
             this.addWidget(button);
-            this.addWidget(page.getWindow());
+            this.addWidget(page.window);
         }
 
-        pages[0].getWindow().transform.doesDraw = true;
-    }
-
-    public Page getCurrentPage() {
-        return currentPage;
+        pageList.get(0).window.transform.doesDraw = true;
     }
 
     private void updateButtonColor(FrameEvent evt, Page page, DrawTexture buttonTex) {
-        float alpha = (evt.hovering || currentPage == page) ? 1.0f : 0.8f;
-        float colorFactor = (currentPage == page) ? 1.0f : 0.8f;
+        boolean hovering = evt.hovering;
+        float alpha = (hovering || this.currentPage == page) ? 1.0f : 0.8f;
+        float colorFactor = (this.currentPage == page) ? 1.0f : 0.8f;
 
         buttonTex.color.setAlpha(Colors.f2i(alpha));
         buttonTex.color.setRed(Colors.f2i(colorFactor));

@@ -409,13 +409,13 @@ ac.gui.common.hist.energy=ENERGY
 ac.gui.common.hist.buffer=BUFFER
 ac.gui.common.hist.liquid=LIQUID
 ac.gui.common.hist.capacity=CAPACITY
-ac.gui.common.prop.range=Trans. Range
+ac.gui.common.prop.range=Range
 ac.gui.common.prop.owner=Owner
 ac.gui.common.prop.node_name=Node Name
 ac.gui.common.prop.password=Password
 ac.gui.common.prop.bandwidth=Bandwidth
 ac.gui.common.prop.ssid=SSID
-ac.gui.common.prop.gen_speed=Gen. speed
+ac.gui.common.prop.gen_speed=Generation Speed
 ac.gui.common.prop.altitude=Altitude
 
 # Skill Tree

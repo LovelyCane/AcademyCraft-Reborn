@@ -5,11 +5,11 @@ import cn.academy.block.tileentity.TilePhaseGen;
 import cn.academy.core.client.ui.*;
 
 public class GuiPhaseGen {
-    public static AcademyContainerUI apply(ContainerPhaseGen containerPhaseGen) {
+    public static ContainerUI apply(ContainerPhaseGen containerPhaseGen) {
         TilePhaseGen tile = containerPhaseGen.tile;
         Page inventoryPage = InventoryPage.apply("phasegen");
-        Page wirelessPage = WirelessPage.userPage(tile);
+        Page wirelessPage = WirelessPageJava.userPage(tile);
 
-        return new AcademyContainerUI(containerPhaseGen, inventoryPage, wirelessPage);
+        return new ContainerUI(containerPhaseGen, inventoryPage, wirelessPage);
     }
 }

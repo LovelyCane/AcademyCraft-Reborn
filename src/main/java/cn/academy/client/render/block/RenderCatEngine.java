@@ -1,14 +1,12 @@
 package cn.academy.client.render.block;
 
 import cn.academy.Resources;
-import cn.academy.block.tileentity.TileCatEngine;
 import cn.lambdalib2.registry.mc.RegTileEntityRender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import cn.lambdalib2.render.legacy.Tessellator;
+import cn.academy.block.tileentity.TileCatEngine;
+import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author WeAthFolD
  */
-
 public class RenderCatEngine extends TileEntitySpecialRenderer {
     @RegTileEntityRender(TileCatEngine.class)
     private static final RenderCatEngine instance = new RenderCatEngine();
@@ -24,36 +21,42 @@ public class RenderCatEngine extends TileEntitySpecialRenderer {
     static final ResourceLocation TEXTURE = Resources.getTexture("blocks/cat_engine");
 
     @Override
-    public void render(TileEntity tile, double x, double y, double z, float pt, int destroyStage, float alpha) {
+    public void render(TileEntity tile, double x,
+                       double y, double z, float pt, int destroyStage, float alpha) {
+        long time = (long) (GameTimer.getTime() * 1000);
         TileCatEngine engine = (TileCatEngine) tile;
+        if (engine.lastRender != 0) {
+            engine.rotation += (time - engine.lastRender) * engine.thisTickGen * 1e-2;
+            //System.out.println(engine.thisTickGen);
+            engine.rotation %= 360;
+        }
+        engine.lastRender = time;
 
         x += 0.5;
         z += 0.5;
 
-        GlStateManager.pushMatrix();
-        GlStateManager.disableCull();
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_CULL_FACE);
 
-        GlStateManager.translate(x, y + 0.03 * 1, z);
+        GL11.glTranslated(x, y + 0.03 * Math.sin(GameTimer.getTime() * 0.006), z);
 
         double yaw = Math.atan2(x, z) * 180 / Math.PI;
-        GlStateManager.rotate((float) (yaw + 180), 0, 1, 0);
+        GL11.glRotated(yaw + 180, 0, 1, 0);
+        GL11.glTranslated(0, .5, 0);
+        GL11.glRotated(engine.rotation, 1, 0, 0);
+        GL11.glTranslated(-.5, -.5, 0);
 
-        GlStateManager.translate(0, .5, 0);
-        GlStateManager.rotate((float) engine.rotation, 1, 0, 0);
-        GlStateManager.translate(-0.5, -0.5, 0);
+        Tessellator t = Tessellator.instance;
+        RenderUtils.loadTexture(TEXTURE);
+        t.startDrawingQuads();
+        t.addVertexWithUV(0, 0, 0, 0, 0);
+        t.addVertexWithUV(1, 0, 0, 1, 0);
+        t.addVertexWithUV(1, 1, 0, 1, 1);
+        t.addVertexWithUV(0, 1, 0, 0, 1);
+        t.draw();
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(0, 0, 0).tex(0, 0).endVertex();
-        buffer.pos(1, 0, 0).tex(1, 0).endVertex();
-        buffer.pos(1, 1, 0).tex(1, 1).endVertex();
-        buffer.pos(0, 1, 0).tex(0, 1).endVertex();
-        tessellator.draw();
-
-        GlStateManager.enableCull();
-        GlStateManager.popMatrix();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
     }
+
 }

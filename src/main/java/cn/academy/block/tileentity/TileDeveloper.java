@@ -84,7 +84,7 @@ public abstract class TileDeveloper extends TileReceiverBase implements IMultiTi
 
         if (info.getSubID() != 0) {
             TileDeveloper te = getOrigin();
-            return te == null ? false : te.use(player);
+            return te != null && te.use(player);
         }
 
         if (user != null) {

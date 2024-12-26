@@ -1,17 +1,17 @@
 package cn.academy.core.client.ui;
 
-import cn.academy.util.LocalHelper;
+import cn.academy.Resources;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.Color;
 
-import static cn.lambdalib2.util.Colors.fromHexColor;
+import java.util.Objects;
 
 public class HistElement {
-    private final String id;
-    private final Color color;
-    private final double value;
-    private final String desc;
-    static LocalHelper local = LocalHelper.at("ac.gui.common");
-    public static LocalHelper localHist = local.subPath("hist");
+    public static final ResourceLocation histogramTex = Resources.getTexture("guis/histogram");
+    public final String id;
+    public final Color color;
+    public final double value;
+    public final String desc;
 
     public HistElement(String id, Color color, double value, String desc) {
         this.id = id;
@@ -20,39 +20,29 @@ public class HistElement {
         this.desc = desc;
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "HistElement{" +
+                "id='" + id + '\'' +
+                ", color=" + color +
+                ", value=" + value +
+                ", desc=" + desc +
+                '}';
     }
 
-    public Color getColor() {
-        return color;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HistElement that = (HistElement) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(color, that.color) &&
+                Objects.equals(value, that.value) &&
+                Objects.equals(desc, that.desc);
     }
 
-    public double getValue() {
-        return value;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public static HistElement histEnergy(double energy, double max) {
-        Color color = fromHexColor(0xff25c4ff);
-        return new HistElement(localHist.get("energy"), color, energy / max, String.format("%.0f IF", energy));
-    }
-
-    public static HistElement histBuffer(double energy, double max) {
-        Color color = fromHexColor(0xff25f7ff);
-        return new HistElement(localHist.get("buffer"), color,  energy / max,String.format("%.0f IF", energy));
-    }
-
-    public static HistElement histPhaseLiquid(double amt, double max) {
-        Color color = fromHexColor(0xff7680de);
-        return new HistElement(localHist.get("liquid"), color,amt / max,String.format("%.0f mB", amt));
-    }
-
-    public static HistElement histCapacity(int amt, double max) {
-        Color color = fromHexColor(0xffff6c00);
-        return new HistElement(localHist.get("capacity"), color, (double) amt / max,String.format("%d/%f", amt, max));
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, color, value, desc);
     }
 }

@@ -31,7 +31,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -233,30 +233,21 @@ public class TerminalUI extends AuxGui {
                 int hour = currentTime / 1000;
                 int minutes = (currentTime % 1000) * 60 / 1000;
 
-                String countText = I18n.translateToLocalFormatted("ac.gui.terminal.appcount", apps.size());
+                String countText = I18n.format("ac.gui.terminal.appcount", apps.size());
                 String timeText = wrapTime(hour) + ":" + wrapTime(minutes);
                 textBox.content = countText + ", " + timeText;
             });
         }
-
         root.getWidget("text_username").getComponent(TextBox.class).setContent(player.getName());
-
         // Obsolete stuff
         root.removeWidget("text_loading");
         root.removeWidget("icon_loading");
-
         updateAppList(data);
-
         createTime = GameTimer.getTime();
-
         root.getWidget("arrow_up").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).enabled = scroll > 0);
-
         root.getWidget("arrow_up").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).enabled = scroll > 0);
-
         root.getWidget("arrow_down").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).enabled = scroll < getMaxScroll());
-
         root.getWidget("icon_loading").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).color.setAlpha(Colors.f2i(0.1f + 0.45f * (1 + MathHelper.sin((float) GameTimer.getTime() * 5)))));
-
         root.getWidget("text_loading").listen(FrameEvent.class, (w, e) -> w.getComponent(TextBox.class).option.color.setAlpha(Colors.f2i(0.1f + (0.45f * (1 + MathHelper.sin((float) GameTimer.getTime() * 5))))));
     }
 
@@ -276,7 +267,7 @@ public class TerminalUI extends AuxGui {
         }
 
 
-        root.getWidget("text_appcount").getComponent(TextBox.class).content = I18n.translateToLocalFormatted("ac.gui.terminal.appcount", apps.size());
+        root.getWidget("text_appcount").getComponent(TextBox.class).content = I18n.format("ac.gui.terminal.appcount", apps.size());
         updatePosition();
     }
 
@@ -296,7 +287,7 @@ public class TerminalUI extends AuxGui {
             Widget app = apps.get(i);
             app.transform.doesDraw = true;
             app.transform.x = START_X + STEP_X * (order % 3);
-            app.transform.y = START_Y + STEP_Y * (order / 3);
+            app.transform.y = START_Y + STEP_Y * ((float) order / 3);
             app.dirty = true;
         }
     }
@@ -433,11 +424,8 @@ public class TerminalUI extends AuxGui {
             if (app != null) {
                 AppHandler handler = getHandler(app);
                 AppEnvironment env = handler.app.createEnvironment();
-                TerminalData data = TerminalData.get(getPlayer());
-
                 env.app = handler.app;
                 env.terminal = TerminalUI.this;
-
                 env.onStart();
             }
         }

@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class GuiMetalFormer {
     private static final Widget template = CGUIDocument.read(Resources.getGui("rework/page_metalformer")).getWidget("main");
 
-    public static AcademyContainerUI apply(ContainerMetalFormer container) {
+    public static ContainerUI apply(ContainerMetalFormer container) {
         final TileMetalFormer tile = container.tile;
 
         {
@@ -44,16 +44,18 @@ public class GuiMetalFormer {
                 IFont.FontOption option = new IFont.FontOption(10, IFont.FontAlign.CENTER, Colors.fromHexColor(0xaaffffff));
                 template.getWidget("icon_mode").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> {
                     if (evt.hovering) {
-                        InfoArea.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
+                        TechUI.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
                     }
                 });
             }
         }
 
         Page invPage = InventoryPage.apply(template);
-        AcademyContainerUI ret = new AcademyContainerUI(container, invPage);
+        ContainerUI ret = new ContainerUI(container, invPage);
 
-        ret.infoPage.histogram(HistElement.histBuffer(tile.getEnergy(), tile.getMaxEnergy()));
+        HistElement elem = HistUtils.histBuffer(tile.getEnergy(), tile.getMaxEnergy());
+
+        ret.infoPage.histogram(elem);
 
         return ret;
     }

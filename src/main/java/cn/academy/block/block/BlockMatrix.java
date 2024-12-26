@@ -2,20 +2,21 @@ package cn.academy.block.block;
 
 import cn.academy.block.container.ContainerMatrix;
 import cn.academy.block.tileentity.TileMatrix;
+import cn.academy.energy.client.ui.GuiMatrix2;
 import cn.lambdalib2.registry.mc.gui.GuiHandlerBase;
 import cn.lambdalib2.registry.mc.gui.RegGuiHandler;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
@@ -83,7 +84,7 @@ public class BlockMatrix extends ACBlockMulti {
         @Override
         protected Object getClientContainer(EntityPlayer player, World world, int x, int y, int z) {
             ContainerMatrix container = (ContainerMatrix) getServerContainer(player, world, x, y, z);
-            return  null;
+            return container == null ? null : GuiMatrix2.apply(container);
         }
         
         @Override

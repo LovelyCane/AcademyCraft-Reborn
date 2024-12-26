@@ -14,7 +14,7 @@ import static cn.academy.block.tileentity.TileWindGenBase.Completeness.*;
 public class GuiWindGenBase {
     private static final Widget main = CGUIDocument.read(Resources.getGui("rework/page_windbase")).getWidget("main");
 
-    public static AcademyContainerUI apply(ContainerWindGenBase containerWindGenBase) {
+    public static ContainerUI apply(ContainerWindGenBase containerWindGenBase) {
         TileWindGenBase tileWindGenBase = containerWindGenBase.tile;
 
         float a0 = 0.2f, a1 = 0.6f, a2 = 1.0f;
@@ -33,11 +33,13 @@ public class GuiWindGenBase {
         iconMiddle.getComponent(DrawTexture.class).color.setAlpha(Colors.f2i(amiddle));
 
         Page inventoryPage = InventoryPage.apply(main);
-        Page wirelessPage = WirelessPage.userPage(tileWindGenBase);
+        Page wirelessPage = WirelessPageJava.userPage(tileWindGenBase);
 
-        AcademyContainerUI academyContainerUI = new AcademyContainerUI(containerWindGenBase, inventoryPage, wirelessPage);
+        ContainerUI academyContainerUI = new ContainerUI(containerWindGenBase, inventoryPage, wirelessPage);
 
-        academyContainerUI.infoPage.histogram(HistElement.histBuffer(tileWindGenBase.getEnergy(), tileWindGenBase.bufferSize)).sepline("info").property("altitude", tileWindGenBase.getPos().getY(), null, false, true);
+        HistElement elems = HistUtils.histBuffer(tileWindGenBase.getEnergy(), tileWindGenBase.bufferSize);
+
+        academyContainerUI.infoPage.histogram(elems).sepline("info").property("altitude", tileWindGenBase.getPos().getY(), null, false, true, null);
 
         return academyContainerUI;
     }

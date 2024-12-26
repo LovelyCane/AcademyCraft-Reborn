@@ -185,12 +185,11 @@ public class TileNode extends TileInventory implements IWirelessNode, IInventory
         return tag;
     }
 
-    String name;
+    String name = getNodeName();
 
     @Override
     public String getNodeName() {
-        this.name = this.getPos().getX() + "-" + this.getPos().getY() + "-" + this.getPos().getZ();
-        return name;
+        return this.getPos().getX() + "-" + this.getPos().getY() + "-" + this.getPos().getZ();
     }
 
     @Override

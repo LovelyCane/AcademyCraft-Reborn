@@ -9,9 +9,7 @@ import cn.academy.event.WirelessUserEvent;
  * @author WeathFolD
  */
 public class UnlinkUserEvent extends WirelessUserEvent {
-
     public UnlinkUserEvent(IWirelessTile _tile) {
         super(_tile);
     }
-
 }

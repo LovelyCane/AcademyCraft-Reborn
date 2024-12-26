@@ -11,11 +11,12 @@ import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.ResourceLocation;
 
+
 public class GuiSolarGen {
     private static final Widget template = CGUIDocument.read(Resources.getGui("rework/page_solar")).getWidget("main");
     private static final ResourceLocation texture = Resources.getTexture("guis/effect/effect_solar");
 
-    public static AcademyContainerUI apply(ContainerSolarGen container) {
+    public static ContainerUI apply(ContainerSolarGen container) {
         TileSolarGen tile = container.tile;
 
         Widget main = template.copy();
@@ -40,10 +41,13 @@ public class GuiSolarGen {
         });
 
         Page invPage = InventoryPage.apply(main);
-        Page wirelessPage = WirelessPage.userPage(tile);
+        Page wirelessPage = WirelessPageJava.userPage(tile);
 
-        AcademyContainerUI academyContainerUI = new AcademyContainerUI(container, invPage, wirelessPage);
-        academyContainerUI.infoPage.histogram(HistElement.histBuffer(tile.getEnergy(), tile.bufferSize)).sepline("info").property("gen_speed", String.format("%.2fIF/T", tile.getGeneration(1024)), null, false, true);
+        ContainerUI academyContainerUI = new ContainerUI(container, invPage, wirelessPage);
+
+        HistElement elems = HistUtils.histBuffer(tile.getEnergy(), tile.bufferSize);
+
+        academyContainerUI.infoPage.histogram(elems).sepline("info").property("gen_speed", String.format("%.2fIF/T", tile.getGeneration(1024)), null, false, true, null);
 
         return academyContainerUI;
     }

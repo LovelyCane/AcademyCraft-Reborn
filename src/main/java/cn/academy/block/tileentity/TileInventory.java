@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
  * <br/> P.S.Notch的脑子绝！对！秀！逗！了！
  * @author WeAthFolD
  */
+
 public class TileInventory extends TileEntity implements IInventory {
     
     protected final ItemStack[] inventory;

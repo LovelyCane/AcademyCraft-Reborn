@@ -1,7 +1,7 @@
 package cn.academy.support;
 
 import cn.academy.block.block.ACBlockContainer;
-import cn.academy.core.client.ui.WirelessPage;
+import cn.academy.core.client.ui.WirelessPageJava;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.lambdalib2.cgui.CGuiScreen;
 import net.minecraft.block.Block;
@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
+
 public abstract class BlockConverterBase extends ACBlockContainer {
     public static class Item extends ItemBlock {
         BlockConverterBase converter;
@@ -45,10 +46,9 @@ public abstract class BlockConverterBase extends ACBlockContainer {
 
     @Override
     @SuppressWarnings("sideonly")
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-                                    EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity te = world.getTileEntity(pos);
-        if (tileType.isInstance(te)) {
+        if (te != null && tileType.isInstance(te)) {
             if (te instanceof IWirelessUser && !player.isSneaking()) {
                 if (world.isRemote) {
                     displayGui((IWirelessUser) te);
@@ -67,9 +67,8 @@ public abstract class BlockConverterBase extends ACBlockContainer {
                 return false;
             }
         };
-        screen.getGui().addWidget(WirelessPage.userPage((TileEntity) te).getWindow());
+        screen.getGui().addWidget(WirelessPageJava.userPage((TileEntity) te).window);
 
         Minecraft.getMinecraft().displayGuiScreen(screen);
     }
-
 }

@@ -11,13 +11,13 @@ package cn.lambdalib2.cgui
 import cn.lambdalib2.cgui.component.Component
 import cn.lambdalib2.cgui.event.{GuiEvent, IGuiEventHandler}
 
+import scala.language.implicitConversions
 import scala.reflect.ClassTag
 
 class RichWidget(val w: Widget) extends Widget {
-
   def listens[T <: GuiEvent](handler: (Widget, T) => Any, priority: Int = 0)(implicit evidence: ClassTag[T]): Widget = {
     w.listen[T](evidence.runtimeClass.asInstanceOf[Class[T]], priority, new IGuiEventHandler[T] {
-      override def handleEvent(w: Widget, event: T) = {
+      override def handleEvent(w: Widget, event: T): Unit = {
         handler(w, event)
       }
     })
@@ -40,20 +40,19 @@ class RichWidget(val w: Widget) extends Widget {
 
   def :+(c: Component): Unit = w.addComponent(c)
 
-  def component[T <: Component](implicit evidence: ClassTag[T]) = {
+  def component[T <: Component](implicit evidence: ClassTag[T]): T = {
     w.getComponent(evidence.runtimeClass.asInstanceOf[Class[T]])
   }
 
-  def child(name: String) = w.getWidget(name)
+  def child(name: String): Widget = w.getWidget(name)
 
-  def child(idx: Int) = w.getWidget(idx)
-
+  def child(idx: Int): Widget = w.getWidget(idx)
 }
 
 class RichComponent(val c: Component) extends AnyVal {
   def listens[T <: GuiEvent](handler: (Widget, T) => Any)(implicit tag: ClassTag[T]): Unit = {
     c.listen[T](tag.runtimeClass.asInstanceOf[Class[T]], new IGuiEventHandler[T] {
-      override def handleEvent(w: Widget, e: T) = handler(w, e)
+      override def handleEvent(w: Widget, e: T): Unit = handler(w, e)
     })
   }
 
@@ -69,6 +68,7 @@ class RichComponent(val c: Component) extends AnyVal {
 /**
  * CGUI scala extensions to reduce syntax burden.
  */
+
 object ScalaCGUI {
   implicit def toWrapper(w: Widget): RichWidget = new RichWidget(w)
 

@@ -18,20 +18,21 @@ import java.util.List;
 
 /**
  * AC global HUD drawing dispatcher.
+ *
  * @author WeAthFolD
  */
+
 @SideOnly(Side.CLIENT)
 public class ACHud extends AuxGui {
-    
     public static ACHud instance = new ACHud();
 
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
         AuxGui.register(instance);
     }
-    
+
     private List<Node> nodes = new ArrayList<>();
-    
+
     private CGui gui = new CGui();
 
     private ACHud() {
@@ -41,13 +42,13 @@ public class ACHud extends AuxGui {
     @Override
     public void draw(ScaledResolution sr) {
         gui.resize(sr.getScaledWidth(), sr.getScaledHeight());
-        for(Node n : nodes) {
+        for (Node n : nodes) {
             n.w.transform.doesDraw = n.cond.shows();
         }
-        
+
         gui.draw();
     }
-    
+
     public void addElement(Widget w, Condition showCondition, String name, Widget preview) {
         Node node = new Node(w, showCondition, name, preview);
         nodes.add(node);
@@ -59,18 +60,18 @@ public class ACHud extends AuxGui {
     public List<Node> getNodes() {
         return ImmutableList.copyOf(nodes);
     }
-    
+
     public interface Condition {
         boolean shows();
     }
-    
+
     public class Node {
         final Widget w;
         final Condition cond;
         final String name;
         final float defaultX, defaultY;
         final Widget preview;
-        
+
         public Node(Widget _w, Condition _cond, String _name, Widget _preview) {
             w = _w;
             cond = _cond;
@@ -84,9 +85,13 @@ public class ACHud extends AuxGui {
             return prop().getDoubleList();
         }
 
-        public Widget getPreview() { return preview; }
+        public Widget getPreview() {
+            return preview;
+        }
 
-        public String getName() { return name; }
+        public String getName() {
+            return name;
+        }
 
         void updatePosition() {
             double[] pos = getPosition();
@@ -96,17 +101,16 @@ public class ACHud extends AuxGui {
 
         public void setPosition(float newX, float newY) {
             Property prop = prop();
-            prop.set(new double[] { newX, newY });
+            prop.set(new double[]{newX, newY});
             updatePosition();
         }
 
         private Property prop() {
-            return conf().get("gui", name, new double[] { defaultX, defaultY });
+            return conf().get("gui", name, new double[]{defaultX, defaultY});
         }
 
         private Configuration conf() {
             return AcademyCraft.config;
         }
     }
-
 }

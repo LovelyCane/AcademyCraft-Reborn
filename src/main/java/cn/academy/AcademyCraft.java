@@ -48,6 +48,9 @@ public class AcademyCraft {
 
     public static AcademyConfig academyConfig;
 
+    public static void test(Object node,Object tile,Object pass) {
+        AcademyCraft.log.info("Node: " + node + "Tile: " + tile + "Pass" + pass);
+    }
     static {
         try {
             academyConfig = AcademyConfig.loadConfig(configFilePath);
