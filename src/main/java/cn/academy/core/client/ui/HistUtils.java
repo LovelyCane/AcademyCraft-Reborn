@@ -3,49 +3,39 @@ package cn.academy.core.client.ui;
 import cn.lambdalib2.util.Colors;
 import org.lwjgl.util.Color;
 
+import java.util.function.Supplier;
+
 import static cn.academy.core.client.ui.ContainerUI.localHist;
 
 public class HistUtils {
     private HistUtils() {
     }
 
-    public static HistElement histEnergy(double energy, double max) {
+    public static HistElement histEnergy(Supplier<Double> energy, double max) {
         Color color = Colors.fromHexColor(0xff25c4ff);
-        return new HistElement(
-                localHist.get("energy"),
-                color,
-                energy / max,
-                String.format("%.0f IF", energy)
-        );
+        Supplier<Double> value = () -> energy.get() / max;
+        Supplier<String> desc = () -> String.format("%.2f", energy.get());
+        return new HistElement(localHist.get("energy"), color, value, desc);
     }
 
-    public static HistElement histBuffer(double energy, double max) {
+    public static HistElement histBuffer(Supplier<Double> energy, double max) {
         Color color = Colors.fromHexColor(0xff25f7ff);
-        return new HistElement(
-                localHist.get("buffer"),
-                color,
-                energy / max,
-                String.format("%.0f IF", energy)
-        );
+        Supplier<Double> value = () -> energy.get() / max;
+        Supplier<String> desc = () -> String.format("%.0f IF", energy.get());
+        return new HistElement(localHist.get("buffer"), color, value, desc);
     }
 
-    public static HistElement histPhaseLiquid(double amt, double max) {
+    public static HistElement histPhaseLiquid(Supplier<Double> amt, double max) {
         Color color = Colors.fromHexColor(0xff7680de);
-        return new HistElement(
-                localHist.get("liquid"),
-                color,
-                amt / max,
-                String.format("%.0f mB", amt)
-        );
+        Supplier<Double> value = () -> amt.get() / max;
+        Supplier<String> desc = () -> String.format("%.0f mB", amt.get());
+        return new HistElement(localHist.get("liquid"), color, value, desc);
     }
 
-    public static HistElement histCapacity(int amt, int max) {
+    public static HistElement histCapacity(Supplier<Integer> amt, int max) {
         Color color = Colors.fromHexColor(0xffff6c00);
-        return new HistElement(
-                localHist.get("capacity"),
-                color,
-                (double) amt / max,
-                amt + "/" + max
-        );
+        Supplier<Double> value = () -> (double) amt.get() / max;
+        Supplier<String> desc = () -> amt.get() + "/" + max;
+        return new HistElement(localHist.get("capacity"), color, value, desc);
     }
 }

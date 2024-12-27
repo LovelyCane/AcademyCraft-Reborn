@@ -145,7 +145,12 @@ object GuiAbilityInterferer {
     val invPage = InventoryPage.apply(window)
     val wirelessPage: Page = WirelessPageJava.userPage(tile)
     val ret = new ContainerUI(container, invPage, wirelessPage)
-    ret.infoPage.histogram(HistUtils.histEnergy(tile.getEnergy, tile.getMaxEnergy))
+    def getEnergy: java.util.function.Supplier[java.lang.Double] = {
+      new java.util.function.Supplier[java.lang.Double] {
+        override def get(): java.lang.Double = tile.getEnergy
+      }
+    }
+    ret.infoPage.histogram(HistUtils.histEnergy(getEnergy, tile.getMaxEnergy))
     ret
   }
 }

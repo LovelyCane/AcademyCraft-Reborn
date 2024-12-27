@@ -6,8 +6,6 @@ import cn.academy.core.client.ui.*;
 import cn.lambdalib2.cgui.Widget;
 
 public class GuiNode {
-    static int load = 1;
-
     public static ContainerUI apply(ContainerNode container) {
         TileNode tile = container.tile;
 
@@ -19,8 +17,8 @@ public class GuiNode {
 
         ContainerUI ret = new ContainerUI(container, invPage);
 
-        HistElement elems1 = HistUtils.histEnergy(tile.getEnergy(), tile.getMaxEnergy());
-        HistElement elems2 = HistUtils.histCapacity(load, tile.getCapacity());
+        HistElement elems1 = HistUtils.histEnergy(tile::getEnergy, tile.getMaxEnergy());
+        HistElement elems2 = HistUtils.histCapacity(tile::getCapacity, tile.getCapacity());
 
         ret.infoPage
                 .histogram(elems1, elems2)

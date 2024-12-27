@@ -37,7 +37,7 @@ public class GuiWindGenBase {
 
         ContainerUI academyContainerUI = new ContainerUI(containerWindGenBase, inventoryPage, wirelessPage);
 
-        HistElement elems = HistUtils.histBuffer(tileWindGenBase.getEnergy(), tileWindGenBase.bufferSize);
+        HistElement elems = HistUtils.histBuffer(tileWindGenBase::getEnergy, tileWindGenBase.bufferSize);
 
         academyContainerUI.infoPage.histogram(elems).sepline("info").property("altitude", tileWindGenBase.getPos().getY(), null, false, true, null);
 

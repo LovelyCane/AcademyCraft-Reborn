@@ -37,10 +37,10 @@ public class GuiImagFusor {
             text.setContent(recipe == null ? "IDLE" : String.valueOf(recipe.consumeLiquid));
         }
 
-        HistElement elems1 = HistUtils.histEnergy(tile.getEnergyForDisplay(), tile.getMaxEnergy());
-        HistElement elems2 = HistUtils.histPhaseLiquid(tile.getLiquidAmount(), tile.getTankSize());
+        HistElement elems1 = HistUtils.histEnergy(tile::getEnergyForDisplay, tile.getMaxEnergy());
+        HistElement elems2 = HistUtils.histPhaseLiquid(() -> (double) tile.getLiquidAmount(), tile.getTankSize());
 
-        ret.infoPage.histogram(elems1,elems2);
+        ret.infoPage.histogram(elems1, elems2);
 
         return ret;
     }

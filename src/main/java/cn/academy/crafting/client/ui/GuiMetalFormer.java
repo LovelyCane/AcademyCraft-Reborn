@@ -14,13 +14,10 @@ import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
-import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.util.Colors;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.util.function.Supplier;
 
 public class GuiMetalFormer {
     private static final Widget template = CGUIDocument.read(Resources.getGui("rework/page_metalformer")).getWidget("main");
@@ -28,49 +25,26 @@ public class GuiMetalFormer {
     public static ContainerUI apply(ContainerMetalFormer container) {
         final TileMetalFormer tile = container.tile;
 
-        {
-            updateModeTexture(tile.mode, template);
+        template.getWidget("icon_mode").getComponent(DrawTexture.class).texture = tile.mode.texture;
 
-            template.getWidget("progress").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> {
-                ProgressBar progressBar = w.getComponent(ProgressBar.class);
-                progressBar.progress = tile.getWorkProgress();
-            });
+        template.getWidget("progress").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> w.getComponent(ProgressBar.class).progress = tile.getWorkProgress());
 
-            template.getWidget("btn_left").listen(LeftClickEvent.class, () -> handleAlt(-1, tile));
+        template.getWidget("btn_left").listen(LeftClickEvent.class, () -> send(MFNetDelegate.MSG_ALTERNATE, tile, -1, Future.create(future -> template.getWidget("icon_mode").getComponent(DrawTexture.class).texture = tile.mode.texture)));
 
-            template.getWidget("btn_right").listen(LeftClickEvent.class, () -> handleAlt(1, tile));
+        template.getWidget("btn_right").listen(LeftClickEvent.class, () -> send(MFNetDelegate.MSG_ALTERNATE, tile, 1, Future.create(future -> template.getWidget("icon_mode").getComponent(DrawTexture.class).texture = tile.mode.texture)));
 
-            {
-                IFont.FontOption option = new IFont.FontOption(10, IFont.FontAlign.CENTER, Colors.fromHexColor(0xaaffffff));
-                template.getWidget("icon_mode").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> {
-                    if (evt.hovering) {
-                        TechUI.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
-                    }
-                });
+        IFont.FontOption option = new IFont.FontOption(10, IFont.FontAlign.CENTER, Colors.fromHexColor(0xaaffffff));
+        template.getWidget("icon_mode").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> {
+            if (evt.hovering) {
+                TechUI.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
             }
-        }
+        });
 
-        Page invPage = InventoryPage.apply(template);
-        ContainerUI ret = new ContainerUI(container, invPage);
+        ContainerUI ret = new ContainerUI(container, InventoryPage.apply(template), WirelessPageJava.userPage(tile));
 
-        HistElement elem = HistUtils.histBuffer(tile.getEnergy(), tile.getMaxEnergy());
-
-        ret.infoPage.histogram(elem);
+        ret.infoPage.histogram(HistUtils.histBuffer(tile::getEnergy, tile.getMaxEnergy()));
 
         return ret;
-    }
-
-    public static void updateModeTexture(TileMetalFormer.Mode mode, Widget invWidget) {
-        invWidget.getWidget("icon_mode").getComponent(DrawTexture.class).texture = mode.texture;
-    }
-
-    public static Supplier<Void> handleAlt(int dir, TileMetalFormer tile) {
-        return () -> {
-            send(MFNetDelegate.MSG_ALTERNATE, tile, dir, Future.create(future -> {
-                updateModeTexture(tile.mode, template);
-            }));
-            return null;
-        };
     }
 
     private static void send(String channel, Object... args) {
@@ -80,7 +54,6 @@ public class GuiMetalFormer {
 
 class MFNetDelegate {
     public static final MFNetDelegate INSTANCE = new MFNetDelegate();
-
     public static final String MSG_ALTERNATE = "alt";
 
     @StateEventCallback
@@ -88,7 +61,7 @@ class MFNetDelegate {
         NetworkS11n.addDirectInstance(INSTANCE);
     }
 
-    @Listener(channel = MSG_ALTERNATE, side = {Side.SERVER})
+    @NetworkMessage.Listener(channel = MSG_ALTERNATE, side = {Side.SERVER})
     public void alternate(TileMetalFormer tile, int dir, Future<TileMetalFormer.Mode> fut) {
         tile.cycleMode(dir);
         fut.sendResult(tile.mode);

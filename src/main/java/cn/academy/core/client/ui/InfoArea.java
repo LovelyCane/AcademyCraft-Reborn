@@ -101,7 +101,7 @@ public class InfoArea extends Widget {
             progressBarUpdater.add(progress);
             progress.color = elem.color;
             progress.setDirection(ProgressBar.Direction.UP);
-            bar.listen(FrameEvent.class, () -> progress.progress = MathUtils.clampd(0.03, 1, elem.value));
+            bar.listen(FrameEvent.class, () -> progress.progress = MathUtils.clampd(0.03, 1, elem.value.get()));
             bar.addComponent(progress);
             widget.addWidget(bar);
         }
@@ -126,14 +126,14 @@ public class InfoArea extends Widget {
         Widget widget = new Widget(expectWidth - 10, 8).pos(6, 0);
         TextBox keyAreaTextBox = newTextBox(new IFont.FontOption(8));
         textBoxUpdater.add(keyAreaTextBox);
-        Widget keyArea = new Widget().pos(4, 0).size(32, 8).halign(Transform.HeightAlign.CENTER).addComponent(keyAreaTextBox.setContent(elem.id));
+        Widget keyArea = new Widget().pos(4, 0).size(32, 8).halign(Transform.HeightAlign.CENTER).addComponent(keyAreaTextBox.setContent(elem.name));
         DrawTexture iconDrawTexture = new DrawTexture(null).setColor(elem.color);
         drawTexUpdater.add(iconDrawTexture);
         Widget icon = new Widget().size(6, 6).halign(Transform.HeightAlign.CENTER).pos(-3, 0.5f).addComponents(iconDrawTexture);
         TextBox iconAreaTextBox = newTextBox(new IFont.FontOption(8));
         textBoxUpdater.add(iconAreaTextBox);
-        Widget valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(Transform.HeightAlign.CENTER).addComponent(iconAreaTextBox.setContent(elem.desc));
-        valueArea.listen(FrameEvent.class, () -> valueArea.getComponent(TextBox.class).setContent(elem.desc));
+        Widget valueArea = new Widget().pos(keyLength, 0).size(40, 8).halign(Transform.HeightAlign.CENTER).addComponent(iconAreaTextBox.setContent(elem.name));
+        valueArea.listen(FrameEvent.class, () -> valueArea.getComponent(TextBox.class).setContent(elem.desc.get()));
         widget.addWidget(keyArea);
         widget.addWidget(icon);
         widget.addWidget(valueArea);
@@ -210,5 +210,93 @@ public class InfoArea extends Widget {
         TextBox textBox = Resources.newTextBox(new IFont.FontOption(8)).setContent(ch);
         textBoxUpdater.add(textBox);
         return new Widget().size(10, 8).halign(Transform.HeightAlign.CENTER).addComponent(textBox);
+    }
+}
+
+interface Updater<T> {
+    void add(T obj);
+
+    void clear();
+
+    void apply(float alpha);
+
+    void apply(T obj, float alpha);
+}
+
+class DrawTexUpdater implements Updater<DrawTexture> {
+    private final List<DrawTexture> us = new ArrayList<>();
+
+    @Override
+    public void add(DrawTexture obj) {
+        us.add(obj);
+    }
+
+    @Override
+    public void clear() {
+        us.clear();
+    }
+
+    @Override
+    public void apply(float alpha) {
+        for (DrawTexture obj : us) {
+            apply(obj, alpha);
+        }
+    }
+
+    @Override
+    public void apply(DrawTexture obj, float alpha) {
+        obj.color.setAlpha(Colors.f2i(alpha));
+    }
+}
+
+class ProgressBarUpdater implements Updater<ProgressBar> {
+    private final List<ProgressBar> us = new ArrayList<>();
+
+    @Override
+    public void add(ProgressBar obj) {
+        us.add(obj);
+    }
+
+    @Override
+    public void clear() {
+        us.clear();
+    }
+
+    @Override
+    public void apply(float alpha) {
+        for (ProgressBar obj : us) {
+            apply(obj, alpha);
+        }
+    }
+
+    @Override
+    public void apply(ProgressBar obj, float alpha) {
+        obj.color.setAlpha(Colors.f2i(alpha));
+    }
+}
+
+class TextBoxUpdater implements Updater<TextBox> {
+    private final List<TextBox> us = new ArrayList<>();
+
+    @Override
+    public void add(TextBox obj) {
+        us.add(obj);
+    }
+
+    @Override
+    public void clear() {
+        us.clear();
+    }
+
+    @Override
+    public void apply(float alpha) {
+        for (TextBox obj : us) {
+            apply(obj, alpha);
+        }
+    }
+
+    @Override
+    public void apply(TextBox obj, float alpha) {
+        obj.option.color.setAlpha(Colors.f2i(alpha));
     }
 }

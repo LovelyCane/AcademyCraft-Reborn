@@ -35,7 +35,9 @@ object GuiMatrix2 {
         ret.infoPage.reset()
 
         ret.infoPage.histogram(
-          HistUtils.histCapacity(data.load, tile.getCapacity)
+          HistUtils.histCapacity(new java.util.function.Supplier[java.lang.Integer] {
+            override def get(): java.lang.Integer = data.load
+          }, tile.getCapacity)
         )
 
         ret.infoPage.sepline("info")

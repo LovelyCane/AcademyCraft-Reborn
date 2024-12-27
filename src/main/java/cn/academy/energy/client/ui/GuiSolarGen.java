@@ -45,7 +45,7 @@ public class GuiSolarGen {
 
         ContainerUI academyContainerUI = new ContainerUI(container, invPage, wirelessPage);
 
-        HistElement elems = HistUtils.histBuffer(tile.getEnergy(), tile.bufferSize);
+        HistElement elems = HistUtils.histBuffer(tile::getEnergy, tile.bufferSize);
 
         academyContainerUI.infoPage.histogram(elems).sepline("info").property("gen_speed", String.format("%.2fIF/T", tile.getGeneration(1024)), null, false, true, null);
 
