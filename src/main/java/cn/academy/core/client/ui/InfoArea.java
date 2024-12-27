@@ -22,17 +22,17 @@ import java.util.function.Function;
 import static cn.academy.Resources.newTextBox;
 import static cn.academy.core.client.ui.ContainerUI.localProperty;
 import static cn.academy.core.client.ui.ContainerUI.localSep;
+import static cn.lambdalib2.util.MathUtils.lerp;
 
 public class InfoArea extends Widget {
     private final DrawTexUpdater drawTexUpdater = new DrawTexUpdater();
     private final TextBoxUpdater textBoxUpdater = new TextBoxUpdater();
     private final ProgressBarUpdater progressBarUpdater = new ProgressBarUpdater();
 
-    private final double blendStartTime = GameTimer.getTime();
-    private double lastFrameTime;
+    private final double startTime = GameTimer.getTime();
 
     private final float expectWidth = 100f;
-    private float expectHeight;
+    private float expectHeight = 50f;
 
     private final int keyLength = 40;
     private float elemY = 10f;
@@ -40,24 +40,29 @@ public class InfoArea extends Widget {
     private final List<Widget> elements = new ArrayList<>();
     private final List<Updater<?>> uas = Arrays.asList(drawTexUpdater, textBoxUpdater, progressBarUpdater);
 
+    private static final double alphaWidthDuration = 10;
+    private static final double alphaHeightDuration = 5;
+    private static final double balphaDuration = 0.3;
+
     public InfoArea() {
         this.addComponent(new BlendQuad());
+
         this.listen(FrameEvent.class, () -> {
-            transform.width = move(transform.width, expectWidth);
-            transform.height = move(transform.height, expectHeight);
-            double balpha = MathUtils.clampd(0, 1, (GameTimer.getTime() - blendStartTime - 0.3) / 0.3);
+            double time = GameTimer.getTime();
+
+            double alphaWidth = Math.max(0, Math.min(1, (time - startTime) / alphaWidthDuration));
+
+            double alphaHeight = Math.max(0, Math.min(1, (time - startTime) / alphaHeightDuration));
+
+            transform.width = (float) lerp(transform.width, expectWidth, alphaWidth);
+            transform.height = (float) lerp(transform.height, expectHeight, alphaHeight);
+
+            double balpha = Math.max(0, Math.min(1, (time - startTime - 0.3) / balphaDuration));
+
             for (Updater<?> ua : uas) {
                 ua.apply((float) balpha);
             }
-            lastFrameTime = GameTimer.getTime();
         });
-    }
-
-    float move(float fr, float to) {
-        double dt = Math.min(GameTimer.getTime() - lastFrameTime, 0.5);
-        float max = (float) (dt * 500);
-        float delta = to - fr;
-        return fr + Math.min(max, Math.abs(delta)) * Math.signum(delta);
     }
 
     public InfoArea reset() {

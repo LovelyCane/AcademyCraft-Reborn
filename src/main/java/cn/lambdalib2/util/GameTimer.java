@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * A simple timer wrapup to handle paused timing situations.
  * @author WeAthFolD
  */
+
 public enum GameTimer {
     @RegEventHandler
     INSTANCE;
