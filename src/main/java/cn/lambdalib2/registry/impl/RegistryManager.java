@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public enum RegistryManager {
     INSTANCE;
 
-    public class ModContext {
+    public static class ModContext {
         public String packageRoot;
         public Object modObject;
 

@@ -1,9 +1,9 @@
 package cn.academy.client.render.block;
 
 import cn.academy.Resources;
+import cn.academy.block.tileentity.TileCatEngine;
 import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.legacy.Tessellator;
-import cn.academy.block.tileentity.TileCatEngine;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author WeAthFolD
  */
+
 public class RenderCatEngine extends TileEntitySpecialRenderer {
     @RegTileEntityRender(TileCatEngine.class)
     private static final RenderCatEngine instance = new RenderCatEngine();
@@ -27,7 +28,6 @@ public class RenderCatEngine extends TileEntitySpecialRenderer {
         TileCatEngine engine = (TileCatEngine) tile;
         if (engine.lastRender != 0) {
             engine.rotation += (time - engine.lastRender) * engine.thisTickGen * 1e-2;
-            //System.out.println(engine.thisTickGen);
             engine.rotation %= 360;
         }
         engine.lastRender = time;
@@ -58,5 +58,4 @@ public class RenderCatEngine extends TileEntitySpecialRenderer {
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glPopMatrix();
     }
-
 }

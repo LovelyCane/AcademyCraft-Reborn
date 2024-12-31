@@ -2,7 +2,7 @@ package cn.academy.util;
 
 /**
  * JAVA REFERENCE IMPLEMENTATION OF IMPROVED NOISE - COPYRIGHT 2002 KEN PERLIN.
- * From: http://mrl.nyu.edu/~perlin/noise/
+ * From: <a href="http://mrl.nyu.edu/~perlin/noise/">...</a>
  */
 
 public final class ImprovedNoise {

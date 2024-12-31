@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "normal": {
+      "model": "academy:dev_advanced"
+    }
+  }
+}

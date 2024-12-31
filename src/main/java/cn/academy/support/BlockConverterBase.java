@@ -1,7 +1,7 @@
 package cn.academy.support;
 
 import cn.academy.block.block.ACBlockContainer;
-import cn.academy.core.client.ui.WirelessPageJava;
+import cn.academy.core.client.ui.WirelessPage;
 import cn.academy.energy.api.block.IWirelessUser;
 import cn.lambdalib2.cgui.CGuiScreen;
 import net.minecraft.block.Block;
@@ -67,7 +67,7 @@ public abstract class BlockConverterBase extends ACBlockContainer {
                 return false;
             }
         };
-        screen.getGui().addWidget(WirelessPageJava.userPage((TileEntity) te).window);
+        screen.getGui().addWidget(WirelessPage.userPage((TileEntity) te).window);
 
         Minecraft.getMinecraft().displayGuiScreen(screen);
     }

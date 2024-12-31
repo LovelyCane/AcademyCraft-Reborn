@@ -17,7 +17,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ACBlocks {
-    public static final BlockAbilityInterferer ability_interferer = new BlockAbilityInterferer();
     public static final BlockCatEngine cat_engine = new BlockCatEngine();
     public static final BlockGenericOre constraint_metal = new BlockGenericOre(4.0f, 1);
     public static final BlockGenericOre crystal_ore = new BlockGenericOre(3.0f, 2);
@@ -27,7 +26,6 @@ public class ACBlocks {
     public static final BlockImagPhase imag_phase = new BlockImagPhase();
     public static final BlockGenericOre imagsil_ore = new BlockGenericOre(3.75f, 2);
     public static final net.minecraft.block.Block machine_frame = new net.minecraft.block.Block(Material.ROCK);
-    public static final BlockMatrix matrix = new BlockMatrix();
     public static final BlockMetalFormer metal_former = new BlockMetalFormer();
     public static final BlockNode node_advanced = new BlockNode(NodeType.ADVANCED);
     public static final BlockNode node_basic = new BlockNode(NodeType.BASIC);
@@ -39,7 +37,6 @@ public class ACBlocks {
     public static final BlockWindGenMain windgen_main = new BlockWindGenMain();
     public static final BlockWindGenPillar windgen_pillar = new BlockWindGenPillar();
 
-    public static final ItemBlock item_ability_interferer = new ItemBlock(ability_interferer);
     public static final ItemBlock item_cat_engine = new ItemBlock(cat_engine);
     public static final ItemBlock item_constraint_metal = new ItemBlock(constraint_metal);
     public static final ItemBlock item_crystal_ore = new ItemBlock(crystal_ore);
@@ -49,7 +46,6 @@ public class ACBlocks {
     public static final ItemBlock item_imag_phase = new ItemBlock(imag_phase);
     public static final ItemBlock item_imagsil_ore = new ItemBlock(imagsil_ore);
     public static final ItemBlock item_machine_frame = new ItemBlock(machine_frame);
-    public static final ItemBlockMulti item_matrix = new ItemBlockMulti(matrix);
     public static final ItemBlock item_metal_former = new ItemBlock(metal_former);
     public static final ItemBlock item_node_advanced = new ItemBlock(node_advanced);
     public static final ItemBlock item_node_basic = new ItemBlock(node_basic);
@@ -62,11 +58,8 @@ public class ACBlocks {
     public static final ItemBlock item_windgen_pillar = new ItemBlock(windgen_pillar);
 
     @RegistryCallback
+    @SuppressWarnings("unused")
     private static void registerBlocks(RegistryEvent.Register<Block> event) {
-        ability_interferer.setRegistryName("academy:ability_interferer");
-        ability_interferer.setTranslationKey("ac_ability_interferer");
-        ability_interferer.setCreativeTab(cn.academy.AcademyCraft.cct);
-        event.getRegistry().register(ability_interferer);
         cat_engine.setRegistryName("academy:cat_engine");
         cat_engine.setTranslationKey("ac_cat_engine");
         cat_engine.setCreativeTab(cn.academy.AcademyCraft.cct);
@@ -104,10 +97,6 @@ public class ACBlocks {
         machine_frame.setTranslationKey("ac_machine_frame");
         machine_frame.setCreativeTab(cn.academy.AcademyCraft.cct);
         event.getRegistry().register(machine_frame);
-        matrix.setRegistryName("academy:matrix");
-        matrix.setTranslationKey("ac_matrix");
-        matrix.setCreativeTab(cn.academy.AcademyCraft.cct);
-        event.getRegistry().register(matrix);
         metal_former.setRegistryName("academy:metal_former");
         metal_former.setTranslationKey("ac_metal_former");
         metal_former.setCreativeTab(cn.academy.AcademyCraft.cct);
@@ -152,11 +141,8 @@ public class ACBlocks {
     }
 
     @RegistryCallback
-    @SuppressWarnings("sideonly")
+    @SuppressWarnings({"sideonly", "unused"})
     private static void registerItems(RegistryEvent.Register<Item> event) {
-        item_ability_interferer.setRegistryName("academy:ability_interferer");
-        item_ability_interferer.setTranslationKey("ac_ability_interferer");
-        event.getRegistry().register(item_ability_interferer);
         item_cat_engine.setRegistryName("academy:cat_engine");
         item_cat_engine.setTranslationKey("ac_cat_engine");
         event.getRegistry().register(item_cat_engine);
@@ -184,9 +170,7 @@ public class ACBlocks {
         item_machine_frame.setRegistryName("academy:machine_frame");
         item_machine_frame.setTranslationKey("ac_machine_frame");
         event.getRegistry().register(item_machine_frame);
-        item_matrix.setRegistryName("academy:matrix");
-        item_matrix.setTranslationKey("ac_matrix");
-        event.getRegistry().register(item_matrix);
+
         item_metal_former.setRegistryName("academy:metal_former");
         item_metal_former.setTranslationKey("ac_metal_former");
         event.getRegistry().register(item_metal_former);
@@ -225,7 +209,6 @@ public class ACBlocks {
 
     @SideOnly(Side.CLIENT)
     private static void registerItemRenderers() {
-        ModelLoader.setCustomModelResourceLocation(item_ability_interferer, 0, new ModelResourceLocation(ability_interferer.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_cat_engine, 0, new ModelResourceLocation(cat_engine.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_constraint_metal, 0, new ModelResourceLocation(constraint_metal.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_crystal_ore, 0, new ModelResourceLocation(crystal_ore.getRegistryName(), "inventory"));
@@ -235,7 +218,6 @@ public class ACBlocks {
         ModelLoader.setCustomModelResourceLocation(item_imag_phase, 0, new ModelResourceLocation(imag_phase.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_imagsil_ore, 0, new ModelResourceLocation(imagsil_ore.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_machine_frame, 0, new ModelResourceLocation(machine_frame.getRegistryName(), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(item_matrix, 0, new ModelResourceLocation(matrix.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_metal_former, 0, new ModelResourceLocation(metal_former.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_node_advanced, 0, new ModelResourceLocation(node_advanced.getRegistryName(), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item_node_basic, 0, new ModelResourceLocation(node_basic.getRegistryName(), "inventory"));

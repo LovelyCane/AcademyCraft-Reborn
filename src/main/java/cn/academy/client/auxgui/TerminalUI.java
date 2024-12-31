@@ -25,13 +25,13 @@ import cn.lambdalib2.util.*;
 import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,9 +48,9 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
-
 @SideOnly(Side.CLIENT)
 public class TerminalUI extends AuxGui {
+
     private static final String OVERRIDE_GROUP = "AC_Terminal";
 
     private static AuxGui current = null;
@@ -60,11 +60,12 @@ public class TerminalUI extends AuxGui {
 
     static final ResourceLocation APP_BACK = tex("app_back"), APP_BACK_HDR = tex("app_back_highlight"), CURSOR = tex("cursor");
 
-    final float SENSITIVITY = 0.7f;
+    final double SENSITIVITY = 0.7;
 
     private static WidgetContainer loaded;
 
     @StateEventCallback
+    @SuppressWarnings("unused")
     private static void init(FMLInitializationEvent ev) {
         loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal.xml"));
     }
@@ -85,6 +86,7 @@ public class TerminalUI extends AuxGui {
 
     int selection = 0;
     int scroll = 0;
+
     List<Widget> apps = new ArrayList<>();
 
     public TerminalUI() {
@@ -104,8 +106,6 @@ public class TerminalUI extends AuxGui {
     public void onEnable() {
         Minecraft mc = Minecraft.getMinecraft();
         oldHelper = mc.mouseHelper;
-
-        // omg,it's so bad,but i like it :)
         mc.mouseHelper = helper = new TerminalMouseHelper();
 
         KeyManager.dynamic.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
@@ -126,6 +126,7 @@ public class TerminalUI extends AuxGui {
 
     @Override
     public void draw(ScaledResolution sr) {
+        //Frame update
         selection = (int) ((mouseY - 0.01) / MAX_MY * 3) * 3 + (int) ((mouseX - 0.01) / MAX_MX * 3);
 
         if (mouseY == 0) {
@@ -137,13 +138,16 @@ public class TerminalUI extends AuxGui {
             if (scroll < getMaxScroll()) scroll++;
         }
 
+        //Draw
         Minecraft mc = Minecraft.getMinecraft();
         double time = GameTimer.getTime();
         if (lastFrameTime == 0) lastFrameTime = time;
         double dt = time - lastFrameTime;
 
-        mouseX = Math.max(0, Math.min(MAX_MX, mouseX + helper.dx * SENSITIVITY));
-        mouseY = Math.max(0, Math.min(MAX_MY, mouseY - helper.dy * SENSITIVITY));
+        mouseX += (float) (helper.dx * SENSITIVITY);
+        mouseY -= (float) (helper.dy * SENSITIVITY);
+        mouseX = Math.max(0, Math.min(MAX_MX, mouseX));
+        mouseY = Math.max(0, Math.min(MAX_MY, mouseY));
 
         buffX = balance(dt, buffX, mouseX);
         buffY = balance(dt, buffY, mouseY);
@@ -169,15 +173,15 @@ public class TerminalUI extends AuxGui {
 
         double scale = 1.0 / 310;
         GL11.glTranslated(.35 * aspect, 1.2, -4);
+
         GL11.glTranslated(1, -1.8, 0);
 
-        double rotX = -18 - 4 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0);
-        double rotY = 7 + 4 * (buffY / MAX_MY - 0.5);
         GL11.glRotated(-1.6, 0, 0, 1);
-        GL11.glRotated(rotX, 0, 1, 0);
-        GL11.glRotated(rotY, 1, 0, 0);
+        GL11.glRotated(-18 - 4 * (buffX / MAX_MX - 0.5) + 1 * Math.sin(time / 1000.0), 0, 1, 0);
+        GL11.glRotated(7 + 4 * (buffY / MAX_MY - 0.5), 1, 0, 0);
 
         GL11.glTranslated(-1, 1.8, 0);
+
         GL11.glScaled(scale, -scale, scale);
 
         gui.draw(mouseX, mouseY);
@@ -197,8 +201,10 @@ public class TerminalUI extends AuxGui {
         }
 
         GL11.glPopMatrix();
+
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPopMatrix();
+
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -238,16 +244,24 @@ public class TerminalUI extends AuxGui {
                 textBox.content = countText + ", " + timeText;
             });
         }
+
         root.getWidget("text_username").getComponent(TextBox.class).setContent(player.getName());
-        // Obsolete stuff
+
         root.removeWidget("text_loading");
         root.removeWidget("icon_loading");
+
         updateAppList(data);
+
         createTime = GameTimer.getTime();
+
         root.getWidget("arrow_up").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).enabled = scroll > 0);
+
         root.getWidget("arrow_up").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).enabled = scroll > 0);
+
         root.getWidget("arrow_down").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).enabled = scroll < getMaxScroll());
+
         root.getWidget("icon_loading").listen(FrameEvent.class, (w, e) -> w.getComponent(DrawTexture.class).color.setAlpha(Colors.f2i(0.1f + 0.45f * (1 + MathHelper.sin((float) GameTimer.getTime() * 5)))));
+
         root.getWidget("text_loading").listen(FrameEvent.class, (w, e) -> w.getComponent(TextBox.class).option.color.setAlpha(Colors.f2i(0.1f + (0.45f * (1 + MathHelper.sin((float) GameTimer.getTime() * 5))))));
     }
 
@@ -266,7 +280,6 @@ public class TerminalUI extends AuxGui {
             apps.add(w);
         }
 
-
         root.getWidget("text_appcount").getComponent(TextBox.class).content = I18n.format("ac.gui.terminal.appcount", apps.size());
         updatePosition();
     }
@@ -274,20 +287,12 @@ public class TerminalUI extends AuxGui {
     private void updatePosition() {
         final float START_X = 65, START_Y = 155, STEP_X = 180, STEP_Y = 180;
 
-        // Check if scroll is viable
-        int max = getMaxScroll();
-        if (scroll > max) scroll = max;
-
-        for (Widget w : apps) {
-            w.transform.doesDraw = false;
-        }
-
-        for (int i = scroll * 3; i < scroll * 3 + 9 && i < apps.size(); ++i) {
-            int order = i - scroll * 3;
+        for (int i = 0; i < apps.size(); ++i) {
             Widget app = apps.get(i);
-            app.transform.doesDraw = true;
-            app.transform.x = START_X + STEP_X * (order % 3);
-            app.transform.y = START_Y + STEP_Y * ((float) order / 3);
+            int rowIndex = i / 3;
+            int colIndex = i % 3;
+            app.transform.x = START_X + (colIndex) * STEP_X;
+            app.transform.y = START_Y + (rowIndex) * STEP_Y;
             app.dirty = true;
         }
     }
@@ -355,6 +360,7 @@ public class TerminalUI extends AuxGui {
     };
 
     private class AppHandler extends Component {
+
         final int id;
         final App app;
 
@@ -395,15 +401,14 @@ public class TerminalUI extends AuxGui {
                     icon.color.setAlpha(Colors.f2i(0.6f * mAlpha));
                     text.option.color.setAlpha(Colors.f2i(0.10f + 0.1f * mAlpha));
                 }
-
                 lastSelected = selected;
             });
+
         }
 
         @Override
         public void onAdded() {
             super.onAdded();
-
             drawer = DrawTexture.get(widget);
             text = TextBox.get(widget.getWidget("text"));
             icon = DrawTexture.get(widget.getWidget("icon"));
@@ -424,6 +429,7 @@ public class TerminalUI extends AuxGui {
             if (app != null) {
                 AppHandler handler = getHandler(app);
                 AppEnvironment env = handler.app.createEnvironment();
+
                 env.app = handler.app;
                 env.terminal = TerminalUI.this;
                 env.onStart();
@@ -432,7 +438,7 @@ public class TerminalUI extends AuxGui {
     }
 
     public static class TerminalMouseHelper extends MouseHelper {
-        public float dx, dy;
+        public int dx, dy;
 
         @Override
         public void mouseXYChange() {

@@ -41,7 +41,7 @@ public class GuiSolarGen {
         });
 
         Page invPage = InventoryPage.apply(main);
-        Page wirelessPage = WirelessPageJava.userPage(tile);
+        Page wirelessPage = WirelessPage.userPage(tile);
 
         ContainerUI academyContainerUI = new ContainerUI(container, invPage, wirelessPage);
 

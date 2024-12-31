@@ -22,7 +22,6 @@ import org.lwjgl.util.Color;
  */
 @SideOnly(Side.CLIENT)
 public class RenderIcon<T extends Entity> extends Render<T> {
-    
     protected ResourceLocation icon;
     protected float size = 0.5F;
     protected boolean hasLight = false;
@@ -39,11 +38,6 @@ public class RenderIcon<T extends Entity> extends Render<T> {
         size = s;
         return this;
     }
-    
-    public RenderIcon setHasLight(boolean b) {
-        hasLight = b;
-        return this;
-    }
 
     @Override
     public void doRender(T par1Entity, double par2, double par4,
@@ -58,7 +52,7 @@ public class RenderIcon<T extends Entity> extends Render<T> {
             GL11.glPushMatrix(); {
                 GL11.glTranslatef((float) par2, (float) par4, (float) par6);
                 GL11.glScalef(size, size, size);
-                postTranslate(par1Entity);
+                postTranslate();
                 if(icon != null) RenderUtils.loadTexture(icon);
                 
                 Tessellator t = Tessellator.instance;
@@ -70,9 +64,9 @@ public class RenderIcon<T extends Entity> extends Render<T> {
             GL11.glEnable(GL11.GL_CULL_FACE);
     }
     
-    protected void postTranslate(Entity ent) {}
+    protected void postTranslate() {}
     
-    protected void firstTranslate(Entity ent) {}
+    protected void firstTranslate() {}
 
     private void func_77026_a(Entity e, Tessellator tessllator) {
         float f4 = 1.0F;
@@ -82,7 +76,7 @@ public class RenderIcon<T extends Entity> extends Render<T> {
         GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         if(!hasLight) 
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-        firstTranslate(e);
+        firstTranslate();
         Colors.bindToGL(color);
         tessllator.startDrawingQuads();
 

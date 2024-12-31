@@ -1,6 +1,5 @@
 package cn.lambdalib2.registry.impl;
 
-import cn.lambdalib2.util.Debug;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
@@ -23,7 +22,7 @@ public class RegistryTransformer implements IClassTransformer {
             System.out.println("[LL2] Find registry mod: " + name);
             ClassWriter cw = new ClassWriter(Opcodes.ASM5);
             ClassReader cr = new ClassReader(bytes);
-            ClassVisitor cv =  new RegistryModTransformer(cw, name);
+            ClassVisitor cv = new RegistryModTransformer(cw);
             cr.accept(cv, 0);
             return cw.toByteArray();
         }
@@ -31,12 +30,10 @@ public class RegistryTransformer implements IClassTransformer {
         return bytes;
     }
 
-    class RegistryModTransformer extends ClassVisitor {
-        private final String modClassName;
+    static class RegistryModTransformer extends ClassVisitor {
 
-        public RegistryModTransformer(ClassVisitor cv, String _modClassName) {
+        public RegistryModTransformer(ClassVisitor cv) {
             super(Opcodes.ASM5, cv);
-            modClassName = _modClassName;
         }
 
         @Override

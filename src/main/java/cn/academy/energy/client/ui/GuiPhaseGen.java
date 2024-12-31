@@ -6,10 +6,17 @@ import cn.academy.core.client.ui.*;
 
 public class GuiPhaseGen {
     public static ContainerUI apply(ContainerPhaseGen containerPhaseGen) {
-        TilePhaseGen tile = containerPhaseGen.tile;
+        TilePhaseGen tilePhaseGen = containerPhaseGen.tile;
         Page inventoryPage = InventoryPage.apply("phasegen");
-        Page wirelessPage = WirelessPageJava.userPage(tile);
+        Page wirelessPage = WirelessPage.userPage(tilePhaseGen);
 
-        return new ContainerUI(containerPhaseGen, inventoryPage, wirelessPage);
+        ContainerUI ret = new ContainerUI(containerPhaseGen, inventoryPage, wirelessPage);
+
+        HistElement element1 = HistUtils.histEnergy(tilePhaseGen::getEnergy, tilePhaseGen.bufferSize);
+        HistElement element2 = HistUtils.histPhaseLiquid(() -> (double) tilePhaseGen.getLiquidAmount(), tilePhaseGen.getTankSize());
+
+        ret.infoPage.histogram(element1, element2);
+
+        return ret;
     }
 }

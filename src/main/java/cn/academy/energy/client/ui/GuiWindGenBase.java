@@ -33,7 +33,7 @@ public class GuiWindGenBase {
         iconMiddle.getComponent(DrawTexture.class).color.setAlpha(Colors.f2i(amiddle));
 
         Page inventoryPage = InventoryPage.apply(main);
-        Page wirelessPage = WirelessPageJava.userPage(tileWindGenBase);
+        Page wirelessPage = WirelessPage.userPage(tileWindGenBase);
 
         ContainerUI academyContainerUI = new ContainerUI(containerWindGenBase, inventoryPage, wirelessPage);
 

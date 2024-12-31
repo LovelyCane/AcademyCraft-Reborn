@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CatElectromaster extends Category {
-    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect$.MODULE$, railgun = Railgun$.MODULE$, magMovement = MagMovement$.MODULE$, currentCharging = CurrentCharging$.MODULE$, bodyIntensify = BodyIntensify$.MODULE$, thunderBolt = ThunderBolt$.MODULE$, thunderClap = ThunderClap$.MODULE$
-            /* ironSand = ??? */;
+    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect$.MODULE$, railgun = Railgun$.MODULE$, magMovement = MagMovement$.MODULE$, currentCharging = CurrentCharging$.MODULE$, bodyIntensify = BodyIntensify$.MODULE$, thunderBolt = ThunderBolt$.MODULE$, thunderClap = ThunderClap$.MODULE$;
 
     public CatElectromaster() {
         super("electromaster");
@@ -36,7 +35,6 @@ public class CatElectromaster extends Category {
         thunderClap.setPosition(204, 80);
         magManip.setPosition(204, 33);
 
-        // 分别添加技能
         addSkill(arcGen);
         addSkill(currentCharging);
         addSkill(magMovement);
@@ -49,7 +47,6 @@ public class CatElectromaster extends Category {
 
         VanillaCategories.addGenericSkills(this);
 
-        // Assign dependencies
         currentCharging.setParent(arcGen, 0.3f);
         magMovement.setParent(arcGen);
         magMovement.addSkillDep(currentCharging, 0.7f);
@@ -72,7 +69,6 @@ public class CatElectromaster extends Category {
         Map<String, List<String>> cfgBlocks = AcademyCraft.academyConfig.getAbility().getMetalBlocks();
         Map<String, List<String>> cfgEntities = AcademyCraft.academyConfig.getAbility().getMetalEntities();
 
-        // Merge block and entity handling into a single loop for efficiency
         processMetalItems(cfgBlocks, metalBlocks, true);
         processMetalItems(cfgEntities, metalEntities, false);
     }
@@ -94,7 +90,6 @@ public class CatElectromaster extends Category {
                 } else {
                     Class<? extends Entity> entityClass = EntityList.getClass(resourceLocation);
                     if (entityClass != null) {
-                        AcademyCraft.log.info("Entity {} is a {} class.", resourceLocation, entityClass.getName());
                         itemSet.add((T) entityClass);
                     } else {
                         AcademyCraft.log.error("The entity {} is not found!", resourceLocation);

@@ -38,5 +38,4 @@ public class CorePlugin implements IFMLLoadingPlugin {
     public String getAccessTransformerClass() {
         return null;
     }
-
 }

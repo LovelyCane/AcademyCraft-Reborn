@@ -1,6 +1,5 @@
 package cn.academy.ability.context;
 
-import cn.academy.AcademyCraft;
 import cn.academy.ability.Controllable;
 import cn.academy.ability.context.Context.Status;
 import cn.academy.ability.ctrl.ClientHandler;
@@ -31,7 +30,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
@@ -102,13 +100,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
 
         // Remove dead keys
         {
-            Iterator<Entry<Integer, KeyState>> iter = keyStates.entrySet().iterator();
-            while (iter.hasNext()) {
-                Entry<Integer, KeyState> ent = iter.next();
-                if (!ent.getValue().realState && !delegates.containsKey(ent.getKey())) {
-                    iter.remove();
-                }
-            }
+            keyStates.entrySet().removeIf(ent -> !ent.getValue().realState && !delegates.containsKey(ent.getKey()));
         }
 
         // Update override
@@ -136,7 +128,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     /**
-     * Adds a key delegate with specified group. Note that the delegate with same key musn't be previously present, or
+     * Adds a key delegate with specified group. Note that the delegate with same key mustn't be previously present, or
      * yields an error.
      */
     public void addKey(String group, int keyID, KeyDelegate delegate) {
@@ -168,8 +160,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     public void clearAllKeys() {
-        List<String> all = new ArrayList<>();
-        all.addAll(delegateGroups.keySet());
+        List<String> all = new ArrayList<>(delegateGroups.keySet());
 
         for (String s : all) {
             clearKeys(s);
@@ -289,7 +280,6 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     private void rebuildOverrides() {
-        AcademyCraft.debug("RebuildOverrides");
         CPData cpData = CPData.get(getEntity());
 
         ctrlDirty = false;
@@ -298,12 +288,12 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         ControlOverrider.override(OVERRIDE_GROUP, set);
     }
 
-    private class KeyState {
+    private static class KeyState {
         boolean state = false;
         boolean realState = false;
     }
 
-    public class DelegateNode {
+    public static class DelegateNode {
         public final KeyDelegate delegate;
         public final int keyID;
 
@@ -398,9 +388,9 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         String getHint();
 
         default Optional<String> getHintTranslated() {
-            String kname = KeyManager.getKeyName(ACKeyManager.instance.getKeyID(ClientHandler.keyActivate));
+            String keyName = KeyManager.getKeyName(ACKeyManager.instance.getKeyID(ClientHandler.keyActivate));
             String hint = ClientRuntime.instance().getActivateHandler().getHint();
-            return hint == null ? Optional.empty() : Optional.of("[" + kname + "]: " + I18n.format("ac.activate_key." + hint + ".desc"));
+            return hint == null ? Optional.empty() : Optional.of("[" + keyName + "]: " + I18n.format("ac.activate_key." + hint + ".desc"));
         }
 
     }

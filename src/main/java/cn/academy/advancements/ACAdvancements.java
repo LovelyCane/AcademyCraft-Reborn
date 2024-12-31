@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  */
 
 public class ACAdvancements {
-
     public static final cn.academy.advancements.triggers.ACTrigger ac_developer = new cn.academy.advancements.triggers.ACTrigger("ac_developer");
 
     public static final cn.academy.advancements.triggers.ACTrigger ac_exp_full = new cn.academy.advancements.triggers.ACTrigger("ac_exp_full");
@@ -92,8 +91,8 @@ public class ACAdvancements {
             return false;
 
         ICriterionTrigger ach = CriteriaTriggers.get(achid);
-        if (ach == null || (!(ach instanceof ACTrigger))) {
-            AcademyCraft.log.warn("AC Achievement '" + achid + "' does not exist");
+        if ((!(ach instanceof ACTrigger))) {
+            AcademyCraft.log.warn("AC Achievement '{}' does not exist", achid);
             return false;
         }
         ((ACTrigger) ach).trigger((EntityPlayerMP) player);

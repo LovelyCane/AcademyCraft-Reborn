@@ -1,1 +1,6 @@
-{"parent":"block/cube_all","textures":{"all":"academy:blocks/dev_advanced"},"__xconfgen":true}
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "academy:blocks/dev_advanced"
+  }
+}

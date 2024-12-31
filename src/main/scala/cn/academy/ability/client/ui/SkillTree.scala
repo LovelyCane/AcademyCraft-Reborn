@@ -1,13 +1,13 @@
 package cn.academy.ability.client.ui
 
-import cn.academy.ability.client.ui.Common.{Cover, RebuildEvent, TreeScreen}
+import cn.academy.ability.client.ui.Common.RebuildEvent
 import cn.academy.ability.develop.DevelopData.DevState
 import cn.academy.ability.develop.action.{DevelopActionLevel, DevelopActionReset, DevelopActionSkill}
 import cn.academy.ability.develop.condition.IDevCondition
 import cn.academy.ability.develop.{DevelopData, DeveloperType, IDeveloper, LearningHelper}
 import cn.academy.ability.{AbilityLocalization, Skill}
 import cn.academy.block.tileentity.TileDeveloper
-import cn.academy.core.client.ui.WirelessPageJava
+import cn.academy.core.client.ui.WirelessPage
 import cn.academy.datapart.{AbilityData, CPData}
 import cn.academy.energy.api.WirelessHelper
 import cn.academy.util.LocalHelper
@@ -41,46 +41,10 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 @SideOnly(Side.CLIENT)
-object DeveloperUI {
-  def apply(tile: IDeveloper): CGuiScreen = {
-    val ret = new TreeScreen {
-      override def onGuiClosed() = tile.onGuiClosed()
-
-      // Close the link page if we are opening that, otherwise delegate down
-      override def keyTyped(ch: Char, key: Int) = {
-        if (key == Keyboard.KEY_ESCAPE) {
-          Option(gui.getWidget("link_page")) match {
-            case Some(page) => page.component[Cover].end()
-            case None => super.keyTyped(ch, key)
-          }
-        } else {
-          super.keyTyped(ch, key)
-        }
-      }
-    }
-    implicit val gui = ret.getGui
-
-    def build() = {
-      ret.getGui.clear()
-      ret.getGui.addWidget("main", Common.initialize(tile))
-    }
-
-    gui.listen(classOf[RebuildEvent], new IGuiEventHandler[RebuildEvent] {
-      override def handleEvent(w: Widget, event: RebuildEvent): Unit = build()
-    })
-
-    build()
-
-    ret
-  }
-
-}
-
-@SideOnly(Side.CLIENT)
 object SkillTreeAppUI {
   def apply(): CGuiScreen = {
     val ret = Common.newScreen()
-    implicit val gui = ret.getGui
+    implicit val gui: CGui = ret.getGui
 
     ret.getGui.addWidget(Common.initialize())
 
@@ -484,7 +448,7 @@ private object Common {
               }
             }))
             panel.child("button_wireless").listens[LeftClickEvent](() => {
-              val wirelessPage = WirelessPageJava.userPage(tile).window.centered()
+              val wirelessPage = WirelessPage.userPage(tile).window.centered()
               val cover = blackCover(gui)
               cover :+ wirelessPage
 

@@ -6,7 +6,6 @@ import cn.lambdalib2.multiblock.RenderBlockMulti;
 import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
 import cn.lambdalib2.util.RenderUtils;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -15,8 +14,8 @@ public class RenderDeveloperAdvanced extends RenderBlockMulti<TileDeveloper> {
     @RegTileEntityRender(TileDeveloper.Advanced.class)
     public static final RenderDeveloperAdvanced instance = new RenderDeveloperAdvanced();
 
-    private ResourceLocation texture = Resources.getTexture("models/developer_advanced");
-    private ObjLegacyRender mdl = Resources.getModel("developer_advanced");
+    private final ResourceLocation texture = Resources.getTexture("models/developer_advanced");
+    private final ObjLegacyRender mdl = Resources.getModel("developer_advanced");
 
     @Override
     public void drawAtOrigin(TileDeveloper te) {
@@ -29,5 +28,4 @@ public class RenderDeveloperAdvanced extends RenderBlockMulti<TileDeveloper> {
         mdl.renderAll();
         GL11.glEnable(GL11.GL_CULL_FACE);
     }
-
 }

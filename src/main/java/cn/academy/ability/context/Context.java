@@ -88,10 +88,6 @@ public class Context<TSkill extends Skill> implements IMessageDelegate {
         this(Minecraft.getMinecraft().player, _skill);
     }
 
-    EntityPlayer getPlayer() {
-        return player;
-    }
-
     // Lifetime
 
     public Status getStatus() {

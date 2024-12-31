@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "parent": "block:block",
+  "defaults": {
+    "custom": {
+      "flip-v": true
+    },
+    "model": "academy:windgen_pillar.obj"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": {
+          "thirdperson": {
+            "scale": 0.375
+          },
+          "gui": {
+            "scale": 0.625
+          }
+        }
+      }
+    ]
+  }
+}

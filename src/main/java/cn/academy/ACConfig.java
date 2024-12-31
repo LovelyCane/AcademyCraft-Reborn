@@ -63,6 +63,7 @@ public final class ACConfig {
 
 
     @StateEventCallback
+    @SuppressWarnings("unused")
     private static void __onInit(FMLInitializationEvent event) {
         instance();
         MinecraftForge.EVENT_BUS.register(new LoginEvents());
@@ -99,5 +100,4 @@ public final class ACConfig {
             if (!evt.player.world.isRemote) NetworkManager.sendTo(config, (EntityPlayerMP) evt.player);
         }
     }
-
 }

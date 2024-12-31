@@ -146,12 +146,6 @@ shaped(academy:metal_former) {
     [academy:constraint_plate, academy:matter_unit, academy:constraint_plate]
 }
 
-shaped(academy:matrix) {
-    [nil,          academy:reso_crystal, nil]
-    [redstone, academy:machine_frame,        redstone]
-    [academy:data_chip,    academy:reso_crystal, academy:data_chip]
-}
-
 shaped(academy:mat_core#0) {
     [nil,       academy:crystal_low,     nil]
     [academy:calc_chip, academy:reso_crystal, academy:data_chip]
@@ -254,12 +248,6 @@ shaped(academy:dev_advanced) {
     [academy:constraint_plate, academy:constraint_plate, academy:constraint_plate]
     [glowstone,  academy:dev_normal, glowstone]
     [academy:node_standard,      academy:crystal_pure,   academy:reso_crystal]
-}
-
-shaped(academy:ability_interferer) {
-    [nil, academy:energy_convert_component, nil]
-    [academy:brain_component,  academy:machine_frame, noteblock]
-    [nil,      academy:calc_chip,   nil]
 }
 
 shapeless(academy:wafer) {

@@ -26,7 +26,6 @@ public class BlendQuad extends Component {
             RenderUtils.loadTexture(blendQuadTex);
             Colors.bindToGL(color);
 
-            // Quad drawing logic
             double[] xs = new double[]{0 - margin, 0, widget.transform.width, widget.transform.width + margin};
             double[] ys = new double[]{0 - margin, 0, widget.transform.height, widget.transform.height + margin};
 
@@ -65,7 +64,6 @@ public class BlendQuad extends Component {
         GL11.glVertex2d(x1, y0);
     }
 
-    // Getter and Setter for margin
     public double getMargin() {
         return margin;
     }

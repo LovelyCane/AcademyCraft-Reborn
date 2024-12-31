@@ -21,7 +21,8 @@ public @interface RegACKeyHandler {
 }
 
 @SideOnly(Side.CLIENT)
-class RegACKeyHandlerImple {
+@SuppressWarnings("unused")
+class RegACKeyHandlerImpl {
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
         ReflectionUtils.getFields(RegACKeyHandler.class).forEach(field -> {

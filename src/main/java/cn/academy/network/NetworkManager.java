@@ -30,12 +30,10 @@ public class NetworkManager {
     }
 
     public static void sendTo(Config cfg, EntityPlayerMP player) {
-
         if (!player.getEntityWorld().isRemote) {
             MessageConfig msgConfig = new MessageConfig();
             msgConfig.config = cfg;
             instance.sendTo(msgConfig, player);
         }
     }
-
 }

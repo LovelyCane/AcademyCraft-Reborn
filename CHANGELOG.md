@@ -42,3 +42,16 @@
 - Refactored the configuration system.
 - Deleted Tutorial and Misaka Cloud (no longer needed, better alternatives will come).
 - Removed some elements from Node's UI and changed the name to the block's position.
+
+## [1.1.7-pre4] - 2024-12-24
+
+### Changed
+- Removed some Scala code (improved stability).
+- Removed AbilityInterferer (will improve).
+
+## [1.1.7] - 2024-12-31
+
+### Changed
+- Improve performance.
+- Refactor MusicSystem.
+- Happy New Year

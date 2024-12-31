@@ -1,0 +1,41 @@
+{
+  "forge_marker": 1,
+  "parent": "block:block",
+  "defaults": {
+    "custom": {
+      "flip-v": true
+    },
+    "model": "academy:solar.obj"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": [
+      {
+        "transform": {
+          "thirdperson": {
+            "scale": 0.375
+          },
+          "firstperson": {
+            "scale": 0.375
+          },
+          "gui": {
+            "rotation": [
+              {
+                "y": 30
+              },
+              {
+                "x": 30
+              },
+              {
+                "z": 0
+              }
+            ],
+            "scale": 0.5
+          }
+        }
+      }
+    ]
+  }
+}

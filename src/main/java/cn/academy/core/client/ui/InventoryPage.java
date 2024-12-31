@@ -18,10 +18,9 @@ public class InventoryPage {
     public static Page apply(Widget ret) {
         for (Widget w : ret.getDrawList()) {
             if (w.getName().startsWith("ui_")) {
-                TechUI.breathe(w);
+                UIEffectsHelper.breathe(w);
             }
         }
-
         return new Page("inv", ret);
     }
 }

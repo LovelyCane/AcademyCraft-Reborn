@@ -15,6 +15,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ACKeyManager extends KeyManager {
     public static KeyManager instance = new ACKeyManager();
 
+    private ACKeyManager() {
+    }
+
     @Override
     protected Configuration getConfig() {
         return AcademyCraft.config;
@@ -29,8 +32,5 @@ public class ACKeyManager extends KeyManager {
     public void addKeyHandler(String name, String keyDesc, int defKeyID, boolean global, KeyHandler handler) {
         super.addKeyHandler(name, keyDesc, defKeyID, global, handler);
         SettingsUI.addProperty(PropertyElements.KEY, "keys", name, defKeyID, false);
-    }
-
-    private ACKeyManager() {
     }
 }

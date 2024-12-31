@@ -7,9 +7,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
+ *
  */
 public abstract class App {
-
     int appid;
     private final String name;
     protected ResourceLocation icon;
@@ -21,8 +21,8 @@ public abstract class App {
         icon = getTexture("icon");
     }
 
-    protected ResourceLocation getTexture(String texname) {
-        return Resources.getTexture("guis/apps/" + name + "/" + texname);
+    protected ResourceLocation getTexture(String textureName) {
+        return Resources.getTexture("guis/apps/" + name + "/" + textureName);
     }
 
     private String localKey(String key) {
@@ -38,9 +38,8 @@ public abstract class App {
         return icon;
     }
 
-    public App setPreInstalled() {
+    public void setPreInstalled() {
         preInstalled = true;
-        return this;
     }
 
     public int getID() {
@@ -65,5 +64,4 @@ public abstract class App {
 
     @SideOnly(Side.CLIENT)
     public abstract AppEnvironment createEnvironment();
-
 }

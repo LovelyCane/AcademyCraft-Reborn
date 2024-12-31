@@ -32,11 +32,7 @@ public class Resources {
      * @return A resources with path `loc` located in `academy` namespace.
      */
     public static ResourceLocation res(String loc) {
-        return new ResourceLocation("academy", loc);
-    }
-
-    public static SoundEvent soundExternal(String loc) {
-        return new SoundEvent(new ResourceLocation(loc));
+        return new ResourceLocation(Tags.MOD_ID, loc);
     }
 
     public static SoundEvent sound(String loc) {
@@ -107,11 +103,6 @@ public class Resources {
     @SideOnly(Side.CLIENT)
     public static IFont fontBold() {
         return ClientResources.fontBold();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static IFont fontItalic() {
-        return ClientResources.fontItalic();
     }
 
     /**

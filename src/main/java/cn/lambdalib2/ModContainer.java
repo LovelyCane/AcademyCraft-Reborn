@@ -8,7 +8,6 @@ package cn.lambdalib2;
 
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.impl.RegistryTransformer;
-import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.util.ReflectionUtils;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
@@ -21,11 +20,9 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ModContainer extends DummyModContainer {
-
     public static Logger log = LogManager.getLogger("LambdaLib|Core");
     public static final String MODID = "LambdaLib|Core";
 

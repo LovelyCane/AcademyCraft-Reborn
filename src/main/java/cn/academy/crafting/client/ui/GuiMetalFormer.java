@@ -36,11 +36,11 @@ public class GuiMetalFormer {
         IFont.FontOption option = new IFont.FontOption(10, IFont.FontAlign.CENTER, Colors.fromHexColor(0xaaffffff));
         template.getWidget("icon_mode").listen(FrameEvent.class, (Widget w, FrameEvent evt) -> {
             if (evt.hovering) {
-                TechUI.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
+                UIEffectsHelper.drawTextBox(tile.mode.toString(), option, 6, -10, Float.MAX_VALUE);
             }
         });
 
-        ContainerUI ret = new ContainerUI(container, InventoryPage.apply(template), WirelessPageJava.userPage(tile));
+        ContainerUI ret = new ContainerUI(container, InventoryPage.apply(template), WirelessPage.userPage(tile));
 
         ret.infoPage.histogram(HistUtils.histBuffer(tile::getEnergy, tile.getMaxEnergy()));
 

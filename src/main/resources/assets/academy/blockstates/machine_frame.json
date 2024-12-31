@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "normal": {
+      "model": "academy:machine_frame"
+    }
+  }
+}

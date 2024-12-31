@@ -19,8 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 @RegistryMod(resourceDomain = "lambdalib2")
 @Mod(modid = LambdaLib2.MODID, version = LambdaLib2.VERSION)
-public class LambdaLib2
-{
+public class LambdaLib2 {
     public static final String MODID = "lambdalib2";
     public static final String VERSION = "0.2.1";
 
@@ -55,7 +54,7 @@ public class LambdaLib2
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        if(DEBUG) log.info("LambdaLib2 is running in development mode.");
+        if (DEBUG) log.info("LambdaLib2 is running in development mode.");
         RegistryManager.asm_RegistrationEvent(this, event);
     }
 
@@ -101,5 +100,4 @@ public class LambdaLib2
     public void serverAboutToStart(FMLServerAboutToStartEvent event) {
         RegistryManager.asm_RegistrationEvent(this, event);
     }
-
 }

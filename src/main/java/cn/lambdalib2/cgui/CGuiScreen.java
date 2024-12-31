@@ -69,5 +69,4 @@ public class CGuiScreen extends GuiScreen {
     public CGui getGui() {
         return gui;
     }
-
 }
