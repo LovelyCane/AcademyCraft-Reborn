@@ -27,6 +27,7 @@ import cn.lambdalib2.s11n.network.{Future, NetworkMessage, NetworkS11n}
 import cn.lambdalib2.util.MathUtils._
 import cn.lambdalib2.util._
 import net.minecraft.client.Minecraft
+import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.util.{ChatAllowedCharacters, EnumHand, ResourceLocation}
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -56,9 +57,9 @@ object SkillTreeAppUI {
 object SkillPosEditorUI {
 
   @StateEventCallback
-  def __init(ev: FMLInitializationEvent) = {
+  def __init(ev: FMLInitializationEvent): Unit = {
     if (AcademyCraft.DEBUG_MODE) KeyManager.dynamic.addKeyHandler("skill_tree_pos_editor", Keyboard.KEY_RMENU, new KeyHandler {
-      override def onKeyDown() = {
+      override def onKeyDown(): Unit = {
         Minecraft.getMinecraft.displayGuiScreen(SkillPosEditorUI())
       }
     })
@@ -66,9 +67,9 @@ object SkillPosEditorUI {
 
   def apply(): CGuiScreen = {
     val ret = Common.newScreen()
-    implicit val gui = ret.getGui
+    implicit val gui: CGui = ret.getGui
 
-    def build() = {
+    def build(): Unit = {
       gui.clear()
 
       val main = Common.initialize()
@@ -123,7 +124,6 @@ object SkillPosEditorUI {
 }
 
 private object Common {
-
   private lazy val template = CGUIDocument.read(Resources.getGui("rework/page_developer")).getWidget("main")
 
   private val texAreaBack = Resources.preloadTexture("guis/effect/effect_developer_background")
@@ -174,14 +174,14 @@ private object Common {
   // This event is posted on global GuiEventBus to query for widget reload. Each gui instance must by itself respond to it.
   class RebuildEvent extends GuiEvent
 
-  def player = Minecraft.getMinecraft.player
+  def player: EntityPlayerSP = Minecraft.getMinecraft.player
 
   def initialize(developer: IDeveloper = null)(implicit gui: CGui): Widget = {
     val ret = template.copy()
 
-    implicit val aData = AbilityData.get(player)
-    implicit val developer_ = developer
-    implicit val devData = DevelopData.get(player)
+    implicit val aData: AbilityData = AbilityData.get(player)
+    implicit val developer_ : IDeveloper = developer
+    implicit val devData: DevelopData = DevelopData.get(player)
 
     val area = ret.child("parent_right/area")
 
@@ -742,7 +742,7 @@ private object Common {
     .addComponent(new DrawTexture(texButton))
     .addComponent(new Tint(Colors.monoBlend(1, .6f), Colors.monoBlend(1, 1), true))
 
-  private def drawActionIcon(icon: ResourceLocation, progress: Double, glow: Boolean) = {
+  private def drawActionIcon(icon: ResourceLocation, progress: Double, glow: Boolean): Unit = {
     val BackSize = 50
     val IconSize = 27
     val IconAlign = (BackSize - IconSize) / 2
@@ -780,8 +780,8 @@ private object Common {
 
   private def fmt(x: Int): String = if (x < 10) "0" + x else x.toString
 
-  private def initConsole(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
-    implicit val console = new Console(false, developer != null)
+  private def initConsole(area: Widget)(implicit data: DevelopData, developer: IDeveloper): Unit = {
+    implicit val console: Console = new Console(false, developer != null)
 
     if (developer != null) {
       console += Command("learn", () => {
@@ -794,11 +794,11 @@ private object Common {
         console.enqueue(new Task {
           override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
 
-          override def update() = {
+          override def update(): Unit = {
             console.output("\b\b\b" + fmt((data.getDevelopProgress * 100).toInt) + "%")
           }
 
-          override def finish() = {
+          override def finish(): Unit = {
             console.outputln()
             if (data.getState == DevState.DONE) {
               console.output(Console.localized("dev_succ"))
@@ -816,8 +816,8 @@ private object Common {
     area :+ console
   }
 
-  private def initReset(area: Widget)(implicit data: DevelopData, developer: IDeveloper) = {
-    implicit val console = new Console(true, true)
+  private def initReset(area: Widget)(implicit data: DevelopData, developer: IDeveloper): Unit = {
+    implicit val console: Console = new Console(true, true)
 
     console += Command("reset", () => {
       if (DevelopActionReset.canReset(data.getEntity, developer)) {
@@ -829,11 +829,11 @@ private object Common {
         console.enqueue(new Task {
           override def isFinished: Boolean = data.getState == DevState.FAILED || data.getState == DevState.DONE
 
-          override def update() = {
+          override def update(): Unit = {
             console.output("\b\b\b" + fmt((data.getDevelopProgress * 100).toInt) + "%")
           }
 
-          override def finish() = {
+          override def finish(): Unit = {
             console.outputln()
             if (data.getState == DevState.DONE) {
               console.output(Console.localized("reset_succ"))
@@ -885,7 +885,7 @@ private object Common {
       widget.dirty = true
     })
 
-    def end() = {
+    def end(): Unit = {
       ended = true
       lastTransit = GameTimer.getTime
     }
@@ -908,7 +908,7 @@ private object Common {
 
     private val consoleLocal = local.subPath("console")
 
-    def localized(id: String, args: AnyRef*) = consoleLocal.getFormatted(id, args: _*).replace("\\n", "\n")
+    def localized(id: String, args: AnyRef*): String = consoleLocal.getFormatted(id, args: _*).replace("\\n", "\n")
   }
 
   class Console(val emergency: Boolean, val hasDeveloper: Boolean)
@@ -916,7 +916,7 @@ private object Common {
 
     import Console._
 
-    private implicit val _self = this
+    private implicit val _self: Console = this
 
     private val inputTask = new Task {
       override def finish(): Unit = {}
@@ -939,7 +939,7 @@ private object Common {
     enqueue(slowPrintTask(localized("init", player.getName)))
     pause(0.4)
 
-    val numSeq = (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
+    val numSeq: Seq[String] = (1 to 6).map(_ * 10 + RandUtils.nextInt(6) - 3).map(_ + "%").toList :::
       ((64 + RandUtils.nextInt(4)) + "%") :: localized("boot_failed") :: Nil
 
     animSequence(0.3, numSeq: _*)
@@ -1004,7 +1004,7 @@ private object Common {
       }
     })
 
-    def enqueue(task: Task) = {
+    def enqueue(task: Task): Unit = {
       taskQueue.offer(task)
       if (currentTask == inputTask) {
         outputln(input)
@@ -1012,12 +1012,12 @@ private object Common {
       }
     }
 
-    def output(content: String) = {
+    def output(content: String): Unit = {
       def refresh() = new StringBuilder(if (outputs.isEmpty) "" else outputs.removeLast())
 
       var current = refresh()
 
-      def flush() = {
+      def flush(): Unit = {
         outputs.addLast(current.toString())
       }
 
@@ -1035,16 +1035,16 @@ private object Common {
       while (outputs.size > MaxLines) outputs.removeFirst()
     }
 
-    def outputln(content: String) = {
+    def outputln(content: String): Unit = {
       output(content + '\n')
     }
 
-    def outputln() = output("\n")
+    def outputln(): Unit = output("\n")
 
-    def animSequence(time: Double, strs: String*) = {
+    def animSequence(time: Double, strs: String*): Unit = {
       for ((s, idx) <- strs.zipWithIndex) {
         enqueue(new TimedTask {
-          override def life = time
+          override def life: Double = time
 
           override def finish(): Unit = if (idx != strs.length - 1) {
             output("\b" * s.length)
@@ -1060,11 +1060,11 @@ private object Common {
       }
     }
 
-    def pause(time: Double) = enqueue(new TimedTask {
+    def pause(time: Double): Unit = enqueue(new TimedTask {
       override def life: Double = time
     })
 
-    def enqueueRebuild() = enqueue(new Task {
+    def enqueueRebuild(): Unit = enqueue(new Task {
       override def isFinished: Boolean = true
 
       override def begin(): Unit = widget.getGui.postEvent(new RebuildEvent)
@@ -1143,11 +1143,9 @@ private object Common {
   }
 
   private def send(channel: String, pars: Any*) = NetworkMessage.sendToServer(NetDelegate, channel, pars.map(_.asInstanceOf[AnyRef]): _*)
-
 }
 
 private object NetDelegate {
-
   final val MSG_START_SKILL = "start_skill"
   final val MSG_GET_NODE = "get_node"
   final val MSG_RESET = "reset"
@@ -1169,7 +1167,7 @@ private object NetDelegate {
   }
 
   @Listener(channel = MSG_GET_NODE, side = Array(Side.SERVER))
-  private def hGetLinkNodeName(tile: TileDeveloper, future: Future[String]) = {
+  private def hGetLinkNodeName(tile: TileDeveloper, future: Future[String]): Unit = {
     future.sendResult(WirelessHelper.getNodeConn(tile) match {
       case null => null
       case conn => conn.getNode.getNodeName
@@ -1177,7 +1175,7 @@ private object NetDelegate {
   }
 
   @Listener(channel = MSG_RESET, side = Array(Side.SERVER))
-  private def hStartReset(data: DevelopData, developer: IDeveloper) = {
+  private def hStartReset(data: DevelopData, developer: IDeveloper): Unit = {
     data.startDeveloping(developer, new DevelopActionReset)
   }
 }

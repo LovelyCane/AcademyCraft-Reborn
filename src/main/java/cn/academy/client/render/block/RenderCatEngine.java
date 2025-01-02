@@ -6,31 +6,29 @@ import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.legacy.Tessellator;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RenderUtils;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.animation.FastTESR;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
  */
 
-public class RenderCatEngine extends TileEntitySpecialRenderer {
+public class RenderCatEngine extends FastTESR<TileCatEngine> {
     @RegTileEntityRender(TileCatEngine.class)
     private static final RenderCatEngine instance = new RenderCatEngine();
 
     static final ResourceLocation TEXTURE = Resources.getTexture("blocks/cat_engine");
 
     @Override
-    public void render(TileEntity tile, double x,
-                       double y, double z, float pt, int destroyStage, float alpha) {
+    public void renderTileEntityFast(TileCatEngine te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
         long time = (long) (GameTimer.getTime() * 1000);
-        TileCatEngine engine = (TileCatEngine) tile;
-        if (engine.lastRender != 0) {
-            engine.rotation += (time - engine.lastRender) * engine.thisTickGen * 1e-2;
-            engine.rotation %= 360;
+        if (te.lastRender != 0) {
+            te.rotation += (time - te.lastRender) * te.thisTickGen * 1e-2;
+            te.rotation %= 360;
         }
-        engine.lastRender = time;
+        te.lastRender = time;
 
         x += 0.5;
         z += 0.5;
@@ -43,7 +41,7 @@ public class RenderCatEngine extends TileEntitySpecialRenderer {
         double yaw = Math.atan2(x, z) * 180 / Math.PI;
         GL11.glRotated(yaw + 180, 0, 1, 0);
         GL11.glTranslated(0, .5, 0);
-        GL11.glRotated(engine.rotation, 1, 0, 0);
+        GL11.glRotated(te.rotation, 1, 0, 0);
         GL11.glTranslated(-.5, -.5, 0);
 
         Tessellator t = Tessellator.instance;

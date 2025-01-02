@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 @RegDataPart(EntityPlayer.class)
 public class DevelopData extends DataPart<EntityPlayer> {
-
     public static DevelopData get(EntityPlayer player) {
         return EntityData.get(player).getPart(DevelopData.class);
     }
@@ -103,8 +102,6 @@ public class DevelopData extends DataPart<EntityPlayer> {
     }
 
     public void reset() {
-//        checkSide(Side.SERVER);
-
         resetProgress(false);
     }
 
@@ -150,7 +147,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
                     ++stim;
 
                     if(stim >= maxStim) {
-                        // try perform the action.
+                        // try to perform the action.
                         boolean success = type.validate(player, developer);
                         if(success) {
                             type.onLearned(player);
@@ -164,5 +161,4 @@ public class DevelopData extends DataPart<EntityPlayer> {
             }
         }
     }
-
 }

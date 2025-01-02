@@ -4,10 +4,8 @@ import cn.academy.energy.api.block.*;
 import cn.academy.energy.impl.NodeConn;
 import cn.academy.energy.impl.WiWorldData;
 import cn.academy.energy.impl.WirelessNet;
-import cn.lambdalib2.util.IBlockSelector;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.WorldUtils;
-import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -84,24 +82,19 @@ public class WirelessHelper {
      */
     public static List<IWirelessNode> getNodesInRange(World world, BlockPos pos) {
         double range = 20.0;
-        WorldUtils.getBlocksWithin(_blockPosBuffer, world, pos.getX(), pos.getY(), pos.getZ(), range, 100, new IBlockSelector() {
+        WorldUtils.getBlocksWithin(_blockPosBuffer, world, pos.getX(), pos.getY(), pos.getZ(), range, 100, (world1, x2, y2, z2, block) -> {
+            TileEntity te = world1.getTileEntity(new BlockPos(x2, y2, z2));
+            if (te instanceof IWirelessNode) {
+                IWirelessNode node = ((IWirelessNode) te);
+                NodeConn conn = getNodeConn((IWirelessNode) te);
 
-            @Override
-            public boolean accepts(World world, int x2, int y2, int z2, Block block) {
-                TileEntity te = world.getTileEntity(new net.minecraft.util.math.BlockPos(x2, y2, z2));
-                if (te instanceof IWirelessNode) {
-                    IWirelessNode node = ((IWirelessNode) te);
-                    NodeConn conn = getNodeConn((IWirelessNode) te);
+                double distSq = MathUtils.distanceSq(pos.getX(), pos.getY(), pos.getZ(), x2, y2, z2);
+                double range1 = node.getRange();
 
-                    double distSq = MathUtils.distanceSq(pos.getX(), pos.getY(), pos.getZ(), x2, y2, z2);
-                    double range = node.getRange();
-
-                    return range * range >= distSq && conn.getLoad() < conn.getCapacity();
-                } else {
-                    return false;
-                }
+                return range1 * range1 >= distSq && conn.getLoad() < conn.getCapacity();
+            } else {
+                return false;
             }
-
         });
 
         List<IWirelessNode> ret = new ArrayList<>();

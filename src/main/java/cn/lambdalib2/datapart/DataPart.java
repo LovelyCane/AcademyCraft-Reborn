@@ -236,5 +236,4 @@ public abstract class DataPart<T extends Entity> {
         NetworkS11n.deserializeRecursivelyInto(buf, this, getClass());
         onSynchronized();
     }
-
 }

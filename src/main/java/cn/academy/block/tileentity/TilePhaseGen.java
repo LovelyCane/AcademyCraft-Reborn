@@ -167,5 +167,4 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
         return stack.isEmpty() || (stack.getItem() == ACItems.matter_unit &&
                 ACItems.matter_unit.getMaterial(stack) == ItemMatterUnit.MAT_NONE && stack.getCount() < stack.getMaxStackSize());
     }
-
 }

@@ -12,9 +12,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * methods to setup key listening.
  * @author WeathFolD
  */
+
 @SideOnly(Side.CLIENT)
 public abstract class AuxGui {
-
     public static void register(AuxGui gui) {
         AuxGuiHandler.register(gui);
     }
@@ -55,20 +55,16 @@ public abstract class AuxGui {
      * Called when this AuxGui instance is literally removed from the draw list.
      */
     public void onDisposed() {
-        
     }
     
     /**
      * Called when this AuxGui instance is literally added into the draw list.
      */
     public void onEnable() {
-        
     }
 
     public void onTick() {
-
     }
 
     public abstract void draw(ScaledResolution resolution);
-
 }

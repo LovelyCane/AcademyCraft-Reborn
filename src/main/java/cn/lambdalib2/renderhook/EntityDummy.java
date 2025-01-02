@@ -1,8 +1,6 @@
 package cn.lambdalib2.renderhook;
 
-import cn.lambdalib2.registry.mc.RegEntity;
 import cn.lambdalib2.util.ViewOptimize.IAssociatePlayer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
+
 @SideOnly(Side.CLIENT)
 public class EntityDummy extends Entity implements IAssociatePlayer {
     
@@ -77,5 +76,4 @@ public class EntityDummy extends Entity implements IAssociatePlayer {
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound t) {}
-
 }

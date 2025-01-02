@@ -52,9 +52,8 @@ import java.util.stream.Collectors;
  */
 
 public class NetworkMessage {
-
     static final SimpleNetworkWrapper network = LambdaLib2.channel;
-    private static Map<ChannelID, List<INetworkListener>> cachedListeners = new HashMap<>();
+    private static final Map<ChannelID, List<INetworkListener>> cachedListeners = new HashMap<>();
     private static Map<Class, ClassDelegate> classDelegates = new HashMap<>();
 
     static {
@@ -427,5 +426,4 @@ public class NetworkMessage {
             }
         }
     }
-
 }
