@@ -6,7 +6,7 @@ plugins {
     id 'scala'
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.7'
+    id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.9'
     id 'com.gtnewhorizons.retrofuturagradle' version '1.4.2'
 }
 
