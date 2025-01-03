@@ -34,10 +34,7 @@ public class Context<TSkill extends Skill> implements IMessageDelegate {
     // Turn this on if you want to debug context message detail
     public static final boolean DEBUG_MSG = false;
 
-    public static final String
-            MSG_TERMINATED = "i_term",
-            MSG_MADEALIVE = "i_alive",
-            MSG_TICK = "i_tick";
+    public static final String MSG_TERMINATED = "i_term", MSG_MADEALIVE = "i_alive", MSG_TICK = "i_tick";
 
     // Key messages for single key context.
     public static final String MSG_KEYDOWN = "keydown";
@@ -168,9 +165,8 @@ public class Context<TSkill extends Skill> implements IMessageDelegate {
     }
 
     protected void debug(Object message) {
-        AcademyCraft.log.info("[CTX]" + message);
+        AcademyCraft.log.info("[CTX]{}", message);
     }
-    //
 
     // Ugly hacks
     @SideOnly(Side.CLIENT)
@@ -188,6 +184,4 @@ public class Context<TSkill extends Skill> implements IMessageDelegate {
             }
         }
     }
-
-
 }

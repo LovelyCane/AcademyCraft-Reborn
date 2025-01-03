@@ -80,9 +80,6 @@ private object Common {
   }
   glUseProgram(0)
 
-  // This event is posted on global GuiEventBus to query for widget reload. Each gui instance must by itself respond to it.
-  class RebuildEvent extends GuiEvent
-
   private def player: EntityPlayerSP = Minecraft.getMinecraft.player
 
   def initialize(developer: IDeveloper = null)(implicit gui: CGui): Widget = {

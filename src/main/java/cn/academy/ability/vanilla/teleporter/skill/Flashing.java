@@ -92,7 +92,7 @@ public class Flashing extends Skill {
             new Vec3d(-1, 0, 0)
     };
 
-    public static class MainContext extends Context {
+    public static class MainContext extends Context<Flashing> {
 
         int performingKey = -1;
 

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CatElectromaster extends Category {
-    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect$.MODULE$, railgun = Railgun.INSTANCE, magMovement = MagMovement$.MODULE$, currentCharging = CurrentCharging$.MODULE$, bodyIntensify = BodyIntensify$.MODULE$, thunderBolt = ThunderBolt$.MODULE$, thunderClap = ThunderClap$.MODULE$;
+    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect$.MODULE$, railgun = Railgun.INSTANCE, magMovement = MagMovement$.MODULE$, currentCharging = CurrentCharging$.MODULE$, bodyIntensify = BodyIntensifyJava.INSTANCE, thunderBolt = ThunderBolt$.MODULE$, thunderClap = ThunderClap$.MODULE$;
 
     public CatElectromaster() {
         super("electromaster");
@@ -65,6 +65,7 @@ public class CatElectromaster extends Category {
     private static final HashSet<Block> metalBlocks = new HashSet<>();
 
     @StateEventCallback
+    @SuppressWarnings("unused")
     public static void init(FMLInitializationEvent event) {
         Map<String, List<String>> cfgBlocks = AcademyCraft.academyCraftConfig.getAbility().getMetalBlocks();
         Map<String, List<String>> cfgEntities = AcademyCraft.academyCraftConfig.getAbility().getMetalEntities();

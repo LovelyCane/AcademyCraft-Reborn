@@ -392,6 +392,5 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
             String hint = ClientRuntime.instance().getActivateHandler().getHint();
             return hint == null ? Optional.empty() : Optional.of("[" + keyName + "]: " + I18n.format("ac.activate_key." + hint + ".desc"));
         }
-
     }
 }

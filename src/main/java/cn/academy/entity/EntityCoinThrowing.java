@@ -83,19 +83,16 @@ public class EntityCoinThrowing extends EntityAdvanced {
     private static final int MAXLIFE = 120;
     private static final double INITVEL = 0.92;
 
-    //private EntitySyncer syncer;
-
-    //@Synchronized(SyncType.ONCE)
     private float initHt;
     private double maxHt;
 
-    //@Synchronized(SyncType.ONCE)
     public EntityPlayer player;
 
     public ItemStack stack;
     public Vec3d axis;
     public boolean isSync = false;
 
+    @SuppressWarnings("unused")
     public EntityCoinThrowing(World world) {
         super(world);
         isSync = true;
@@ -137,7 +134,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
 
             if (equipped.isEmpty()) {
                 // 如果玩家的指定手没有物品，给指定手一个硬币
-                player.setItemStackToSlot(hand == hand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, new ItemStack(ACItems.coin));
+                player.setItemStackToSlot(hand == EnumHand.MAIN_HAND ? EntityEquipmentSlot.MAINHAND : EntityEquipmentSlot.OFFHAND, new ItemStack(ACItems.coin));
             } else if (equipped.getItem() == ACItems.coin && equipped.getCount() < equipped.getMaxStackSize()) {
                 // 如果指定手持有的是硬币并且数量没有达到上限，增加硬币数量
                 equipped.setCount(equipped.getCount() + 1);
@@ -206,5 +203,4 @@ public class EntityCoinThrowing extends EntityAdvanced {
                     "generic", false, "Show heads or tails after throwing a coin.");
         }
     }
-
 }

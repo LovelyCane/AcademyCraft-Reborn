@@ -15,55 +15,50 @@ import net.minecraft.util.{EnumFacing, SoundCategory}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
-  * @author WeAthFolD, KSkun
-  */
+ * @author WeAthFolD, KSkun
+ */
+
 object MarkTeleport extends Skill("mark_teleport", 2) {
-
   @SideOnly(Side.CLIENT)
-  override def activate(rt: ClientRuntime, keyID: Int) = activateSingleKey(rt, keyID, p => new MTContext(p))
-
+  override def activate(rt: ClientRuntime, keyID: Int): Unit = activateSingleKey(rt, keyID, p => new MTContext(p))
 }
 
 object MTContext {
-
   final val MSG_EXECUTE = "execute"
   final val MSG_SOUND = "sound"
-
 }
 
-import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.vanilla.teleporter.skill.MTContext._
 import cn.lambdalib2.util.MathUtils._
 
 class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
-
   private val MINIMUM_VALID_DISTANCE: Double = 3.0
 
   private var ticks: Int = 0
   private val exp: Float = ctx.getSkillExp
 
-  @Listener(channel=AbilityAPIExt.MSG_KEYUP, side=Array(Side.CLIENT))
-  private def l_onKeyUp = sendToServer(MSG_EXECUTE)
+  @Listener(channel = AbilityAPIExt.MSG_KEYUP, side = Array(Side.CLIENT))
+  private def l_onKeyUp(): Unit = sendToServer(MSG_EXECUTE)
 
-  @Listener(channel=AbilityAPIExt.MSG_KEYABORT, side=Array(Side.CLIENT))
-  private def l_onKeyAbort = terminate()
+  @Listener(channel = AbilityAPIExt.MSG_KEYABORT, side = Array(Side.CLIENT))
+  private def l_onKeyAbort(): Unit = terminate()
 
-  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.SERVER))
-  private def s_tick() = {
+  @Listener(channel = AbilityAPIExt.MSG_TICK, side = Array(Side.SERVER))
+  private def s_tick(): Unit = {
     ticks += 1
   }
 
-  @Listener(channel=MSG_EXECUTE, side=Array(Side.SERVER))
-  private def s_execute() = {
+  @Listener(channel = MSG_EXECUTE, side = Array(Side.SERVER))
+  private def s_execute(): Unit = {
     val dest: Vec3d = getDest(player, ticks)
     val distance: Float = dest.distanceTo(new Vec3d(player.posX, player.posY, player.posZ)).toFloat
-    if(distance < MINIMUM_VALID_DISTANCE) {
+    if (distance < MINIMUM_VALID_DISTANCE) {
       // TODO: Play abort sound
     } else {
       sendToClient(MSG_SOUND)
       val overload: Float = lerpf(40, 20, exp)
       ctx.consumeWithForce(overload, distance * getCPB(exp))
-      if(player.isRiding)
+      if (player.isRiding)
         player.dismountRidingEntity()
       player.setPositionAndUpdate(dest.x, dest.y, dest.z)
       val expincr: Float = 0.00018f * distance
@@ -75,16 +70,16 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
     terminate()
   }
 
-  def getMaxDist(exp: Float, cp: Float, ticks: Int): Double = {
+  private def getMaxDist(exp: Float, cp: Float, ticks: Int): Double = {
     val max: Double = lerpf(25, 60, exp)
     val cplim: Double = cp / getCPB(exp)
     Math.min((ticks + 1) * 2, Math.min(max, cplim))
   }
 
   /**
-    * @return Consumption per block
-    */
-  def getCPB(exp: Float): Float = lerpf(12, 4, exp)
+   * @return Consumption per block
+   */
+  private def getCPB(exp: Float): Float = lerpf(12, 4, exp)
 
   def getDest(player: EntityPlayer, ticks: Int): Vec3d = {
     val cpData: CPData = CPData.get(player)
@@ -93,11 +88,11 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
     var x: Double = .0
     var y: Double = .0
     var z: Double = .0
-    if(mop.typeOfHit != RayTraceResult.Type.MISS) {
+    if (mop.typeOfHit != RayTraceResult.Type.MISS) {
       x = mop.hitVec.x
       y = mop.hitVec.y
       z = mop.hitVec.z
-      if(mop.typeOfHit == RayTraceResult.Type.BLOCK) {
+      if (mop.typeOfHit == RayTraceResult.Type.BLOCK) {
         mop.sideHit match {
           case EnumFacing.DOWN =>
             y -= 1.0
@@ -117,11 +112,11 @@ class MTContext(p: EntityPlayer) extends Context(p, MarkTeleport) {
             y = mop.getBlockPos.getY + 1.7
         }
         // check head
-        if(mop.sideHit.getIndex > 1) {
+        if (mop.sideHit.getIndex > 1) {
           val hx: Int = x.toInt
           val hy: Int = (y + 1).toInt
           val hz: Int = z.toInt
-          if(!player.world.isAirBlock(new BlockPos(hx, hy, hz))) y -= 1.25
+          if (!player.world.isAirBlock(new BlockPos(hx, hy, hz))) y -= 1.25
         }
       } else y += mop.entityHit.getEyeHeight
     } else {
@@ -142,31 +137,30 @@ class MTContextC(par: MTContext) extends ClientContext(par) {
   private var mark: EntityTPMarking = _
   private var ticks = 0
 
-  @Listener(channel=AbilityAPIExt.MSG_MADEALIVE, side=Array(Side.CLIENT))
+  @Listener(channel = AbilityAPIExt.MSG_MADEALIVE, side = Array(Side.CLIENT))
   private def l_start() = {
-    if(isLocal) {
+    if (isLocal) {
       mark = new EntityTPMarking(player)
       player.world.spawnEntity(mark)
     }
   }
 
-  @Listener(channel=AbilityAPIExt.MSG_TICK, side=Array(Side.CLIENT))
-  private def l_update() = {
-    if(mark == null) terminate()
+  @Listener(channel = AbilityAPIExt.MSG_TICK, side = Array(Side.CLIENT))
+  private def l_update(): Unit = {
+    if (mark == null) terminate()
 
     ticks += 1
     val dest = par.getDest(player, ticks)
-    if(isLocal) mark.setPosition(dest.x, dest.y, dest.z)
+    if (isLocal) mark.setPosition(dest.x, dest.y, dest.z)
   }
 
-  @Listener(channel=AbilityAPIExt.MSG_TERMINATED, side=Array(Side.CLIENT))
-  private def l_end() = {
-    if(isLocal) mark.setDead()
+  @Listener(channel = AbilityAPIExt.MSG_TERMINATED, side = Array(Side.CLIENT))
+  private def l_end(): Unit = {
+    if (isLocal) mark.setDead()
   }
 
-  @Listener(channel=MSG_SOUND, side=Array(Side.CLIENT))
-  private def c_sound() = {
-    ACSounds.playClient(player, "tp.tp",SoundCategory.AMBIENT, .5f)
+  @Listener(channel = MSG_SOUND, side = Array(Side.CLIENT))
+  private def c_sound(): Unit = {
+    ACSounds.playClient(player, "tp.tp", SoundCategory.AMBIENT, .5f)
   }
-
 }

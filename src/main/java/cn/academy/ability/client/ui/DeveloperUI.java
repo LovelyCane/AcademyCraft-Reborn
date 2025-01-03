@@ -4,6 +4,7 @@ import cn.academy.ability.develop.IDeveloper;
 import cn.lambdalib2.cgui.CGui;
 import cn.lambdalib2.cgui.CGuiScreen;
 import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.event.GuiEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -45,10 +46,15 @@ public class DeveloperUI {
             gui.addWidget("main", Common.initialize(tile, gui));
         };
 
-        gui.listen(Common.RebuildEvent.class, (w, event) -> build.run());
+        gui.listen(RebuildEvent.class, (w, event) -> build.run());
 
         build.run();
 
         return ret;
     }
+}
+
+// This event is posted on global GuiEventBus to query for widget reload. Each gui instance must by itself respond to it.
+
+class RebuildEvent implements GuiEvent {
 }

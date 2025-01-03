@@ -1,28 +1,28 @@
 package cn.lambdalib2.render.legacy;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import cn.lambdalib2.util.Debug;
+import cn.lambdalib2.util.ResourceUtils;
+import com.google.common.base.Throwables;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
+import org.lwjgl.opengl.GL11;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.lambdalib2.util.Debug;
-import cn.lambdalib2.util.ResourceUtils;
-import com.google.common.base.Throwables;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
-
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL20.*;
 
 /**
  * A simple GL Shader Program wrapper.
  * @author WeAthFolD
  */
+
 @SideOnly(Side.CLIENT)
 public class LegacyShaderProgram {
-    
     private boolean compiled = false;
     private boolean valid = false;
     private int programID;
@@ -124,5 +124,4 @@ public class LegacyShaderProgram {
     public static ResourceLocation getShader(String name) {
         return new ResourceLocation("lambdalib2:legacy_shader/" + name);
     }
-    
 }

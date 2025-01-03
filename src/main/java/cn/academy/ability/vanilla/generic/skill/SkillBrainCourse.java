@@ -8,10 +8,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Generic skill: Brain Course.
+ *
  * @author WeAthFolD
  */
-public class SkillBrainCourse extends Skill {
 
+public class SkillBrainCourse extends Skill {
     public SkillBrainCourse() {
         super("brain_course", 3);
         this.canControl = false;
@@ -20,11 +21,10 @@ public class SkillBrainCourse extends Skill {
     }
 
     @SubscribeEvent
-    public void recalcMaxCP(CalcEvent.MaxCP event) {
-        AbilityData adata = AbilityData.get(event.player);
-        if (adata.isSkillLearned(this)) {
+    public void recalculateMaxCP(CalcEvent.MaxCP event) {
+        AbilityData abilityData = AbilityData.get(event.player);
+        if (abilityData.isSkillLearned(this)) {
             event.value += 1000;
         }
     }
-
 }

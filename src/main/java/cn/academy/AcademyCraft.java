@@ -28,7 +28,6 @@ import java.io.IOException;
  *
  * @author acaly, WeathFolD, KS
  */
-
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
 @RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
 public class AcademyCraft {

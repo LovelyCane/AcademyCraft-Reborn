@@ -657,5 +657,4 @@ public class CPBar extends Widget {
     
     ShaderCPBar shaderCPBar;
     ShaderOverloaded shaderOverloaded;
-    
 }
