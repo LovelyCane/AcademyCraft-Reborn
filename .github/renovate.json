@@ -1,0 +1,10 @@
+{
+  "ignoreDeps": [
+    "org.scala-lang:scala-compiler",
+    "org.scala-lang:scala-library",
+    "com.typesafe:config",
+    "org.typelevel:cats-core_2.11",
+    "org.typelevel:cats-kernel_2.11",
+    "org.typelevel:cats-free_2.11"
+  ]
+}
