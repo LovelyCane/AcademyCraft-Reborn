@@ -42,7 +42,7 @@ dependencies {
     implementation "cofh:RedstoneFlux:1.12-2.1.0.7:universal"
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700"
     implementation "CraftTweaker2:CraftTweaker2-API:4.1.20.700"
-    implementation "CraftTweaker2:ZenScript:4.1.20.685"
+    implementation "CraftTweaker2:ZenScript:4.1.20.700"
     implementation "net.industrial-craft:industrialcraft-2:2.8.222-ex112"
 
     // will delete
