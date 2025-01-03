@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class AcademyConfig {
+public class AcademyCraftConfig {
     @SerializedName("ability")
     private Ability ability;
 
@@ -32,10 +32,10 @@ public class AcademyConfig {
         }
     }
 
-    public static AcademyConfig loadConfig(String filePath) throws IOException {
+    public static AcademyCraftConfig loadConfig(String filePath) throws IOException {
         try (FileReader fileReader = new FileReader(filePath)) {
             Gson gson = new Gson();
-            return gson.fromJson(fileReader, AcademyConfig.class);
+            return gson.fromJson(fileReader, AcademyCraftConfig.class);
         }
     }
 }

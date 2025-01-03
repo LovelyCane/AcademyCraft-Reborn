@@ -1,4 +1,7 @@
 {
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "auto",
   "ignoreDeps": [
     "org.scala-lang:scala-compiler",
     "org.scala-lang:scala-library",

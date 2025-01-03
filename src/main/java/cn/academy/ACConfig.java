@@ -51,7 +51,7 @@ public final class ACConfig {
 
             config = customConfig.withFallback(config);
         } catch (RuntimeException ex) {
-            log.error("An error occured parsing custom config", ex);
+            log.error("An error occurred parsing custom config", ex);
             lastError = ex.toString();
         }
     }

@@ -38,12 +38,12 @@ public class AcademyCraft {
     public static final Logger log = LogManager.getLogger("AcademyCraft");
     public static Configuration config;
     private static final String configFilePath = Minecraft.getMinecraft().gameDir.getPath() + File.separator + "config" + File.separator + Tags.MOD_ID + ".json";
-    public static AcademyConfig academyConfig;
+    public static AcademyCraftConfig academyCraftConfig;
     public static RecipeRegistry recipes;
 
     static {
         try {
-            academyConfig = AcademyConfig.loadConfig(configFilePath);
+            academyCraftConfig = AcademyCraftConfig.loadConfig(configFilePath);
             AcademyCraft.log.info("Loaded AcademyCraft config");
         } catch (IOException e) {
             AcademyCraft.log.error("Failed to load config file");
