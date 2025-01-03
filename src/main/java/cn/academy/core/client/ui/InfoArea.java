@@ -12,6 +12,8 @@ import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.Color;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import static cn.academy.core.client.ui.ContainerUI.localProperty;
 import static cn.academy.core.client.ui.ContainerUI.localSep;
 import static cn.lambdalib2.util.MathUtils.lerp;
 
+@SideOnly(Side.CLIENT)
 public class InfoArea extends Widget {
     private final DrawTexUpdater drawTexUpdater = new DrawTexUpdater();
     private final TextBoxUpdater textBoxUpdater = new TextBoxUpdater();

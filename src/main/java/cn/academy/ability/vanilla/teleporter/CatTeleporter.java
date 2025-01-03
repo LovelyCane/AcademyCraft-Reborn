@@ -10,7 +10,6 @@ import cn.academy.ability.vanilla.teleporter.skill.*;
  * @author WeAthFolD
  */
 public class CatTeleporter extends Category {
-
     public static final Skill
         dimFolding = DimFoldingTheorem.instance,
         spaceFluct = SpaceFluctuation.instance,
@@ -69,5 +68,4 @@ public class CatTeleporter extends Category {
         spaceFluct.setParent(shiftTP, 0.0f);
         flashing.setParent(shiftTP, 0.8f);
     }
-
 }

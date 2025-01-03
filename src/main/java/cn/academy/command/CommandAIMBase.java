@@ -4,15 +4,14 @@ import cn.academy.AcademyCraft;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
-import cn.academy.datapart.CooldownData;
 import cn.academy.datapart.AbilityData;
 import cn.academy.datapart.CPData;
+import cn.academy.datapart.CooldownData;
 import cn.academy.util.ACCommand;
+import cn.lambdalib2.datapart.PlayerDataTag;
 import cn.lambdalib2.registry.mc.RegCommand;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
-import cn.lambdalib2.datapart.PlayerDataTag;
 import cn.lambdalib2.util.PlayerUtils;
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,9 +23,9 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
+
 @NetworkS11nType
 public abstract class CommandAIMBase extends ACCommand {
-
     private static final String MSG_CLEAR_COOLDOWN = "clearcd";
 
     private static void sendChat(ICommandSender s, String key, Object ...pars) {
@@ -397,5 +396,4 @@ public abstract class CommandAIMBase extends ACCommand {
             return cat.getSkill(i);
         return cat.getSkill(str);
     }
-
 }

@@ -42,7 +42,7 @@ public class DeveloperUI {
 
         Runnable build = () -> {
             gui.clear();
-            gui.addWidget("main", Common.initialize(tile,gui));
+            gui.addWidget("main", Common.initialize(tile, gui));
         };
 
         gui.listen(Common.RebuildEvent.class, (w, event) -> build.run());

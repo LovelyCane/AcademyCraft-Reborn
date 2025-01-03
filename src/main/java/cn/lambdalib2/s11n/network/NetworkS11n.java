@@ -30,8 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,12 +47,11 @@ import java.util.function.Supplier;
  *
  * @author WeAthFolD
  */
-public class NetworkS11n {
 
-    // ---
+public class NetworkS11n {
     private static final SerializationHelper serHelper = new SerializationHelper();
     private static final short IDX_NULL = -1, IDX_ARRAY = -2;
-    private static BiMap<Integer, Class<?>> serTypesHashLookup = HashBiMap.create();
+    private static final BiMap<Integer, Class<?>> serTypesHashLookup = HashBiMap.create();
 
     private static Map<Class<?>, NetS11nAdaptor> adaptors = new HashMap<>();
     private static Map<Class, Supplier> suppliers = new HashMap<>();

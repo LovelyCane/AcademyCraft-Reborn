@@ -1,8 +1,7 @@
 package cn.lambdalib2.multiblock;
 
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.model.animation.FastTESR;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -11,13 +10,13 @@ import org.lwjgl.opengl.GL11;
  *
  * @author WeathFolD
  */
-public abstract class RenderBlockMulti<T extends TileEntity> extends FastTESR<T> {
 
+public abstract class RenderBlockMulti<T extends TileEntity> extends TileEntitySpecialRenderer<T> {
     public RenderBlockMulti() {
     }
 
     @Override
-    public void renderTileEntityFast(T te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
+    public void render(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (!(te.getBlockType() instanceof BlockMulti)) return;
 
         BlockMulti bm = (BlockMulti) te.getBlockType();
@@ -34,5 +33,4 @@ public abstract class RenderBlockMulti<T extends TileEntity> extends FastTESR<T>
     }
 
     public abstract void drawAtOrigin(T te);
-
 }

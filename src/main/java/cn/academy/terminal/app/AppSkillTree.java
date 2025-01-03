@@ -1,6 +1,6 @@
 package cn.academy.terminal.app;
 
-import cn.academy.ability.client.ui.SkillTreeAppUI;
+import cn.academy.client.ui.SkillTreeAppUI;
 import cn.academy.terminal.App;
 import cn.academy.terminal.AppEnvironment;
 import cn.academy.terminal.RegApp;
@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 
+@SuppressWarnings("unused")
 public class AppSkillTree extends App {
     @RegApp
     public static AppSkillTree instance = new AppSkillTree();

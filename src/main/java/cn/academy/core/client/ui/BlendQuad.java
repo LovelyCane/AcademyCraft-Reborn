@@ -7,9 +7,12 @@ import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
+@SideOnly(Side.CLIENT)
 public class BlendQuad extends Component {
     private final ResourceLocation blendQuadTex = Resources.getTexture("guis/blend_quad");
     private final ResourceLocation lineTex = Resources.getTexture("guis/line");

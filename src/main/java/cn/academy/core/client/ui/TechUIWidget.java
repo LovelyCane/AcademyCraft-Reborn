@@ -9,10 +9,13 @@ import cn.lambdalib2.cgui.event.LeftClickEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class TechUIWidget extends Widget {
     public Page currentPage;
 

@@ -14,12 +14,12 @@ import net.minecraftforge.fml.relauncher.Side;
  * Created by Paindar on 2016/8/31.
  */
 
-@Deprecated
 public class NetworkManager {
     public static SimpleNetworkWrapper instance = NetworkRegistry.INSTANCE.newSimpleChannel("AcademyCraft");
     private static int nextID = 0;
 
     @StateEventCallback
+    @SuppressWarnings("unused")
     public static void init(FMLPreInitializationEvent event) {
         registerMessage(MessageConfig.Handler.class, MessageConfig.class, Side.CLIENT);
     }

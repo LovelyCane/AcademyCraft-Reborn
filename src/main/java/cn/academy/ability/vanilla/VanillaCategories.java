@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 public class VanillaCategories {
-
     @RegCategory
     public static final CatElectromaster electromaster = new CatElectromaster();
 
@@ -34,6 +33,7 @@ public class VanillaCategories {
     public static final CatVecManip vecManip = new CatVecManip();
 
     @StateEventCallback
+    @SuppressWarnings("unused")
     private static void init(FMLInitializationEvent event) {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(ACItems.reinforced_iron_plate), new ItemStack(ACItems.needle, 6),
                 Mode.INCISE);

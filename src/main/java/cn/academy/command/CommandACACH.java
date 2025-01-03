@@ -13,8 +13,9 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 /**
  * @author EAirPeter
  */
-public class CommandACACH extends ACCommand {
 
+@SuppressWarnings("unused")
+public class CommandACACH extends ACCommand {
     @StateEventCallback
     private static void serverInit(FMLServerStartingEvent ev) {
         ev.registerServerCommand(new CommandACACH());

@@ -14,14 +14,11 @@ import static org.lwjgl.opengl.GL11.glGetInteger;
 import static org.lwjgl.opengl.GL15.*;
 
 public class Mesh {
-
-    public static final int VertexCountLimit = 65536;
-
     enum DataType {
         Position, Color, UV1, UV2, UV3, UV4
     }
 
-    class DataLayoutItem {
+    static class DataLayoutItem {
         DataType dataType;
         int offset;
 
@@ -38,19 +35,12 @@ public class Mesh {
 
     private final List<Vector4f> colors = new ArrayList<>();
 
-    private final List<?> uvs[] = new List[] {
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new ArrayList<>(),
-        new ArrayList<>(),
-    };
+    private final List<?>[] uvs = new List[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),};
 
 
     private int[] indices = new int[0];
 
     private boolean dirty = true;
-
-    private boolean dynamic = false;
 
     private int vbo, ibo;
 
@@ -85,29 +75,6 @@ public class Mesh {
         setUVsVec2(channel, Arrays.asList(uv));
     }
 
-    public void setUVsVec3(int channel, List<Vector3f> uv) {
-        uvs[channel] = new ArrayList<>(uv);
-        markDirty();
-    }
-
-    public void setUVsVec3(int channel, Vector3f[] uv) {
-        setUVsVec3(channel, Arrays.asList(uv));
-    }
-
-    public void setUVsVec4(int channel, List<Vector4f> uv) {
-        uvs[channel] = new ArrayList<>(uv);
-        markDirty();
-    }
-
-    public void setUVsVec4(int channel, Vector4f[] uv) {
-        setUVsVec4(channel, Arrays.asList(uv));
-    }
-
-    public void makeDynamic() {
-        dynamic = true;
-        markDirty();
-    }
-
     public int getIndicesCount() {
         return indices.length;
     }
@@ -122,7 +89,7 @@ public class Mesh {
 
     /**
      * Internally, ensureBuffers() must be called BEFORE mesh's vbo and ibo
-     *  are used. It will check dirtiness and upload the data to the buffers.
+     * are used. It will check dirtiness and upload the data to the buffers.
      */
     void ensureBuffers() {
         if (!dirty) return;
@@ -137,7 +104,7 @@ public class Mesh {
 
         updateVertexLayout();
 
-        int usage = dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
+        int usage = GL_STATIC_DRAW;
 
         FloatBuffer vboUpload = BufferUploadUtils.requestFloatBuffer(vertices.size() * floatsPerVertex);
         vboUpload.clear();
@@ -243,25 +210,28 @@ public class Mesh {
 
     private int getFloatWidth(List<?> vecList) {
         Object o = vecList.get(0);
-        if (o instanceof Vector2f)
-            return 2;
-        if (o instanceof Vector3f)
-            return 3;
-        if (o instanceof Vector4f)
-            return 4;
+        if (o instanceof Vector2f) return 2;
+        if (o instanceof Vector3f) return 3;
+        if (o instanceof Vector4f) return 4;
         throw new RuntimeException("Should never reach here");
     }
 
     private List<?> getDataList(DataType type) {
         switch (type) {
-            case Position: return vertices;
-            case Color: return colors;
-            case UV1: return uvs[0];
-            case UV2: return uvs[1];
-            case UV3: return uvs[2];
-            case UV4: return uvs[3];
-            default: throw new RuntimeException("Unreachable code");
+            case Position:
+                return vertices;
+            case Color:
+                return colors;
+            case UV1:
+                return uvs[0];
+            case UV2:
+                return uvs[1];
+            case UV3:
+                return uvs[2];
+            case UV4:
+                return uvs[3];
+            default:
+                throw new RuntimeException("Unreachable code");
         }
     }
-
 }

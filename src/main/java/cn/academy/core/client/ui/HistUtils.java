@@ -1,12 +1,15 @@
 package cn.academy.core.client.ui;
 
 import cn.lambdalib2.util.Colors;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.Color;
 
 import java.util.function.Supplier;
 
 import static cn.academy.core.client.ui.ContainerUI.localHist;
 
+@SideOnly(Side.CLIENT)
 public class HistUtils {
     private HistUtils() {
     }

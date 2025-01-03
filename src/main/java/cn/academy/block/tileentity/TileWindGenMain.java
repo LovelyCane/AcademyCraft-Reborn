@@ -3,28 +3,26 @@ package cn.academy.block.tileentity;
 import cn.academy.ACBlocks;
 import cn.academy.ACItems;
 import cn.academy.block.WindGeneratorConsts;
-import cn.academy.client.render.block.RenderWindGenMain;
 import cn.lambdalib2.multiblock.BlockMulti;
 import cn.lambdalib2.multiblock.BlockMulti.SubBlockPos;
 import cn.lambdalib2.multiblock.IMultiTile;
 import cn.lambdalib2.multiblock.InfoBlockMulti;
 import cn.lambdalib2.registry.mc.RegTileEntity;
-import cn.lambdalib2.s11n.network.TargetPoints;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkMessage.NullablePar;
-import net.minecraft.init.Items;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +30,9 @@ import java.util.List;
 /**
  * @author WeAthFolD
  */
+
 @RegTileEntity
 public class TileWindGenMain extends TileInventory implements IMultiTile, ITickable  {
-    
     static List<SubBlockPos>[] checkAreas = new ArrayList[6];
     static {
         List<SubBlockPos> checkArea = new ArrayList();
@@ -181,5 +179,4 @@ public class TileWindGenMain extends TileInventory implements IMultiTile, ITicka
     private void syncStack(@NullablePar ItemStack stack) {
         setInventorySlotContents(0, stack);
     }
-    
 }

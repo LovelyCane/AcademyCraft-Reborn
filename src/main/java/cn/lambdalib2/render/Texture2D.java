@@ -10,28 +10,16 @@ import java.io.InputStream;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class Texture2D {
-
     public static Texture2D load(ResourceLocation loc, TextureImportSettings settings) {
         return loadFromStream(ResourceUtils.getResourceStream(loc), settings);
     }
 
-    public static Texture2D loadFromResource(String path, TextureImportSettings settings) {
-        try {
-            return loadFromStream(Texture2D.class.getResource(path).openStream(), settings);
-        } catch (RuntimeException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
     private static int fixColor(int x) {
-        int r = (x      ) & 0xFF;
-        int g = (x >> 8 ) & 0xFF;
+        int r = (x) & 0xFF;
+        int g = (x >> 8) & 0xFF;
         int b = (x >> 16) & 0xFF;
         int a = (x >> 24) & 0xFF;
         return (a << 24) | (r << 16) | (g << 8) | (b);
@@ -101,12 +89,7 @@ public class Texture2D {
         this.textureID = textureID;
     }
 
-    public void destroy() {
-        glDeleteTextures(textureID);
-    }
-
     public int getTextureID() {
         return textureID;
     }
-
 }

@@ -9,10 +9,13 @@ import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.HudUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Optional;
 
+@SideOnly(Side.CLIENT)
 public class UIEffectsHelper {
     public static void drawTextBox(String content, FontOption option, float x, float y, float limit) {
         final int wmargin = 5;

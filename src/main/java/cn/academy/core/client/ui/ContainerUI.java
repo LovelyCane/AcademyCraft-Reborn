@@ -3,7 +3,10 @@ package cn.academy.core.client.ui;
 import cn.academy.util.LocalHelper;
 import cn.lambdalib2.cgui.CGuiScreenContainer;
 import net.minecraft.inventory.Container;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ContainerUI extends CGuiScreenContainer {
     public static final LocalHelper local = LocalHelper.at("ac.gui.common");
     public static final LocalHelper localSep = local.subPath("sep");

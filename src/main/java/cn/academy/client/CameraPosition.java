@@ -21,9 +21,9 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * This class stores render camera position in world space each frame.
  */
+
 @SideOnly(Side.CLIENT)
 public class CameraPosition {
-
     @StateEventCallback
     private static void _init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new CameraPosition());

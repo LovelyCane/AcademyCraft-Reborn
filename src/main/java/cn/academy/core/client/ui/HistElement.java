@@ -2,11 +2,14 @@ package cn.academy.core.client.ui;
 
 import cn.academy.Resources;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.Color;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
+@SideOnly(Side.CLIENT)
 public class HistElement {
     public static final ResourceLocation histogramTex = Resources.getTexture("guis/histogram");
     public final String name;

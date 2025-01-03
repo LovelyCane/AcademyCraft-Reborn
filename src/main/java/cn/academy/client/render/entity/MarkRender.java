@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 @SideOnly(Side.CLIENT)
 @RegEntityRender(EntityTPMarking.class)
 public class MarkRender extends Render<EntityTPMarking> {
-
     {
         shadowOpaque = 0;
     }
@@ -33,8 +32,7 @@ public class MarkRender extends Render<EntityTPMarking> {
 
     @Override
     public void doRender(EntityTPMarking mark, double x, double y, double z, float var8, float var9) {
-        if (!mark.firstUpdated())
-            return;
+        if (!mark.firstUpdated()) return;
 
         int texID = (int) ((mark.ticksExisted / 2.5) % tex.length);
 
@@ -72,5 +70,4 @@ public class MarkRender extends Render<EntityTPMarking> {
     protected ResourceLocation getEntityTexture(EntityTPMarking entity) {
         return null;
     }
-
 }

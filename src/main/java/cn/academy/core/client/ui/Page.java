@@ -1,9 +1,12 @@
 package cn.academy.core.client.ui;
 
 import cn.lambdalib2.cgui.Widget;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Objects;
 
+@SideOnly(Side.CLIENT)
 public class Page {
     public final String id;
     public final Widget window;

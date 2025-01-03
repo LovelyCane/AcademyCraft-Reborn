@@ -5,8 +5,8 @@ import cn.academy.block.tileentity.TileWindGenMain;
 import cn.lambdalib2.multiblock.RenderBlockMulti;
 import cn.lambdalib2.registry.mc.RegTileEntityRender;
 import cn.lambdalib2.render.obj.ObjLegacyRender;
-import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -18,13 +18,9 @@ public class RenderWindGenMain extends RenderBlockMulti {
     @RegTileEntityRender(TileWindGenMain.class)
     private static RenderWindGenMain instance = new RenderWindGenMain();
 
-    ObjLegacyRender
-        mdlBody = Resources.getModel("windgen_main"),
-        mdlFan = Resources.getModel("windgen_fan");
+    ObjLegacyRender mdlBody = Resources.getModel("windgen_main"), mdlFan = Resources.getModel("windgen_fan");
 
-    ResourceLocation
-        texBody = Resources.getTexture("models/windgen_main"),
-        texFan = Resources.getTexture("models/windgen_fan");
+    ResourceLocation texBody = Resources.getTexture("models/windgen_main"), texFan = Resources.getTexture("models/windgen_fan");
 
     @Override
     public void drawAtOrigin(TileEntity te) {
@@ -55,5 +51,4 @@ public class RenderWindGenMain extends RenderBlockMulti {
 
         GL11.glPopMatrix();
     }
-
 }
