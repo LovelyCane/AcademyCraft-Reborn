@@ -19,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.Function1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -258,20 +257,9 @@ public abstract class Skill extends Controllable {
         return 0.0f;
     }
 
-    /**
-     * Java version
-     */
     @SideOnly(Side.CLIENT)
-    protected void activateSingleKey2(ClientRuntime rt, int keyID, Function<EntityPlayer, Context> contextSupplier) {
+    protected void activateSingleKey(ClientRuntime rt, int keyID, Function<EntityPlayer, Context> contextSupplier) {
         rt.addKey(keyID, new SingleKeyDelegate(contextSupplier));
-    }
-
-    /**
-     * Scala version
-     */
-    @SideOnly(Side.CLIENT)
-    protected void activateSingleKey(ClientRuntime rt, int keyID, Function1<EntityPlayer, Context> contextSupplier) {
-        activateSingleKey2(rt, keyID, contextSupplier::apply);
     }
 
     //--- Learning
@@ -280,7 +268,8 @@ public abstract class Skill extends Controllable {
     }
 
     public void setParent(Skill skill, float requiredExp) {
-        if (parent != null) throw new IllegalStateException("You can't set the parent twice!");
+        if (parent != null)
+            throw new IllegalStateException("You can't set the parent twice!");
         if (skill.isEnabled()) {
             parent = skill;
             this.addDevCondition(new DevConditionDep(parent, requiredExp));
@@ -344,14 +333,10 @@ public abstract class Skill extends Controllable {
             this.contextSupplier = contextSupplier;
         }
 
-        public SingleKeyDelegate(Function1<EntityPlayer, Context> supplier) {
-            this((Function<EntityPlayer, Context>) supplier::apply);
-        }
-
-
         @Override
         public void onKeyDown() {
-            if (Minecraft.getMinecraft().player.isSpectator()) return;
+            if (Minecraft.getMinecraft().player.isSpectator())
+                return;
             context = contextSupplier.apply(getPlayer());
             ContextManager.instance.activate(context);
 
@@ -360,7 +345,8 @@ public abstract class Skill extends Controllable {
 
         @Override
         public void onKeyTick() {
-            if (Minecraft.getMinecraft().player.isSpectator()) return;
+            if (Minecraft.getMinecraft().player.isSpectator())
+                return;
             checkContext();
 
             if (context != null) {
@@ -370,7 +356,8 @@ public abstract class Skill extends Controllable {
 
         @Override
         public void onKeyUp() {
-            if (Minecraft.getMinecraft().player.isSpectator()) return;
+            if (Minecraft.getMinecraft().player.isSpectator())
+                return;
 
             if (context != null) {
                 context.sendToSelf(Context.MSG_KEYUP);

@@ -12,15 +12,14 @@ import java.util.function.Supplier;
  * @author WeAthFolD
  */
 public class Debug {
-
-    private static Logger logger = getOrCreateLogger();
+    private static final Logger LOGGER = getOrCreateLogger();
 
     public static RuntimeException TODO() {
         throw new RuntimeException("TODO: Not implemented!");
     }
 
     public static void assert2(boolean expr) {
-        assert2(expr, "Assersion failed");
+        assert2(expr, "Assertion failed");
     }
     
     public static void assert2(boolean expr, Supplier<String> lazyMessage) {
@@ -45,12 +44,6 @@ public class Debug {
         }
     }
 
-    public static void require(boolean expr, Supplier<String> lazyMessage) {
-        if (!expr) {
-            throw new RuntimeException("Requirement failed: " + lazyMessage.get());
-        }
-    }
-
     public static <T> T assertNotNull(T obj) {
         return assertNotNull(obj, "Object is null");
     }
@@ -67,35 +60,27 @@ public class Debug {
     }
 
     public static void debug(String msg) {
-        logger.debug(msg);
-    }
-
-    public static void debugFormat(String format, Object ...pars) {
-        debug(String.format(format, pars));
+        LOGGER.debug(msg);
     }
 
     public static void log(String msg) {
-        logger.info(msg);
-    }
-
-    public static void logFormat(String format, Object... params) {
-        log(String.format(format, params));
+        LOGGER.info(msg);
     }
 
     public static void error(Throwable ex) {
-        logger.error(ex);
+        LOGGER.error(ex);
     }
 
     public static void error(String msg, Throwable ex) {
-        logger.error(msg, ex);
+        LOGGER.error(msg, ex);
     }
 
     public static void error(String msg) {
-        logger.error(msg);
+        LOGGER.error(msg);
     }
 
     public static void warn(String msg) {
-        logger.warn(msg);
+        LOGGER.warn(msg);
     }
 
     public static void warnFormat(String msg, Object ...pars) {

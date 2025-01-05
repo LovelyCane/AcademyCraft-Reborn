@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerDisconnectionFromClientEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import scala.Function1;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -111,15 +110,6 @@ public class Future<T> {
 
     public static <T> Future<T> create(Consumer<T> callback) {
         return FutureManager.instance.create(callback);
-    }
-
-    public static <T> Future<T> create2(Function1<T, ?> callback) {
-        return create(new Consumer<T>() {
-            @Override
-            public void accept(T t) {
-                callback.apply(t);
-            }
-        });
     }
 
     public void sendResult(T value) {
