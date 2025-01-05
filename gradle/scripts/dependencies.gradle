@@ -44,12 +44,4 @@ dependencies {
     implementation "CraftTweaker2:CraftTweaker2-API:4.1.20.700"
     implementation "CraftTweaker2:ZenScript:4.1.20.700"
     implementation "net.industrial-craft:industrialcraft-2:2.8.222-ex112"
-
-    // will delete
-    implementation 'org.scala-lang:scala-compiler:2.11.1'
-    implementation 'org.scala-lang:scala-library:2.11.1'
-    implementation 'com.typesafe:config:1.4.3'
-    implementation 'org.typelevel:cats-core_2.11:2.0.0'
-    implementation 'org.typelevel:cats-kernel_2.11:2.0.0'
-    implementation 'org.typelevel:cats-free_2.11:2.0.0'
 }

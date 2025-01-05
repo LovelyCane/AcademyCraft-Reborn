@@ -3,7 +3,6 @@ import org.jetbrains.gradle.ext.Gradle
 
 plugins {
     id 'java'
-    id 'scala'
     id 'java-library'
     id 'maven-publish'
     id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.9'
@@ -165,14 +164,8 @@ tasks.withType(ScalaCompile) {
     options.encoding = 'UTF-8'
 }
 
-sourceSets.main {
-    java.srcDirs = []
-    scala.srcDirs = ['src/main/scala', 'src/main/java']
-}
-
 idea {
     module {
-        sourceDirs = [file('src/main/java'), file('src/main/scala')]
         inheritOutputDirs = true
     }
     project {
