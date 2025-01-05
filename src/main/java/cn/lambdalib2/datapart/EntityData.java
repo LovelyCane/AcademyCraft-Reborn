@@ -41,10 +41,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
      * Register all the DataPart into List. Use @RegDataPart to set properties, otherwise throw @RuntimeException..
      */
     @SuppressWarnings("unchecked")
-    static <T extends Entity> void register(
-            Class<? extends DataPart<T>> type,
-            EnumSet<Side> sides,
-            Predicate<Class<? extends T>> pred) {
+    static <T extends Entity> void register(Class<? extends DataPart<T>> type, EnumSet<Side> sides, Predicate<Class<? extends T>> pred) {
         Debug.assert2(!_baked, "Can't register DataPart type after EntityData is used");
 
         RegData add = new RegData();
@@ -80,8 +77,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         Preconditions.checkState(bothSideList.size() < Byte.MAX_VALUE);
         IntStream.range(0, bothSideList.size()).forEach(i -> bothSideList.get(i).networkID = (byte) i);
 
-        Debug.log("EntityData baked, network participants: " +
-                bothSideList.stream().map(x -> x.type.getCanonicalName()).collect(Collectors.toList()));
+        Debug.log("EntityData baked, network participants: " + bothSideList.stream().map(x -> x.type.getCanonicalName()).collect(Collectors.toList()));
 
         _baked = true;
     }
@@ -160,20 +156,15 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
      * @throws RuntimeException if no such DataPart was registered before
      */
     @SuppressWarnings("unchecked")
-    public <T extends DataPart<?>>
-    T getPart(Class<T> type) {
-        return Debug.assertNotNull(
-                (T) constructed.get(type),
-                () -> "No DataPart of type " + type + " in " + this
-        );
+    public <T extends DataPart<?>> T getPart(Class<T> type) {
+        return Debug.assertNotNull((T) constructed.get(type), () -> "No DataPart of type " + type + " in " + this);
     }
 
     /**
      * @return The datapart of exact type, or null if not present
      */
     @SuppressWarnings("unchecked")
-    public <T extends Entity>
-    DataPart<T> getPartNonCreate(Class<? extends DataPart<T>> type) {
+    public <T extends Entity> DataPart<T> getPartNonCreate(Class<? extends DataPart<T>> type) {
         return constructed.getOrDefault(type, null);
     }
 
@@ -242,9 +233,9 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         checkInit();
         for (DataPart part : constructed.values()) {
             // some Entity DataPart pair only exist in client
-//            if (needSyncDataPart(part)) {
+            //            if (needSyncDataPart(part)) {
             part.callTick();
-//            }
+            //            }
         }
     }
 

@@ -1,6 +1,7 @@
 package cn.academy.datapart;
 
 import cn.academy.ACConfig;
+import cn.academy.AcademyCraft;
 import cn.academy.ability.Category;
 import cn.academy.ability.CategoryManager;
 import cn.academy.ability.Skill;
@@ -269,10 +270,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
         if (!hasCategory()) {
             return Collections.emptyList();
         } else {
-            return getCategory().getSkillList()
-                    .stream()
-                    .filter(predicate)
-                    .collect(Collectors.toList());
+            return getCategory().getSkillList().stream().filter(predicate).collect(Collectors.toList());
         }
     }
 
@@ -289,10 +287,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 
     private float getLevelTotalExp() {
         if (hasCategory()) {
-            List<Skill> testSkills = getCategory().getSkillList()
-                    .stream()
-                    .filter(skill -> skill.canControl() && skill.getLevel() == getLevel())
-                    .collect(Collectors.toList());
+            List<Skill> testSkills = getCategory().getSkillList().stream().filter(skill -> skill.canControl() && skill.getLevel() == getLevel()).collect(Collectors.toList());
             return testSkills.size();
         }
 
@@ -300,6 +295,9 @@ public class AbilityData extends DataPart<EntityPlayer> {
     }
 
     private boolean checkSkillSoft(Skill s) {
+        if (s == null) {
+            AcademyCraft.log.info("Skill is null!");
+        }
         return s.getCategory().getCategoryID() == catID;
     }
 

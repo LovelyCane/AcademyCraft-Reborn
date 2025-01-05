@@ -22,6 +22,7 @@ import cn.lambdalib2.s11n.SerializeNullable;
 import cn.lambdalib2.s11n.SerializeStrategy;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
+import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.util.Colors;
@@ -169,7 +170,7 @@ public class WirelessPage {
     }
 
     private static Page apply() {
-        Widget widget = wirelessPageTemplate;
+        Widget widget = wirelessPageTemplate.copy();
         Widget connectIcon = widget.getWidget("panel_wireless/elem_connected/icon_connect");
         connectIcon.addComponent(new LinkedInfo(null));
         connectIcon.listen(LeftClickEvent.class, (a, event) -> {
@@ -204,21 +205,21 @@ class WirelessNetDelegate {
         NetworkS11n.addDirectInstance(WirelessNetDelegate.INSTANCE);
     }
 
-    @NetworkMessage.Listener(channel = MSG_USER_CONNECT, side = Side.SERVER)
+    @Listener(channel = MSG_USER_CONNECT, side = Side.SERVER)
     private <T extends IWirelessTile> void hUserDisconnect(T user, TileNode target, String password, Future<Boolean> fut) {
         LinkUserEvent evt = new LinkUserEvent(user, target, password);
         boolean result = !MinecraftForge.EVENT_BUS.post(evt);
         fut.sendResult(result);
     }
 
-    @NetworkMessage.Listener(channel = MSG_USER_DISCONNECT, side = Side.SERVER)
+    @Listener(channel = MSG_USER_DISCONNECT, side = Side.SERVER)
     private <T extends IWirelessTile> void hUserDisconnect(T user, Future<Boolean> fut) {
         UnlinkUserEvent evt = new UnlinkUserEvent(user);
         boolean result = !MinecraftForge.EVENT_BUS.post(evt);
         fut.sendResult(result);
     }
 
-    @NetworkMessage.Listener(channel = MSG_FIND_NODES, side = {Side.SERVER})
+    @Listener(channel = MSG_FIND_NODES, side = {Side.SERVER})
     private <T extends TileEntity & IWirelessUser> void hFindNodes(T user, Future<UserResult> fut) {
         NodeConn linkedConn = WirelessHelper.getNodeConn(user);
         List<NodeData> nodes = WirelessHelper.getNodesInRange(user.getWorld(), user.getPos()).stream().map(WirelessHelper::getNodeConn).filter(conn -> linkedConn == null || !linkedConn.equals(conn)).map(this::convertToNodeData).collect(Collectors.toList());

@@ -188,8 +188,6 @@ public class Widget extends WidgetContainer {
         disposed = true;
     }
 
-    //Component handling
-
     /**
      * @return The first component that is of the given type, or null if no such component.
      */

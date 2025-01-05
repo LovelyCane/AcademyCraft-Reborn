@@ -3,9 +3,9 @@ package cn.academy.ability.vanilla.vecmanip.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
-import cn.academy.client.sound.ACSounds
 import cn.academy.datapart.HandRenderOverrideData
+import cn.academy.internel.render.util.{IHandRenderer, VanillaHandRenderer}
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, GameTimer, Raytrace}
 import cn.lambdalib2.vis.animation.presets.CompTransformAnim
@@ -29,7 +29,7 @@ private object ShockContext {
 
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.vanilla.vecmanip.skill.ShockContext._
-import cn.academy.client.render.util.AnimPresets._
+import cn.academy.internel.render.util.AnimPresets._
 
 class ShockContext(p: EntityPlayer) extends Context(p, DirectedShock) {
   import cn.lambdalib2.util.MathUtils._

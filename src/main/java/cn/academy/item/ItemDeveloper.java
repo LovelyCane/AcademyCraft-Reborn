@@ -4,8 +4,8 @@ import cn.academy.Resources;
 import cn.academy.ability.client.ui.DeveloperUI;
 import cn.academy.ability.develop.DeveloperType;
 import cn.academy.ability.develop.PortableDevData;
-import cn.academy.client.render.item.TEISRModel;
-import cn.academy.client.render.item.BakedModelForTEISR;
+import cn.academy.internel.render.item.TEISRModel;
+import cn.academy.internel.render.item.BakedModelForTEISR;
 import cn.lambdalib2.render.TransformChain;
 import cn.lambdalib2.util.SideUtils;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -30,11 +30,6 @@ import org.lwjgl.util.vector.Matrix4f;
  * @author WeAthFolD
  */
 public class ItemDeveloper extends ItemEnergyBase {
-
-//    @SideOnly(Side.CLIENT)
-//    @RegItem.Render
-//    public static RenderDeveloperPortable renderer;
-//
     public static final DeveloperType type = DeveloperType.PORTABLE;
 
     private final ModelResourceLocation _modelLocation = new ModelResourceLocation("academy:developer_portable", "inventory");

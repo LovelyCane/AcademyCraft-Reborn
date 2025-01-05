@@ -1,8 +1,8 @@
 package cn.academy.item;
 
 import cn.academy.advancements.ACAdvancements;
-import cn.academy.terminal.TerminalData;
-import cn.academy.client.auxgui.TerminalInstallEffect;
+import cn.academy.internel.terminal.TerminalData;
+import cn.academy.internel.auxgui.TerminalInstallEffect;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;

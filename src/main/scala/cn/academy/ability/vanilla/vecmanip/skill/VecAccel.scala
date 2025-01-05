@@ -4,7 +4,7 @@ import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.ParabolaEffect
-import cn.academy.client.sound.ACSounds
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import net.minecraft.entity.player.EntityPlayer

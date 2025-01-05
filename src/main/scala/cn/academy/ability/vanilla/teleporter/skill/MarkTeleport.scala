@@ -4,9 +4,9 @@ import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper
-import cn.academy.client.sound.ACSounds
 import cn.academy.datapart.CPData
 import cn.academy.entity.EntityTPMarking
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{Raytrace, VecUtils}
 import net.minecraft.entity.player.EntityPlayer

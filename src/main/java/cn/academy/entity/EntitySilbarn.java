@@ -1,7 +1,6 @@
 package cn.academy.entity;
 
 import cn.academy.Resources;
-import cn.academy.client.sound.ACSounds;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.particle.ParticleFactory;
 import cn.lambdalib2.particle.decorators.ParticleDecorator;
@@ -25,7 +24,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;

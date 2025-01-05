@@ -1,6 +1,6 @@
 package cn.academy;
 
-import cn.academy.network.NetworkManager;
+import cn.academy.api.network.NetworkManager;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.ResourceUtils;
 import com.typesafe.config.Config;

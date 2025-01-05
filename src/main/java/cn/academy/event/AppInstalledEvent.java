@@ -1,6 +1,6 @@
 package cn.academy.event;
 
-import cn.academy.terminal.App;
+import cn.academy.internel.terminal.App;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Event;
 

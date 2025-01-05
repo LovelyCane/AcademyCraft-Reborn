@@ -5,13 +5,13 @@ import cn.academy.ability.Skill;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.DelegateState;
 import cn.academy.ability.context.KeyDelegate;
-import cn.academy.client.render.misc.RailgunHandEffect;
-import cn.academy.client.sound.ACSounds;
 import cn.academy.datapart.CPData;
 import cn.academy.datapart.PresetData;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.entity.EntityRailgunFX;
 import cn.academy.event.CoinThrowEvent;
+import cn.academy.internel.render.misc.RailgunHandEffect;
+import cn.academy.internel.sound.ACSounds;
 import cn.academy.util.RangedRayDamage;
 import cn.lambdalib2.renderhook.DummyRenderData;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -38,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static cn.lambdalib2.util.MathUtils.lerp;
 import static cn.lambdalib2.util.MathUtils.lerpf;
@@ -157,13 +156,10 @@ public class Railgun extends Skill {
             float energy = lerpf(900, 2000, exp);
 
             double[] length = {45.0};
-            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, new Consumer<Entity>() {
-                @Override
-                public void accept(Entity reflector) {
-                    reflectServer(player, reflector);
-                    length[0] = Math.min(length[0], reflector.getDistance(player));
-                    NetworkMessage.sendToServer(Railgun.this, MSG_REFLECT, player, reflector);
-                }
+            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, reflector -> {
+                reflectServer(player, reflector);
+                length[0] = Math.min(length[0], reflector.getDistance(player));
+                NetworkMessage.sendToServer(Railgun.this, MSG_REFLECT, player, reflector);
             });
             damage.startDamage = dmg;
             damage.perform();

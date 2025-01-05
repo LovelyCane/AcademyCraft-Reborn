@@ -1,8 +1,7 @@
 package cn.academy.entity;
 
-import cn.academy.client.render.entity.ray.RendererRayComposite;
-import cn.academy.client.sound.ACSounds;
-import cn.lambdalib2.registry.mc.RegEntity;
+import cn.academy.internel.render.entity.ray.RendererRayComposite;
+import cn.academy.internel.sound.ACSounds;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.MathUtils;

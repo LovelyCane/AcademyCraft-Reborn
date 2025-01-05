@@ -2,8 +2,8 @@ package cn.academy.util;
 
 import cn.academy.AcademyCraft;
 import cn.academy.event.ConfigModifyEvent;
-import cn.academy.terminal.app.settings.PropertyElements;
-import cn.academy.terminal.app.settings.SettingsUI;
+import cn.academy.internel.terminal.app.settings.PropertyElements;
+import cn.academy.internel.terminal.app.settings.SettingsUI;
 import cn.lambdalib2.input.KeyHandler;
 import cn.lambdalib2.input.KeyManager;
 import net.minecraftforge.common.config.Configuration;

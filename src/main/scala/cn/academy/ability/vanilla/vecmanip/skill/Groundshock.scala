@@ -5,7 +5,7 @@ import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.generic.client.effect.SmokeEffect
 import cn.academy.ability.vanilla.util.HandlerLifePeroidEvent
-import cn.academy.client.sound.ACSounds
+import cn.academy.internel.sound.ACSounds
 import cn.academy.util.Plotter
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, RandUtils, WorldUtils}

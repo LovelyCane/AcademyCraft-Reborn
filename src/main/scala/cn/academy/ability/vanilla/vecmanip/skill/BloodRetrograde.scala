@@ -3,9 +3,9 @@ package cn.academy.ability.vanilla.vecmanip.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityBloodSplash
 import cn.academy.ability.vanilla.generic.client.effect.BloodSprayEffect
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import net.minecraft.entity.EntityLivingBase

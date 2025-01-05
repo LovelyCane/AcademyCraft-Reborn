@@ -3,9 +3,9 @@ package cn.academy.ability.vanilla.electromaster.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.render.util.ArcPatterns
-import cn.academy.client.sound.ACSounds
 import cn.academy.entity.EntityArc
+import cn.academy.internel.render.util.ArcPatterns
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}

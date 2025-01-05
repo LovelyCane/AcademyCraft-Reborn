@@ -1,7 +1,7 @@
 package cn.academy.energy.api;
 
 import cn.academy.energy.api.item.ImagEnergyItem;
-import cn.academy.support.EnergyItemHelper.EnergyItemManager;
+import cn.academy.internel.support.EnergyItemHelper.EnergyItemManager;
 import cn.lambdalib2.util.StackUtils;
 import net.minecraft.item.ItemStack;
 

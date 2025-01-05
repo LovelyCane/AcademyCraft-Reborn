@@ -1,22 +1,16 @@
 package cn.academy.item;
 
 import cn.academy.AcademyCraft;
-import cn.academy.terminal.App;
-import cn.academy.terminal.AppRegistry;
-import cn.academy.terminal.TerminalData;
-import cn.lambdalib2.registry.RegistryCallback;
+import cn.academy.internel.terminal.App;
+import cn.academy.internel.terminal.AppRegistry;
+import cn.academy.internel.terminal.TerminalData;
 import cn.lambdalib2.util.Debug;
-import cn.lambdalib2.util.SideUtils;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

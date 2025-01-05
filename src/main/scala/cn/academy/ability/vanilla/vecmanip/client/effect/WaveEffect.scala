@@ -2,15 +2,12 @@ package cn.academy.ability.vanilla.vecmanip.client.effect
 
 import cn.academy.Resources
 import cn.academy.entity.LocalEntity
-import cn.lambdalib2.registry.StateEventCallback
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.render.legacy.{LegacyMesh, LegacyMeshUtils, SimpleMaterial}
 import cn.lambdalib2.util.{Colors, MathUtils, RandUtils}
 import cn.lambdalib2.vis.curve.CubicCurve
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
-import net.minecraft.entity.Entity
 import net.minecraft.world.World
-import net.minecraftforge.fml.client.registry.RenderingRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable
@@ -45,8 +42,8 @@ class WaveEffect(world: World, val rings: Int, val size: Double) extends LocalEn
 @SideOnly(Side.CLIENT)
 @RegEntityRender(classOf[WaveEffect])
 class WaveEffectRenderer(m: RenderManager) extends Render[WaveEffect](m) {
-  import org.lwjgl.opengl.GL11._
   import cn.lambdalib2.util.MathUtils._
+  import org.lwjgl.opengl.GL11._
 
   val alphaCurve = new CubicCurve()
   alphaCurve.addPoint(0, 0)

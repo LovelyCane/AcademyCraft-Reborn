@@ -3,8 +3,8 @@ package cn.academy.ability.vanilla.meltdowner.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.render.particle.MdParticleFactory
 import cn.academy.entity.{EntityDiamondShield, EntityRippleMark}
+import cn.academy.internel.render.particle.MdParticleFactory
 import cn.lambdalib2.particle.Particle
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{RandUtils, VecUtils}

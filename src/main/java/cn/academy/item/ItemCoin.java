@@ -1,7 +1,7 @@
 package cn.academy.item;
 
 import cn.academy.Resources;
-import cn.academy.client.render.item.BakedModelForTEISR;
+import cn.academy.internel.render.item.BakedModelForTEISR;
 import cn.academy.entity.EntityCoinThrowing;
 import cn.academy.event.CoinThrowEvent;
 import cn.lambdalib2.render.TransformChain;

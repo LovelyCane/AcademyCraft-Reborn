@@ -6,19 +6,17 @@
 */
 package cn.lambdalib2.util;
 
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -27,7 +25,6 @@ import static org.lwjgl.opengl.GL11.*;
  *
  */
 public class HudUtils {
-
     public static double zLevel = 0;
     
     static double stack = Double.NEGATIVE_INFINITY;
@@ -127,11 +124,9 @@ public class HudUtils {
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             int k = 0;
-            float zLevel = -90.0F;
-            Iterator iterator = par1List.iterator();
 
-            while (iterator.hasNext()) {
-                String s = (String)iterator.next();
+            for (Object o : par1List) {
+                String s = (String) o;
                 int l = font.getStringWidth(s);
 
                 if (l > k) {
@@ -155,7 +150,6 @@ public class HudUtils {
                 j1 = height - k1 - 6;
             }
 
-            zLevel = 300.0F;
             int l1 = -267386864;
             drawGradientRect(i1 - 3, j1 - 4, i1 + k + 3, j1 - 3, l1, l1);
             drawGradientRect(i1 - 3, j1 + k1 + 3, i1 + k + 3, j1 + k1 + 4, l1, l1);
@@ -223,5 +217,4 @@ public class HudUtils {
     private static void addVertexWithUV(BufferBuilder bb, double x, double y, double z, double u, double v) {
         bb.pos(x, y, z).tex(u, v).endVertex();
     }
-    
 }

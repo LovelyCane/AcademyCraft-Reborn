@@ -4,7 +4,7 @@ import cn.academy.Resources
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.sound.ACSounds
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.render.legacy.{LegacyMeshUtils, RenderStage, SimpleMaterial, Tessellator}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener

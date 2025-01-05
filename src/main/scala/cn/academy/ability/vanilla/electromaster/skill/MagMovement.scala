@@ -4,10 +4,10 @@ import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
 import cn.academy.ability.vanilla.electromaster.CatElectromaster
-import cn.academy.client.render.util.{ACRenderingHelper, ArcPatterns}
-import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.datapart.AbilityData
 import cn.academy.entity.EntityArc
+import cn.academy.internel.render.util.{ACRenderingHelper, ArcPatterns}
+import cn.academy.internel.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{MathUtils, Raytrace}
 import net.minecraft.entity.Entity

@@ -3,11 +3,11 @@ package cn.academy.ability.vanilla.electromaster.skill
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
-import cn.academy.client.render.util.{ACRenderingHelper, ArcPatterns}
-import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.EntitySurroundArc.ArcType
 import cn.academy.entity.{EntityArc, EntitySurroundArc}
-import cn.academy.support.{EnergyBlockHelper, EnergyItemHelper}
+import cn.academy.internel.render.util.{ACRenderingHelper, ArcPatterns}
+import cn.academy.internel.sound.{ACSounds, FollowEntitySound}
+import cn.academy.internel.support.{EnergyBlockHelper, EnergyItemHelper}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.s11n.network.NetworkS11nType
 import cn.lambdalib2.s11n.{SerializeIncluded, SerializeNullable}

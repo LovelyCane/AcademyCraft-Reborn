@@ -7,7 +7,7 @@ import cn.academy.ability.context.ClientRuntime.IActivateHandler
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.StormWingEffect
 import cn.academy.ability.vanilla.vecmanip.skill.StormWingContext._
-import cn.academy.client.sound.{ACSounds, FollowEntitySound}
+import cn.academy.internel.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.MathUtils._
 import cn.lambdalib2.util.RandUtils._

@@ -11,7 +11,7 @@ import cn.academy.ability.context.ContextManager;
 import cn.academy.ability.context.KeyDelegate;
 import cn.academy.ability.vanilla.teleporter.util.GravityCancellor;
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper;
-import cn.academy.client.sound.ACSounds;
+import cn.academy.internel.sound.ACSounds;
 import cn.academy.entity.EntityTPMarking;
 import cn.academy.event.ability.FlushControlEvent;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

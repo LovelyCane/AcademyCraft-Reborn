@@ -1,5 +1,6 @@
 package cn.academy.ability;
 
+import cn.academy.AcademyCraft;
 import cn.academy.ability.context.ClientRuntime;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
@@ -67,6 +68,9 @@ public abstract class Controllable {
     }
 
     public final Category getCategory() {
+        if (category == null) {
+            AcademyCraft.log.info("getCategory() called without a category");
+        }
         return category;
     }
 

@@ -30,11 +30,7 @@ public class PipelineTransformer implements IClassTransformer {
         }
 
         @Override
-        public MethodVisitor visitMethod(int access, String name, String desc, String signature,
-                                         String[] exceptions) {
-            // net/minecraft/client/renderer/RenderGlobal/renderEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;F)V
-            // buy/a (Lvg;Lbxy;F)V
-
+        public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
             MethodVisitor smv = super.visitMethod(access, name, desc, signature, exceptions);
 
             String testName, testDesc;
@@ -57,8 +53,7 @@ public class PipelineTransformer implements IClassTransformer {
                         // FLOAD 3
                         // INVOKESTATIC cn/lambdalib/core/RenderEventDispatch beginRenderEntities(f)V;
                         this.visitVarInsn(FLOAD, 3);
-                        this.visitMethodInsn(INVOKESTATIC, Type.getInternalName(RenderEventDispatch.class), "beginRenderEntities",
-                                Type.getMethodDescriptor(Type.getType(Void.TYPE), Type.getType(float.class)), false);
+                        this.visitMethodInsn(INVOKESTATIC, Type.getInternalName(RenderEventDispatch.class), "beginRenderEntities", Type.getMethodDescriptor(Type.getType(Void.TYPE), Type.getType(float.class)), false);
                     }
 
                     @Override
@@ -67,17 +62,14 @@ public class PipelineTransformer implements IClassTransformer {
                             // FLOAD 3
                             // INVOKESTATIC cn/lambdalib/core/RenderEventDispatch endRenderEntities(f)V;
                             this.visitVarInsn(FLOAD, 3);
-                            this.visitMethodInsn(INVOKESTATIC, Type.getInternalName(RenderEventDispatch.class), "endRenderEntities",
-                                    Type.getMethodDescriptor(Type.getType(Void.TYPE), Type.getType(float.class)), false);
+                            this.visitMethodInsn(INVOKESTATIC, Type.getInternalName(RenderEventDispatch.class), "endRenderEntities", Type.getMethodDescriptor(Type.getType(Void.TYPE), Type.getType(float.class)), false);
                         }
 
                         super.visitInsn(opcode);
                     }
                 };
             }
-
             return smv;
         }
-
     }
 }

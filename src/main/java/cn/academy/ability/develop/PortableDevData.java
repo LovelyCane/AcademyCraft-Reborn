@@ -7,7 +7,6 @@ import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * The Developer instance for portable developer attached one per player.
@@ -15,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 @RegDataPart(EntityPlayer.class)
 public class PortableDevData extends DataPart<EntityPlayer> implements IDeveloper {
-    
     public static PortableDevData get(EntityPlayer player) {
         return EntityData.get(player).getPart(PortableDevData.class);
     }

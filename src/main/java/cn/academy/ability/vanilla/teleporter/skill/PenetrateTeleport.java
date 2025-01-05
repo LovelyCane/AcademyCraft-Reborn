@@ -6,7 +6,7 @@ import cn.academy.ability.api.AbilityAPIExt;
 import cn.academy.ability.context.ClientRuntime;
 import cn.academy.ability.context.Context;
 import cn.academy.ability.vanilla.teleporter.util.TPSkillHelper;
-import cn.academy.client.sound.ACSounds;
+import cn.academy.internel.sound.ACSounds;
 import cn.academy.entity.EntityTPMarking;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import net.minecraft.block.Block;

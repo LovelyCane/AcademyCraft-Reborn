@@ -5,8 +5,8 @@ import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.Context.Status
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.{PlasmaBodyEffect, TornadoEffect, TornadoRenderer}
-import cn.academy.client.sound.{ACSounds, FollowEntitySound}
 import cn.academy.entity.LocalEntity
+import cn.academy.internel.sound.{ACSounds, FollowEntitySound}
 import cn.lambdalib2.registry.mc.RegEntityRender
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{EntitySelectors, Raytrace, WorldUtils}

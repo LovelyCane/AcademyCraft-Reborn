@@ -1,12 +1,12 @@
 package cn.academy.block.tileentity;
 
-import cn.academy.client.sound.ACSounds;
-import cn.academy.client.sound.PositionedSound;
-import cn.academy.client.sound.TileEntitySound;
+import cn.academy.internel.sound.ACSounds;
+import cn.academy.internel.sound.PositionedSound;
+import cn.academy.internel.sound.TileEntitySound;
 import cn.academy.crafting.MetalFormerRecipes;
 import cn.academy.crafting.MetalFormerRecipes.RecipeObject;
 import cn.academy.energy.IFConstants;
-import cn.academy.support.EnergyItemHelper;
+import cn.academy.internel.support.EnergyItemHelper;
 import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

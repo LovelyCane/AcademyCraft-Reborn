@@ -1,6 +1,6 @@
 package cn.academy.datapart;
 
-import cn.academy.client.render.util.IHandRenderer;
+import cn.academy.internel.render.util.IHandRenderer;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;

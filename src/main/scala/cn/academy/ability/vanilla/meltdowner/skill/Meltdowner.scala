@@ -4,11 +4,10 @@ import java.util.function.Consumer
 import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context.{ClientContext, ClientRuntime, Context, RegClientContext}
-import cn.academy.client.render.particle.MdParticleFactory
-import cn.academy.client.render.util.ACRenderingHelper
-import cn.academy.client.sound.ACSounds
-import cn.academy.client.sound.FollowEntitySound
 import cn.academy.entity.EntityMDRay
+import cn.academy.internel.render.particle.MdParticleFactory
+import cn.academy.internel.render.util.ACRenderingHelper
+import cn.academy.internel.sound.{ACSounds, FollowEntitySound}
 import cn.academy.util.RangedRayDamage
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util.{MathUtils, Raytrace, VecUtils}

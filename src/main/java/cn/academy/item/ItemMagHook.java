@@ -2,8 +2,8 @@ package cn.academy.item;
 
 import cn.academy.AcademyCraft;
 import cn.academy.Resources;
-import cn.academy.client.render.item.BakedModelForTEISR;
-import cn.academy.client.render.item.TEISRModel;
+import cn.academy.internel.render.item.BakedModelForTEISR;
+import cn.academy.internel.render.item.TEISRModel;
 import cn.academy.entity.EntityMagHook;
 import cn.lambdalib2.render.TransformChain;
 import cn.lambdalib2.util.SideUtils;

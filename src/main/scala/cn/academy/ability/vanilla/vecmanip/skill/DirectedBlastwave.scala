@@ -4,9 +4,9 @@ import cn.academy.ability.Skill
 import cn.academy.ability.api.AbilityAPIExt
 import cn.academy.ability.context._
 import cn.academy.ability.vanilla.vecmanip.client.effect.WaveEffect
-import cn.academy.client.render.util.{IHandRenderer, VanillaHandRenderer}
-import cn.academy.client.sound.ACSounds
 import cn.academy.datapart.HandRenderOverrideData
+import cn.academy.internel.render.util.{IHandRenderer, VanillaHandRenderer}
+import cn.academy.internel.sound.ACSounds
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener
 import cn.lambdalib2.util._
 import cn.lambdalib2.vis.animation.presets.CompTransformAnim
@@ -36,7 +36,7 @@ private object BlastwaveContext {
 
 import cn.academy.ability.api.AbilityAPIExt._
 import cn.academy.ability.vanilla.vecmanip.skill.BlastwaveContext._
-import cn.academy.client.render.util.AnimPresets._
+import cn.academy.internel.render.util.AnimPresets._
 import cn.lambdalib2.util.RandUtils._
 
 import scala.collection.JavaConversions._

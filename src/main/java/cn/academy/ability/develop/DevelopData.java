@@ -146,7 +146,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
                     tickThisStim = 0;
                     ++stim;
 
-                    if(stim >= maxStim) {
+
                         // try to perform the action.
                         boolean success = type.validate(player, developer);
                         if(success) {
@@ -156,7 +156,7 @@ public class DevelopData extends DataPart<EntityPlayer> {
                         if (success) {
                             state = DevState.DONE;
                         }
-                    }
+
                 }
             }
         }

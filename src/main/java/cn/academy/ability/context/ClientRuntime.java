@@ -3,7 +3,7 @@ package cn.academy.ability.context;
 import cn.academy.ability.Controllable;
 import cn.academy.ability.context.Context.Status;
 import cn.academy.ability.ctrl.ClientHandler;
-import cn.academy.client.auxgui.TerminalUI;
+import cn.academy.internel.auxgui.TerminalUI;
 import cn.academy.datapart.CPData;
 import cn.academy.datapart.CooldownData;
 import cn.academy.datapart.PresetData;

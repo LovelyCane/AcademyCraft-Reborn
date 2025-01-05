@@ -26,10 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 public abstract class TileDeveloper extends TileReceiverBase implements IMultiTile, IDeveloper {
-    private static final String
-            MSG_OPEN_GUI = "gui",
-            MSG_UNUSE = "unuse",
-            MSG_SYNC = "sync";
+    private static final String MSG_OPEN_GUI = "gui", MSG_UNUSE = "unuse", MSG_SYNC = "sync";
 
     @RegTileEntity
     public static class Normal extends TileDeveloper {
