@@ -43,7 +43,7 @@ public class ArcGen extends Skill {
     @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyid) {
-        activateSingleKey2(rt, keyid, ArcGenContext::new);
+        activateSingleKey(rt, keyid, ArcGenContext::new);
     }
 
     public static class ArcGenContext extends Context<ArcGen> {
