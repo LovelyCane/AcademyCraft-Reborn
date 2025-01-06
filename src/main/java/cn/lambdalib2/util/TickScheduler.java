@@ -2,7 +2,6 @@ package cn.lambdalib2.util;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import scala.Function0;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -78,16 +77,6 @@ public class TickScheduler {
             add.counter = timeIntv;
             schedules.add(add);
             return this;
-        }
-
-        // Scala support
-        public ScheduleCreator run2(Function0<?> _task) {
-            return run(new Runnable() {
-                @Override
-                public void run() {
-                    _task.apply();
-                }
-            });
         }
 
         private boolean shouldIgnore() {

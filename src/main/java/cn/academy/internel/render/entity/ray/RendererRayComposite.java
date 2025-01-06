@@ -1,20 +1,19 @@
 package cn.academy.internel.render.entity.ray;
 
-import cn.academy.internel.render.entity.RendererList;
 import cn.academy.entity.IRay;
+import cn.academy.internel.render.entity.RendererList;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 /**
  * @author WeAthFolD
- *
  */
 public class RendererRayComposite extends RendererList {
-    
+
     public RendererRayGlow glow;
     public RendererRayCylinder cylinderIn, cylinderOut;
-    
+
     public RendererRayComposite(RenderManager manager, String name) {
         super(manager);
         append(glow = RendererRayGlow.createFromName(manager, name));
@@ -22,16 +21,14 @@ public class RendererRayComposite extends RendererList {
         append(cylinderOut = new RendererRayCylinder(manager, 0.08f));
         cylinderIn.headFix = 0.98;
     }
-    
+
     @Override
-    public void doRender(Entity ent, double x,
-            double y, double z, float a, float b) {
-        ((IRay)ent).onRenderTick();
+    public void doRender(Entity ent, double x, double y, double z, float a, float b) {
+        ((IRay) ent).onRenderTick();
         super.doRender(ent, x, y, z, a, b);
     }
-    
-    public void plainDoRender(Entity ent, double x,
-            double y, double z, float a, float b) {
+
+    public void plainDoRender(Entity ent, double x, double y, double z, float a, float b) {
         super.doRender(ent, x, y, z, a, b);
     }
 
@@ -39,5 +36,4 @@ public class RendererRayComposite extends RendererList {
     protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
         return null;
     }
-
 }
