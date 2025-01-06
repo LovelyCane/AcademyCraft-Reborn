@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static cn.lambdalib2.util.MathUtils.lerp;
 import static cn.lambdalib2.util.MathUtils.lerpf;
@@ -77,13 +78,13 @@ public class Railgun extends Skill {
     public void onThrowCoin(CoinThrowEvent evt) {
         CPData cpData = CPData.get(evt.getEntityPlayer());
         PresetData pData = PresetData.get(evt.getEntityPlayer());
-        boolean spawn = cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(this);
+        boolean spawn = cpData.canUseAbility() && pData.getCurrentPreset().hasControllable(INSTANCE);
 
         if (spawn) {
             if (SideUtils.isClient()) {
                 informDelegate(evt.coin);
             } else {
-                NetworkMessage.sendToAllAround(TargetPoints.convert(evt.getEntityPlayer(), 30), this, MSG_CHARGE_EFFECT, evt.getEntityPlayer());
+                NetworkMessage.sendToAllAround(TargetPoints.convert(evt.getEntityPlayer(), 30), INSTANCE, MSG_CHARGE_EFFECT, evt.getEntityPlayer());
             }
         }
     }
@@ -123,14 +124,14 @@ public class Railgun extends Skill {
     }
 
     private void reflectServer(EntityPlayer player, Entity reflector) {
-        AbilityContext ctx = AbilityContext.of(player, this);
+        AbilityContext ctx = AbilityContext.of(player, INSTANCE);
         RayTraceResult result = Raytrace.traceLiving(reflector, REFLECT_DISTANCE);
         if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
             ctx.attack(result.entityHit, 14);
             hitEntity = true;
         }
 
-        NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20), Railgun.this, MSG_REFLECT, player, reflector);
+        NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20), Railgun.INSTANCE, MSG_REFLECT, player, reflector);
     }
 
     @SideOnly(Side.CLIENT)
@@ -142,11 +143,11 @@ public class Railgun extends Skill {
     @NetworkMessage.Listener(channel = MSG_PERFORM, side = Side.CLIENT)
     private void performClient(EntityPlayer player, double length) {
         ACSounds.playClient(player.world, player.posX, player.posY, player.posZ, "em.railgun", SoundCategory.AMBIENT, 0.5f, 1.0f);
-        player.getEntityWorld().spawnEntity(new EntityRailgunFX(player, length));
+        player.world.spawnEntity(new EntityRailgunFX(player, length));
     }
 
     private void performServer(EntityPlayer player) {
-        AbilityContext ctx = AbilityContext.of(player, this);
+        AbilityContext ctx = AbilityContext.of(player, INSTANCE);
         float exp = ctx.getSkillExp();
 
         float cp = lerpf(200, 450, exp);
@@ -156,10 +157,13 @@ public class Railgun extends Skill {
             float energy = lerpf(900, 2000, exp);
 
             double[] length = {45.0};
-            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, reflector -> {
-                reflectServer(player, reflector);
-                length[0] = Math.min(length[0], reflector.getDistance(player));
-                NetworkMessage.sendToServer(Railgun.this, MSG_REFLECT, player, reflector);
+            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, new Consumer<Entity>() {
+                @Override
+                public void accept(Entity reflector) {
+                    reflectServer(player, reflector);
+                    length[0] = Math.min(length[0], reflector.getDistance(player));
+                    NetworkMessage.sendToServer(Railgun.INSTANCE, MSG_REFLECT, player, reflector);
+                }
             });
             damage.startDamage = dmg;
             damage.perform();
@@ -171,7 +175,7 @@ public class Railgun extends Skill {
             }
 
             ctx.setCooldown((int) lerp(300, 160, exp));
-            NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20), Railgun.this, MSG_PERFORM, player, length[0]);
+            NetworkMessage.sendToAllAround(TargetPoints.convert(player, 20), Railgun.INSTANCE, MSG_PERFORM, player, length[0]);
         }
     }
 
@@ -216,7 +220,7 @@ public class Railgun extends Skill {
                 }
             } else {
                 if (coin.getProgress() > 0.7) {
-                    NetworkMessage.sendToServer(Railgun.this, MSG_COIN_PERFORM, getPlayer(), coin);
+                    NetworkMessage.sendToServer(Railgun.INSTANCE, MSG_COIN_PERFORM, getPlayer(), coin);
                 }
                 coin = null;
             }
@@ -227,7 +231,7 @@ public class Railgun extends Skill {
             if (chargeTicks != -1) {
                 chargeTicks--;
                 if (chargeTicks == 0) {
-                    NetworkMessage.sendToServer(Railgun.this, MSG_ITEM_PERFORM, getPlayer());
+                    NetworkMessage.sendToServer(Railgun.INSTANCE, MSG_ITEM_PERFORM, getPlayer());
                 }
             }
         }
@@ -271,7 +275,7 @@ public class Railgun extends Skill {
 
         @Override
         public Skill getSkill() {
-            return Railgun.this;
+            return Railgun.INSTANCE;
         }
     }
 }

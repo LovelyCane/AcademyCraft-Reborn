@@ -50,7 +50,7 @@ public class MagManip extends Skill
     @Override
     public void activate(ClientRuntime rt, int keyid)
     {
-        activateSingleKey2(rt, keyid, MagManipContext::new);
+        activateSingleKey(rt, keyid, MagManipContext::new);
     }
 
     public static boolean accepts(EntityPlayer player, Block block)

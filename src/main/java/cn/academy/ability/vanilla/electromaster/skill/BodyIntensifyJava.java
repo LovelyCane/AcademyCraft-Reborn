@@ -49,7 +49,7 @@ public class BodyIntensifyJava extends Skill {
     @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyid) {
-        activateSingleKey2(rt, keyid, IntensifyContext::new);
+        activateSingleKey(rt, keyid, IntensifyContext::new);
     }
 
     public static class IntensifyContext extends Context<BodyIntensifyJava> {

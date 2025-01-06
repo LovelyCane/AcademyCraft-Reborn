@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CatElectromaster extends Category {
-    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect$.MODULE$, railgun = Railgun.INSTANCE, magMovement = MagMovement$.MODULE$, currentCharging = CurrentCharging$.MODULE$, bodyIntensify = BodyIntensifyJava.INSTANCE, thunderBolt = ThunderBolt$.MODULE$, thunderClap = ThunderClap$.MODULE$;
+    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect.INSTANCE, railgun = Railgun.INSTANCE, magMovement = MagMovement.INSTANCE, currentCharging = CurrentCharging.INSTANCE, bodyIntensify = BodyIntensifyJava.INSTANCE, thunderBolt = ThunderBolt.INSTANCE, thunderClap = ThunderClap.INSTANCE;
 
     public CatElectromaster() {
         super("electromaster");
@@ -105,9 +105,11 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isEntityMetallic(Entity entity) {
-        if (metalEntities.isEmpty()) return false;
+        if (metalEntities.isEmpty())
+            return false;
         for (Class<? extends Entity> entityClass : metalEntities) {
-            if (entityClass.isInstance(entity)) return true;
+            if (entityClass.isInstance(entity))
+                return true;
         }
         return false;
     }
