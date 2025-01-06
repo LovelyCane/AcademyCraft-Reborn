@@ -11,7 +11,7 @@ import cn.academy.ability.vanilla.teleporter.skill.*;
  * @author WeAthFolD
  */
 public class CatTeleporter extends Category {
-    public static final Skill dimFolding = DimFoldingTheorem.instance, spaceFluct = SpaceFluctuation.instance, markTP = MarkTeleport$.MODULE$, locTP = LocationTeleport.INSTANCE, penetrateTP = PenetrateTeleport.instance, threateningTP = ThreateningTeleport.instance, shiftTP = ShiftTeleport.instance, fleshRipping = FleshRipping.instance, flashing = Flashing.instance;
+    public static final Skill dimFolding = DimFoldingTheorem.instance, spaceFluct = SpaceFluctuation.instance, markTP = MarkTeleport.INSTANCE, locTP = LocationTeleport.INSTANCE, penetrateTP = PenetrateTeleport.instance, threateningTP = ThreateningTeleport.instance, shiftTP = ShiftTeleport.instance, fleshRipping = FleshRipping.instance, flashing = Flashing.instance;
 
     public CatTeleporter() {
         super("teleporter");

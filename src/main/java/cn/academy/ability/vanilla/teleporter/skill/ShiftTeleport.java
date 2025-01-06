@@ -53,7 +53,7 @@ public class ShiftTeleport extends Skill
     @SideOnly(Side.CLIENT)
     public void activate(ClientRuntime rt, int keyID)
     {
-      activateSingleKey2(rt, keyID, p -> new STContext(p));
+      activateSingleKey(rt, keyID, p -> new STContext(p));
     }
 
     @Override

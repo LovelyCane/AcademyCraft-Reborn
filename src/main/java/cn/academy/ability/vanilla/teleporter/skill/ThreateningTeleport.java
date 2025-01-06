@@ -38,7 +38,7 @@ public class ThreateningTeleport extends Skill
     @Override
     public void activate(ClientRuntime rt, int keyID)
     {
-        activateSingleKey2(rt, keyID, TTContext::new);
+        activateSingleKey(rt, keyID, TTContext::new);
     }
 
     public static class TTContext extends Context

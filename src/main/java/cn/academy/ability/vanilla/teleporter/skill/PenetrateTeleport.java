@@ -37,7 +37,7 @@ public class PenetrateTeleport extends Skill
     @Override
     public void activate(ClientRuntime rt , int keyID)
     {
-        activateSingleKey2(rt, keyID, PTContext::new);
+        activateSingleKey(rt, keyID, PTContext::new);
     }
 
     public static class PTContext extends Context
