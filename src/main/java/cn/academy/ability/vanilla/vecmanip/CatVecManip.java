@@ -8,47 +8,47 @@ public class CatVecManip extends Category {
 
     public CatVecManip() {
         super("vecmanip");
-        setColorStyle(0,0,0);
+        setColorStyle(0, 0, 0);
 
-        DirectedShock.setPosition(16, 45);
-        Groundshock.setPosition(64, 85);
-        VecAccel.setPosition(76, 40);
-    //    VecDeviation.setPosition(145, 53);
-        DirectedBlastwave.setPosition(136, 80);
-        StormWing.setPosition(130, 20);
-        BloodRetrograde.setPosition(204, 83);
-   //     VecReflection.setPosition(210, 50);
-        PlasmaCannon.setPosition(175, 14);
+        DirectedShock.INSTANCE.setPosition(16, 45);
+        Groundshock.INSTANCE.setPosition(64, 85);
+        VecAccel.INSTANCE.setPosition(76, 40);
+        //    VecDeviation.setPosition(145, 53);
+        DirectedBlastwave.INSTANCE.setPosition(136, 80);
+        StormWing.INSTANCE.setPosition(130, 20);
+        BloodRetrograde.INSTANCE.setPosition(204, 83);
+        //     VecReflection.setPosition(210, 50);
+        PlasmaCannon.INSTANCE.setPosition(175, 14);
 
         // Level 1
-        addSkill(DirectedShock$.MODULE$);
-        addSkill(Groundshock$.MODULE$);
+        addSkill(DirectedShock.INSTANCE);
+        addSkill(Groundshock.INSTANCE);
 
         // 2
-        addSkill(VecAccel$.MODULE$);
-      //  addSkill(VecDeviation$.MODULE$);
+        addSkill(VecAccel.INSTANCE);
+        //  addSkill(VecDeviation$.MODULE$);
 
         // 3
-        addSkill(DirectedBlastwave$.MODULE$);
-        addSkill(StormWing$.MODULE$);
+        addSkill(DirectedBlastwave.INSTANCE);
+        addSkill(StormWing.INSTANCE);
 
         // 4
-        addSkill(BloodRetrograde$.MODULE$);
+        addSkill(BloodRetrograde.INSTANCE);
 
 
-       // addSkill(VecReflection$.MODULE$);
+        // addSkill(VecReflection$.MODULE$);
 
         // 5
-        addSkill(PlasmaCannon$.MODULE$);
+        addSkill(PlasmaCannon.INSTANCE);
 
-        Groundshock.setParent(DirectedShock$.MODULE$);
-        VecAccel.setParent(DirectedShock$.MODULE$);
-      //  VecDeviation.setParent(VecAccel$.MODULE$);
-        DirectedBlastwave.setParent(Groundshock$.MODULE$);
-        StormWing.setParent(VecAccel$.MODULE$);
-        BloodRetrograde.setParent(DirectedBlastwave$.MODULE$);
-       // VecReflection.setParent(VecDeviation$.MODULE$);
-        PlasmaCannon.setParent(StormWing$.MODULE$);
+        Groundshock.INSTANCE.setParent(DirectedShock.INSTANCE);
+        VecAccel.INSTANCE.setParent(DirectedShock.INSTANCE);
+        //  VecDeviation.setParent(VecAccel$.MODULE$);
+        DirectedBlastwave.INSTANCE.setParent(Groundshock.INSTANCE);
+        StormWing.INSTANCE.setParent(VecAccel.INSTANCE);
+        BloodRetrograde.INSTANCE.setParent(DirectedBlastwave.INSTANCE);
+        // VecReflection.setParent(VecDeviation$.MODULE$);
+        PlasmaCannon.INSTANCE.setParent(StormWing.INSTANCE);
 
         VanillaCategories.addGenericSkills(this);
     }
