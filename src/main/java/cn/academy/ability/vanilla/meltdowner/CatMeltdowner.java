@@ -11,18 +11,7 @@ import cn.academy.ability.vanilla.meltdowner.skill.*;
  */
 
 public class CatMeltdowner extends Category {
-    public static final Skill
-            electronBomb = ElectronBomb.Instance,
-            radIntensify = RadiationIntensify.INSTANCE,
-            rayBarrage = RayBarrage$.MODULE$,
-            scatterBomb = ScatterBomb$.MODULE$,
-            lightShield = LightShield.INSTANCE,
-            meltdowner = Meltdowner$.MODULE$,
-            jetEngine = JetEngine$.MODULE$,
-            mineRayBasic = MineRayBasic.INSTANCE,
-            mineRayExpert = MineRayExpert.INSTANCE,
-            mineRayLuck = MineRayLuck.instance,
-            electronMissile = ElectronMissile$.MODULE$;
+    public static final Skill electronBomb = ElectronBomb.Instance, radIntensify = RadiationIntensify.INSTANCE, rayBarrage = RayBarrage.INSTANCE, scatterBomb = ScatterBomb.INSTANCE, lightShield = LightShield.INSTANCE, meltdowner = Meltdowner.INSTANCE, jetEngine = JetEngine.INSTANCE, mineRayBasic = MineRayBasic.INSTANCE, mineRayExpert = MineRayExpert.INSTANCE, mineRayLuck = MineRayLuck.INSTANCE, electronMissile = ElectronMissile.INSTANCE;
 
     public CatMeltdowner() {
         super("meltdowner");

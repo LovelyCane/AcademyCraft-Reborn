@@ -29,7 +29,7 @@ public class ElectronBomb extends Skill {
 
     @Override
     public void activate(ClientRuntime rt, int keyID) {
-        activateSingleKey2(rt, keyID, Ctx::new);
+        activateSingleKey(rt, keyID, Ctx::new);
     }
 
     static final String MsgEffect = "effect";

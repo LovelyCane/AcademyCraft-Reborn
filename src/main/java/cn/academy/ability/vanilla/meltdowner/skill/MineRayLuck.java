@@ -7,17 +7,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD, KSkun
  */
-
 public class MineRayLuck extends MineRaysBase {
+    public static final MineRayLuck INSTANCE = new MineRayLuck();
+
     public MineRayLuck() {
         super("luck", 5);
     }
 
-    public static MineRayLuck instance = new MineRayLuck();
-
     @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyID) {
-        activateSingleKey2(rt, keyID, LuckMRContext::new);
+        activateSingleKey(rt, keyID, LuckMRContext::new);
     }
 }

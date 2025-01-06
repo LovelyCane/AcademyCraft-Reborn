@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
+@SuppressWarnings("unused")
 public enum SBNetDelegate {
     INSTANCE;
     public static final String MSG_EFFECT = "eff";
@@ -29,5 +31,4 @@ public enum SBNetDelegate {
         raySmall.viewOptimize = false;
         player.world.spawnEntity(raySmall);
     }
-
 }

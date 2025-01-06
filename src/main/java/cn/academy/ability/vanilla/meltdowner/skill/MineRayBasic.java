@@ -28,7 +28,7 @@ public class MineRayBasic extends MineRaysBase {
     @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyID) {
-        activateSingleKey2(rt, keyID, BasicMRContext::new);
+        activateSingleKey(rt, keyID, BasicMRContext::new);
     }
 }
 

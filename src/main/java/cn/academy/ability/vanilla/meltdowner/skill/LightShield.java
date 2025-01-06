@@ -48,7 +48,7 @@ public class LightShield extends Skill
     @Override
     public void activate(ClientRuntime rt, int keyID)
     {
-        activateSingleKey2(rt, keyID, LSContext::new);
+        activateSingleKey(rt, keyID, LSContext::new);
     }
 
     @SubscribeEvent

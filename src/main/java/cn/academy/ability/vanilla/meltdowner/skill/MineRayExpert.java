@@ -25,7 +25,7 @@ public class MineRayExpert extends MineRaysBase {
     @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyID) {
-        activateSingleKey2(rt, keyID, ExpertMRContext::new);
+        activateSingleKey(rt, keyID, ExpertMRContext::new);
     }
 }
 
