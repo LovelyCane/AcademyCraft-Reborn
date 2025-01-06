@@ -12,7 +12,7 @@ public class LuckMRContext extends MRContext {
     EntityPlayer player;
 
     public LuckMRContext(EntityPlayer p) {
-        super(p, MineRayLuck.instance); // Assuming MineRayLuck is a singleton
+        super(p, MineRayLuck.INSTANCE); // Assuming MineRayLuck is a singleton
         this.player = p;
         setRange(20);
         setHarvestLevel(5);
