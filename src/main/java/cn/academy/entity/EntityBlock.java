@@ -78,11 +78,6 @@ public class EntityBlock extends EntityAdvanced {
         ignoreFrustumCheck = true;
     }
 
-    // Additional hack for scala...
-    public void constructServer(EntityPlayer _player) {
-        player = _player;
-    }
-
     // Hack...
     public void setPlaceFromServer(boolean value) {
         placeWhenCollide = value;
