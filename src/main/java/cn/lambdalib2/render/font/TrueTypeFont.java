@@ -58,7 +58,7 @@ public class TrueTypeFont implements IFont {
 
     static {
         try {
-            defaultFont = new TrueTypeFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getResourceStream(Resources.res("fonts/misans-normal.ttf"))));
+            defaultFont = new TrueTypeFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getResourceStream(Resources.res("fonts/misans-normal.ttf"))).deriveFont(Font.PLAIN,32));
         } catch (FontFormatException | IOException e) {
             AcademyCraft.log.info("Can't load Font :{}", e.getMessage());
             throw new RuntimeException(e);
