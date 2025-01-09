@@ -1,25 +1,21 @@
 package cn.lambdalib2.cgui.component;
 
-import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
-import cn.lambdalib2.util.ClientUtils;
-import net.minecraft.client.resources.I18n;
-
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.s11n.SerializeIncluded;
-import cn.lambdalib2.util.GameTimer;
-import cn.lambdalib2.render.font.Fonts;
-import cn.lambdalib2.render.font.IFont;
-import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
 import cn.lambdalib2.cgui.component.Transform.HeightAlign;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.GuiEvent;
 import cn.lambdalib2.cgui.event.KeyEvent;
 import cn.lambdalib2.cgui.event.LeftClickEvent;
+import cn.lambdalib2.render.font.Fonts;
+import cn.lambdalib2.render.font.IFont;
+import cn.lambdalib2.render.font.IFont.FontOption;
+import cn.lambdalib2.s11n.SerializeIncluded;
+import cn.lambdalib2.util.ClientUtils;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector2f;
 
 /**
@@ -28,7 +24,6 @@ import org.lwjgl.util.vector.Vector2f;
  */
 @CGuiEditorComponent
 public class TextBox extends Component {
-    
     /**
      * Fired each time the TextBox's content is being edited.
      */
@@ -88,34 +83,14 @@ public class TextBox extends Component {
         // Draws the content
         listen(FrameEvent.class, (w, e) -> {
             validate();
-
             final Vector2f origin = origin();
-            final float widthLimit = w.transform.width - xOffset;
-
             final String processed = processedContent().substring(displayOffset);
 
-            final int localCaret = caretPos - displayOffset; // ∈[0, processed.length]
-
-            float acc = 0.0f;
             int i = processed.length();
-            if (emit) {
-                for (i = 0; i < processed.length() && acc < widthLimit; ++i) {
-                    acc += font.getCharWidth(processed.codePointAt(i), option);
-                }
-            }
 
             final String display = processed.substring(0, i);
 
-            GL11.glPushMatrix();
-            GL11.glTranslated(0, 0, zLevel);
-
             font.draw(display, origin.x, origin.y, option);
-
-            if (w.isFocused() && allowEdit && GameTimer.getAbsTime() % 2 < 1) {
-                font.draw("|", origin.x + sumLength(display, 0, localCaret), origin.y - 1, option);
-            }
-
-            GL11.glPopMatrix();
         });
 
         // Handles input
@@ -281,5 +256,4 @@ public class TextBox extends Component {
     public static TextBox get(Widget w) {
         return w.getComponent(TextBox.class);
     }
-
 }

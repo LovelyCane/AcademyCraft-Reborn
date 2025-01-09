@@ -1,6 +1,9 @@
 package cn.lambdalib2.render.font;
 
+import cn.academy.AcademyCraft;
+import cn.academy.Resources;
 import cn.lambdalib2.util.Colors;
+import cn.lambdalib2.util.ResourceUtils;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
@@ -11,10 +14,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -22,20 +26,19 @@ import static org.lwjgl.opengl.GL11.*;
  * Created by Paindar on 2017/10/15.
  */
 public class TrueTypeFont implements IFont {
-
-    static class CachedChar{
+    static class CachedChar {
         int ch;
         int width;
         int index;
         float u;
         float v;
 
-        CachedChar(int ch,int w,int i,float u,float v){
-            this.ch=ch;
-            this.width=w;
-            this.index=i;
-            this.u=u;
-            this.v=v;
+        CachedChar(int ch, int w, int i, float u, float v) {
+            this.ch = ch;
+            this.width = w;
+            this.index = i;
+            this.u = u;
+            this.v = v;
         }
     }
 
@@ -51,46 +54,38 @@ public class TrueTypeFont implements IFont {
         }
     }
 
-    public static TrueTypeFont defaultFont = withFallback(Font.PLAIN, 32,
-            "Microsoft YaHei", "Adobe Heiti Std R", "STHeiti",
-            "SimHei", "微软雅黑", "黑体",
-            "Consolas", "Monospace", "Arial");
+    public static TrueTypeFont defaultFont;
 
-    public static TrueTypeFont withFallback(int style, int size, String... fallbackNames){
-        Font[] allfonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
-        List<Font> used=new ArrayList<>();
-        for (String c : fallbackNames) {
-            for(Font ex:allfonts){
-                if(ex.getName().equalsIgnoreCase(c)) {
-                    used.add(ex);
-                    break;
-                }
-            }
+    static {
+        try {
+            defaultFont = new TrueTypeFont(Font.createFont(Font.TRUETYPE_FONT, ResourceUtils.getResourceStream(Resources.res("fonts/misans-normal.ttf"))));
+        } catch (FontFormatException | IOException e) {
+            AcademyCraft.log.info("Can't load Font :{}", e.getMessage());
+            throw new RuntimeException(e);
         }
-        return (used.isEmpty()) ? new TrueTypeFont(new Font(null, style, size)) : new TrueTypeFont(new Font(used.get(0).getName(), style, size));
     }
 
-    private static Color BACKGRND_COLOR = new Color(255, 255, 255, 0);
+    private static final Color BACKGRND_COLOR = new Color(255, 255, 255, 0);
     private final int TEXTURE_SZ_LIMIT = Math.min(2048, GL11.glGetInteger(GL_MAX_TEXTURE_SIZE));
 
     private final int charSize;
     private final float maxPerCol;
     private final float maxStep;
-    private List<Integer> generated = new ArrayList<>();
-    private BitSet dirty = new BitSet();
-    private Map<Integer, CachedChar> lookup = new HashMap<>();
+    private final List<Integer> generated = new ArrayList<>();
+    private final BitSet dirty = new BitSet();
+    private final Map<Integer, CachedChar> lookup = new HashMap<>();
     private int step = 0;
-    private float texStep;
+    private final float texStep;
 
     @SuppressWarnings("unchecked")
-    private List<Vertex>[] batchInfoCache = new List[8];
+    private final List<Vertex>[] batchInfoCache = new List[8];
 
     public final Font font;
 
-    public TrueTypeFont(Font font){
-        this.font=font;
-        charSize=(int)(font.getSize() * 1.4);
-        maxPerCol = MathHelper.floor(1.0*TEXTURE_SZ_LIMIT / charSize);
+    public TrueTypeFont(Font font) {
+        this.font = font;
+        charSize = (int) (font.getSize() * 1.4);
+        maxPerCol = MathHelper.floor(1.0 * TEXTURE_SZ_LIMIT / charSize);
         maxStep = maxPerCol * maxPerCol;
         texStep = 1.0f / maxPerCol;
         newTexture();
@@ -100,7 +95,7 @@ public class TrueTypeFont implements IFont {
         }
     }
 
-    private int currentTexture(){
+    private int currentTexture() {
         return generated.get(generated.size() - 1);
     }
 
@@ -119,19 +114,17 @@ public class TrueTypeFont implements IFont {
         int lastTextureBinding = glGetInteger(GL_TEXTURE_BINDING_2D);
 
         float len = getTextWidth(str, option); // Which will call updateCache()
-        for(int i=0;i<dirty.size();i++){
-            if(dirty.get(i)) {
+        for (int i = 0; i < dirty.size(); i++) {
+            if (dirty.get(i)) {
                 glBindTexture(GL_TEXTURE_2D, generated.get(i));
                 GL30.glGenerateMipmap(GL_TEXTURE_2D);
             }
         }
         dirty.clear();
 
-        float x = px;
+        float x = px - len * option.align.lenOffset;
         float sz = option.fontSize;
         float scale = option.fontSize / charSize;
-
-        x = px - len * option.align.lenOffset;
 
         boolean preEnabled = glIsEnabled(GL_ALPHA_TEST);
         int preFunc = glGetInteger(GL_ALPHA_TEST_FUNC);
@@ -140,19 +133,19 @@ public class TrueTypeFont implements IFont {
         glAlphaFunc(GL_GEQUAL, 0.1f);
         glEnable(GL_TEXTURE_2D);
 
-        for (int i = 0; i < batchInfoCache.length; ++i) {
-            batchInfoCache[i].clear();
+        for (List<Vertex> vertices : batchInfoCache) {
+            vertices.clear();
         }
 
-        for(int i:codePoints(str)){
+        for (int i : codePoints(str)) {
             CachedChar info = lookup.get(i);
             float u = info.u;
             float v = info.v;
             List<Vertex> list = batchInfoCache[info.index];
-            list.add(new Vertex(x,      y,      0, u,           v          ));
-            list.add(new Vertex(x,      y + sz, 0, u,           v + texStep));
+            list.add(new Vertex(x, y, 0, u, v));
+            list.add(new Vertex(x, y + sz, 0, u, v + texStep));
             list.add(new Vertex(x + sz, y + sz, 0, u + texStep, v + texStep));
-            list.add(new Vertex(x + sz, y,      0, u + texStep, v          ));
+            list.add(new Vertex(x + sz, y, 0, u + texStep, v));
 
             x += info.width * scale;
         }
@@ -180,9 +173,9 @@ public class TrueTypeFont implements IFont {
         glBindTexture(GL_TEXTURE_2D, lastTextureBinding);
     }
 
-    private List<Integer> codePoints(String str){
-        List<Integer> list=new ArrayList<>();
-        for(int i=0;i<str.length();i++){
+    private List<Integer> codePoints(String str) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < str.length(); i++) {
             list.add(str.codePointAt(i));
         }
         return list;
@@ -192,9 +185,8 @@ public class TrueTypeFont implements IFont {
      * Get the width of given character when drawn with given FontOption.
      */
     @Override
-    public float getCharWidth(int chr, FontOption option)
-    {
-        if(!lookup.containsKey(chr)) {
+    public float getCharWidth(int chr, FontOption option) {
+        if (!lookup.containsKey(chr)) {
             writeImage(chr);
         }
         return (lookup.get(chr)).width * option.fontSize / charSize;
@@ -204,22 +196,20 @@ public class TrueTypeFont implements IFont {
      * Get the text width that will be drawn if calls the {@link IFont#draw}.
      */
     @Override
-    public float getTextWidth(String str, FontOption option)
-    {
+    public float getTextWidth(String str, FontOption option) {
         updateCache(str);
-        float sum=0;
-        for(int i:codePoints(str)){
-            sum+= (lookup.get(i)).width;
+        float sum = 0;
+        for (int i : codePoints(str)) {
+            sum += (lookup.get(i)).width;
         }
         return sum * option.fontSize / charSize;
     }
 
-    private void newTexture(){
+    private void newTexture() {
         int texture = glGenTextures();
 
         glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXTURE_SZ_LIMIT, TEXTURE_SZ_LIMIT, 0, GL_RGBA, GL_FLOAT,
-                (ByteBuffer)null);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXTURE_SZ_LIMIT, TEXTURE_SZ_LIMIT, 0, GL_RGBA, GL_FLOAT, (ByteBuffer) null);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -237,15 +227,15 @@ public class TrueTypeFont implements IFont {
     // Update the cached images to contain the given new characters.
     private void updateCache(String str) {
         Set<Integer> newchars = new HashSet<>();
-        for(int i : codePoints(str)) {
-            if(!lookup.containsKey(i))
+        for (int i : codePoints(str)) {
+            if (!lookup.containsKey(i))
                 newchars.add(i);
         }
         newchars.forEach(this::writeImage);
     }
 
     // Draw the image into the cached textures at current step position and increment the step by 1.
-    private void writeImage(int ch){
+    private void writeImage(int ch) {
         // Create an image holding the character
         BufferedImage image = new BufferedImage(charSize, charSize, BufferedImage.TYPE_INT_ARGB);
         int curtex = currentTexture();
@@ -267,43 +257,36 @@ public class TrueTypeFont implements IFont {
 
         ByteBuffer byteBuffer;
         DataBuffer db = image.getData().getDataBuffer();
-        Byte bpp = (byte) image.getColorModel().getPixelSize();
+        byte bpp = (byte) image.getColorModel().getPixelSize();
         if (db instanceof DataBufferInt) {
             int[] rawData = ((DataBufferInt) image.getData().getDataBuffer()).getData();
             byte[] bytes = new byte[rawData.length * 4];
-            for(int i=0; i < rawData.length; i++) {
+            for (int i = 0; i < rawData.length; i++) {
                 int val = rawData[i];
-                int newIndex = i*4;
+                int newIndex = i * 4;
 
                 byte r = (byte) ((val >>> 24) & 0xFF);
                 byte g = (byte) ((val >>> 16) & 0xFF);
                 byte b = (byte) ((val >>> 8) & 0xFF);
-                byte l = (byte) ((int) (r + g + b) / 3);
+                byte l = (byte) ((r + g + b) / 3);
                 bytes[newIndex] = bytes[newIndex + 1] = bytes[newIndex + 2] = -1;
-                bytes[newIndex+3]= (byte) ((val & 0xFF) * l / 255);
+                bytes[newIndex + 3] = (byte) ((val & 0xFF) * l / 255);
             }
 
-            byteBuffer = ByteBuffer.allocateDirect(
-                    charSize*charSize*(bpp/8))
-                    .order(ByteOrder.nativeOrder())
-                    .put(bytes);
+            byteBuffer = ByteBuffer.allocateDirect(charSize * charSize * (bpp / 8)).order(ByteOrder.nativeOrder()).put(bytes);
         } else {
-            byteBuffer = ByteBuffer.allocateDirect(
-                    charSize*charSize*(bpp/8))
-                    .order(ByteOrder.nativeOrder())
-                    .put(((DataBufferByte)image.getData().getDataBuffer()).getData());
+            byteBuffer = ByteBuffer.allocateDirect(charSize * charSize * (bpp / 8)).order(ByteOrder.nativeOrder()).put(((DataBufferByte) image.getData().getDataBuffer()).getData());
         }
         byteBuffer.flip();
 
         // write the image to texture
-        int rasterX = (int)(step % maxPerCol) * charSize;
-        int rasterY = (int)(step / maxPerCol) * charSize;
+        int rasterX = (int) (step % maxPerCol) * charSize;
+        int rasterY = (int) (step / maxPerCol) * charSize;
 
         glBindTexture(GL_TEXTURE_2D, curtex);
         glTexSubImage2D(GL_TEXTURE_2D, 0, rasterX, rasterY, charSize, charSize, GL_RGBA, GL_UNSIGNED_BYTE, byteBuffer);
 
-        lookup.put(ch, new CachedChar(ch, width, generated.size() - 1, 1.0f*rasterX / TEXTURE_SZ_LIMIT,
-                1.0f*rasterY / TEXTURE_SZ_LIMIT));
+        lookup.put(ch, new CachedChar(ch, width, generated.size() - 1, 1.0f * rasterX / TEXTURE_SZ_LIMIT, 1.0f * rasterY / TEXTURE_SZ_LIMIT));
 
         step += 1;
         if (step == maxStep) {
