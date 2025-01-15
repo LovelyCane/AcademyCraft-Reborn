@@ -97,6 +97,10 @@ public class AcademyCraftConfig {
                 return false;
             }
 
+            if (jsonObject == null) {
+                return false;
+            }
+
             Field[] fields = AcademyCraftConfig.class.getDeclaredFields();
             AcademyCraftConfig defaultConfig = getDefaultConfig();
 
