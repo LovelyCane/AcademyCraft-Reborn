@@ -1,5 +1,7 @@
 package cn.academy.api.ability;
 
+import cn.academy.AcademyCraft;
+import cn.academy.AcademyCraftConfig;
 import cn.academy.Resources;
 import cn.academy.internal.ability.Controllable;
 import cn.academy.internal.ability.context.*;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -36,6 +39,8 @@ import java.util.function.Function;
  * @author WeAthFolD
  */
 public abstract class Skill extends Controllable {
+    Map<String, AcademyCraftConfig.Skill> skillMap = AcademyCraft.academyCraftConfig.getAbility().getSkills();
+
     private Category category;
 
     private final List<IDevCondition> learningConditions = new ArrayList<>();
@@ -155,7 +160,7 @@ public abstract class Skill extends Controllable {
     }
 
     public float getDamageScale() {
-        return getOptionalFloat("damage_scale", 1.0f);
+        return getOptionalFloat("damage_scale");
     }
 
     /**
@@ -163,34 +168,42 @@ public abstract class Skill extends Controllable {
      * will be automatically ignored.
      */
     public boolean isEnabled() {
-        return getOptionalBool("enabled", true);
+        return getOptionalBool("enabled");
     }
 
     /**
      * @return Whether this skill is permitted to destroy blocks.
      */
     public boolean shouldDestroyBlocks() {
-        return getOptionalBool("destroy_blocks", true);
+        return getOptionalBool("destroy_blocks");
     }
 
     public float getCPConsumeSpeed() {
-        return getOptionalFloat("cp_consume_speed", 1.0f);
+        return getOptionalFloat("cp_consume_speed");
     }
 
     public float getOverloadConsumeSpeed() {
-        return getOptionalFloat("overload_consume_speed", 1.0f);
+        return getOptionalFloat("overload_consume_speed");
     }
 
     public float getExpIncrSpeed() {
-        return getOptionalFloat("exp_incr_speed", 1.0f);
+        return getOptionalFloat("exp_incr_speed");
     }
 
-    private float getOptionalFloat(String path, float fallback) {
-        return fallback;
+    private float getOptionalFloat(String path) {
+        AcademyCraftConfig.Skill skill = skillMap.get(name);
+        if (skill != null) {
+            return skill.getFloatMap().getOrDefault(path,1.0f);
+        }
+        return 1.0f;
     }
 
-    private boolean getOptionalBool(String path, boolean fallback) {
-        return fallback;
+    private boolean getOptionalBool(String path) {
+        AcademyCraftConfig.Skill skill = skillMap.get(name);
+        if (skill != null) {
+            return skill.getBooleanMap().getOrDefault(path,true);
+        }
+        return true;
     }
 
     public boolean canControl() {
@@ -235,7 +248,7 @@ public abstract class Skill extends Controllable {
     /**
      * Get called when set expCustomize=true, to query the experience of the skill.
      *
-     * @param data
+     * @param data AbilityData
      * @return exp value in [0, 1]
      */
     public float getSkillExp(AbilityData data) {

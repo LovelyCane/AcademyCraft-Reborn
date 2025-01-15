@@ -37,6 +37,9 @@ public class AcademyCraftConfig {
         @SerializedName("metalBlocks")
         private Map<String, List<String>> metalBlocks = new HashMap<>();
 
+        @SerializedName("skills")
+        private Map<String, Skill> skills = new HashMap<>();
+
         public float getCpRecoverSpeed() {
             return cpRecoverSpeed;
         }
@@ -49,9 +52,29 @@ public class AcademyCraftConfig {
             return metalBlocks;
         }
 
+        public Map<String, Skill> getSkills() {
+            return skills;
+        }
+
         public void setCpRecoverSpeed(int cpRecoverSpeed) {
             this.cpRecoverSpeed = cpRecoverSpeed;
             saveConfig();
+        }
+    }
+
+    public static class Skill {
+        @SerializedName("booleanMap")
+        private Map<String, Boolean> booleanMap = new HashMap<>();
+
+        @SerializedName("floatMap")
+        private Map<String, Float> floatMap = new HashMap<>();
+
+        public Map<String, Boolean> getBooleanMap() {
+            return booleanMap;
+        }
+
+        public Map<String, Float> getFloatMap() {
+            return floatMap;
         }
     }
 
@@ -89,8 +112,10 @@ public class AcademyCraftConfig {
 
     private static boolean isValidConfig(File file) {
         Gson gson = new GsonBuilder().create();
+
         try (FileReader fileReader = new FileReader(file)) {
             JsonObject jsonObject;
+
             try {
                 jsonObject = gson.fromJson(fileReader, JsonObject.class);
             } catch (JsonSyntaxException e) {
@@ -112,27 +137,34 @@ public class AcademyCraftConfig {
                 }
 
                 JsonElement element = jsonObject.get(fieldName);
+                if (!element.isJsonObject()) {
+                    return false;
+                }
+
                 JsonObject nestedObject = element.getAsJsonObject();
-                // the inner class's field
+
+                // ability
                 for (Field nestedField : field.getType().getDeclaredFields()) {
                     String nestedFieldName = nestedField.getName();
+
                     if (!nestedObject.has(nestedFieldName)) {
                         return false;
                     }
                 }
 
+                // gui
                 if (field.getType().equals(Map.class)) {
                     Map<String, Node> gui = defaultConfig.getGui();
                     JsonObject guiObject = element.getAsJsonObject();
+
                     for (String string : gui.keySet()) {
                         if (!guiObject.has(string)) {
                             return false;
                         }
-                        // node,like cpbar
+
                         JsonObject nodeObject = nestedObject.get(string).getAsJsonObject();
-                        Field[] nodeFields = AcademyCraftConfig.Node.class.getDeclaredFields();
-                        for (Field nodeFild : nodeFields) {
-                            String nodeFieldName = nodeFild.getName();
+                        for (Field nodeField : AcademyCraftConfig.Node.class.getDeclaredFields()) {
+                            String nodeFieldName = nodeField.getName();
                             if (!nodeObject.has(nodeFieldName)) {
                                 return false;
                             }
@@ -159,6 +191,12 @@ public class AcademyCraftConfig {
     private static AcademyCraftConfig getDefaultConfig() {
         AcademyCraftConfig defaultConfig = new AcademyCraftConfig();
         defaultConfig.getAbility().cpRecoverSpeed = 1.0f;
+        Skill railGun = new Skill();
+        railGun.getBooleanMap().put("enabled", true);
+        railGun.getFloatMap().put("damage_scale", 1.0f);
+        railGun.getFloatMap().put("cp_consume_speed", 1.0f);
+        railGun.getFloatMap().put("overload_consume_speed", 1.0f);
+        defaultConfig.getAbility().getSkills().put("railgun", railGun);
         defaultConfig.getGui().put("cpbar", new Node(new double[]{-12, 12}));
         defaultConfig.getGui().put("keyhint", new Node(new double[]{0, 30}));
         defaultConfig.getGui().put("media", new Node(new double[]{-6, -6}));
@@ -174,7 +212,7 @@ public class AcademyCraftConfig {
                 fileWriter.write(json);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            AcademyCraft.log.error("Error while saving academy craft config", e);
         }
     }
 }
