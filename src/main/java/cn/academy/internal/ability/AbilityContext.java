@@ -1,6 +1,5 @@
 package cn.academy.internal.ability;
 
-import cn.academy.ACConfig;
 import cn.academy.api.ability.Skill;
 import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.datapart.CPData;
@@ -47,7 +46,8 @@ public class AbilityContext {
 
     /**
      * Make the player fire the attack with the given skill. The damage will be re-calculated according to the damage
-     *  scale specified globally and skill-locally, and influenced by passive skills.
+     * scale specified globally and skill-locally, and influenced by passive skills.
+     *
      * @param target The entity to attack
      * @param damage The amount of damage applied (raw)
      */
@@ -79,10 +79,9 @@ public class AbilityContext {
         return canBreakBlock(entity.world) || (!(entity instanceof EntityPainting) && !(entity instanceof EntityItemFrame));
     }
 
-    public void attackRange(double x, double y, double z, double range,
-                            float damage, Predicate<Entity> entitySelector) {
+    public void attackRange(double x, double y, double z, double range, float damage, Predicate<Entity> entitySelector) {
         List<Entity> list = WorldUtils.getEntities(player.world, x, y, z, range, entitySelector);
-        for(Entity ent : list) {
+        for (Entity ent : list) {
             double dist = MathUtils.distance(x, y, z, ent.posX, ent.posY, ent.posZ);
             float factor = 1 - MathUtils.clampf(0, 1, (float) (dist / range));
             float appliedDamage = MathUtils.lerpf(0, damage, factor);
@@ -95,9 +94,7 @@ public class AbilityContext {
     }
 
     public boolean consume(float overload, float cp) {
-        return cpData.perform(
-                getFinalConsO(overload),
-                getFinalConsCP(cp));
+        return cpData.perform(getFinalConsO(overload), getFinalConsCP(cp));
     }
 
     public void consumeWithForce(float overload, float cp) {
@@ -121,14 +118,13 @@ public class AbilityContext {
     }
 
     private float g_getDamageScale() {
-        return (float) ACConfig.instance().getDouble(
-                "ac.ability.calc_global.damage_scale"
-        );
+        return 1.0f;
     }
 
     public boolean canBreakBlock(World world, int x, int y, int z) {
         return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, player, x, y, z);
     }
+
     public boolean canBreakBlock(World world, BlockPos pos) {
         return skill.shouldDestroyBlocks() && AbilityPipeline.canBreakBlock(world, player, pos);
     }

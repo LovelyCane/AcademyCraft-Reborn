@@ -53,11 +53,6 @@ minecraft {
     }
 }
 dependencies {
-    if (propertyBool('use_modern_java_syntax')) {
-        annotationProcessor 'net.java.dev.jna:jna-platform:5.16.0'
-        // Allow jdk.unsupported classes like sun.misc.Unsafe, workaround for JDK-8206937 and fixes crashes in tests
-        patchedMinecraft 'me.eigenraven.java8unsupported:java-8-unsupported-shim:1.0.0'
-    }
     if (propertyBool('use_asset_mover')) {
         implementation "com.cleanroommc:assetmover:${propertyString('asset_mover_version')}"
     }
@@ -71,19 +66,6 @@ dependencies {
         annotationProcessor 'com.google.code.gson:gson:2.11.0'
         annotationProcessor(mixin) {
             transitive = false
-        }
-    }
-}
-
-// Adds Access Transformer files to tasks
-if (propertyBool('use_access_transformer')) {
-    for (def location : propertyStringList('access_transformer_locations')) {
-        def fileLocation = file("${projectDir}/src/main/resources/${location}")
-        if (fileLocation.exists()) {
-            tasks.deobfuscateMergedJarToSrg.accessTransformerFiles.from(fileLocation)
-            tasks.srgifyBinpatchedJar.accessTransformerFiles.from(fileLocation)
-        } else {
-            throw new GradleException("Access Transformer file [$fileLocation] does not exist!")
         }
     }
 }

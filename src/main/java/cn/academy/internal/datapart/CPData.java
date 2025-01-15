@@ -1,7 +1,5 @@
 package cn.academy.internal.datapart;
 
-import cn.academy.ACConfig;
-import cn.academy.AcademyCraft;
 import cn.academy.internal.event.ability.*;
 import cn.academy.internal.event.ability.CalcEvent.CPRecoverSpeed;
 import cn.academy.internal.event.ability.CalcEvent.OverloadRecoverSpeed;
@@ -15,7 +13,6 @@ import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.MathUtils;
 import com.google.common.base.Preconditions;
-import com.typesafe.config.Config;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,7 +34,7 @@ import java.util.Map;
  */
 @RegDataPart(EntityPlayer.class)
 public class CPData extends DataPart<EntityPlayer> {
-    private Config config;
+
     private AbilityData abilityData;
 
     private static final String MSG_POST_EVENT = "post_event", MSG_ACTIVATE_SVR = "actv_svr";
@@ -102,7 +99,6 @@ public class CPData extends DataPart<EntityPlayer> {
 
     @Override
     public void wake() {
-        config = ACConfig.instance().getConfig("ac.ability.data");
         abilityData = AbilityData.get(getEntity());
     }
 
@@ -304,7 +300,7 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     /***
-     * A pre-test to judge whether the skill can be performed.
+     * A pre test to judge whether the skill can be performed.
      * @return Whether the player can perform the ability with the given consumption currently,
      *     takes account of creative mode.
      */
@@ -317,26 +313,26 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     private void addMaxCP(float consumedCP) {
-        setAddMaxCP(addMaxCP + consumedCP * getFloat("maxcp_incr_rate"));
+        setAddMaxCP(addMaxCP + consumedCP * 0.0025f);
     }
 
     private void addMaxOverload(float overload) {
         AbilityData aData = AbilityData.get(getEntity());
         float max = getMaxAddOverload(aData.getLevel());
-        float add = MathUtils.clampf(0, 10, overload * getFloat("maxo_incr_rate"));
+        float add = MathUtils.clampf(0, 10, overload * 0.0058f);
         addMaxOverload += add;
         if (addMaxOverload > max)
             addMaxOverload = max;
     }
 
     private float getCPRecoverSpeed() {
-        float raw = AcademyCraft.academyCraftConfig.getAbility().getCpRecoverSpeed();
+        float raw = 0.0003f * maxCP * MathUtils.lerpf(1, 2, curCP / maxCP);
 
         return CalcEvent.calc(new CPRecoverSpeed(getEntity(), 1)) * raw;
     }
 
     private float getOverloadRecoverSpeed() {
-        float raw = getFloat("overload_recover_speed") * Math.max(0.002f * maxOverload, 0.007f * maxOverload * MathUtils.lerpf(1, 0.5f, curOverload / maxOverload / 2));
+        float raw = Math.max(0.002f * maxOverload, 0.007f * maxOverload * MathUtils.lerpf(1, 0.5f, curOverload / maxOverload / 2));
 
         return CalcEvent.calc(new OverloadRecoverSpeed(getEntity(), 1)) * raw;
     }
@@ -350,7 +346,7 @@ public class CPData extends DataPart<EntityPlayer> {
             return false;
 
         curCP = Math.max(0, curCP - amt);
-        untilRecover = getInt("cp_recover_cooldown");
+        untilRecover = 15;
 
         if (!isClient())
             dataDirty = true;
@@ -367,7 +363,7 @@ public class CPData extends DataPart<EntityPlayer> {
 
         curOverload = Math.min(getMaxOverload(), curOverload + amt);
 
-        untilOverloadRecover = getInt("overload_recover_cooldown");
+        untilOverloadRecover = 32;
 
         if (curOverload == getMaxOverload()) {
             MinecraftForge.EVENT_BUS.post(new OverloadEvent(getEntity()));
@@ -412,33 +408,28 @@ public class CPData extends DataPart<EntityPlayer> {
         return interfering;
     }
 
-    // Inteference API end
-    private int getInt(String name) {
-        return config.getInt(name);
-    }
-
-    private float getFloat(String name) {
-        return (float) config.getDouble(name);
-    }
-
     public float getInitCP(int level) {
-        float rawValue = config.getDoubleList("init_cp").get(level).floatValue();
+        double[] doubles = new double[]{1800, 1800, 2800, 4000, 5800, 8000};
+        float rawValue = (float) doubles[level];
 
         return CalcEvent.calc(new CalcEvent.MaxCP(getEntity(), rawValue));
     }
 
     public float getInitOverload(int level) {
-        float rawValue = config.getDoubleList("init_overload").get(level).floatValue();
+        double[] doubles = new double[]{100, 100, 150, 240, 350, 500};
+        float rawValue = (float) doubles[level];
 
         return CalcEvent.calc(new CalcEvent.MaxOverload(getEntity(), rawValue));
     }
 
     public float getMaxAddCP(int level) {
-        return config.getDoubleList("add_cp").get(level).floatValue();
+        double[] doubles = new double[]{0, 900, 1000, 1500, 1700, 12000};
+        return (float) doubles[level];
     }
 
     public float getMaxAddOverload(int level) {
-        return config.getDoubleList("add_overload").get(level).floatValue();
+        double[] doubles = new double[]{0, 40, 70, 80, 100, 500};
+        return (float) doubles[level];
     }
 
     /**
@@ -514,5 +505,6 @@ public class CPData extends DataPart<EntityPlayer> {
                 cpData.setActivateState(false);
             }
         }
+
     }
 }

@@ -5,7 +5,6 @@ import cn.academy.internal.event.AppInstalledEvent;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.terminal.App;
 import cn.academy.internal.terminal.AppEnvironment;
-import cn.academy.internal.terminal.DonatorList;
 import cn.academy.internal.terminal.TerminalData;
 import cn.academy.internal.util.RegACKeyHandler;
 import cn.lambdalib2.auxgui.AuxGui;
@@ -112,10 +111,6 @@ public class TerminalUI extends AuxGui {
 
         KeyManager.dynamic.addKeyHandler("terminal_click", KeyManager.MOUSE_LEFT, clickHandler = new LeftClickHandler());
         ControlOverrider.override(OVERRIDE_GROUP, KeyManager.MOUSE_LEFT);
-
-        // There is a chance that About App will be opened
-        //   to improve user experience we request that ahead of time
-        DonatorList.Instance.tryRequest();
     }
 
     @Override

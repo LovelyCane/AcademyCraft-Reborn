@@ -93,11 +93,6 @@ public class AcademyCraft {
     }
 
     @EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {
-        ACConfig.updateConfig(null);
-    }
-
-    @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
         config.save();
     }

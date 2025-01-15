@@ -1,12 +1,10 @@
 package cn.academy.api.ability;
 
-import cn.academy.ACConfig;
 import cn.academy.Resources;
 import cn.academy.internal.ability.CategoryManager;
 import cn.academy.internal.ability.Controllable;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.SideUtils;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -121,11 +119,6 @@ public class Category {
         if (ctrlList.size() > id) return ctrlList.get(id);
         return null;
     }
-
-    public float getProgIncrRate() {
-        return (float) Preconditions.checkNotNull(ACConfig.instance().getConfig("ac.ability.category." + name)).getDouble("common.prog_incr_rate");
-    }
-
 
     public ResourceLocation getIcon() {
         return icon;

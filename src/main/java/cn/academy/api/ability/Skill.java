@@ -1,6 +1,5 @@
 package cn.academy.api.ability;
 
-import cn.academy.ACConfig;
 import cn.academy.Resources;
 import cn.academy.internal.ability.Controllable;
 import cn.academy.internal.ability.context.*;
@@ -11,9 +10,7 @@ import cn.academy.internal.ability.develop.condition.DevConditionDeveloperType;
 import cn.academy.internal.ability.develop.condition.DevConditionLevel;
 import cn.academy.internal.ability.develop.condition.IDevCondition;
 import cn.academy.internal.datapart.AbilityData;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.typesafe.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -157,16 +154,6 @@ public abstract class Skill extends Controllable {
         return getLocalized("desc");
     }
 
-    /**
-     * @return The configuration object for this skill.
-     */
-    public Config getConfig() {
-        Config config = ACConfig.instance().getConfig("ac.ability.category").getConfig(getCategoryLocation()).getConfig("skills").getConfig(getName());
-
-        Preconditions.checkNotNull(config);
-        return config;
-    }
-
     public float getDamageScale() {
         return getOptionalFloat("damage_scale", 1.0f);
     }
@@ -199,13 +186,11 @@ public abstract class Skill extends Controllable {
     }
 
     private float getOptionalFloat(String path, float fallback) {
-        Config cfg = getConfig();
-        return cfg.hasPath(path) ? (float) cfg.getDouble(path) : fallback;
+        return fallback;
     }
 
     private boolean getOptionalBool(String path, boolean fallback) {
-        Config cfg = getConfig();
-        return cfg.hasPath(path) ? cfg.getBoolean(path) : fallback;
+        return fallback;
     }
 
     public boolean canControl() {

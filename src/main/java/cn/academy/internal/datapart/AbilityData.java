@@ -1,10 +1,9 @@
 package cn.academy.internal.datapart;
 
-import cn.academy.ACConfig;
 import cn.academy.AcademyCraft;
 import cn.academy.api.ability.Category;
-import cn.academy.internal.ability.CategoryManager;
 import cn.academy.api.ability.Skill;
+import cn.academy.internal.ability.CategoryManager;
 import cn.academy.internal.event.ability.*;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
@@ -302,8 +301,8 @@ public class AbilityData extends DataPart<EntityPlayer> {
     }
 
     private void addLevelProgress(float consumedExp) {
-        float mul0 = getCategory().getProgIncrRate();
-        float mul1 = (float) ACConfig.instance().getDouble("ac.ability.data.prog_incr_rate");
+        float mul0 = 1.0f;
+        float mul1 = 1.0f;
         expAddedThisLevel += consumedExp * mul0 * mul1;
     }
 

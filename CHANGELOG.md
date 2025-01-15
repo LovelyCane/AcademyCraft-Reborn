@@ -71,3 +71,5 @@
 - Refactor Skill Tree UI.
 - New Config System.
 - New Register System.
+- Remove Old Config System.
+- Remove DonatorList and AppAbout.
