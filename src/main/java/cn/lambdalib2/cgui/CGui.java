@@ -102,7 +102,8 @@ public class CGui extends WidgetContainer {
 
     @Override
     public boolean addWidget(String name, Widget w) {
-        if (this.hasWidget(name)) return false;
+        if (this.hasWidget(name))
+            return false;
         super.addWidget(name, w);
         eventBus.postEvent(null, new AddWidgetEvent(w));
         return true;
@@ -122,7 +123,8 @@ public class CGui extends WidgetContainer {
             if (draggingNode == null) {
                 draggingNode = getTopWidget(mx, my);
                 //    System.out.println("StartDragging " + draggingNode);
-                if (draggingNode == null) return;
+                if (draggingNode == null)
+                    return;
                 xOffset = mx - draggingNode.x;
                 yOffset = my - draggingNode.y;
             }
@@ -139,8 +141,10 @@ public class CGui extends WidgetContainer {
         }
 
         bus.postEvent(target, new MouseClickEvent(x, y, bid));
-        if (bid == 0) bus.postEvent(target, new LeftClickEvent(x, y));
-        if (bid == 1) bus.postEvent(target, new RightClickEvent(x, y));
+        if (bid == 0)
+            bus.postEvent(target, new LeftClickEvent(x, y));
+        if (bid == 1)
+            bus.postEvent(target, new RightClickEvent(x, y));
     }
 
     /**
@@ -303,8 +307,10 @@ public class CGui extends WidgetContainer {
     private void frameUpdate() {
         double time = GameTimer.getAbsTime();
 
-        if (lastFrameTime == -1) deltaTime = 0;
-        else deltaTime = MathUtils.clampd(0f, 0.1f, GameTimer.getAbsTime() - lastFrameTime);
+        if (lastFrameTime == -1)
+            deltaTime = 0;
+        else
+            deltaTime = MathUtils.clampd(0f, 0.1f, GameTimer.getAbsTime() - lastFrameTime);
 
         lastFrameTime = time;
 
@@ -379,12 +385,14 @@ public class CGui extends WidgetContainer {
             res = node;
         }
 
-        if (!checkSub) return res;
+        if (!checkSub)
+            return res;
 
         Widget next = null;
         for (Widget wn : set) {
             Widget tmp = gtnTraverse(x, y, wn, wn);
-            if (tmp != null) next = tmp;
+            if (tmp != null)
+                next = tmp;
         }
         return next == null ? res : next;
     }

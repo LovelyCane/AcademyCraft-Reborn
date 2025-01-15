@@ -11,7 +11,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public abstract class PlayerRenderHook {
-    
     EntityPlayer player;
     boolean disposed;
     double createTime = GameTimer.getTime();
@@ -29,5 +28,4 @@ public abstract class PlayerRenderHook {
     protected double getElapsedTime() {
         return GameTimer.getTime() - createTime;
     }
-    
 }

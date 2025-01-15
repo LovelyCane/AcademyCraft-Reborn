@@ -6,7 +6,6 @@
  */
 package cn.lambdalib2.util;
 
-import cn.lambdalib2.LambdaLib2;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.registry.mc.RegEventHandler;
 import com.google.common.base.Throwables;
@@ -44,8 +43,8 @@ public class ControlOverrider {
     private static Field pressedField;
     private static Field kbMapField;
 
-    private static Map<Integer, Override> activeOverrides = new HashMap<>();
-    private static Map<String, OverrideGroup> overrideGroups = new HashMap<>();
+    private static final Map<Integer, Override> activeOverrides = new HashMap<>();
+    private static final Map<String, OverrideGroup> overrideGroups = new HashMap<>();
 
     private static boolean completeOverriding;
     private static GuiScreen lastTickGui;
@@ -164,9 +163,6 @@ public class ControlOverrider {
                     }
                     //kb.setKeyCode(-1);
                     activeOverrides.put(keyid, new Override(kb));
-                    log("Override new [" + keyid + "]");
-                } else {
-                    log("Override ignored [" + keyid + "]");
                 }
             }
         }
@@ -183,10 +179,6 @@ public class ControlOverrider {
             Collection<KeyBinding> collection = kbMap.lookup(keyid);
             if(collection!=null) {
                 collection.add(ovr.kb);
-                log("Override remove [" + keyid + "]");
-            }
-            else{
-                log("Clear ignore ["+ keyid + "]");
             }
         });
 
@@ -214,11 +206,6 @@ public class ControlOverrider {
                 collection.remove(ao.getValue().kb);
             }
         }
-    }
-
-    private static void log(String s) {
-        if (LambdaLib2.DEBUG)
-            Debug.log(s);
     }
 
     private static RuntimeException error(String s) {

@@ -22,7 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author WeAthFolD
  */
 public abstract class DataPart<T extends Entity> {
-
     EntityData<T> entityData;
     private boolean syncInit = false;
 
@@ -149,10 +148,6 @@ public abstract class DataPart<T extends Entity> {
         return getEntity().world.isRemote;
     }
 
-    protected Side getSide() {
-        return isClient() ? Side.CLIENT : Side.SERVER;
-    }
-
     /**
      * @return The entity that this DataPart is attached to.
      */
@@ -176,8 +171,8 @@ public abstract class DataPart<T extends Entity> {
         }
     }
 
-    protected boolean checkSideSoft(Side side) {
-        return isClient() == side.isClient();
+    protected boolean checkSideSoft() {
+        return isClient() == Side.SERVER.isClient();
     }
 
     protected void debug(Object message) {
@@ -232,7 +227,6 @@ public abstract class DataPart<T extends Entity> {
 
     @Listener(channel="itn_sync", side={Side.CLIENT, Side.SERVER})
     private void onSync(ByteBuf buf) {
-//        Debug.log("Sync on " + this);
         NetworkS11n.deserializeRecursivelyInto(buf, this, getClass());
         onSynchronized();
     }

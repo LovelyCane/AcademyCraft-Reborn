@@ -22,7 +22,6 @@ import java.util.*;
  * Parses obj model file into the runtime {@link ObjModel}.
  */
 public class ObjParser {
-
     public static ObjModel parse(ResourceLocation res) {
         return parse(new InputStreamReader(ResourceUtils.getResourceStream(res)));
     }
@@ -264,5 +263,4 @@ public class ObjParser {
             return result;
         }
     }
-
 }

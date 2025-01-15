@@ -15,7 +15,6 @@ import org.lwjgl.util.Color;
  */
 @SideOnly(Side.CLIENT)
 public final class Particle extends EntityAdvanced implements ISpriteEntity {
-
     public ResourceLocation texture = null;
     public Color color = Colors.white();
     public float size = 1.0f;
@@ -124,5 +123,4 @@ public final class Particle extends EntityAdvanced implements ISpriteEntity {
     public boolean needViewOptimize() {
         return false;
     }
-
 }

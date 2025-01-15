@@ -1,9 +1,5 @@
 package cn.lambdalib2.renderhook;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
@@ -12,6 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author WeAthFolD
@@ -40,7 +39,7 @@ public class DummyRenderData extends DataPart<EntityPlayer> {
         renderers.removeIf(val -> val.disposed);
         
         // Destroy the entity when no more needed, saving resources
-        if(entity != null && renderers.size() == 0) {
+        if(entity != null && renderers.isEmpty()) {
             entity.setDead();
             entity = null;
         }
@@ -67,5 +66,4 @@ public class DummyRenderData extends DataPart<EntityPlayer> {
     @Override
     public void toNBT(NBTTagCompound tag) {
     }
-
 }

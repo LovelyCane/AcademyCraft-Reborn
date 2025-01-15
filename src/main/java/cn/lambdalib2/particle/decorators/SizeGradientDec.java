@@ -11,9 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class SizeGradientDec implements ParticleDecorator {
-    
     public float endScale = 0.7f;
-    
+
     public SizeGradientDec(float es) {
         endScale = es;
     }
@@ -21,7 +20,6 @@ public class SizeGradientDec implements ParticleDecorator {
     @Override
     public void decorate(Particle particle) {
         particle.addMotionHandler(new MotionHandler<Particle>() {
-            
             float startSize;
 
             @Override
@@ -36,11 +34,8 @@ public class SizeGradientDec implements ParticleDecorator {
 
             @Override
             public void onUpdate() {
-                getTarget().size = startSize * 
-                    MathUtils.lerpf(1, endScale, ((float) getTarget().getParticleLife() / (float) getTarget().getMaxLife()));
+                getTarget().size = startSize * MathUtils.lerpf(1, endScale, ((float) getTarget().getParticleLife() / (float) getTarget().getMaxLife()));
             }
-            
         });
     }
-
 }

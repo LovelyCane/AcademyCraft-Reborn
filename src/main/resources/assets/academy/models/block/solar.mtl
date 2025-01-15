@@ -2,5 +2,4 @@
 # www.blender.org
 
 newmtl Material
-Kd 1.00 1.00 1.00
 map_Kd academy:models/solar

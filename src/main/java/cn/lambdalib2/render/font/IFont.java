@@ -1,14 +1,14 @@
 /**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of LambdaLib modding library.
-* https://github.com/LambdaInnovation/LambdaLib
-* Licensed under MIT, see project root for more information.
-*/
+ * Copyright (c) Lambda Innovation, 2013-2016
+ * This file is part of LambdaLib modding library.
+ * https://github.com/LambdaInnovation/LambdaLib
+ * Licensed under MIT, see project root for more information.
+ */
 package cn.lambdalib2.render.font;
 
-import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.render.font.TextSplitter.IFontSizeProvider;
 import cn.lambdalib2.s11n.SerializeType;
+import cn.lambdalib2.util.Colors;
 import org.lwjgl.util.Color;
 
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.List;
  * A generic font interface.
  */
 public interface IFont {
-
     enum FontAlign {
         LEFT(0), CENTER(0.5f), RIGHT(1);
 
@@ -42,7 +41,6 @@ public interface IFont {
 
     @SerializeType
     class FontOption {
-
         public float fontSize;
         public FontAlign align;
         public Color color;
@@ -89,9 +87,9 @@ public interface IFont {
 
     /**
      * Draws the string at the given position with given font option in one line. <br>
-     *
+     * <p>
      * The string is assumed to not include line-seperate characters. (\n or \r). Violating this yields undefined
-     *     behaviour.
+     * behaviour.
      */
     void draw(String str, float x, float y, FontOption option);
 
@@ -117,12 +115,12 @@ public interface IFont {
 
     /**
      * Simulates the {@link IFont#drawSeperated} and return the extent drawn.
+     *
      * @return A {@link Extent} describing the drawn area
      */
     default Extent drawSeperated_Sim(String str, float limit, FontOption option) {
         List<String> lines = TextSplitter.split(str, provider(option), limit);
-        return new Extent(lines.size(), lines.size() == 1 ? getTextWidth(lines.get(0), option) : limit
-            , lines.size() * option.fontSize);
+        return new Extent(lines.size(), lines.size() == 1 ? getTextWidth(lines.get(0), option) : limit, lines.size() * option.fontSize);
     }
 
     default IFontSizeProvider provider(FontOption option) {
@@ -138,5 +136,4 @@ public interface IFont {
             }
         };
     }
-
 }

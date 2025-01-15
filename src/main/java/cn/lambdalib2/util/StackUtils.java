@@ -17,8 +17,7 @@ import java.util.Random;
 
 public class StackUtils {
 
-    public static void dropItems(World world, BlockPos pos,
-                                 IInventory inv) {
+    public static void dropItems(World world, BlockPos pos, IInventory inv) {
         Random rand = new Random();
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
@@ -28,12 +27,10 @@ public class StackUtils {
                 float ry = rand.nextFloat() * 0.8F + 0.1F;
                 float rz = rand.nextFloat() * 0.8F + 0.1F;
 
-                EntityItem entityItem = new EntityItem(world,
-                    pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz, stack.copy());
+                EntityItem entityItem = new EntityItem(world, pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz, stack.copy());
 
                 if (stack.hasTagCompound()) {
-                    entityItem.getItem().setTagCompound(
-                            (NBTTagCompound) stack.getTagCompound().copy());
+                    entityItem.getItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
                 }
 
                 float factor = 0.05F;

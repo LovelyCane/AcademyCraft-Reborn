@@ -60,5 +60,4 @@ public class ModContainer extends DummyModContainer {
                 .collect(Collectors.toList())
         );
     }
-
 }

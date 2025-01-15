@@ -1,6 +1,6 @@
 package cn.academy;
 
-import cn.academy.client.ClientResources;
+import cn.academy.internal.client.ClientResources;
 import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;

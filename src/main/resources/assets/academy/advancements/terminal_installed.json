@@ -10,7 +10,8 @@
       "translate": "advancements.general.terminal_installed.desc"
     }
   },
-  "criteria":{
+  "parent": "academy:root",
+  "criteria": {
     "terminal_installed": {
       "trigger": "academy:terminal_installed"
     }

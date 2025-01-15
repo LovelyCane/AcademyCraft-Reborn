@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL11;
  */
 @Deprecated
 public class ViewOptimize {
-    
     public interface IAssociatePlayer {
         EntityPlayer getPlayer();
     }
@@ -56,5 +55,4 @@ public class ViewOptimize {
         EntityPlayer clientPlayer = Minecraft.getMinecraft().player;
         return mc.gameSettings.thirdPersonView == 0 && clientPlayer == entity.getPlayer();
     }
-    
 }

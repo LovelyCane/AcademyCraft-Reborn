@@ -21,7 +21,6 @@ import java.util.List;
 
 /**
  * @author WeathFolD
- *
  */
 @SideOnly(Side.CLIENT)
 public class AuxGuiHandler {
@@ -36,7 +35,7 @@ public class AuxGuiHandler {
     private static final List<AuxGui> toAddList = new ArrayList<>();
 
     public static void register(AuxGui gui) {
-        if(!iterating)
+        if (!iterating)
             doAdd(gui);
         else
             toAddList.add(gui);
@@ -66,7 +65,7 @@ public class AuxGuiHandler {
 
     @SubscribeEvent(receiveCanceled = true)
     public void drawHudEvent(RenderGameOverlayEvent event) {
-        if(event.getType() == ElementType.CROSSHAIRS) {
+        if (event.getType() == ElementType.CROSSHAIRS) {
             doRender(event);
         }
     }
@@ -81,10 +80,10 @@ public class AuxGuiHandler {
 
         Iterator<AuxGui> iter = auxGuiList.iterator();
         startIterating();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             AuxGui gui = iter.next();
-            if(!gui.disposed) {
-                if(!gui.lastFrameActive)
+            if (!gui.disposed) {
+                if (!gui.lastFrameActive)
                     gui.lastActivateTime = GameTimer.getTime();
                 gui.draw(event.getResolution());
                 gui.lastFrameActive = true;
@@ -96,7 +95,7 @@ public class AuxGuiHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDepthMask(true);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glColor4f(1,1,1,1);
+        GL11.glColor4f(1, 1, 1, 1);
     }
 
     @SubscribeEvent

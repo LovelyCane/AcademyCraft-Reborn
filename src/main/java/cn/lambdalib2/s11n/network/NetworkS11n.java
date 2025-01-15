@@ -416,6 +416,67 @@ public class NetworkS11n {
                 return new ItemStack(tag);
             }
         });
+        addDirect(HashSet.class, new NetS11nAdaptor<HashSet>() {
+            @Override
+            public void write(ByteBuf buf, HashSet obj) {
+                Preconditions.checkArgument(obj.size() < Short.MAX_VALUE, "Too many objects to serialize");
+
+                buf.writeShort(obj.size());
+
+                for (Object o : obj) {
+                    serialize(buf, o, false);
+                }
+            }
+
+            @Override
+            public HashSet read(ByteBuf buf) throws ContextException {
+                int size = buf.readShort();
+                HashSet<Object> ret = new HashSet<>();
+
+                while (size-- > 0) {
+                    ret.add(deserialize(buf));
+                }
+
+                return ret;
+            }
+        });
+        addDirect(ArrayList.class, new NetS11nAdaptor<ArrayList>() {
+            @Override
+            public void write(ByteBuf buf, ArrayList obj) {
+                _check(obj.size() <= Byte.MAX_VALUE, "Too many objects to serialize");
+
+                buf.writeByte(obj.size());
+                for (Object elem : obj) {
+                    serialize(buf, elem, true);
+                }
+            }
+
+            @Override
+            public ArrayList read(ByteBuf buf) {
+                ArrayList<Object> ret = new ArrayList<>();
+                int size = buf.readByte();
+                for (int i = 0; i < size; ++i) {
+                    ret.add(deserialize(buf));
+                }
+                return ret;
+            }
+        });
+        addDirect(BlockPos.class, new NetS11nAdaptor<BlockPos>() {
+            @Override
+            public void write(ByteBuf buf, BlockPos obj) {
+                buf.writeInt(obj.getX());
+                buf.writeInt(obj.getY());
+                buf.writeInt(obj.getZ());
+            }
+
+            @Override
+            public BlockPos read(ByteBuf buf) {
+                int x = buf.readInt();
+                int y = buf.readInt();
+                int z = buf.readInt();
+                return new BlockPos(x, y, z);
+            }
+        });
     }
 
     private NetworkS11n() {
@@ -766,5 +827,4 @@ public class NetworkS11n {
             super(msg);
         }
     }
-
 }

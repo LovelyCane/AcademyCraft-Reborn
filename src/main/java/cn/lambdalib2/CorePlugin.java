@@ -14,7 +14,7 @@ public class CorePlugin implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
         return new String[] {
-                "cn.lambdalib2.render.mc.PipelineTransformer",
+          //      "cn.lambdalib2.render.mc.PipelineTransformer",
                 "cn.lambdalib2.registry.impl.RegistryTransformer"
         };
     }

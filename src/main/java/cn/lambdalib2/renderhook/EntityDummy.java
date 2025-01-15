@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class EntityDummy extends Entity implements IAssociatePlayer {
-    
     AbstractClientPlayer player;
     final DummyRenderData data;
     

@@ -1,7 +1,5 @@
 package cn.lambdalib2.multiblock;
 
-import cn.lambdalib2.LambdaLib2;
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -23,7 +21,7 @@ public class InfoBlockMulti {
     private boolean loaded; // Client-Only flag. Indicate if it was synced.
     int syncCD; // Ticks until sending next sync request.
 
-    InfoBlockMulti(TileEntity _te, EnumFacing _dir, int sid) {
+    public InfoBlockMulti(TileEntity _te, EnumFacing _dir, int sid) {
         te = _te;
         dir = _dir;
         subID = sid;
@@ -39,41 +37,6 @@ public class InfoBlockMulti {
     public InfoBlockMulti(TileEntity _te, NBTTagCompound tag) {
         te = _te;
         load(tag);
-    }
-
-    /**
-     * Delegate this method in your TileEntity's updateEntity method.
-     */
-    public void update() {
-        if (te.getWorld().isRemote) {
-            if (!loaded) {
-                if (syncCD == 0) {
-                    LambdaLib2.channel.sendToServer(new MsgBlockMulti.Req(this));
-                    syncCD = 10;
-                } else {
-                    --syncCD;
-                }
-            }
-        } else {
-            // Check block consistency every 1s in server.
-            if (syncCD == 0) {
-                syncCD = 20;
-            }
-            boolean fail = false;
-            Block b = te.getBlockType();
-            if (!(b instanceof BlockMulti)) {
-                fail = true;
-            } else {
-                TileEntity ori = ((BlockMulti) b).getOriginTile(te);
-                if (ori == null) {
-                    fail = true;
-                }
-            }
-            if (fail) { // Kill this block.
-                te.getWorld().setBlockToAir(te.getPos());
-                te.getWorld().removeTileEntity(te.getPos());
-            }
-        }
     }
 
     public boolean isLoaded() {
@@ -107,5 +70,4 @@ public class InfoBlockMulti {
             loaded = true;
         }
     }
-
 }

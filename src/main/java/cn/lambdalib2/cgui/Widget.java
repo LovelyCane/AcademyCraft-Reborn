@@ -22,10 +22,9 @@ import java.util.List;
 /**
  * @author WeathFolD
  */
-
 public class Widget extends WidgetContainer {
     private GuiEventBus eventBus = new GuiEventBus();
-    private List<Component> components = new LinkedList<>();
+    private final List<Component> components = new LinkedList<>();
 
     public boolean disposed = false;
     public boolean dirty = true; //Indicate that this widget's pos data is dirty and requires update.
@@ -101,23 +100,6 @@ public class Widget extends WidgetContainer {
         return this;
     }
 
-    public Widget withChild(Widget child) {
-        addWidget(child);
-        return this;
-    }
-
-    public Widget withChild(String name, Widget child) {
-        addWidget(name, child);
-        return this;
-    }
-
-    public Widget raycast(boolean enable) {
-        transform.doesListenKey = enable;
-        return this;
-    }
-
-    //
-
     /**
      * @return Whether the widget is visible (and called each draw frame).
      */
@@ -126,7 +108,7 @@ public class Widget extends WidgetContainer {
     }
 
     /**
-     * Return a reasonable copy of this widget. Retains all the properties and functions, 
+     * Return a reasonable copy of this widget. Retains all the properties and functions,
      * along with its all sub widgets recursively.
      */
     public Widget copy() {
@@ -155,7 +137,8 @@ public class Widget extends WidgetContainer {
 
         //Also copy the widget's sub widgets recursively.
         for (Widget asub : getDrawList()) {
-            if (asub.needCopy) n.addWidget(asub.getName(), asub.copy());
+            if (asub.needCopy)
+                n.addWidget(asub.getName(), asub.copy());
         }
     }
 
@@ -163,10 +146,6 @@ public class Widget extends WidgetContainer {
      * Called when added into a GUI. Use this to do initialization.
      */
     protected void onAdded() {
-    }
-
-    public boolean initialized() {
-        return gui != null;
     }
 
     public boolean isWidgetParent() {
@@ -214,10 +193,6 @@ public class Widget extends WidgetContainer {
         components.add(c);
         c.onAdded();
         return this;
-    }
-
-    public void removeComponent(Component c) {
-        removeComponent(c.getClass());
     }
 
     public void removeComponent(Class<? extends Component> klass) {
@@ -269,12 +244,9 @@ public class Widget extends WidgetContainer {
         eventBus.unlisten(clazz, handler);
     }
 
-    public <T extends GuiEvent> void unlisten(IGuiEventHandler<T> handler) {
-        eventBus.unlisten(handler);
-    }
-
     /**
      * Post a event to this widget's event bus.
+     *
      * @param event
      */
     public void post(GuiEvent event) {
@@ -283,17 +255,14 @@ public class Widget extends WidgetContainer {
 
     /**
      * Post a event to this widget's event bus (and all it's childs hierarchically, if tochild=true)
+     *
      * @param event
      * @param tochild If we should post event to all childs hierarchically
      */
     public void post(GuiEvent event, boolean tochild) {
         eventBus.postEvent(this, event);
         if (tochild) {
-            widgets
-                    .values()
-                    .stream()
-                    .filter(w -> !w.disposed)
-                    .forEach(w -> w.post(event, true));
+            widgets.values().stream().filter(w -> !w.disposed).forEach(w -> w.post(event, true));
         }
     }
 
@@ -320,95 +289,18 @@ public class Widget extends WidgetContainer {
         return gui != null && this == gui.getFocus();
     }
 
-    public void markDirty() {
-        this.dirty = true;
-    }
-
     @Override
     protected void onWidgetAdded(String name, Widget w) {
         w.parent = this;
         w.gui = gui;
     }
 
-    public int getHierarchyLevel() {
-        int ret = 0;
-        Widget cur = this;
-        while (cur.isWidgetParent()) {
-            cur = cur.getWidgetParent();
-            ++ret;
-        }
-        return ret;
-    }
-
     public WidgetContainer getAbstractParent() {
         return abstractParent;
-    }
-
-    public boolean rename(String newName) {
-        WidgetContainer parent = getAbstractParent();
-        if (parent.hasWidget(newName))
-            return false;
-        getAbstractParent().renameWidget(getName(), newName);
-        return true;
-    }
-
-    public boolean isChildOf(Widget another) {
-        Widget cur = this.getWidgetParent();
-        while (cur != null) {
-            if (cur == another)
-                return true;
-            cur = cur.getWidgetParent();
-        }
-        return false;
-    }
-
-    public void gainFocus() {
-        getGui().gainFocus(this);
     }
 
     @Override
     public String toString() {
         return this.getName() + "@" + this.getClass().getSimpleName();
     }
-
-    interface IWidgetFormatter {
-        String format(Widget w);
-    }
-
-    /**
-     * Get the widget's hierarchical structure for debugging.
-     */
-    public String getHierarchyStructure() {
-        return getHierarchyStructure(w -> w.toString());
-    }
-
-    public String getHierarchyStructure_pos() {
-        return getHierarchyStructure(w -> String.format("%s: (%f,%f)[%f,%f]x%f", w.getName(),
-                w.transform.x, w.transform.y,
-                w.transform.width, w.transform.height,
-                w.transform.scale));
-    }
-
-    public String getHierarchyStructure(IWidgetFormatter f) {
-        return getHierarchyStructure_int(f, 0);
-    }
-
-    private String _rep(int times) {
-        StringBuilder sb = new StringBuilder(times * 2);
-        while (times-- > 0) sb.append("  ");
-        return sb.toString();
-    }
-
-    private String getHierarchyStructure_int(IWidgetFormatter f, int indent) {
-        String istr = _rep(indent);
-        StringBuilder ret = new StringBuilder();
-        ret.append(istr).append(f.format(this));
-        if (getDrawList().size() != 0) {
-            ret.append(istr).append("{\n");
-            getDrawList().forEach(w -> ret.append(w.getHierarchyStructure_int(f, indent + 1)).append(','));
-            ret.append(istr).append("\n}");
-        }
-        return ret.toString();
-    }
-
 }

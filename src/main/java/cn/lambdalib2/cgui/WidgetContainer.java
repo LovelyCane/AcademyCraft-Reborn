@@ -48,21 +48,7 @@ public class WidgetContainer implements Iterable<Widget> {
             }
         }
     }
-    
-    /**
-     * @throws NullPointerException if the widget wasn't found.
-     */
-    public void renameWidget(String name, String newName) {
-        Widget w = widgets.remove(name);
-        if(w == null)
-            throw new NullPointerException();
-        widgets.put(newName, w);
-    }
-    
-    public Set<Map.Entry<String, Widget>> getEntries() {
-        return widgets.entrySet();
-    }
-    
+
     public boolean addWidget(Widget add) {
         return addWidget(getNextName(), add);
     }
@@ -91,38 +77,6 @@ public class WidgetContainer implements Iterable<Widget> {
         else
             widgetList.add(add);
         
-        checkAdded(name, add);
-        return true;
-    }
-
-    public boolean addWidgetAfter(Widget add, Widget pivot) {
-        return addWidgetAfter(getNextName(), add, pivot);
-    }
-    
-    public boolean addWidgetAfter(String name, Widget add, Widget pivot) {
-        int index = widgetList.indexOf(pivot);
-        if(index == -1)
-            return false;
-        if(!checkInit(name, add))
-            return false;
-        
-        widgetList.add(index + 1, add);
-        checkAdded(name, add);
-        return true;
-    }
-
-    public boolean addWidgetBefore(Widget add, Widget pivot) {
-        return addWidgetBefore(getNextName(), add, pivot);
-    }
-    
-    public boolean addWidgetBefore(String name, Widget add, Widget pivot) {
-        int index = widgetList.indexOf(pivot);
-        if(index == -1)
-            index = 0;
-        if(!checkInit(name, add))
-            return false;
-        
-        widgetList.add(index, add);
         checkAdded(name, add);
         return true;
     }
@@ -161,11 +115,7 @@ public class WidgetContainer implements Iterable<Widget> {
     public Widget getWidget(int i) {
         return widgetList.get(i);
     }
-    
-    public int locate(Widget w) {
-        return widgetList.indexOf(w);
-    }
-    
+
     /**
      * Callback when a widget was loaded. Allows sub class to do
      * some specific data setup.
@@ -218,15 +168,7 @@ public class WidgetContainer implements Iterable<Widget> {
         //w.gui = null;
         w.parent = null;
     }
-    
-    public void forceRemoveWidget(Widget w) {
-        if(w.getAbstractParent() != this)
-            return;
-        widgets.remove(w.getName());
-        widgetList.remove(w);
-        w.gui = null;
-        w.parent = null;
-    }
+
     
     /**
      * Get the id of the widget, provided that the widget is in this container.
@@ -235,59 +177,12 @@ public class WidgetContainer implements Iterable<Widget> {
     public String getWidgetName(Widget w) {
         return widgets.inverse().get(w);
     }
-    
-    /**
-     * Assign a new name for the widget.
-     */
-    public void changeWidgetName(Widget w, String newName) {
-        widgets.inverse().put(w, newName);
-    }
 
     /**
      * @return An immutable list of all widgets in this WidgetContainer in draw order.
      */
     public List<Widget> getDrawList() {
         return ImmutableList.copyOf(widgetList);
-    }
-
-    public int widgetCount() {
-        return widgetList.size();
-    }
-
-    /**
-     * Reorder the given widget before the pivot. The target and pivot must be all within this container,
-     *     or the result is undefined.
-     * @param target The target to reorder
-     * @param pivot if null, put at the beginning of the draw list, otherwise after the given pivot.
-     */
-    public void reorder(Widget target, Widget pivot) {
-        widgetList.remove(target);
-        ListIterator<Widget> litr = widgetList.listIterator();
-        if (pivot == null) {
-            litr.add(target);
-        } else {
-            while (litr.hasNext()) {
-                Widget w = litr.next();
-                if (w == pivot) {
-                    litr.add(target);
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * Reorder the given widget to before the element at the given index, in view of the draw list before reordering.
-     * @throws NoSuchElementException if newIndex > size
-     */
-    public void reorder(Widget target, int newIndex) {
-        int prevIndex = widgetList.indexOf(target);
-        widgetList.remove(prevIndex);
-        if (newIndex > prevIndex) {
-            widgetList.add(newIndex - 1, target);
-        } else {
-            widgetList.add(newIndex, target);
-        }
     }
     
     public Iterator<Widget> iterator() {

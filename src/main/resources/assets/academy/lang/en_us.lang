@@ -24,7 +24,7 @@ item.ac_energy_convert_component.name=Energy Converter
 item.ac_calc_chip.name=Calculation Chip
 item.ac_data_chip.name=Data Chip
 
-item.ac_matter_unit.name=Matter Unit
+item.ac_empty_matter_unit.name=Matter Unit
 item.ac_matter_unit_phase_liquid.name=Imag Phase Liquid Unit
 item.ac_matter_unit_none.name=Empty Unit
 item.ac_matrix_core.name=Matrix Core

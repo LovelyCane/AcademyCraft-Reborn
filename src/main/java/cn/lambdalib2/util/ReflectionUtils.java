@@ -120,46 +120,40 @@ public class ReflectionUtils {
     public static List<Method> getMethods(Class<? extends Annotation> annoClass) {
         List<ASMData> objects = getRawObjects(annoClass.getCanonicalName());
 
-        return objects.stream()
-                .map(data -> {
-                    try {
-                        Class<?> type = Class.forName(data.getClassName());
+        return objects.stream().map(data -> {
+            try {
+                Class<?> type = Class.forName(data.getClassName());
 
-                        String fullDesc = data.getObjectName();
-                        int idx = fullDesc.indexOf('(');
-                        String methodName = fullDesc.substring(0, idx);
-                        String desc = fullDesc.substring(idx);
+                String fullDesc = data.getObjectName();
+                int idx = fullDesc.indexOf('(');
+                String methodName = fullDesc.substring(0, idx);
+                String desc = fullDesc.substring(idx);
 
-                        Type[] rawArgs = Type.getArgumentTypes(desc);
-                        Class<?>[] args = new Class[rawArgs.length];
-                        for (int i = 0; i < rawArgs.length; ++i) {
-                            args[i] = Class.forName(rawArgs[i].getClassName());
-                        }
+                Type[] rawArgs = Type.getArgumentTypes(desc);
+                Class<?>[] args = new Class[rawArgs.length];
+                for (int i = 0; i < rawArgs.length; ++i) {
+                    args[i] = Class.forName(rawArgs[i].getClassName());
+                }
 
-                        return type.getDeclaredMethod(methodName, args);
-                    }
-                    catch (ClassNotFoundException | NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    }
+                return type.getDeclaredMethod(methodName, args);
+            } catch (ClassNotFoundException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
 
-                }).collect(Collectors.toList());
+        }).collect(Collectors.toList());
     }
 
     /**
      * Get all classes with given annotation.
      */
     public static List<Class<?>> getClasses(Class<? extends Annotation> annoClass) {
-        return getRawObjects(annoClass.getCanonicalName()).stream()
-                .map(ASMData::getClassName)
-                .distinct()
-                .map(className -> {
-                    try {
-                        return Class.forName(className);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toList());
+        return getRawObjects(annoClass.getCanonicalName()).stream().map(ASMData::getClassName).distinct().map(className -> {
+            try {
+                return Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -167,22 +161,19 @@ public class ReflectionUtils {
      */
     public static List<Field> getFields(Class<? extends Annotation> annoClass) {
         List<ASMData> objects = getRawObjects(annoClass.getCanonicalName());
-        return objects.stream()
-                .filter(obj -> !Objects.equals(obj.getObjectName(), obj.getClassName()))
-                .map(it -> {
-                    try {
-                        Field field =  Class.forName(it.getClassName()).getDeclaredField(it.getObjectName());
-                        field.setAccessible(true);
-                        return field;
+        return objects.stream().filter(obj -> !Objects.equals(obj.getObjectName(), obj.getClassName())).map(it -> {
+            try {
+                Field field = Class.forName(it.getClassName()).getDeclaredField(it.getObjectName());
+                field.setAccessible(true);
+                return field;
 
-                    } catch (ClassNotFoundException | NoSuchFieldException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoClassDefFoundError ex) {
-                        Debug.log(String.format("Error when get field %s.%s ", it.getClassName(), it.getObjectName()));
-                        throw new RuntimeException(ex);
-                    }
-                })
-                .collect(Collectors.toList());
+            } catch (ClassNotFoundException | NoSuchFieldException ex) {
+                throw new RuntimeException(ex);
+            } catch (NoClassDefFoundError ex) {
+                Debug.log(String.format("Error when get field %s.%s ", it.getClassName(), it.getObjectName()));
+                throw new RuntimeException(ex);
+            }
+        }).collect(Collectors.toList());
     }
 
     public static List<ASMData> getRawObjects(String annoName) {
@@ -192,14 +183,12 @@ public class ReflectionUtils {
     public static List<ASMData> getRawObjects(String annoName, boolean removeSideOnly) {
         Stream<ASMData> stream = table.getAll(annoName).stream();
         if (removeSideOnly) {
-            stream = stream.filter(it -> !removedClasses.contains(it.getClassName()))
-                    .filter(it -> removedMethods.stream().noneMatch(m -> isClassObjectEqual(it, m)));
+            stream = stream.filter(it -> !removedClasses.contains(it.getClassName())).filter(it -> removedMethods.stream().noneMatch(m -> isClassObjectEqual(it, m)));
         }
         return stream.collect(Collectors.toList());
     }
 
     private static boolean isClassObjectEqual(ASMData lhs, ASMData rhs) {
-        return (Objects.equals(lhs.getObjectName(), rhs.getObjectName())) &&
-                (Objects.equals(lhs.getClassName(), rhs.getClassName()));
+        return (Objects.equals(lhs.getObjectName(), rhs.getObjectName())) && (Objects.equals(lhs.getClassName(), rhs.getClassName()));
     }
 }

@@ -12,7 +12,6 @@ package cn.lambdalib2.cgui.event;
  * @author WeAthFolD
  */
 public class DragEvent implements GuiEvent {
-    
     /**
      * Offset coordinates from dragging widget origin to current mouse position, in global scale level.
      */
@@ -22,5 +21,4 @@ public class DragEvent implements GuiEvent {
         offsetX = _offsetX;
         offsetY = _offsetY;
     }
-
 }

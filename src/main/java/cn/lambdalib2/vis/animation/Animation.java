@@ -5,7 +5,6 @@ package cn.lambdalib2.vis.animation;
  * @author WeAthFolD
  */
 public abstract class Animation {
-    
     public boolean disposed = false;
     
     /**
@@ -22,5 +21,4 @@ public abstract class Animation {
      * Callback when animation is ended.
      */
     public void onEnded() {}
-    
 }

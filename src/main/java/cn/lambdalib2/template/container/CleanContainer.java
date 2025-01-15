@@ -1,15 +1,12 @@
 package cn.lambdalib2.template.container;
 
-import com.google.common.primitives.Ints;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -18,7 +15,6 @@ import java.util.function.Predicate;
  *  replaced by the neat {@link #addTransferRule(SlotGroup, Predicate, SlotGroup)} interface.
  */
 public abstract class CleanContainer extends Container {
-
     /**
      * @return A slot group containing specified slots
      */
@@ -33,21 +29,7 @@ public abstract class CleanContainer extends Container {
         return new SlotGroup(from, toExclusive);
     }
 
-    /**
-     * @return A slot group that is the combination of given groups
-     */
-    public static SlotGroup gCombine(SlotGroup ... groups) {
-        Set<Integer> collector = new HashSet<>();
-        for (SlotGroup g : groups) {
-            for (int i : g.slots) {
-                collector.add(i);
-            }
-        }
-
-        return new SlotGroup(Ints.toArray(collector));
-    }
-
-    private List<Rule> rules = new ArrayList<>();
+    private final List<Rule> rules = new ArrayList<>();
 
     /**
      * Adds a stack transfer rule.
@@ -107,7 +89,6 @@ public abstract class CleanContainer extends Container {
      * Then check if they can be merged.
      * @param stackToMerge slot merged from
      * @param idx slot merged to
-     * @return
      */
     private boolean tryMerge(ItemStack stackToMerge, int idx) {
         Slot slot = this.inventorySlots.get(idx);
@@ -168,7 +149,7 @@ public abstract class CleanContainer extends Container {
 
     }
 
-    private class Rule {
+    private static class Rule {
         SlotGroup from, to;
         Predicate<ItemStack> pred;
     }

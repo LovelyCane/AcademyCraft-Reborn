@@ -59,10 +59,6 @@ public class Debug {
         return obj;
     }
 
-    public static void debug(String msg) {
-        LOGGER.debug(msg);
-    }
-
     public static void log(String msg) {
         LOGGER.info(msg);
     }

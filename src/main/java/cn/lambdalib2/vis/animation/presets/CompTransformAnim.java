@@ -46,5 +46,4 @@ public class CompTransformAnim extends Animation {
         if(curveScale != null)
             target.scale = curveScale.valueAt(timePoint);
     }
-
 }

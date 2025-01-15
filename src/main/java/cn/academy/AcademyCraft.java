@@ -1,15 +1,13 @@
 package cn.academy;
 
-import cn.lambdalib2.crafting.RecipeRegistry;
+import cn.academy.internal.event.AcademyCraftEventManager;
 import cn.lambdalib2.registry.RegistryMod;
-import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -32,38 +30,52 @@ import java.io.IOException;
 @RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
 public class AcademyCraft {
     @Instance("academy-craft")
-    public static AcademyCraft INSTANCE;
+    public static final AcademyCraft INSTANCE = new AcademyCraft();
     public static final boolean DEBUG_MODE = false;
     public static final Logger log = LogManager.getLogger("AcademyCraft");
     public static Configuration config;
-    private static final String configFilePath = Minecraft.getMinecraft().gameDir.getPath() + File.separator + "config" + File.separator + Tags.MOD_ID + ".json";
     public static AcademyCraftConfig academyCraftConfig;
-    public static RecipeRegistry recipes;
+    public static final File configFile;
 
     static {
+        if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+            configFile = new File(".", "config" + File.separator + Tags.MOD_ID + ".json");
+        } else {
+            configFile = new File(Minecraft.getMinecraft().gameDir, "config" + File.separator + Tags.MOD_ID + ".json");
+        }
+
         try {
-            academyCraftConfig = AcademyCraftConfig.loadConfig(configFilePath);
+            if (!configFile.exists()) {
+                boolean created = configFile.createNewFile();
+                if (created) {
+                    AcademyCraft.log.info("Created new config file: {}", configFile.getAbsolutePath());
+                }
+            }
+            academyCraftConfig = AcademyCraftConfig.loadConfig(configFile);
             AcademyCraft.log.info("Loaded AcademyCraft config");
         } catch (IOException e) {
-            AcademyCraft.log.error("Failed to load config file");
+            AcademyCraft.log.error("Failed to load or create config file: {}", e.getMessage());
         }
     }
 
     public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ACItems.logo);
+            return new ItemStack(AcademyCraftItemList.LOGO);
         }
     };
 
-    @StateEventCallback(priority = 1)
-    @SuppressWarnings("unused")
-    private static void preInit(FMLPreInitializationEvent event) {
+    @EventHandler
+    public static void preInit(FMLPreInitializationEvent event) {
         log.info("Starting AcademyCraft");
         log.info("Copyright (c) Lambda Innovation, 2013-2018");
 
-        OBJLoader.INSTANCE.addDomain(Tags.MOD_ID);
-        recipes = new RecipeRegistry();
+        AcademyCraftEventManager.registerEventBus();
+        AcademyCraftRegister.registerAllDuringPreInit();
+
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+            OBJLoader.INSTANCE.addDomain(Tags.MOD_ID);
+        }
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
@@ -71,14 +83,12 @@ public class AcademyCraft {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(this);
-        OreDictionary.registerOre("plateIron", ACItems.reinforced_iron_plate);
+        OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
+        AcademyCraftRegister.registerAllDuringInit();
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        recipes.addRecipeFromResourceLocation(new ResourceLocation("academy:recipes/default.recipe"));
-        recipes = null;
         config.save();
     }
 

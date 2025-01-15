@@ -6,10 +6,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Auxillary GUI interface class. This is a kind of GUI that doesn't make mouse gain focus. </br>
+ * Auxiliary GUI interface class. This is a kind of GUI that doesn't make mouse gain focus. </br>
  * GUIs such as health indication, information indications are suitable of using this interface to define.
  * The class also provided a set of key-listening functions, based on LIKeyProcess. you can use event-based
- * methods to setup key listening.
+ * methods to set up key listening.
  * @author WeathFolD
  */
 
@@ -25,7 +25,7 @@ public abstract class AuxGui {
     
     // Parameters
     /**
-     * Whether this AuxGui needs fixed timestep update (ticking). If set to true onTick() method will get called each onTick.
+     * Whether this AuxGui needs fixed time step update (ticking). If set to true onTick() method will get called each onTick.
      */
     public boolean requireTicking = false;
 

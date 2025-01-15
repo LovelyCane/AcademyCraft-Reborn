@@ -24,9 +24,8 @@ item.ac_energy_convert_component.name=能量转换模块
 item.ac_calc_chip.name=计算芯片
 item.ac_data_chip.name=数据芯片
 
-item.ac_matter_unit.name=物质单元
+item.ac_empty_matter_unit.name=空单元
 item.ac_matter_unit_phase_liquid.name=虚相位液体单元
-item.ac_matter_unit_none.name=空单元
 item.ac_matrix_core.name=矩阵核心
 item.ac_mat_core_0.name=基础矩阵核心
 item.ac_mat_core_1.name=改良矩阵核心
@@ -496,4 +495,4 @@ ac.headsOrTails.1=硬币反面朝上
 ac.converter.desc_template=转换%s到%s
 
 # About App
-ac.about.donators_info=排名不分先后
+ac.about.donators_info=排名不分先后item.ac_matter_unit_none.name=Empty Unit

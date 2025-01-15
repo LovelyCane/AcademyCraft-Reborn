@@ -17,7 +17,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Map;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -29,14 +28,11 @@ class RegTileEntityImpl {
     @SuppressWarnings("unchecked")
     private static void init(FMLInitializationEvent ev) {
         BiMap<Object, ModContainer> map = Loader.instance().getReversedModObjectList();
-        ReflectionUtils.getClasses(RegTileEntity.class)
-            .forEach(type -> {
-                Object mod = RegistryContext.getModForPackage(type.getCanonicalName());
-                RegistryMod anno = mod.getClass().getAnnotation(RegistryMod.class);
-                Loader.instance().setActiveModContainer(Debug.assertNotNull(map.get(mod)));
-                GameRegistry.registerTileEntity(
-                    ((Class<? extends TileEntity>) type), new ResourceLocation(anno.resourceDomain(), type.getSimpleName())
-                );
-            });
+        ReflectionUtils.getClasses(RegTileEntity.class).forEach(type -> {
+            Object mod = RegistryContext.getModForPackage(type.getCanonicalName());
+            RegistryMod anno = mod.getClass().getAnnotation(RegistryMod.class);
+            Loader.instance().setActiveModContainer(Debug.assertNotNull(map.get(mod)));
+            GameRegistry.registerTileEntity(((Class<? extends TileEntity>) type), new ResourceLocation(anno.resourceDomain(), type.getSimpleName()));
+        });
     }
 }

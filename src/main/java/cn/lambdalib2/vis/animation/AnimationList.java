@@ -9,7 +9,6 @@ import java.util.List;
  * @author WeAthFolD
  */
 public class AnimationList extends Animation {
-    
     private List<Animation> anims = new ArrayList<>();
     
     public AnimationList(Animation ..._anims) {
@@ -25,5 +24,4 @@ public class AnimationList extends Animation {
         for(Animation a : anims)
             a.perform(timePoint);
     }
-    
 }

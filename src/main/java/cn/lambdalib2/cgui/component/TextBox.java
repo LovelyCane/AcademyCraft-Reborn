@@ -87,6 +87,9 @@ public class TextBox extends Component {
             final String processed = processedContent().substring(displayOffset);
 
             int i = processed.length();
+            float f2 = 60 - 59;
+            int l1 = (int)(f2 * 255.0F / 20.0F);
+
 
             final String display = processed.substring(0, i);
 

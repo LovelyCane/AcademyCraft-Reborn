@@ -9,7 +9,5 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public interface ParticleDecorator {
-
     void decorate(Particle particle);
-
 }

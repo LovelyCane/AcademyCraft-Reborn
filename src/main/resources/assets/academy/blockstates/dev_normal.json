@@ -1,7 +1,43 @@
 {
+  "forge_marker": 1,
+  "parent": "block:block",
+  "defaults": {
+    "custom": {
+      "flip-v": true
+    }
+  },
   "variants": {
-    "normal": {
-      "model": "academy:dev_normal"
+    "facing=north,part=main": {
+      "model": "academy:developer_normal.obj",
+      "y": 180
+    },
+    "facing=south,part=main": {
+      "model": "academy:developer_normal.obj",
+      "y": 0
+    },
+    "facing=east,part=main": {
+      "model": "academy:developer_normal.obj",
+      "y": 90
+    },
+    "facing=west,part=main": {
+      "model": "academy:developer_normal.obj",
+      "y": 270
+    },
+    "facing=north,part=sub": {
+      "model": "academy:developer_normal.obj",
+      "y": 180
+    },
+    "facing=south,part=sub": {
+      "model": "academy:developer_normal.obj",
+      "y": 0
+    },
+    "facing=east,part=sub": {
+      "model": "academy:developer_normal.obj",
+      "y": 90
+    },
+    "facing=west,part=sub": {
+      "model": "academy:developer_normal.obj",
+      "y": 270
     }
   }
 }

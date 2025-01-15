@@ -1,6 +1,5 @@
 package cn.lambdalib2;
 
-import cn.lambdalib2.multiblock.MsgBlockMulti;
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.impl.RegistryManager;
 import cn.lambdalib2.s11n.network.NetworkEvent;
@@ -21,12 +20,12 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = LambdaLib2.MODID, version = LambdaLib2.VERSION)
 public class LambdaLib2 {
     public static final String MODID = "lambdalib2";
-    public static final String VERSION = "@0.2.1";
+    public static final String VERSION = "0.2.1";
 
     /**
      * Whether we are in development (debug) mode.
      */
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static final SimpleNetworkWrapper channel = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
     public static Configuration config;
@@ -46,15 +45,14 @@ public class LambdaLib2 {
         channel.registerMessage(NetworkEvent.MessageHandler.class, NetworkEvent.Message.class, 1, Side.SERVER);
         channel.registerMessage(NetworkMessage.Handler.class, NetworkMessage.Message.class, 2, Side.CLIENT);
         channel.registerMessage(NetworkMessage.Handler.class, NetworkMessage.Message.class, 3, Side.SERVER);
-        channel.registerMessage(MsgBlockMulti.ReqHandler.class, MsgBlockMulti.Req.class, 4, Side.SERVER);
-        channel.registerMessage(MsgBlockMulti.Handler.class, MsgBlockMulti.class, 5, Side.CLIENT);
 
         RegistryManager.asm_RegistrationEvent(this, event);
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        if (DEBUG) log.info("LambdaLib2 is running in development mode.");
+        if (DEBUG)
+            log.info("LambdaLib2 is running in development mode.");
         RegistryManager.asm_RegistrationEvent(this, event);
     }
 
