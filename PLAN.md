@@ -1,10 +1,12 @@
 # Plan
+- Welcome to submit issues and PRs.
 
-## Delete Bad Code
-- For example,RenderEntityBlock.
+## Remove LambdaLib2
+- LambdaLib2 isn't conducive to transforming to other versions and loaders.
 
-## Remove Scala Code
-- The Scala code is extensive and will require some time to remove.
+## Refactor Skill System
+- It will be better.
 
-## Replace Lambdalib2 with Better Libraries
-- To facilitate porting to higher versions.
+## Refactor UI System
+- It is a part of the transformation to other versions and loaders.
+- It needs some time,LovelyCane and I need to learn OpenGL.

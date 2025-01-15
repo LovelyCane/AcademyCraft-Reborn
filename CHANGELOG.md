@@ -55,3 +55,19 @@
 - Improve performance.
 - Refactor MusicSystem.
 - Happy New Year
+
+## [1.1.8-pre1] - 2025-1-15
+
+### Changed
+- Remove the dependency on Scalar.
+- Remove the Advanced Ability Developer and Normal Ability Developer.
+- Remove the Wireless Imag Matrix.
+- Remove the Wind Generator,Wind Generator Pillar and Wind Generator Pillar Base.
+- Improve stability.
+- Improve jar size.
+- Improve performance.
+- Fix text render bug.
+- Move some folder and file.
+- Refactor Skill Tree UI.
+- New Config System.
+- New Register System.
