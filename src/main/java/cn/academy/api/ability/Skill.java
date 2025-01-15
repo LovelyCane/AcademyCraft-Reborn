@@ -160,7 +160,7 @@ public abstract class Skill extends Controllable {
     }
 
     public float getDamageScale() {
-        return getOptionalFloat("damage_scale");
+        return getOptionalFloat("damageScale");
     }
 
     /**
@@ -175,15 +175,15 @@ public abstract class Skill extends Controllable {
      * @return Whether this skill is permitted to destroy blocks.
      */
     public boolean shouldDestroyBlocks() {
-        return getOptionalBool("destroy_blocks");
+        return getOptionalBool("destroyBlock");
     }
 
     public float getCPConsumeSpeed() {
-        return getOptionalFloat("cp_consume_speed");
+        return getOptionalFloat("cpConsumeSpeed");
     }
 
     public float getOverloadConsumeSpeed() {
-        return getOptionalFloat("overload_consume_speed");
+        return getOptionalFloat("overloadConsumeSpeed");
     }
 
     public float getExpIncrSpeed() {

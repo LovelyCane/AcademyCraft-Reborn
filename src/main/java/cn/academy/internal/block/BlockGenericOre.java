@@ -12,7 +12,6 @@ import java.util.Random;
  * @author WeAthFolD
  */
 public class BlockGenericOre extends BlockOre {
-    
     private int rangeFrom = 1, rangeTo = 2;
     private Item itemDropped;
 

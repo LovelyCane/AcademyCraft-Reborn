@@ -20,6 +20,13 @@ public class AcademyCraftConfig {
         return ability;
     }
 
+    @SerializedName("generic")
+    private Generic generic = new Generic();
+
+    public Generic getGeneric() {
+        return generic;
+    }
+
     @SerializedName("gui")
     private Map<String, Node> gui = new HashMap<>();
 
@@ -59,6 +66,29 @@ public class AcademyCraftConfig {
         public void setCpRecoverSpeed(int cpRecoverSpeed) {
             this.cpRecoverSpeed = cpRecoverSpeed;
             saveConfig();
+        }
+    }
+
+    public static class Generic {
+        @SerializedName("genOres")
+        private boolean genOres;
+
+        @SerializedName("genPhaseLiquid")
+        private boolean genPhaseLiquid;
+
+        @SerializedName("generateOresBlackList")
+        private String[] generateOresBlackList = new String[]{};
+
+        public boolean isGenOres() {
+            return genOres;
+        }
+
+        public boolean isGenPhaseLiquid() {
+            return genPhaseLiquid;
+        }
+
+        public String[] getGenerateOresBlackList() {
+            return generateOresBlackList;
         }
     }
 
@@ -193,10 +223,14 @@ public class AcademyCraftConfig {
         defaultConfig.getAbility().cpRecoverSpeed = 1.0f;
         Skill railGun = new Skill();
         railGun.getBooleanMap().put("enabled", true);
-        railGun.getFloatMap().put("damage_scale", 1.0f);
-        railGun.getFloatMap().put("cp_consume_speed", 1.0f);
-        railGun.getFloatMap().put("overload_consume_speed", 1.0f);
+        railGun.getBooleanMap().put("destroyBlock", true);
+        railGun.getFloatMap().put("damageScale", 1.0f);
+        railGun.getFloatMap().put("cpConsumeSpeed", 1.0f);
+        railGun.getFloatMap().put("overloadConsumeSpeed", 1.0f);
+        railGun.getFloatMap().put("exp_incr_speed", 1.0f);
         defaultConfig.getAbility().getSkills().put("railgun", railGun);
+        defaultConfig.getGeneric().genOres = true;
+        defaultConfig.getGeneric().genPhaseLiquid = true;
         defaultConfig.getGui().put("cpbar", new Node(new double[]{-12, 12}));
         defaultConfig.getGui().put("keyhint", new Node(new double[]{0, 30}));
         defaultConfig.getGui().put("media", new Node(new double[]{-6, -6}));
