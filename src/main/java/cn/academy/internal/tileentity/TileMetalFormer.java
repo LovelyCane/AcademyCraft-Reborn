@@ -1,13 +1,12 @@
 package cn.academy.internal.tileentity;
 
-import cn.academy.internal.sound.ACSounds;
-import cn.academy.internal.sound.PositionedSound;
-import cn.academy.internal.sound.TileEntitySound;
 import cn.academy.internal.crafting.MetalFormerRecipes;
 import cn.academy.internal.crafting.MetalFormerRecipes.RecipeObject;
 import cn.academy.internal.energy.IFConstants;
+import cn.academy.internal.sound.ACSounds;
+import cn.academy.internal.sound.PositionedSound;
+import cn.academy.internal.sound.TileEntitySound;
 import cn.academy.internal.support.EnergyItemHelper;
-import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkMessage.NullablePar;
@@ -25,8 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
-
-@RegTileEntity
 public class TileMetalFormer extends TileReceiverBase implements ISidedInventory {
     @Override
     public int[] getSlotsForFace(EnumFacing side) {

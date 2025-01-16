@@ -1,7 +1,6 @@
 package cn.academy.internal.support.rf;
 
 import cn.academy.internal.tileentity.TileReceiverBase;
-import cn.lambdalib2.registry.mc.RegTileEntity;
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.tileentity.TileEntity;
@@ -13,7 +12,6 @@ import net.minecraftforge.fml.common.Optional;
 import static cn.academy.internal.support.rf.RFSupport.if2rf;
 import static cn.academy.internal.support.rf.RFSupport.rf2if;
 
-@RegTileEntity
 @Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyProvider")
 public class TileRFOutput extends TileReceiverBase implements IEnergyProvider
 {

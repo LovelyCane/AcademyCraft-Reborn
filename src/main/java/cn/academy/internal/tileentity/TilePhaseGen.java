@@ -2,9 +2,8 @@ package cn.academy.internal.tileentity;
 
 import cn.academy.AcademyCraftItemList;
 import cn.academy.internal.block.ACFluids;
-import cn.academy.internal.inventory.ContainerPhaseGen;
 import cn.academy.internal.energy.IFConstants;
-import cn.lambdalib2.registry.mc.RegTileEntity;
+import cn.academy.internal.inventory.ContainerPhaseGen;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.TargetPoints;
 import net.minecraft.item.ItemStack;
@@ -20,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 /**
  * @author WeAthFolD
  */
-@RegTileEntity
 public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
 
     // 废话~~~

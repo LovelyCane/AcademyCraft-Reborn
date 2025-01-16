@@ -1,15 +1,14 @@
 package cn.academy.internal.tileentity;
 
 import cn.academy.AcademyCraftItemList;
-import cn.academy.internal.sound.ACSounds;
-import cn.academy.internal.sound.PositionedSound;
-import cn.academy.internal.sound.TileEntitySound;
 import cn.academy.internal.block.ACFluids;
 import cn.academy.internal.crafting.ImagFusorRecipes;
 import cn.academy.internal.crafting.ImagFusorRecipes.IFRecipe;
 import cn.academy.internal.energy.IFConstants;
+import cn.academy.internal.sound.ACSounds;
+import cn.academy.internal.sound.PositionedSound;
+import cn.academy.internal.sound.TileEntitySound;
 import cn.academy.internal.support.EnergyItemHelper;
-import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.util.StackUtils;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -27,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
-@RegTileEntity
 public class TileImagFusor extends TileReceiverBase implements IFluidHandler, ISidedInventory {
     
     static final double WORK_SPEED = 1.0 / 120;

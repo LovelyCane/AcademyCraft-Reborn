@@ -1,6 +1,5 @@
 package cn.academy.internal.tileentity;
 
-import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.util.TickScheduler;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -9,8 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
  *
  * @author WeAthFolD
  */
-
-@RegTileEntity
 public class TileCatEngine extends TileGeneratorBase {
     private final TickScheduler scheduler = new TickScheduler();
 

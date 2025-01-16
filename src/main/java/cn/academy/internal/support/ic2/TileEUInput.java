@@ -1,7 +1,6 @@
 package cn.academy.internal.support.ic2;
 
 import cn.academy.internal.tileentity.TileGeneratorBase;
-import cn.lambdalib2.registry.mc.RegTileEntity;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergyEmitter;
@@ -17,7 +16,6 @@ import static cn.academy.internal.support.ic2.IC2Support.if2eu;
  * 
  * @author KSkun
  */
-@RegTileEntity
 @Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     

@@ -6,7 +6,6 @@ import cn.academy.internal.energy.api.IFItemManager;
 import cn.academy.internal.energy.api.WirelessHelper;
 import cn.academy.internal.energy.api.block.IWirelessNode;
 import cn.academy.internal.energy.impl.WirelessNet;
-import cn.lambdalib2.registry.mc.RegTileEntity;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.TargetPoints;
@@ -24,8 +23,6 @@ import net.minecraftforge.fml.relauncher.Side;
 /**
  * @author WeathFolD
  */
-
-@RegTileEntity
 public class TileNode extends TileEntityInventory implements IWirelessNode, IInventory, ITickable {
     static IFItemManager itemManager = IFItemManager.instance;
 
