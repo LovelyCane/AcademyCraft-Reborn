@@ -1,7 +1,7 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.entity.ray.RendererRayComposite;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.Colors;
@@ -51,7 +51,7 @@ public class EntityMineRayBasic extends EntityRayBase {
     }
 
     @RegEntityRender(EntityMineRayBasic.class)
-    public static class BasicMineRayRender extends RendererRayComposite {
+    public static class BasicMineRayRender extends RenderRayComposite {
 
         public BasicMineRayRender(RenderManager manager) {
             super(manager, "mdray_small");

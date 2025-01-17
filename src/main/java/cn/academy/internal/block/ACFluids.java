@@ -6,7 +6,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class ACFluids {
     public static Fluid fluidImagProj = new Fluid("imagproj",
-            // Note: All render effects are implemented by RenderImagPhaseLiquid
+            // Note: All render effects are implemented by TileImagPhaseRenderer
             //  but we have to see what to do when liquid behaves in other situations (e.g. in BC tanks).
             new ResourceLocation("academy:blocks/black"), new ResourceLocation("academy:blocks/black"));
 

@@ -1,6 +1,6 @@
 package cn.academy.internal.ability.vanilla.teleporter.client;
 
-import cn.academy.internal.client.render.particle.FormulaParticleFactory;
+import cn.academy.internal.client.renderer.particle.FormulaParticleFactory;
 import cn.academy.internal.ability.vanilla.teleporter.util.TPSkillHelper.TPCritHitEvent;
 import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.util.RandUtils;

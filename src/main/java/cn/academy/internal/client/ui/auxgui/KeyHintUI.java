@@ -5,7 +5,7 @@ import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.ClientRuntime.DelegateNode;
 import cn.academy.internal.ability.context.DelegateState;
 import cn.academy.internal.ability.context.KeyDelegate;
-import cn.academy.internal.client.render.util.ACRenderingHelper;
+import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.datapart.CPData;
 import cn.academy.internal.datapart.CooldownData;

@@ -50,9 +50,9 @@ public class EntityMdRayBarrage extends EntityRayBase {
     }
 
     @RegEntityRender(EntityMdRayBarrage.class)
-    public static class BarrageRenderer extends EntityMdRaySmall.SmallMdRayRender {
+    public static class BarrageRender extends EntityMdRaySmall.SmallMdRayRender {
 
-        public BarrageRenderer(RenderManager manager) {
+        public BarrageRender(RenderManager manager) {
             super(manager);
         }
 

@@ -5,7 +5,7 @@ import cn.academy.api.ability.AbilityAPIExt;
 import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
 import cn.academy.internal.ability.context.ContextManager;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.sound.FollowEntitySound;
 import cn.academy.internal.entity.EntityMdShield;

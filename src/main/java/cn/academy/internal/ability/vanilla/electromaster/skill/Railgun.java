@@ -10,7 +10,7 @@ import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.entity.EntityCoinThrowing;
 import cn.academy.internal.entity.EntityRailgunFX;
 import cn.academy.internal.event.CoinThrowEvent;
-import cn.academy.internal.client.render.misc.RailgunHandEffect;
+import cn.academy.internal.client.renderer.misc.RailgunHandEffect;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.util.RangedRayDamage;
 import cn.lambdalib2.renderhook.DummyRenderData;

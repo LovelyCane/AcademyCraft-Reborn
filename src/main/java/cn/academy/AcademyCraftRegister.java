@@ -1,6 +1,5 @@
 package cn.academy;
 
-import cn.lambdalib2.registry.RegistryContext;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
@@ -11,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -50,12 +50,12 @@ public class AcademyCraftRegister {
     private static void registerItemRenderer() {
         for (Item item : AcademyCraftItemList.ITEM_LIST) {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-
         }
     }
 
     public static void registerAllDuringInit() {
         registerEntity();
+        registerTileEntityRender();
     }
 
     public static void registerAllDuringPreInit() {
@@ -65,8 +65,7 @@ public class AcademyCraftRegister {
     private static void registerEntity() {
         int num = 0;
         for (Class<? extends Entity> entity : AcademyCraftEntityList.ENTITY_LIST) {
-            Object mod = RegistryContext.getModForPackage(entity.getCanonicalName());
-            EntityRegistry.registerModEntity(new ResourceLocation(Tags.MOD_ID, entity.getSimpleName().toLowerCase()), entity, entity.getSimpleName().toLowerCase(), num, mod, 32, 3, true);
+            EntityRegistry.registerModEntity(new ResourceLocation(Tags.MOD_ID, entity.getSimpleName().toLowerCase()), entity, entity.getSimpleName().toLowerCase(), num, AcademyCraft.instance, 32, 3, true);
             num++;
         }
     }
@@ -88,6 +87,13 @@ public class AcademyCraftRegister {
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException("Render class does not have required constructor: " + render, e);
             }
+        }
+    }
+
+    @SuppressWarnings({"unchecked","rawtypes"})
+    private static void registerTileEntityRender() {
+        for (AcademyCraftTileEntityRendererList.TileEntityRenderer tileEntityRenderer : AcademyCraftTileEntityRendererList.TILE_ENTITY_RENDERER_LIST) {
+            ClientRegistry.bindTileEntitySpecialRenderer(tileEntityRenderer.tileEntityClass, tileEntityRenderer.specialRenderer);
         }
     }
 

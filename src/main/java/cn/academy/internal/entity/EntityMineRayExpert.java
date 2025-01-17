@@ -1,7 +1,7 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.entity.ray.RendererRayComposite;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.Colors;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityMineRayExpert extends EntityRayBase {
 
-    public static ExpertRayRenderer renderer;
+    public static ExpertRayRender renderer;
     
     public EntityMineRayExpert(EntityPlayer _player) {
         super(_player);
@@ -56,9 +56,9 @@ public class EntityMineRayExpert extends EntityRayBase {
     }
 
     @RegEntityRender(EntityMineRayExpert.class)
-    public static class ExpertRayRenderer extends RendererRayComposite {
+    public static class ExpertRayRender extends RenderRayComposite {
 
-        public ExpertRayRenderer(RenderManager manager) {
+        public ExpertRayRender(RenderManager manager) {
             super(manager, "mdray_expert");
             this.cylinderIn.width = 0.045;
             this.cylinderIn.color.set(216, 248, 216, 230);

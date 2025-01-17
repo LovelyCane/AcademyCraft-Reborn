@@ -3,7 +3,7 @@ package cn.academy.internal.ability.vanilla.meltdowner.skill;
 import cn.academy.internal.ability.AbilityContext;
 import cn.academy.internal.ability.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.internal.ability.vanilla.meltdowner.passiveskill.RadiationIntensify;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.academy.internal.datapart.AbilityData;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.NetworkMessage;

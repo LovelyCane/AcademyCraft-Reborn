@@ -5,7 +5,7 @@ import cn.academy.internal.ability.context.ClientContext;
 import cn.academy.internal.ability.context.RegClientContext;
 import cn.academy.internal.entity.EntityDiamondShield;
 import cn.academy.internal.entity.EntityRippleMark;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.EntitySelectors;

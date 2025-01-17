@@ -3,6 +3,7 @@ package cn.academy;
 import cn.academy.internal.event.AcademyCraftEventManager;
 import cn.lambdalib2.registry.RegistryMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.command.ICommand;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -29,8 +30,8 @@ import java.io.IOException;
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
 @RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
 public class AcademyCraft {
-    @Instance("academy-craft")
-    public static final AcademyCraft INSTANCE = new AcademyCraft();
+    @Instance("academy")
+    public static AcademyCraft instance;
     public static final boolean DEBUG_MODE = false;
     public static final Logger log = LogManager.getLogger("AcademyCraft");
     public static Configuration config;
@@ -95,6 +96,13 @@ public class AcademyCraft {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) {
         config.save();
+    }
+
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        for (ICommand command : AcademyCraftCommandList.COMMAND_LIST) {
+            event.registerServerCommand(command);
+        }
     }
 
     @SubscribeEvent

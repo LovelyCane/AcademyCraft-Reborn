@@ -8,7 +8,7 @@ import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
 import cn.academy.internal.ability.context.RegClientContext;
 import cn.academy.internal.ability.vanilla.teleporter.util.TPSkillHelper;
-import cn.academy.internal.client.render.misc.TPParticleFactory;
+import cn.academy.internal.client.renderer.misc.TPParticleFactory;
 import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.entity.EntityMarker;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

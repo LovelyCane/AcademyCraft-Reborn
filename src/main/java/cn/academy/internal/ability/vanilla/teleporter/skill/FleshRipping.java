@@ -7,7 +7,7 @@ import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
 import cn.academy.internal.ability.context.RegClientContext;
 import cn.academy.internal.ability.vanilla.teleporter.util.TPSkillHelper;
-import cn.academy.internal.client.render.util.ACRenderingHelper;
+import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.entity.EntityBloodSplash;
 import cn.academy.internal.entity.EntityMarker;

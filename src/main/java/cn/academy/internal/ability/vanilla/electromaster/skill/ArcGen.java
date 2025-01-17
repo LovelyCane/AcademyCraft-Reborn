@@ -5,7 +5,7 @@ import cn.academy.internal.ability.context.ClientContext;
 import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
 import cn.academy.internal.ability.context.RegClientContext;
-import cn.academy.internal.client.render.util.ArcPatterns;
+import cn.academy.internal.client.renderer.util.ArcPatterns;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.entity.EntityArc;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;

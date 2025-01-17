@@ -1,6 +1,6 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.entity.ray.RendererRayComposite;
+import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
 import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.Colors;
@@ -46,7 +46,7 @@ public class EntityBarrageRayPre extends EntityRayBase {
     }
 
     @RegEntityRender(EntityBarrageRayPre.class)
-    public static class BRPRender extends RendererRayComposite {
+    public static class BRPRender extends RenderRayComposite {
 
         public BRPRender(RenderManager manager) {
             super(manager, "mdray_small");

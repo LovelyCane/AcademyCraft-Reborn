@@ -162,8 +162,7 @@ public class EntityCoinThrowing extends EntityAdvanced {
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         setDead();
-        getEntityWorld().spawnEntity(new EntityItem(world, posX, posY, posZ, new ItemStack(
-                AcademyCraftItemList.COIN)));
+        getEntityWorld().spawnEntity(new EntityItem(world, posX, posY, posZ, new ItemStack(AcademyCraftItemList.COIN)));
     }
 
     @Override
@@ -180,15 +179,13 @@ public class EntityCoinThrowing extends EntityAdvanced {
 
         @StateEventCallback
         private static void init(FMLInitializationEvent event) {
-            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",
-                    "generic", false, "Show heads or tails after throwing a coin.");
+            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails", "generic", false, "Show heads or tails after throwing a coin.");
             MinecraftForge.EVENT_BUS.register(instance);
         }
 
         @SubscribeEvent
         public void onConfigModified(ConfigModifyEvent e) {
-            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails",
-                    "generic", false, "Show heads or tails after throwing a coin.");
+            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails", "generic", false, "Show heads or tails after throwing a coin.");
         }
     }
 }

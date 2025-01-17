@@ -6,7 +6,7 @@ import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.datapart.PresetData.Preset;
 import cn.academy.Resources;
-import cn.academy.internal.client.render.util.ACRenderingHelper;
+import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.lambdalib2.cgui.CGui;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.WidgetContainer;

@@ -27,7 +27,7 @@ public class TilePhaseGen extends TileGeneratorBase implements IFluidHandler {
     // TODO
     //    @RegTileEntity.Render
     //    @SideOnly(Side.CLIENT)
-    //    public static RenderPhaseGen renderer;
+    //    public static TilePhaseGenRenderer renderer;
     //
     static final int CONSUME_PER_TICK = 100;
     static final double GEN_PER_MB = 0.5;

@@ -1,8 +1,8 @@
 package cn.academy.internal.client.ui.auxgui;
 
 import cn.academy.Resources;
-import cn.academy.internal.client.render.util.SubArc2D;
-import cn.academy.internal.client.render.util.SubArcHandler2D;
+import cn.academy.internal.client.renderer.util.SubArc2D;
+import cn.academy.internal.client.renderer.util.SubArcHandler2D;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.auxgui.AuxGui;

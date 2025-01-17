@@ -3,7 +3,7 @@ package cn.academy.internal.ability.vanilla.electromaster.skill;
 import cn.academy.internal.ability.context.ClientContext;
 import cn.academy.internal.ability.context.RegClientContext;
 import cn.academy.internal.entity.EntityArc;
-import cn.academy.internal.client.render.util.ArcPatterns;
+import cn.academy.internal.client.renderer.util.ArcPatterns;
 import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.RandUtils;

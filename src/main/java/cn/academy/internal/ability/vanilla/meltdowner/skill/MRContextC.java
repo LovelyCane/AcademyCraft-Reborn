@@ -2,7 +2,7 @@ package cn.academy.internal.ability.vanilla.meltdowner.skill;
 
 import cn.academy.api.ability.AbilityAPIExt;
 import cn.academy.internal.ability.context.ClientContext;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.sound.FollowEntitySound;
 import cn.lambdalib2.particle.Particle;

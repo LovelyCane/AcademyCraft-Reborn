@@ -1,7 +1,7 @@
 package cn.academy.internal.client.ui;
 
 import cn.academy.Resources;
-import cn.academy.internal.client.render.util.ACRenderingHelper;
+import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.Extent;
 import cn.lambdalib2.render.font.IFont.FontOption;

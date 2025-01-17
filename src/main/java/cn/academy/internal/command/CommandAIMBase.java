@@ -1,21 +1,16 @@
 package cn.academy.internal.command;
 
-import cn.academy.AcademyCraft;
 import cn.academy.api.ability.Category;
-import cn.academy.internal.ability.CategoryManager;
 import cn.academy.api.ability.Skill;
+import cn.academy.internal.ability.CategoryManager;
 import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.datapart.CPData;
 import cn.academy.internal.datapart.CooldownData;
 import cn.academy.internal.util.ACCommand;
-import cn.lambdalib2.datapart.PlayerDataTag;
-import cn.lambdalib2.registry.mc.RegCommand;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.util.PlayerUtils;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.translation.I18n;
 
 import java.util.List;
@@ -28,132 +23,10 @@ import java.util.List;
 public abstract class CommandAIMBase extends ACCommand {
     private static final String MSG_CLEAR_COOLDOWN = "clearcd";
 
-    private static void sendChat(ICommandSender s, String key, Object ...pars) {
+    public static void sendChat(ICommandSender s, String key, Object... pars) {
         PlayerUtils.sendChat(s, key, pars);
     }
-    
-    /**
-     * This is the command used by the client, doesn't specify the player and works on the user.
-     * This command will display a warning before you can use it.
-     */
-    @RegCommand
-    public static class CommandAIM extends CommandAIMBase {
-        
-        static final String ID = "aim_cheats";
 
-        public CommandAIM() {
-            super("aim");
-        }
-        
-        @Override
-        public void execute(MinecraftServer svr, ICommandSender commandSender, String[] pars) {
-            EntityPlayer player = null;
-            try {
-                player = getCommandSenderAsPlayer(commandSender);
-            } catch (PlayerNotFoundException e) {
-                AcademyCraft.log.warn("Attempt to use command \"aim\" in the console.");
-                return;
-            }
-
-            if(!isActive(player) && player.getEntityWorld().getWorldInfo().areCommandsAllowed()) {
-                setActive(player, true);
-            }
-
-            for(int i=0;i<pars.length;i++){pars[i]=pars[i].toLowerCase();}
-            if(pars.length == 1) {
-                switch(pars[0]) {
-                    case "cheats_on":
-                        setActive(player, true);
-                        sendChat(commandSender, locSuccessful());
-                        sendChat(commandSender, getLoc("warning"));
-                        return;
-                    case "cheats_off":
-                        setActive(player, false);
-                        sendChat(commandSender, locSuccessful());
-                        return;
-                    case "?":
-                    case "help":
-                        for(String c : commands)
-                        {
-                            sendChat(commandSender, getLoc(c));
-                        }
-                        return;
-                }
-
-            }
-            
-            if(!isActive(player) && !player.capabilities.isCreativeMode) {
-                sendChat(commandSender, getLoc("notactive"));
-                return;
-            }
-            
-            if(pars.length == 0) {
-                sendChat(commandSender, getLoc("help"));
-                return;
-            }
-            
-            matchCommands(commandSender, player, pars);
-        }
-        
-        private void setActive(EntityPlayer player, boolean data) {
-            PlayerDataTag.get(player).getTag().setBoolean(ID, data);
-        }
-        
-        private boolean isActive(EntityPlayer player) {
-            return PlayerDataTag.get(player).getTag().getBoolean(ID);
-        }
-        
-    }
-    
-    /**
-     * This is the command for the OPs and server console. You must specify the player name.
-     */
-    @RegCommand
-    public static class CommandAIMP extends CommandAIMBase {
-
-        public CommandAIMP() {
-            super("aimp");
-        }
-        
-        @Override
-        public void execute(MinecraftServer svr, ICommandSender ics, String[] pars) {
-            for(int i=0;i<pars.length;i++){pars[i]=pars[i].toLowerCase();}
-            if(pars.length == 0) {
-                sendChat(ics, getLoc("help"));
-                return;
-            }
-            
-            //Try to locate the player.
-            EntityPlayer player = null;
-            
-            //Using player parameter
-            player = svr.getPlayerList().getPlayerByUsername(pars[0]);
-            
-            if(player != null) {
-                String[] newPars = new String[pars.length - 1];
-                for(int i = 0; i < newPars.length; ++i) {
-                    newPars[i] = pars[i + 1];
-                }
-                
-                matchCommands(ics, player, newPars);
-            } else if (pars[0].equals("catlist")) {
-                sendChat(ics, getLoc("cats"));
-                List<Category> catList = CategoryManager.INSTANCE.getCategories();
-                for(int i = 0; i < catList.size(); ++i) {
-                    Category cat = catList.get(i);
-                    sendChat(ics, "#" + i + " " + cat.getName() + ": " + cat.getDisplayName());
-                }
-            } else if (pars[0].equals("help") || pars[0].equals("?")) {
-                for(String c : commands) {
-                    sendChat(ics, getLoc(c));
-                }
-            }else{
-                sendChat(ics, locNoPlayer());
-            }
-        }
-        
-    }
-    
     String[] commands = {
         "help", "cat", "catlist", 
         "learn", "learn_all", "reset",

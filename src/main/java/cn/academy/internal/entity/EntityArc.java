@@ -1,7 +1,7 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.util.ArcFactory;
-import cn.academy.internal.client.render.util.ArcFactory.Arc;
+import cn.academy.internal.client.renderer.util.ArcFactory;
+import cn.academy.internal.client.renderer.util.ArcFactory.Arc;
 import cn.lambdalib2.util.EntityLook;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.ViewOptimize;

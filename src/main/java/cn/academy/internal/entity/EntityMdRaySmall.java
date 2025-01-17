@@ -1,8 +1,8 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.entity.ray.RendererRayComposite;
+import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
 import cn.academy.internal.sound.ACSounds;
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.Colors;
@@ -60,7 +60,7 @@ public class EntityMdRaySmall extends EntityRayBase {
     }
 
     @RegEntityRender(EntityMdRaySmall.class)
-    public static class SmallMdRayRender extends RendererRayComposite {
+    public static class SmallMdRayRender extends RenderRayComposite {
 
         public SmallMdRayRender(RenderManager manager) {
             super(manager, "mdray_small");

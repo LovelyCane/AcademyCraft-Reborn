@@ -1,8 +1,8 @@
 package cn.academy.internal.item;
 
 import cn.academy.Resources;
-import cn.academy.internal.client.render.item.BakedModelForTEISR;
-import cn.academy.internal.client.render.item.TEISRModel;
+import cn.academy.internal.client.renderer.item.BakedModelForTEISR;
+import cn.academy.internal.client.renderer.item.TEISRModel;
 import cn.academy.internal.entity.EntitySilbarn;
 import cn.lambdalib2.render.TransformChain;
 import cn.lambdalib2.util.SideUtils;

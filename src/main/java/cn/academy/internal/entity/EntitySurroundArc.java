@@ -1,10 +1,10 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.util.IPointFactory;
-import cn.academy.internal.client.render.util.CubePointFactory;
-import cn.academy.internal.client.render.util.ArcFactory;
-import cn.academy.internal.client.render.util.ArcFactory.Arc;
-import cn.academy.internal.client.render.util.SubArcHandler;
+import cn.academy.internal.client.renderer.util.IPointFactory;
+import cn.academy.internal.client.renderer.util.CubePointFactory;
+import cn.academy.internal.client.renderer.util.ArcFactory;
+import cn.academy.internal.client.renderer.util.ArcFactory.Arc;
+import cn.academy.internal.client.renderer.util.SubArcHandler;
 import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.Minecraft;

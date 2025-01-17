@@ -1,7 +1,7 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.util.ArcFactory;
-import cn.academy.internal.client.render.util.SubArcHandler;
+import cn.academy.internal.client.renderer.util.ArcFactory;
+import cn.academy.internal.client.renderer.util.SubArcHandler;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;

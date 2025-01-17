@@ -1,7 +1,7 @@
 package cn.academy.internal.entity;
 
 import cn.academy.internal.datapart.AbilityData;
-import cn.academy.internal.client.render.misc.TPParticleFactory;
+import cn.academy.internal.client.renderer.misc.TPParticleFactory;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.entity.player.EntityPlayer;

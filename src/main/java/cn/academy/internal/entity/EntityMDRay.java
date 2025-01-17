@@ -1,6 +1,6 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.render.particle.MdParticleFactory;
+import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;

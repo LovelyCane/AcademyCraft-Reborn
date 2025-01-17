@@ -2,7 +2,7 @@ package cn.academy.internal.client.ui.auxgui;
 
 import cn.academy.AcademyCraft;
 import cn.academy.Resources;
-import cn.academy.internal.client.render.util.ACRenderingHelper;
+import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.academy.internal.energy.api.WirelessHelper;
 import cn.academy.internal.energy.api.block.IWirelessMatrix;
 import cn.academy.internal.energy.api.block.IWirelessNode;

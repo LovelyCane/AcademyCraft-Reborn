@@ -4,8 +4,8 @@ import cn.academy.api.ability.AbilityAPIExt;
 import cn.academy.internal.ability.context.ClientContext;
 import cn.academy.internal.ability.context.RegClientContext;
 import cn.academy.internal.datapart.HandRenderOverrideData;
-import cn.academy.internal.client.render.util.IHandRenderer;
-import cn.academy.internal.client.render.util.VanillaHandRenderer;
+import cn.academy.internal.client.renderer.util.IHandRenderer;
+import cn.academy.internal.client.renderer.util.VanillaHandRenderer;
 import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.GameTimer;
@@ -17,8 +17,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.function.Supplier;
 
 import static cn.academy.internal.ability.vanilla.vecmanip.skill.ShockContext.*;
-import static cn.academy.internal.client.render.util.AnimPresets.createPrepareAnim;
-import static cn.academy.internal.client.render.util.AnimPresets.createPunchAnim;
+import static cn.academy.internal.client.renderer.util.AnimPresets.createPrepareAnim;
+import static cn.academy.internal.client.renderer.util.AnimPresets.createPunchAnim;
 
 @SideOnly(Side.CLIENT)
 @RegClientContext(ShockContext.class)
