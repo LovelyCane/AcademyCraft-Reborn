@@ -5,7 +5,6 @@ import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
 import cn.academy.internal.entity.EntityMdBall;
 import cn.academy.internal.entity.EntityMdRaySmall;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;
@@ -16,7 +15,6 @@ import cn.lambdalib2.util.Raytrace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -60,7 +58,7 @@ public class ElectronBomb extends Skill {
 
                     NetworkMessage.sendToAllAround(
                         TargetPoints.convert(player, 20),
-                        EffectDelegate.Instance,
+                        EffectDelegate.INSTANCE,
                         MsgEffect,
                         target
                     );
@@ -78,14 +76,13 @@ public class ElectronBomb extends Skill {
 
     }
 
-    public enum EffectDelegate {
-        Instance;
+    public static class EffectDelegate {
+        public static final EffectDelegate INSTANCE = new EffectDelegate();
 
         EffectDelegate() {}
 
-        @StateEventCallback
-        private static void preInit(FMLPreInitializationEvent ev) {
-            NetworkS11n.addDirectInstance(Instance);
+        public static void preInit() {
+            NetworkS11n.addDirectInstance(INSTANCE);
         }
 
         @SideOnly(Side.CLIENT)

@@ -1,10 +1,8 @@
 package cn.academy.internal.ability;
 
 import cn.academy.api.ability.Category;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.Debug;
 import com.google.common.collect.ImmutableList;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,11 +13,9 @@ import java.util.List;
  * @author WeAthFolD
  */
 public class CategoryManager {
-
     public static CategoryManager INSTANCE = new CategoryManager();
 
-    @StateEventCallback
-    private static void postInit(FMLPostInitializationEvent ev) {
+    public static void postInit() {
          INSTANCE.bake();
     }
 

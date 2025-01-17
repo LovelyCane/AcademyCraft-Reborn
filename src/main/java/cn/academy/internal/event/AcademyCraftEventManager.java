@@ -5,6 +5,7 @@ import cn.academy.AcademyCraftRegister;
 import cn.academy.internal.ability.AbilityPipeline;
 import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.ctrl.ClientHandler;
+import cn.academy.internal.ability.vanilla.meltdowner.skill.MDDamageHelper;
 import cn.academy.internal.ability.vanilla.teleporter.client.CriticalHitEffect;
 import cn.academy.internal.client.misc.MusicSystem;
 import cn.academy.internal.client.renderer.util.VanillaHandRenderer;
@@ -41,5 +42,6 @@ public class AcademyCraftEventManager {
         MinecraftForge.EVENT_BUS.register(WirelessSystem.class);
         MinecraftForge.EVENT_BUS.register(GameTimer.class);
         MinecraftForge.EVENT_BUS.register(AbilityPipeline.class);
+        MinecraftForge.EVENT_BUS.register(MDDamageHelper.Events.class);
     }
 }

@@ -15,7 +15,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -52,7 +52,7 @@ public class RFSupport {
 
     @StateEventCallback
     @Optional.Method(modid = "redstoneflux")
-    private static void init(FMLInitializationEvent event) {
+    private static void init(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(RFSupport.class);
         EnergyBlockHelper.register(new RFProviderManager());
         EnergyBlockHelper.register(new RFReceiverManager());

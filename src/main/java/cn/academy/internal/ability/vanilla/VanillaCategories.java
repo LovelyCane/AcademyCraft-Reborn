@@ -12,12 +12,10 @@ import cn.academy.internal.ability.vanilla.generic.skill.SkillMindCourse;
 import cn.academy.internal.ability.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.internal.ability.vanilla.teleporter.CatTeleporter;
 import cn.academy.internal.ability.vanilla.vecmanip.CatVecManip;
-import cn.academy.internal.tileentity.TileMetalFormer.Mode;
 import cn.academy.internal.crafting.MetalFormerRecipes;
-import cn.lambdalib2.registry.StateEventCallback;
+import cn.academy.internal.tileentity.TileMetalFormer.Mode;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 public class VanillaCategories {
     @RegCategory
@@ -32,22 +30,15 @@ public class VanillaCategories {
     @RegCategory
     public static final CatVecManip vecManip = new CatVecManip();
 
-    @StateEventCallback
-    @SuppressWarnings("unused")
-    private static void init(FMLInitializationEvent event) {
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.REINFORCED_IRON_PLATE), new ItemStack(AcademyCraftItemList.NEEDLE, 6),
-                Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(Blocks.RAIL), new ItemStack(AcademyCraftItemList.NEEDLE, 2),
-                Mode.INCISE);
-        MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.REINFORCED_IRON_PLATE, 2), new ItemStack(AcademyCraftItemList.COIN, 3),
-                Mode.PLATE);
+    public static void init() {
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.REINFORCED_IRON_PLATE), new ItemStack(AcademyCraftItemList.NEEDLE, 6), Mode.INCISE);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(Blocks.RAIL), new ItemStack(AcademyCraftItemList.NEEDLE, 2), Mode.INCISE);
+        MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.REINFORCED_IRON_PLATE, 2), new ItemStack(AcademyCraftItemList.COIN, 3), Mode.PLATE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.WAFER), new ItemStack(AcademyCraftItemList.SILBARN), Mode.ETCH);
     }
 
     public static void addGenericSkills(Category category) {
-        Skill bc = new SkillBrainCourse(),
-                bca = new SkillBrainCourseAdvanced(),
-                mc = new SkillMindCourse();
+        Skill bc = new SkillBrainCourse(), bca = new SkillBrainCourseAdvanced(), mc = new SkillMindCourse();
 
         bc.setPosition(30, 110);
         bca.setPosition(115, 110);

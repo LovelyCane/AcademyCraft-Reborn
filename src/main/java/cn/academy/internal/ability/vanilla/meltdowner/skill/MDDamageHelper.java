@@ -5,7 +5,6 @@ import cn.academy.internal.ability.vanilla.meltdowner.CatMeltdowner;
 import cn.academy.internal.ability.vanilla.meltdowner.passiveskill.RadiationIntensify;
 import cn.academy.internal.client.renderer.particle.MdParticleFactory;
 import cn.academy.internal.datapart.AbilityData;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11nType;
@@ -15,10 +14,8 @@ import cn.lambdalib2.util.VecUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,14 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @NetworkS11nType
 public class MDDamageHelper {
-    
     private static final String MARKID = "md_marktick", RATEID = "md_markrate";
 
-    @StateEventCallback
-    private static void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new Events());
-    }
-    
     static void attack(AbilityContext ctx, Entity target, float dmg) {
         EntityPlayer player = ctx.player;
 
@@ -78,9 +69,8 @@ public class MDDamageHelper {
     }
     
     public static class Events {
-        
         @SubscribeEvent
-        public void onLivingUpdate(LivingUpdateEvent event) {
+        public static void onLivingUpdate(LivingUpdateEvent event) {
             int tick = getMarkTick(event.getEntity());
             if(tick > 0)
                 setMarkTick(event.getEntity(), tick - 1);
@@ -88,7 +78,7 @@ public class MDDamageHelper {
         
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
-        public void onUpdateClient(LivingUpdateEvent event) {
+        public static void onUpdateClient(LivingUpdateEvent event) {
             Entity e = event.getEntity();
             if(e.getEntityWorld().isRemote) {
                 if(getMarkTick(e) > 0) {
@@ -108,11 +98,10 @@ public class MDDamageHelper {
         }
         
         @SubscribeEvent
-        public void onLivingAttack(LivingHurtEvent event) {
+        public static void onLivingAttack(LivingHurtEvent event) {
             if(getMarkTick(event.getEntityLiving()) > 0) {
                 event.setAmount(event.getAmount() * getMarkRate(event.getEntityLiving()));
             }
         }
-        
     }
 }

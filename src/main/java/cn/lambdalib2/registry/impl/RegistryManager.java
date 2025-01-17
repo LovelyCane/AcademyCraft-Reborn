@@ -1,6 +1,5 @@
 package cn.lambdalib2.registry.impl;
 
-import cn.lambdalib2.registry.RegistryCallback;
 import cn.lambdalib2.registry.RegistryMod;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.Debug;
@@ -130,29 +129,6 @@ public enum RegistryManager {
                 mod.loadCallbacks.get(eventType).add(method);
 
                 StateEventCallback anno = method.getAnnotation(StateEventCallback.class);
-                priorityMap.put(method, anno.priority());
-            });
-
-            // Process all registry callbacks
-            List<Method> registryCallbacks = ReflectionUtils.getMethods(RegistryCallback.class);
-            registryCallbacks.forEach(method -> {
-                if (!Modifier.isStatic(method.getModifiers())) {
-                    throw new IllegalArgumentException("RegistryCallback method " + method + " must be static.");
-                }
-                if (method.getParameterCount() != 1) {
-                    throw new IllegalArgumentException("RegistryCallback method " + method + " requires exactly 1 argument.");
-                }
-
-                String parTypeName = method.getGenericParameterTypes()[0].getTypeName();
-                if (parTypeName.contains("Item")) {
-                    itemRegistryCallbacks.add(method);
-                } else if (parTypeName.contains("Block")) {
-                    blockRegistryCallbacks.add(method);
-                } else {
-                    throw new IllegalStateException("Invalid Registry Callback " + method);
-                }
-
-                RegistryCallback anno = method.getAnnotation(RegistryCallback.class);
                 priorityMap.put(method, anno.priority());
             });
 

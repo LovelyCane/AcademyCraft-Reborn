@@ -5,12 +5,10 @@ import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Skill;
 import cn.academy.internal.ability.vanilla.VanillaCategories;
 import cn.academy.internal.ability.vanilla.electromaster.skill.*;
-import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.HashSet;
@@ -64,9 +62,7 @@ public class CatElectromaster extends Category {
     private static final HashSet<Class<? extends Entity>> metalEntities = new HashSet<>();
     private static final HashSet<Block> metalBlocks = new HashSet<>();
 
-    @StateEventCallback
-    @SuppressWarnings("unused")
-    public static void init(FMLPostInitializationEvent event) {
+    public static void postInit() {
         Map<String, List<String>> cfgBlocks = AcademyCraft.academyCraftConfig.getAbility().getMetalBlocks();
         Map<String, List<String>> cfgEntities = AcademyCraft.academyCraftConfig.getAbility().getMetalEntities();
 

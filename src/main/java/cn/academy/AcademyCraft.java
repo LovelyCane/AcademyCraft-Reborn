@@ -1,6 +1,12 @@
 package cn.academy;
 
+import cn.academy.internal.ability.CategoryManager;
+import cn.academy.internal.ability.Controllable;
 import cn.academy.internal.ability.ctrl.ClientHandler;
+import cn.academy.internal.ability.vanilla.VanillaCategories;
+import cn.academy.internal.ability.vanilla.electromaster.CatElectromaster;
+import cn.academy.internal.ability.vanilla.meltdowner.skill.ElectronBomb;
+import cn.academy.internal.ability.vanilla.meltdowner.skill.SBNetDelegate;
 import cn.academy.internal.event.AcademyCraftEventManager;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.registry.RegistryMod;
@@ -14,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -74,6 +81,7 @@ public class AcademyCraft {
 
         AcademyCraftEventManager.registerEventBus();
         AcademyCraftRegister.registerAllDuringPreInit();
+        ElectronBomb.EffectDelegate.preInit();
 
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             OBJLoader.INSTANCE.addDomain(Tags.MOD_ID);
@@ -88,6 +96,15 @@ public class AcademyCraft {
             ClientHandler.init();
         }
         OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
+        Controllable.init();
+        VanillaCategories.init();
+        SBNetDelegate.init();
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        CategoryManager.postInit();
+        CatElectromaster.postInit();
     }
 
     @EventHandler

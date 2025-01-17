@@ -3,7 +3,6 @@ package cn.academy.internal.ability;
 import cn.academy.AcademyCraft;
 import cn.academy.api.ability.Category;
 import cn.academy.internal.ability.context.ClientRuntime;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
 import cn.lambdalib2.s11n.network.NetworkS11n;
@@ -13,7 +12,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,8 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 
 public abstract class Controllable {
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
+    public static void init() {
         NetworkS11n.addDirect(Controllable.class, new NetS11nAdaptor<Controllable>() {
             @Override
             public void write(ByteBuf buf, Controllable obj) {
