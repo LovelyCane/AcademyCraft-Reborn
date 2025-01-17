@@ -16,7 +16,6 @@ import cn.academy.internal.util.RegACKeyHandler;
 import cn.lambdalib2.input.KeyHandler;
 import cn.lambdalib2.input.KeyManager;
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +76,8 @@ public final class ClientHandler {
 
         @Override
         public void onKeyUp() {
-            if (Minecraft.getMinecraft().player.isSpectator()) return;
+            if (Minecraft.getMinecraft().player.isSpectator())
+                return;
             double delta = GameTimer.getTime() - lastKeyDown;
             if (delta < 0.300) {
                 EntityPlayer player = getPlayer();
@@ -93,7 +93,8 @@ public final class ClientHandler {
 
         @Override
         public void onKeyDown() {
-            if (Minecraft.getMinecraft().player.isSpectator()) return;
+            if (Minecraft.getMinecraft().player.isSpectator())
+                return;
             lastKeyDown = GameTimer.getTime();
             CPBar.INSTANCE.startDisplayNumbers();
         }
@@ -127,11 +128,9 @@ public final class ClientHandler {
 
 
     @SideOnly(Side.CLIENT)
-    public enum ConfigHandler {
-        @RegEventHandler() instance;
-
+    public static class ConfigHandler {
         @SubscribeEvent
-        public void onConfigModify(ConfigModifyEvent evt) {
+        public static void onConfigModify(ConfigModifyEvent evt) {
             updateAbilityKeys();
         }
     }

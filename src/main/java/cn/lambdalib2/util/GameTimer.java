@@ -1,6 +1,5 @@
 package cn.lambdalib2.util;
 
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -11,14 +10,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A simple timer wrapup to handle paused timing situations.
+ *
  * @author WeAthFolD
  */
 
-public enum GameTimer {
-    @RegEventHandler
-    INSTANCE;
-
-    GameTimer() {}
+public class GameTimer {
+    GameTimer() {
+    }
 
     static long storedTime, timeLag;
 
@@ -46,11 +44,13 @@ public enum GameTimer {
     @SuppressWarnings("sideonly")
     private static double getTime(boolean isClient) {
         if (isClient) {
-            if (beginTimeClient == 0) beginTimeClient = getRawTimeClient();
+            if (beginTimeClient == 0)
+                beginTimeClient = getRawTimeClient();
             long elapsed = getRawTimeClient() - beginTimeClient;
             return elapsed / 1000.0;
         } else {
-            if (beginTimeServer == 0) beginTimeServer = getRawTimeServer();
+            if (beginTimeServer == 0)
+                beginTimeServer = getRawTimeServer();
             long elapsed = getRawTimeServer() - beginTimeServer;
             return elapsed / 1000.0;
         }
@@ -59,7 +59,7 @@ public enum GameTimer {
     @SideOnly(Side.CLIENT)
     private static long getRawTimeClient() {
         long time = Minecraft.getSystemTime();
-        if(Minecraft.getMinecraft().isGamePaused()) {
+        if (Minecraft.getMinecraft().isGamePaused()) {
             timeLag = time - storedTime;
         } else {
             storedTime = time - timeLag;
@@ -74,8 +74,7 @@ public enum GameTimer {
     // In case GameTimer isn't queried frequently, use this to prevent huge (and incorrect) time lag.
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
         getRawTimeClient();
     }
-
 }

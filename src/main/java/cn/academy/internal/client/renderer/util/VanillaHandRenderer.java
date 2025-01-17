@@ -1,7 +1,6 @@
 package cn.academy.internal.client.renderer.util;
 
 import cn.academy.internal.datapart.HandRenderOverrideData;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.util.ReflectionUtils;
 import cn.lambdalib2.vis.CompTransform;
 import net.minecraft.client.Minecraft;
@@ -50,12 +49,10 @@ public class VanillaHandRenderer {
         }
     }
 
-    public enum EventHandler {
-        @RegEventHandler instance;
-
+    public static class EventHandler {
         @SideOnly(Side.CLIENT)
         @SubscribeEvent
-        public void onRenderHand(RenderHandEvent ev) {
+        public static void onRenderHand(RenderHandEvent ev) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             HandRenderOverrideData data = HandRenderOverrideData.get(player);
             Minecraft mc = Minecraft.getMinecraft();

@@ -7,7 +7,6 @@
 package cn.lambdalib2.util;
 
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -37,7 +36,6 @@ import java.util.*;
  */
 @SideOnly(Side.CLIENT)
 public class ControlOverrider {
-
     private static IntHashMap<Collection<KeyBinding>> kbMap;
     private static KeyModifier activeModifier;
     private static Field pressedField;
@@ -52,7 +50,6 @@ public class ControlOverrider {
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
         try {
-//            kbMapField = ReflectionUtils.getObfField(KeyBinding.class, "HASH", "field_74514_b");
             kbMapField = ReflectionUtils.getObfField(KeyBindingMap.class, "map", "field_180218_a");
 
             Method getActiveModifier = ReflectionUtils.getObfMethod(KeyModifier.class, "getActiveModifier", "");
@@ -88,7 +85,7 @@ public class ControlOverrider {
         try {
             EnumMap map = (EnumMap) kbMapField.get(null);
             return (IntHashMap) map.get(activeModifier);
-//            return (IntHashMap) kbMapField.get(null);
+            //            return (IntHashMap) kbMapField.get(null);
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
@@ -151,9 +148,9 @@ public class ControlOverrider {
 
         for (int keyid : keys) {
             Collection<KeyBinding> list = kbMap.removeObject(keyid);
-            if(list==null)
+            if (list == null)
                 continue;
-            for(KeyBinding kb : list)//object KeyBinding
+            for (KeyBinding kb : list)//object KeyBinding
             {
                 if (kb != null) {
                     try {
@@ -169,15 +166,14 @@ public class ControlOverrider {
     }
 
     private static void clearInternal() {
-        activeOverrides.entrySet().forEach(entry -> {
-            Override ovr = entry.getValue();
-            int keyid = entry.getKey();
+        activeOverrides.forEach((key, ovr) -> {
+            int keyid = key;
 
             ovr.kb.setKeyCode(keyid);
-            if(!kbMap.containsItem(keyid))
-                kbMap.addKey(keyid, new ArrayList<>() );
+            if (!kbMap.containsItem(keyid))
+                kbMap.addKey(keyid, new ArrayList<>());
             Collection<KeyBinding> collection = kbMap.lookup(keyid);
-            if(collection!=null) {
+            if (collection != null) {
                 collection.add(ovr.kb);
             }
         });
@@ -188,7 +184,7 @@ public class ControlOverrider {
     private static void releaseLocks() {
         for (Map.Entry<Integer, Override> ao : activeOverrides.entrySet()) {
             Collection<KeyBinding> collection = kbMap.lookup(ao.getKey());
-            if(collection!=null) {
+            if (collection != null) {
                 collection.add(ao.getValue().kb);
             }
         }
@@ -202,7 +198,7 @@ public class ControlOverrider {
                 Throwables.propagate(e);
             }
             Collection<KeyBinding> collection = kbMap.lookup(ao.getKey());
-            if(collection!=null) {
+            if (collection != null) {
                 collection.remove(ao.getValue().kb);
             }
         }
@@ -213,10 +209,7 @@ public class ControlOverrider {
     }
 
     @SideOnly(Side.CLIENT)
-    public enum Events {
-        @RegEventHandler
-        instance_;
-
+    public static class Events {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent cte) {
             GuiScreen cgs = Minecraft.getMinecraft().currentScreen;

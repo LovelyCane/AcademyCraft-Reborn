@@ -15,7 +15,6 @@ import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.util.ClientUtils;
 import cn.lambdalib2.util.ControlOverrider;
 import cn.lambdalib2.util.SideUtils;
@@ -224,7 +223,8 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     public IActivateHandler getActivateHandler() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         for (IActivateHandler h : activateHandlers) {
-            if (h.handles(player)) return h;
+            if (h.handles(player))
+                return h;
         }
         throw new RuntimeException();
     }
@@ -317,41 +317,38 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
     }
 
     @SideOnly(Side.CLIENT)
-    public enum Events {
-        @RegEventHandler() instance;
-
+    public static class Events {
         @SubscribeEvent
-        public void presetSwitch(PresetSwitchEvent evt) {
+        public static void presetSwitch(PresetSwitchEvent evt) {
             ClientRuntime.instance().updateDefaultGroup();
         }
 
         @SubscribeEvent
-        public void presetEdit(PresetUpdateEvent evt) {
+        public static void presetEdit(PresetUpdateEvent evt) {
             if (SideUtils.isClient()) {
                 ClientRuntime.instance().updateDefaultGroup();
             }
         }
 
         @SubscribeEvent
-        public void activateAbility(AbilityActivateEvent evt) {
+        public static void activateAbility(AbilityActivateEvent evt) {
             if (SideUtils.isClient()) {
                 ClientRuntime.instance().updateDefaultGroup();
             }
         }
 
         @SubscribeEvent
-        public void deactivateAbility(AbilityDeactivateEvent evt) {
+        public static void deactivateAbility(AbilityDeactivateEvent evt) {
             if (SideUtils.isClient()) {
                 ClientRuntime.instance().clearAllKeys();
             }
         }
 
         @SubscribeEvent
-        public void flushControl(FlushControlEvent evt) {
-            if (ClientRuntime.available()) ClientRuntime.instance().requireFlush = true;
+        public static void flushControl(FlushControlEvent evt) {
+            if (ClientRuntime.available())
+                ClientRuntime.instance().requireFlush = true;
         }
-
-
     }
 
     @SideOnly(Side.CLIENT)

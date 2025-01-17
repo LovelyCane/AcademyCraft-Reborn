@@ -7,7 +7,6 @@ import cn.academy.internal.energy.impl.VBlocks.VNReceiver;
 import cn.academy.internal.energy.impl.VBlocks.VWNode;
 import cn.academy.internal.event.WirelessUserEvent.UserType;
 import cn.academy.internal.event.energy.*;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,15 +18,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
  */
 
 public class WirelessSystem {
-    @RegEventHandler
-    public static WirelessSystem INSTANCE = new WirelessSystem();
-
     private WirelessSystem() {
     }
 
     @SubscribeEvent
-    public void onServerTick(ServerTickEvent event) {
-        if (event.phase == Phase.START) return;
+    public static void onServerTick(ServerTickEvent event) {
+        if (event.phase == Phase.START)
+            return;
 
         for (WorldServer ws : FMLCommonHandler.instance().getMinecraftServerInstance().worlds) {
             WiWorldData data = WiWorldData.getNonCreate(ws);
@@ -39,7 +36,7 @@ public class WirelessSystem {
     }
 
     @SubscribeEvent
-    public void onCreateNet(CreateNetworkEvent event) {
+    public static void onCreateNet(CreateNetworkEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         if (!data.createNetwork(event.mat, event.ssid, event.pwd)) {
             event.setCanceled(true);
@@ -47,14 +44,15 @@ public class WirelessSystem {
     }
 
     @SubscribeEvent
-    public void onDestroyNet(DestroyNetworkEvent event) {
+    public static void onDestroyNet(DestroyNetworkEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         WirelessNet net = data.getNetwork(event.mat);
-        if (net != null) net.dispose();
+        if (net != null)
+            net.dispose();
     }
 
     @SubscribeEvent
-    public void changePass(ChangePassEvent event) {
+    public static void changePass(ChangePassEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         WirelessNet net = data.getNetwork(event.mat);
         if (net == null || !net.resetPassword(event.pwd)) {
@@ -63,23 +61,25 @@ public class WirelessSystem {
     }
 
     @SubscribeEvent
-    public void linkNode(LinkNodeEvent event) {
+    public static void linkNode(LinkNodeEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         WirelessNet net = data.getNetwork(event.matrix);
 
-        if (net == null || !net.addNode(new VWNode(event.node), event.pwd)) event.setCanceled(true);
+        if (net == null || !net.addNode(new VWNode(event.node), event.pwd))
+            event.setCanceled(true);
     }
 
     @SubscribeEvent
-    public void unlinkNode(UnlinkNodeEvent event) {
+    public static void unlinkNode(UnlinkNodeEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         WirelessNet net = data.getNetwork(event.node);
 
-        if (net != null) net.removeNode(new VWNode(event.node));
+        if (net != null)
+            net.removeNode(new VWNode(event.node));
     }
 
     @SubscribeEvent
-    public void linkUser(LinkUserEvent event) {
+    public static void linkUser(LinkUserEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
         NodeConn conn = data.getNodeConnection(event.node);
 
@@ -91,24 +91,28 @@ public class WirelessSystem {
         }
 
         if (event.type == UserType.GENERATOR) {
-            if (!conn.addGenerator(new VNGenerator(event.getAsGenerator()))) event.setCanceled(true);
+            if (!conn.addGenerator(new VNGenerator(event.getAsGenerator())))
+                event.setCanceled(true);
         } else { //RECEIVER
-            if (!conn.addReceiver(new VNReceiver(event.getAsReceiver()))) event.setCanceled(true);
+            if (!conn.addReceiver(new VNReceiver(event.getAsReceiver())))
+                event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public void unlinkUser(UnlinkUserEvent event) {
+    public static void unlinkUser(UnlinkUserEvent event) {
         WiWorldData data = WiWorldData.get(event.getWorld());
 
         if (event.type == UserType.GENERATOR) {
             IWirelessGenerator gen = event.getAsGenerator();
             NodeConn conn = data.getNodeConnection(gen);
-            if (conn != null) conn.removeGenerator(new VNGenerator(gen));
+            if (conn != null)
+                conn.removeGenerator(new VNGenerator(gen));
         } else { //RECEIVER
             IWirelessReceiver rec = event.getAsReceiver();
             NodeConn conn = data.getNodeConnection(rec);
-            if (conn != null) conn.removeReceiver(new VNReceiver(rec));
+            if (conn != null)
+                conn.removeReceiver(new VNReceiver(rec));
         }
     }
 }

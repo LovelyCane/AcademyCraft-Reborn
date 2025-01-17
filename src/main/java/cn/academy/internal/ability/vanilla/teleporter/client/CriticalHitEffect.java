@@ -1,8 +1,7 @@
 package cn.academy.internal.ability.vanilla.teleporter.client;
 
-import cn.academy.internal.client.renderer.particle.FormulaParticleFactory;
 import cn.academy.internal.ability.vanilla.teleporter.util.TPSkillHelper.TPCritHitEvent;
-import cn.lambdalib2.registry.mc.RegEventHandler;
+import cn.academy.internal.client.renderer.particle.FormulaParticleFactory;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
 import net.minecraft.entity.Entity;
@@ -17,13 +16,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class CriticalHitEffect {
-    private CriticalHitEffect() {}
-
-    @RegEventHandler
-    private static CriticalHitEffect instance = new CriticalHitEffect();
+    private CriticalHitEffect() {
+    }
 
     @SubscribeEvent
-    public void onTPCritHit(TPCritHitEvent event) {
+    public static void onTPCritHit(TPCritHitEvent event) {
         World world = event.player.getEntityWorld();
         Entity t = event.target;
         if (world.isRemote) {
@@ -32,12 +29,8 @@ public class CriticalHitEffect {
                 double angle = RandUtils.ranged(0, Math.PI * 2);
                 double r = RandUtils.ranged(t.width * .5, t.width * .7);
                 double h = RandUtils.ranged(0, 1) * event.target.height;
-
-                world.spawnEntity(FormulaParticleFactory.instance.next(world,
-                        new Vec3d(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)),
-                        VecUtils.multiply(VecUtils.random(), 0.03)));
+                world.spawnEntity(FormulaParticleFactory.instance.next(world, new Vec3d(t.posX + r * Math.sin(angle), t.posY + h, t.posZ + r * Math.cos(angle)), VecUtils.multiply(VecUtils.random(), 0.03)));
             }
         }
     }
-
 }

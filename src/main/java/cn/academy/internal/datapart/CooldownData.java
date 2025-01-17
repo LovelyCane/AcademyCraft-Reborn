@@ -2,23 +2,22 @@ package cn.academy.internal.datapart;
 
 import cn.academy.internal.ability.Controllable;
 import cn.academy.internal.event.ability.CategoryChangeEvent;
+import cn.lambdalib2.datapart.DataPart;
+import cn.lambdalib2.datapart.EntityData;
+import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
-import cn.lambdalib2.datapart.DataPart;
-import cn.lambdalib2.datapart.EntityData;
-import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.util.TickScheduler;
 import com.google.common.base.Preconditions;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +30,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 @RegDataPart(EntityPlayer.class)
 public class CooldownData extends DataPart<EntityPlayer> {
-
     public static CooldownData of(EntityPlayer player) {
         return EntityData.get(player).getPart(CooldownData.class);
     }
@@ -61,8 +59,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
         setTick(true);
 
         scheduler.everyTick().run(() -> {
-            for (Iterator<SkillCooldown> itr = cooldownMap.values().iterator();
-                 itr.hasNext(); ) {
+            for (Iterator<SkillCooldown> itr = cooldownMap.values().iterator(); itr.hasNext(); ) {
                 SkillCooldown cd = itr.next();
                 --cd.tickLeft;
 
@@ -90,9 +87,8 @@ public class CooldownData extends DataPart<EntityPlayer> {
     }
 
     /**
-     *
      * @param ctrl The skill
-     * @param id The sub id for this skill. 0 is reserved for skill itself.
+     * @param id   The sub id for this skill. 0 is reserved for skill itself.
      * @throws IllegalArgumentException if id < 0
      */
     public void setSub(Controllable ctrl, int id, int cd) {
@@ -145,7 +141,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
         return ctrl.getControlID() << 2 + id;
     }
 
-    @Listener(channel="cross", side={Side.CLIENT, Side.SERVER})
+    @Listener(channel = "cross", side = {Side.CLIENT, Side.SERVER})
     private void hCrossSet(Controllable ctrl, int id, int cd) {
         doSet(ctrl, id, cd);
     }
@@ -173,16 +169,12 @@ public class CooldownData extends DataPart<EntityPlayer> {
         }
     }
 
-    public enum _Events {
-        @RegEventHandler()
-        instance;
-
+    public static class Events {
         @SubscribeEvent
-        public void onCategoryChange(CategoryChangeEvent evt) {
+        public static void onCategoryChange(CategoryChangeEvent evt) {
             if (!evt.player.world.isRemote) {
                 CooldownData.of(evt.player).clear();
             }
         }
-
     }
 }

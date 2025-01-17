@@ -7,7 +7,6 @@ import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.nbt.NBTS11n.BaseSerializer;
@@ -38,7 +37,6 @@ import java.util.stream.IntStream;
  */
 @RegDataPart(EntityPlayer.class)
 public class PresetData extends DataPart<EntityPlayer> {
-
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
         NBTS11n.addBase(Preset.class, new BaseSerializer<NBTBase, Preset>() {
@@ -265,17 +263,12 @@ public class PresetData extends DataPart<EntityPlayer> {
 
     }
 
-    public static enum Events {
-        @RegEventHandler()
-        instance;
-
+    public static class Events {
         @SubscribeEvent
-        public void onCategoryChanged(CategoryChangeEvent event) {
+        public static void onCategoryChanged(CategoryChangeEvent event) {
             if (!SideUtils.isClient()) {
                 PresetData.get(event.player).clear();
             }
         }
-
     }
-
 }

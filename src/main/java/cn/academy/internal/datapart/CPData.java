@@ -6,7 +6,6 @@ import cn.academy.internal.event.ability.CalcEvent.OverloadRecoverSpeed;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
-import cn.lambdalib2.registry.mc.RegEventHandler;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.nbt.NBTS11n;
 import cn.lambdalib2.s11n.network.NetworkMessage;
@@ -464,11 +463,9 @@ public class CPData extends DataPart<EntityPlayer> {
         MinecraftForge.EVENT_BUS.post(state ? new AbilityActivateEvent(getEntity()) : new AbilityDeactivateEvent(getEntity()));
     }
 
-    public enum Events {
-        @RegEventHandler() instance;
-
+    public static class Events {
         @SubscribeEvent
-        public void changedCategory(CategoryChangeEvent event) {
+        public static void changedCategory(CategoryChangeEvent event) {
             CPData cpData = CPData.get(event.player);
 
             if (!AbilityData.get(event.player).hasCategory()) {
