@@ -70,6 +70,18 @@ public class AcademyCraftConfig {
     }
 
     public static class Generic {
+        @SerializedName("attackPlayer")
+        private boolean attackPlayer;
+
+        @SerializedName("destroyBlocks")
+        private boolean destroyBlocks;
+
+        @SerializedName("worldsWhitelistedDestroyingBlocks")
+        private String[] worldsWhitelistedDestroyingBlocks;
+
+        @SerializedName("useMouseWheel")
+        private boolean useMouseWheel;
+
         @SerializedName("genOres")
         private boolean genOres;
 
@@ -78,6 +90,22 @@ public class AcademyCraftConfig {
 
         @SerializedName("generateOresBlackList")
         private String[] generateOresBlackList = new String[]{};
+
+        public boolean isAttackPlayer() {
+            return attackPlayer;
+        }
+
+        public boolean isDestroyBlocks() {
+            return destroyBlocks;
+        }
+
+        public String[] getWorldsWhitelistedDestroyingBlocks() {
+            return worldsWhitelistedDestroyingBlocks;
+        }
+
+        public boolean isUseMouseWheel() {
+            return useMouseWheel;
+        }
 
         public boolean isGenOres() {
             return genOres;

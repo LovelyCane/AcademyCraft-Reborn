@@ -43,7 +43,7 @@ public class CustomizeUI extends CGuiScreen {
         body = main.getWidget("body");
 
         ElementList list = new ElementList();
-        for (ACHud.Node n : ACHud.instance.getNodes()) {
+        for (ACHud.Node n : ACHud.INSTANCE.getNodes()) {
             double[] pos = n.getPosition();
             n.getPreview().pos((float) pos[0], (float) pos[1]);
             gui.addWidget(n.getPreview());

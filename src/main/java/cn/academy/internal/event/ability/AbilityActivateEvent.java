@@ -8,9 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
  * @author WeAthFolD
  */
 public class AbilityActivateEvent extends AbilityEvent {
-
     public AbilityActivateEvent(EntityPlayer _player) {
         super(_player);
     }
-
 }

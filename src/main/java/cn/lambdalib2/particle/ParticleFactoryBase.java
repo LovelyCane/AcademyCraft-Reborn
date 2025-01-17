@@ -16,6 +16,7 @@ import java.util.List;
  */
 @SideOnly(Side.CLIENT)
 public abstract class ParticleFactoryBase {
+
     static final int MAX_POOL_SIZE = 1000;
 
     static List<Particle> alive = new ArrayList<>(), dead = new ArrayList<>();

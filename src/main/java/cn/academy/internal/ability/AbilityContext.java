@@ -23,7 +23,6 @@ import java.util.function.Predicate;
  * A context for skill usage to abstract over common operations.
  */
 public class AbilityContext {
-
     public static AbilityContext of(EntityPlayer player, Skill skill) {
         return new AbilityContext(player, skill);
     }

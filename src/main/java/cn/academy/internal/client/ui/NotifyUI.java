@@ -43,7 +43,7 @@ public class NotifyUI extends Widget {
                 return "blablabla";
             }
         };
-        ACHud.instance.addElement(new NotifyUI(), () -> true, "notification", new Widget().size(517, 170).scale(0.25f).listen(FrameEvent.class, (w, e) -> {
+        ACHud.INSTANCE.addElement(new NotifyUI(), () -> true, "notification", new Widget().size(517, 170).scale(0.25f).listen(FrameEvent.class, (w, e) -> {
             drawBack(1);
             drawIcon(dummy, end, 1);
             drawText(dummy, 1);

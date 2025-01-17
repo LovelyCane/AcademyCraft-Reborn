@@ -61,7 +61,7 @@ public class CPBar extends Widget {
 
     @StateEventCallback
     private static void init(FMLInitializationEvent ev) {
-        ACHud.instance.addElement(INSTANCE, () -> true, "cpbar", new Widget().size(WIDTH, HEIGHT).scale(SCALE).walign(WidthAlign.RIGHT).addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
+        ACHud.INSTANCE.addElement(INSTANCE, () -> true, "cpbar", new Widget().size(WIDTH, HEIGHT).scale(SCALE).walign(WidthAlign.RIGHT).addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
     }
 
     /**

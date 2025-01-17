@@ -4,10 +4,8 @@ import cn.academy.AcademyCraft;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.cgui.CGui;
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.registry.StateEventCallback;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,15 +17,9 @@ import java.util.List;
  *
  * @author WeAthFolD
  */
-
 @SideOnly(Side.CLIENT)
 public class ACHud extends AuxGui {
-    public static ACHud instance = new ACHud();
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
-        AuxGui.register(instance);
-    }
+    public static final ACHud INSTANCE = new ACHud();
 
     private final List<Node> nodes = new ArrayList<>();
 

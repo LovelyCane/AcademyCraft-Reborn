@@ -33,7 +33,6 @@ import java.util.Map;
  */
 @RegDataPart(EntityPlayer.class)
 public class CPData extends DataPart<EntityPlayer> {
-
     private AbilityData abilityData;
 
     private static final String MSG_POST_EVENT = "post_event", MSG_ACTIVATE_SVR = "actv_svr";

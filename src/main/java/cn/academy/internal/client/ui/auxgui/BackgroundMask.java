@@ -4,7 +4,6 @@ import cn.academy.Resources;
 import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.datapart.CPData;
 import cn.lambdalib2.auxgui.AuxGui;
-import cn.lambdalib2.registry.mc.gui.RegAuxGui;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.HudUtils;
@@ -23,9 +22,8 @@ import org.lwjgl.util.Color;
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
-@RegAuxGui
 public class BackgroundMask extends AuxGui {
-    
+    public static final BackgroundMask INSTANCE = new BackgroundMask();
     final ResourceLocation MASK = Resources.preloadMipmapTexture("effects/screen_mask");
     
     final Color CRL_OVERRIDE = new Color(208, 20, 20, 170);

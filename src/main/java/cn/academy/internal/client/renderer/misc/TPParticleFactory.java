@@ -12,11 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
- *
  */
-public class TPParticleFactory extends ParticleFactory
-{
-
+public class TPParticleFactory extends ParticleFactory {
     public static TPParticleFactory instance;
 
     static Particle template;
@@ -45,5 +42,4 @@ public class TPParticleFactory extends ParticleFactory
         ret.fadeAfter(20, 20);
         return ret;
     }
-
 }

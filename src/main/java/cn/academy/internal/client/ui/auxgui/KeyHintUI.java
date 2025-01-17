@@ -62,7 +62,7 @@ public class KeyHintUI extends Widget {
                 .halign(HeightAlign.CENTER);
         display.addWidget(child);
 
-        ACHud.instance.addElement(new KeyHintUI(),
+        ACHud.INSTANCE.addElement(new KeyHintUI(),
                 () -> CPData.get(Minecraft.getMinecraft().player).isActivated(), "keyhint", display);
     }
 

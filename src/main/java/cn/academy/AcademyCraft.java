@@ -1,6 +1,7 @@
 package cn.academy;
 
 import cn.academy.internal.event.AcademyCraftEventManager;
+import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.registry.RegistryMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
@@ -86,6 +87,7 @@ public class AcademyCraft {
     public void init(FMLInitializationEvent event) {
         OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
         AcademyCraftRegister.registerAllDuringInit();
+        AuxGuiHandler.init();
     }
 
     @EventHandler

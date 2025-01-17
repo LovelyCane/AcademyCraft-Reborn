@@ -1,116 +1,69 @@
 package cn.academy.internal.ability;
 
 import cn.academy.AcademyCraft;
+import cn.academy.AcademyCraftConfig;
 import cn.academy.internal.event.BlockDestroyEvent;
-import cn.lambdalib2.registry.StateEventCallback;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * INTERNAL CLASS
  */
 public class AbilityPipeline {
-
-    private AbilityPipeline() {}
+    private AbilityPipeline() {
+    }
 
     /**
      * @return Whether we can break any block at all
      */
     static boolean canBreakBlock(World world) {
-        return propDestroyBlocks.getBoolean() ||
-                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), String.valueOf(world.provider.getDimension())) ||
-                ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.getSaveFolder());
-                //||ArrayUtils.contains(propWorldsDestroyingBlocks.getStringList(), world.provider.g);
+        return propDestroyBlocks || ArrayUtils.contains(propWorldsDestroyingBlocks, String.valueOf(world.provider.getDimension())) || ArrayUtils.contains(propWorldsDestroyingBlocks, world.provider.getSaveFolder());
     }
 
     static boolean isAllWorldDisableBreakBlock() {
-        return !propDestroyBlocks.getBoolean() && propWorldsDestroyingBlocks.getIntList().length == 0;
+        return !propDestroyBlocks && propWorldsDestroyingBlocks.length == 0;
     }
 
     /**
      * @return Whether PvP is enabled.
      */
     static boolean canAttackPlayer() {
-        return propAttackPlayer.getBoolean();
+        return propAttackPlayer;
     }
 
     /**
      * Tests if the block at the specified coordinates can be broken by a
      * certain player.
+     *
      * @return Whether the block can be really broken.
      */
-    static boolean canBreakBlock(World world, EntityPlayer player,
-        int x, int y, int z)
-    {
-        return !MinecraftForge.EVENT_BUS.post(
-            new BlockDestroyEvent(world, player, new BlockPos(x, y, z)));
-    }
-    static boolean canBreakBlock(World world, EntityPlayer player, BlockPos pos)
-    {
-        return !MinecraftForge.EVENT_BUS.post(
-                new BlockDestroyEvent(world, player, pos));
+    static boolean canBreakBlock(World world, EntityPlayer player, int x, int y, int z) {
+        return !MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, player, new BlockPos(x, y, z)));
     }
 
-    public static boolean canUseMouseWheel(){
-        return propUseMouseWheel.getBoolean();
+    static boolean canBreakBlock(World world, EntityPlayer player, BlockPos pos) {
+        return !MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, player, pos));
     }
 
-    /**
-     * Tests if the block at the specified coordinates can be broken.
-     * @return Whether the block can be really broken.
-     */
-    static boolean canBreakBlock(World world, int x, int y, int z) {
-        return !MinecraftForge.EVENT_BUS.post(
-            new BlockDestroyEvent(world, new BlockPos(x, y, z)));
-    }
-    static boolean canBreakBlock(World world, BlockPos pos) {
-        return !MinecraftForge.EVENT_BUS.post(
-                new BlockDestroyEvent(world, pos));
-    }
-
-    /**
-     * Tests if the block at the specified coordinates can be broken by a
-     * certain player.
-     * @return Whether the block can be really broken.
-     */
-    static boolean canBreakBlock(EntityPlayer player, int x, int y, int z) {
-        return !MinecraftForge.EVENT_BUS.post(
-            new BlockDestroyEvent(player, new BlockPos(x, y, z)));
-    }
-    static boolean canBreakBlock(EntityPlayer player, BlockPos pos) {
-        return !MinecraftForge.EVENT_BUS.post(
-                new BlockDestroyEvent(player, pos));
+    public static boolean canUseMouseWheel() {
+        return propUseMouseWheel;
     }
 
     // PROPERTIES
-    private static Property propAttackPlayer;
-    private static Property propDestroyBlocks;
-    private static Property propWorldsDestroyingBlocks;
-    private static Property propUseMouseWheel;
+    private static final AcademyCraftConfig.Generic generic = AcademyCraft.academyCraftConfig.getGeneric();
+    private static final boolean propAttackPlayer = generic.isAttackPlayer();
+    private static final boolean propDestroyBlocks = generic.isDestroyBlocks();
+    private static final String[] propWorldsDestroyingBlocks = generic.getWorldsWhitelistedDestroyingBlocks();
+    private static final boolean propUseMouseWheel = generic.isUseMouseWheel();
 
-    @StateEventCallback
-    private static void _init(FMLInitializationEvent event) {
-        Configuration conf = AcademyCraft.config;
-
-        propAttackPlayer = conf.get("generic", "attackPlayer", true, "Whether the skills are effective on players.");
-        propDestroyBlocks = conf.get("generic", "destroyBlocks", true, "Whether the skills will destroy blocks in the world.");
-        propWorldsDestroyingBlocks = conf.get("generic", "worldsWhitelistedDestroyingBlocks", new String[]{},
-                "The worlds which whitelisted destroying blocks. World IDs, sub folder names and world names are all supported.");
-        propUseMouseWheel = conf.get("generic","useMouseWheel",false,"Whether teleporter can use mouse wheel to control the destination.");
-        MinecraftForge.EVENT_BUS.register(new AbilityPipeline());
-    }
 
     @SubscribeEvent
-    public void onBlockDestroy(BlockDestroyEvent event) {
-        if(!canBreakBlock(event.world))
+    public static void onBlockDestroy(BlockDestroyEvent event) {
+        if (!canBreakBlock(event.world))
             event.setCanceled(true);
     }
-
 }

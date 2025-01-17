@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 @SideOnly(Side.CLIENT)
 @RegDataPart(value = EntityPlayer.class, side = Side.CLIENT)
 public class ClientRuntime extends DataPart<EntityPlayer> {
-
     public static final String DEFAULT_GROUP = "def";
     private static final String OVERRIDE_GROUP = "AC_ClientRuntime";
 

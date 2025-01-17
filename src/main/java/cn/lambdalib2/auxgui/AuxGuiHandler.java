@@ -1,5 +1,8 @@
 package cn.lambdalib2.auxgui;
 
+import cn.academy.internal.client.ui.auxgui.ACHud;
+import cn.academy.internal.client.ui.auxgui.BackgroundMask;
+import cn.academy.internal.client.ui.auxgui.DebugConsole;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RenderUtils;
 import com.google.common.collect.ImmutableList;
@@ -24,10 +27,13 @@ import java.util.List;
  */
 @SideOnly(Side.CLIENT)
 public class AuxGuiHandler {
-    private static final AuxGuiHandler INSTANCE = new AuxGuiHandler();
-
     private AuxGuiHandler() {
-        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public static void init() {
+        AuxGuiHandler.register(ACHud.INSTANCE);
+        AuxGuiHandler.register(BackgroundMask.INSTANCE);
+        AuxGuiHandler.register(DebugConsole.INSTANCE);
     }
 
     private static boolean iterating;
@@ -64,13 +70,13 @@ public class AuxGuiHandler {
     }
 
     @SubscribeEvent(receiveCanceled = true)
-    public void drawHudEvent(RenderGameOverlayEvent event) {
+    public static void drawHudEvent(RenderGameOverlayEvent event) {
         if (event.getType() == ElementType.CROSSHAIRS) {
             doRender(event);
         }
     }
 
-    private void doRender(RenderGameOverlayEvent event) {
+    private static void doRender(RenderGameOverlayEvent event) {
         GL11.glDepthFunc(GL11.GL_ALWAYS);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -99,7 +105,7 @@ public class AuxGuiHandler {
     }
 
     @SubscribeEvent
-    public void clientTick(ClientTickEvent event) {
+    public static void clientTick(ClientTickEvent event) {
         if (!Minecraft.getMinecraft().isGamePaused()) {
             for (AuxGui gui : toAddList) {
                 doAdd(gui);
@@ -122,7 +128,7 @@ public class AuxGuiHandler {
     }
 
     @SubscribeEvent
-    public void disconnected(ClientDisconnectionFromServerEvent event) {
+    public static void disconnected(ClientDisconnectionFromServerEvent event) {
         startIterating();
         Iterator<AuxGui> iter = auxGuiList.iterator();
         while (iter.hasNext()) {

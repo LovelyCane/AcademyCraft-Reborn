@@ -15,10 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class AuxGui {
-    public static void register(AuxGui gui) {
-        AuxGuiHandler.register(gui);
-    }
-
     // Intrusive states
     boolean lastFrameActive = false;
     double lastActivateTime;

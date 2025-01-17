@@ -1,11 +1,11 @@
 package cn.lambdalib2.particle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.lambdalib2.particle.decorators.ParticleDecorator;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO Completely redesign the particle system
@@ -13,7 +13,6 @@ import net.minecraft.world.World;
  * @author WeAthFolD
  */
 public class ParticleFactory extends ParticleFactoryBase {
-
     public final Particle template;
 
     private List<ParticleDecorator> decorators = new ArrayList<>();
@@ -78,5 +77,4 @@ public class ParticleFactory extends ParticleFactoryBase {
 
         return next(world);
     }
-
 }
