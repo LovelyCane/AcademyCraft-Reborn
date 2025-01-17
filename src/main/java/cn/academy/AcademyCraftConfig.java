@@ -293,6 +293,9 @@ public class AcademyCraftConfig {
         railGun.getFloatMap().put("overloadConsumeSpeed", 1.0f);
         railGun.getFloatMap().put("exp_incr_speed", 1.0f);
         ability.getSkills().put("railgun", railGun);
+        generic.attackPlayer = true;
+        generic.destroyBlocks = true;
+        generic.useMouseWheel = true;
         generic.genOres = true;
         generic.genPhaseLiquid = true;
         gui.put("cpbar", new Node(new double[]{-12, 12}));
