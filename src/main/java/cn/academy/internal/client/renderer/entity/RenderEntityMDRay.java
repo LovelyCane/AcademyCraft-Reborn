@@ -1,14 +1,11 @@
 package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
-import cn.academy.internal.entity.EntityMDRay;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.client.renderer.entity.RenderManager;
 
-@RegEntityRender(EntityMDRay.class)
-public class RenderMDRay extends RenderRayComposite {
-    public RenderMDRay(RenderManager manager) {
+public class RenderEntityMDRay extends RenderRayComposite {
+    public RenderEntityMDRay(RenderManager manager) {
         super(manager, "mdray");
         this.cylinderIn.width = 0.17;
         this.cylinderIn.color.set(216, 248, 216, 230);

@@ -149,7 +149,7 @@ public enum ContextManager {
     }
 
     private static void log(Object msg) {
-        if (AcademyCraft.DEBUG_MODE && DEBUG_LOG) AcademyCraft.log.info("CM: " + msg);
+        if (AcademyCraft.DEBUG_MODE && DEBUG_LOG) AcademyCraft.LOGGER.info("CM: " + msg);
     }
 
     @SuppressWarnings("unchecked")

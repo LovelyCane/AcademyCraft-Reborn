@@ -271,7 +271,7 @@ public class FreqTransmitterUI extends AuxGui {
                     }
                 }
             } else {
-                AcademyCraft.log.error("Human is dead. Mismatch.");
+                AcademyCraft.LOGGER.error("Human is dead. Mismatch.");
                 MinecraftForge.EVENT_BUS.unregister(this);
             }
             return true;

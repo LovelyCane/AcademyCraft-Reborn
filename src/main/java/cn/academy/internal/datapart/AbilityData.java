@@ -295,7 +295,7 @@ public class AbilityData extends DataPart<EntityPlayer> {
 
     private boolean checkSkillSoft(Skill s) {
         if (s == null) {
-            AcademyCraft.log.info("Skill is null!");
+            AcademyCraft.LOGGER.info("Skill is null!");
         }
         return s.getCategory().getCategoryID() == catID;
     }

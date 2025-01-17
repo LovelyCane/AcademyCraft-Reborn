@@ -70,7 +70,7 @@ public abstract class Controllable {
 
     public final Category getCategory() {
         if (category == null) {
-            AcademyCraft.log.info("getCategory() called without a category");
+            AcademyCraft.LOGGER.info("getCategory() called without a category");
         }
         return category;
     }

@@ -1,8 +1,8 @@
-package cn.academy.internal.ability.vanilla.generic.client.effect;
+package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
+import cn.academy.internal.ability.vanilla.generic.client.effect.SmokeEffect;
 import cn.academy.internal.client.CameraPosition;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.Tessellator;
 import cn.lambdalib2.util.EntityLook;
 import cn.lambdalib2.util.RenderUtils;
@@ -12,13 +12,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-@RegEntityRender(SmokeEffect.class)
-@SuppressWarnings("unused")
-public class SmokeEffectRenderer extends Render<SmokeEffect> {
-
+public class RenderSmokeEffect extends Render<SmokeEffect> {
     private final ResourceLocation texture = Resources.preloadTexture("effects/smokes");
 
-    public SmokeEffectRenderer(RenderManager m) {
+    public RenderSmokeEffect(RenderManager m) {
         super(m);
     }
 

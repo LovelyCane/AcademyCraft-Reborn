@@ -1,6 +1,5 @@
 package cn.lambdalib2.particle;
 
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -11,9 +10,7 @@ import org.lwjgl.opengl.GL11;
  *
  * @author WeAthFolD
  */
-@RegEntityRender(Particle.class)
 public class RenderParticle<T extends Particle> extends Render<T> {
-
     static Sprite sprite = new Sprite();
 
     public RenderParticle(RenderManager m) {
@@ -23,22 +20,22 @@ public class RenderParticle<T extends Particle> extends Render<T> {
 
     @Override
     public void doRender(T ent, double x, double y, double z, float a, float b) {
-        Particle ish = (Particle) ent;
-        if (!ish.updated) return;
+        if (!ent.updated)
+            return;
 
-        ish.updateSprite(sprite);
+        ent.updateSprite(sprite);
 
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.05f);
         GL11.glPushMatrix();
 
-        if (ish.needViewOptimize()) {
+        if (ent.needViewOptimize()) {
             GL11.glTranslated(0, -0.2, 0);
         }
 
         GL11.glTranslated(x, y, z);
-        if (ish.customRotation) {
-            GL11.glRotatef(ish.rotationYaw, 0, 1, 0);
-            GL11.glRotatef(ish.rotationPitch, 0, 0, 1);
+        if (ent.customRotation) {
+            GL11.glRotatef(ent.rotationYaw, 0, 1, 0);
+            GL11.glRotatef(ent.rotationPitch, 0, 0, 1);
         } else {
             GL11.glRotatef(180F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
@@ -54,5 +51,4 @@ public class RenderParticle<T extends Particle> extends Render<T> {
     protected ResourceLocation getEntityTexture(T p_110775_1_) {
         return null;
     }
-
 }

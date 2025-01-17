@@ -2,7 +2,6 @@ package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
 import cn.academy.internal.entity.EntityMdShield;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.GLSLMesh;
 import cn.lambdalib2.render.legacy.LegacyMeshUtils;
 import cn.lambdalib2.render.legacy.ShaderSimple;
@@ -18,13 +17,11 @@ import org.lwjgl.opengl.GL20;
 /**
  * @author WeAthFolD
  */
-@RegEntityRender(EntityMdShield.class)
-public class RenderMdShield extends Render<EntityMdShield> {
-
+public class RenderEntityMdShield extends Render<EntityMdShield> {
     GLSLMesh mesh;
     ResourceLocation texture;
 
-    public RenderMdShield(RenderManager manager) {
+    public RenderEntityMdShield(RenderManager manager) {
         super(manager);
         texture = Resources.getTexture("effects/mdshield");
         mesh = LegacyMeshUtils.createBillboard(new GLSLMesh(), -0.5f, -0.5f, 0.5f, 0.5f);

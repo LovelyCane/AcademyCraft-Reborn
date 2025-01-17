@@ -54,7 +54,7 @@ public final class BukkitAdapter {
                 event.pos.getX(), event.pos.getY(), event.pos.getZ()));
         }
         catch (Throwable e) {
-            AcademyCraft.log.error("Failed to handle BlockDestroyEvent", e);
+            AcademyCraft.LOGGER.error("Failed to handle BlockDestroyEvent", e);
         }
     }
 
@@ -70,7 +70,7 @@ public final class BukkitAdapter {
             }
         }
         catch (Throwable e) {
-            AcademyCraft.log.error("Failed to load BukkitAdapter", e);
+            AcademyCraft.LOGGER.error("Failed to load BukkitAdapter", e);
         }
     }
 }

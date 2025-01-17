@@ -15,10 +15,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityDummy extends Entity implements IAssociatePlayer {
     AbstractClientPlayer player;
-    final DummyRenderData data;
+    public final DummyRenderData data;
     
     boolean set;
-    float lastRotationYaw, lastRotationYawHead, rotationYawHead;
+    public float lastRotationYaw;
+    public float lastRotationYawHead;
+    public float rotationYawHead;
     float lastRotationPitch;
     
     public EntityDummy(DummyRenderData _data) {

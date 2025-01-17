@@ -33,7 +33,7 @@ public class AcademyCraft {
     @Instance("academy")
     public static AcademyCraft instance;
     public static final boolean DEBUG_MODE = false;
-    public static final Logger log = LogManager.getLogger("AcademyCraft");
+    public static final Logger LOGGER = LogManager.getLogger("AcademyCraft");
     public static Configuration config;
     public static AcademyCraftConfig academyCraftConfig;
     public static final File configFile;
@@ -49,13 +49,13 @@ public class AcademyCraft {
             if (!configFile.exists()) {
                 boolean created = configFile.createNewFile();
                 if (created) {
-                    AcademyCraft.log.info("Created new config file: {}", configFile.getAbsolutePath());
+                    AcademyCraft.LOGGER.info("Created new config file: {}", configFile.getAbsolutePath());
                 }
             }
             academyCraftConfig = AcademyCraftConfig.loadConfig(configFile);
-            AcademyCraft.log.info("Loaded AcademyCraft config");
+            AcademyCraft.LOGGER.info("Loaded AcademyCraft config");
         } catch (IOException e) {
-            AcademyCraft.log.error("Failed to load or create config file: {}", e.getMessage());
+            AcademyCraft.LOGGER.error("Failed to load or create config file: {}", e.getMessage());
         }
     }
 
@@ -68,8 +68,8 @@ public class AcademyCraft {
 
     @EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
-        log.info("Starting AcademyCraft");
-        log.info("Copyright (c) Lambda Innovation, 2013-2018");
+        LOGGER.info("Starting AcademyCraft");
+        LOGGER.info("Copyright (c) Lambda Innovation, 2013-2018");
 
         AcademyCraftEventManager.registerEventBus();
         AcademyCraftRegister.registerAllDuringPreInit();

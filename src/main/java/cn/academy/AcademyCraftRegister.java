@@ -70,12 +70,12 @@ public class AcademyCraftRegister {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked","rawtypes"})
     private static void registerEntityRenderer() {
-        for (Class<? extends Render<? extends Entity>> render : AcademyCraftEntityRendererList.ENTITY_RENDER_MAP.keySet()) {
+        for (Class<? extends Render> render : AcademyCraftEntityRenderList.ENTITY_RENDER_MAP.keySet()) {
             try {
                 Constructor<?> constructor = render.getConstructor(RenderManager.class);
-                Class<? extends Entity> entityClass = AcademyCraftEntityRendererList.ENTITY_RENDER_MAP.get(render);
+                Class<? extends Entity> entityClass = AcademyCraftEntityRenderList.ENTITY_RENDER_MAP.get(render);
 
                 RenderingRegistry.registerEntityRenderingHandler(entityClass, (IRenderFactory<Entity>) manager -> {
                     try {

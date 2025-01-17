@@ -81,7 +81,7 @@ public class IC2Support {
 
         EnergyItemHelper.register(new IC2EnergyItemManager());
 
-        AcademyCraft.log.info("IC2 API Support has been loaded.");
+        AcademyCraft.LOGGER.info("IC2 API Support has been loaded.");
     }
 
 

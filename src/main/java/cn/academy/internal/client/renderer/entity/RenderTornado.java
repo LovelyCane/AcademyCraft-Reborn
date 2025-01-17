@@ -1,7 +1,7 @@
-package cn.academy.internal.ability.vanilla.vecmanip.skill;
+package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.internal.ability.vanilla.vecmanip.client.effect.TornadoRenderer;
-import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.academy.internal.ability.vanilla.vecmanip.skill.Tornado;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -10,10 +10,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-@RegEntityRender(Tornado.class)
-@SuppressWarnings("unused")
-public class TornadoEntityRenderer extends Render<Tornado> {
-    public TornadoEntityRenderer(RenderManager renderManager) {
+public class RenderTornado extends Render<Tornado> {
+    public RenderTornado(RenderManager renderManager) {
         super(renderManager);
     }
 

@@ -24,7 +24,7 @@ public class CommandAIM extends CommandAIMBase {
         try {
             player = getCommandSenderAsPlayer(commandSender);
         } catch (PlayerNotFoundException e) {
-            AcademyCraft.log.warn("Attempt to use command \"aim\" in the console.");
+            AcademyCraft.LOGGER.warn("Attempt to use command \"aim\" in the console.");
             return;
         }
 

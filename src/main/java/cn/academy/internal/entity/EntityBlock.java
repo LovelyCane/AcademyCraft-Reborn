@@ -188,7 +188,7 @@ public class EntityBlock extends EntityAdvanced {
                         }
                     }
                     if (!isPlace) {
-                        AcademyCraft.log.error("EntityBlock Lost: " + event.result.toString());
+                        AcademyCraft.LOGGER.error("EntityBlock Lost: " + event.result.toString());
                     }
                     setDead();
                 }
@@ -204,7 +204,7 @@ public class EntityBlock extends EntityAdvanced {
                 NetworkMessage.sendToDimension(world.provider.getDimension(), this, "sync_te",
                         tileEntity.getClass().getName(), tag);
             } catch (Exception e) {
-                AcademyCraft.log.error("Error syncing te", e);
+                AcademyCraft.LOGGER.error("Error syncing te", e);
             }
         }
     }
@@ -258,7 +258,7 @@ public class EntityBlock extends EntityAdvanced {
             te.setWorld(world);
             tileEntity = te;
         } catch (Exception e) {
-            AcademyCraft.log.error("Unable to sync tileEntity " + className, e);
+            AcademyCraft.LOGGER.error("Unable to sync tileEntity " + className, e);
         }
     }
 

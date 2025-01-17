@@ -12,12 +12,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class RenderMagHook extends Render<EntityMagHook> {
+public class RenderEntityMagHook extends Render<EntityMagHook> {
     final ObjLegacyRender model = Resources.getModel("maghook"), model_open = Resources.getModel("maghook_open");
 
     final ResourceLocation texture = Resources.getTexture("models/maghook");
 
-    public RenderMagHook(RenderManager renderManager) {
+    public RenderEntityMagHook(RenderManager renderManager) {
         super(renderManager);
     }
 

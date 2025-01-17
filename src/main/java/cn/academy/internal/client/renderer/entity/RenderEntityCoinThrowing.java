@@ -2,7 +2,6 @@ package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
 import cn.academy.internal.entity.EntityCoinThrowing;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -16,13 +15,10 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author KSkun
  */
-
-@RegEntityRender(EntityCoinThrowing.class)
-@SuppressWarnings("unused")
-public class RenderCoinThrowing extends Render<EntityCoinThrowing> {
+public class RenderEntityCoinThrowing extends Render<EntityCoinThrowing> {
     private final Minecraft mc = Minecraft.getMinecraft();
 
-    public RenderCoinThrowing(RenderManager renderManager) {
+    public RenderEntityCoinThrowing(RenderManager renderManager) {
         super(renderManager);
     }
 

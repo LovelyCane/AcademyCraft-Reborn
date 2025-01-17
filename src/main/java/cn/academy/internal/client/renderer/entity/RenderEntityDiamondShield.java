@@ -2,7 +2,6 @@ package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
 import cn.academy.internal.entity.EntityDiamondShield;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.LegacyMesh;
 import cn.lambdalib2.render.legacy.SimpleMaterial;
 import net.minecraft.client.renderer.entity.Render;
@@ -14,13 +13,11 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @author WeAthFolD
  */
-
-@RegEntityRender(EntityDiamondShield.class)
-public class RenderDiamondShield extends Render<EntityDiamondShield> {
+public class RenderEntityDiamondShield extends Render<EntityDiamondShield> {
     LegacyMesh mesh;
     SimpleMaterial material;
 
-    public RenderDiamondShield(RenderManager manager) {
+    public RenderEntityDiamondShield(RenderManager manager) {
         super(manager);
         mesh = new LegacyMesh();
         mesh.setVertices(new double[][]{{-1, 0, 0}, {0, -1, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
@@ -33,7 +30,8 @@ public class RenderDiamondShield extends Render<EntityDiamondShield> {
 
     @Override
     public void doRender(EntityDiamondShield entity, double x, double y, double z, float a, float b) {
-        if (!entity.firstUpdated()) return;
+        if (!entity.firstUpdated())
+            return;
 
         glDisable(GL_CULL_FACE);
         glDisable(GL_ALPHA_TEST);

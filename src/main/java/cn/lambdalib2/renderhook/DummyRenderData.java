@@ -28,7 +28,7 @@ public class DummyRenderData extends DataPart<EntityPlayer> {
     }
     
     private EntityDummy entity;
-    List<PlayerRenderHook> renderers = new LinkedList<>();
+    public List<PlayerRenderHook> renderers = new LinkedList<>();
     
     @Override
     public void tick() {

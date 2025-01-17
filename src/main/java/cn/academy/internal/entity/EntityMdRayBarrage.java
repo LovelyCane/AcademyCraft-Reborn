@@ -1,10 +1,7 @@
 package cn.academy.internal.entity;
 
 import cn.academy.internal.sound.ACSounds;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityMdRayBarrage extends EntityRayBase {
 
-    private SubRay[] subrays;
+    public SubRay[] subrays;
 
     public EntityMdRayBarrage(World world, double x, double y, double z, float yaw, float pitch) {
         super(world);
@@ -49,43 +46,13 @@ public class EntityMdRayBarrage extends EntityRayBase {
         return false;
     }
 
-    @RegEntityRender(EntityMdRayBarrage.class)
-    public static class BarrageRender extends EntityMdRaySmall.SmallMdRayRender {
-
-        public BarrageRender(RenderManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public void doRender(Entity ent, double x,
-                double y, double z, float a, float b) {
-            EntityMdRayBarrage ray = (EntityMdRayBarrage) ent;
-            ray.onRenderTick();
-            
-            float rYaw = ent.rotationYaw, rPitch = ent.rotationPitch;
-            
-            for(SubRay sr : ray.subrays) {
-                ent.rotationYaw = rYaw + sr.yawOffset;
-                ent.rotationPitch = rPitch + sr.pitchOffset;
-                this.plainDoRender(ent, x, y, z, a, b);
-            }
-            
-            ent.rotationYaw = rYaw;
-            ent.rotationPitch = rPitch;
-        }
-        
-    }
-    
-    private class SubRay {
-        
-        float yawOffset;
-        float pitchOffset;
+    public class SubRay {
+        public float yawOffset;
+        public float pitchOffset;
         
         public SubRay(float max) {
             yawOffset = RandUtils.rangef(-max, max);
             pitchOffset = RandUtils.rangef(-max / 2, max / 2);    
         }
-        
     }
-
 }

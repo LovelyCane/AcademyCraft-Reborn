@@ -189,7 +189,7 @@ public class NodeConn {
                             double amt = igen.getProvidedEnergy(required);
 
                             if(amt > required) {
-                                AcademyCraft.log.warn("Energy input overflow for generator " + igen);
+                                AcademyCraft.LOGGER.warn("Energy input overflow for generator " + igen);
                                 amt = required;
                             }
 
@@ -259,7 +259,7 @@ public class NodeConn {
     
     private void log(String str) {
         if(AcademyCraft.DEBUG_MODE)
-            AcademyCraft.log.info("[NodeConn] " + str);
+            AcademyCraft.LOGGER.info("[NodeConn] " + str);
     }
     
 }

@@ -1,16 +1,15 @@
-package cn.academy.internal.ability.vanilla.vecmanip.client.effect;
+package cn.academy.internal.client.renderer.entity;
 
+import cn.academy.internal.ability.vanilla.vecmanip.client.effect.StormWingEffect;
 import cn.academy.internal.ability.vanilla.vecmanip.client.effect.StormWingEffect.SubEffect;
-import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.academy.internal.ability.vanilla.vecmanip.client.effect.TornadoRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-@RegEntityRender(StormWingEffect.class)
-@SuppressWarnings("unused")
-public class StormWingEffectRender extends Render<StormWingEffect> {
-    public StormWingEffectRender(RenderManager manager) {
+public class RenderStormWingEffect extends Render<StormWingEffect> {
+    public RenderStormWingEffect(RenderManager manager) {
         super(manager);
     }
 

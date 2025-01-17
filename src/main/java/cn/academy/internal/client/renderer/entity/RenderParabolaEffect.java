@@ -1,8 +1,8 @@
-package cn.academy.internal.ability.vanilla.vecmanip.client.effect;
+package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
+import cn.academy.internal.ability.vanilla.vecmanip.client.effect.ParabolaEffect;
 import cn.academy.internal.ability.vanilla.vecmanip.skill.VecAccelContext;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
@@ -21,13 +21,11 @@ import org.lwjgl.opengl.GL20;
 import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
-@RegEntityRender(ParabolaEffect.class)
-@SuppressWarnings("unused")
-public class ParabolaRenderer extends Render<ParabolaEffect> {
+public class RenderParabolaEffect extends Render<ParabolaEffect> {
     private final ResourceLocation texture = Resources.getTexture("effects/glow_line");
     private final ArrayList<Vec3d> vertices = new ArrayList<>();
 
-    public ParabolaRenderer(RenderManager m) {
+    public RenderParabolaEffect(RenderManager m) {
         super(m);
     }
 

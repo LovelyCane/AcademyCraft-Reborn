@@ -2,7 +2,6 @@ package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
 import cn.academy.internal.entity.EntityRippleMark;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.LegacyMesh;
 import cn.lambdalib2.render.legacy.SimpleMaterial;
 import cn.lambdalib2.util.Colors;
@@ -17,15 +16,13 @@ import org.lwjgl.util.Color;
 /**
  * @author WeAthFolD
  */
-@RegEntityRender(EntityRippleMark.class)
-public class RenderRippleMark extends Render<EntityRippleMark> {
-    
+public class RenderEntityRippleMark extends Render<EntityRippleMark> {
     final double CYCLE = 3.6;
     final double timeOffsets[] = { 0, -1.2, -2.4};
     LegacyMesh mesh;
     SimpleMaterial material;
     
-    public RenderRippleMark(RenderManager manager) {
+    public RenderEntityRippleMark(RenderManager manager) {
         super(manager);
         mesh = new LegacyMesh();
         mesh.setVertices(new double[][] {

@@ -1,23 +1,20 @@
 package cn.academy.internal.client.renderer.entity;
 
 
-import cn.academy.AcademyCraft;
 import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
 import cn.academy.internal.client.renderer.util.ArcFactory;
 import cn.academy.internal.entity.EntityRailgunFX;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
-@RegEntityRender(EntityRailgunFX.class)
-public class RenderRailgun extends RenderRayComposite {
+public class RenderEntityRailgunFX extends RenderRayComposite {
     ArcFactory.Arc[] arcs;
     static final int ARC_SIZE = 15;
 
-    public RenderRailgun(RenderManager manager) {
+    public RenderEntityRailgunFX(RenderManager manager) {
         super(manager, "railgun");
         glow.startFix = -0.3;
         glow.endFix = 0.3;
@@ -44,7 +41,6 @@ public class RenderRailgun extends RenderRayComposite {
 
     @Override
     public void doRender(Entity ent, double x, double y, double z, float a, float b) {
-        AcademyCraft.log.info("Rendering " + ent);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         ViewOptimize.fix((ViewOptimize.IAssociatePlayer) ent);
@@ -57,6 +53,5 @@ public class RenderRailgun extends RenderRayComposite {
 
         super.doRender(ent, x, y, z, a, b);
     }
-
 }
 

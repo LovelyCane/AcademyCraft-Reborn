@@ -3,7 +3,6 @@ package cn.academy.internal.client.renderer.entity;
 import cn.academy.Resources;
 import cn.academy.internal.client.renderer.util.SimpleModelBiped;
 import cn.academy.internal.entity.EntityTPMarking;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,8 +16,7 @@ import org.lwjgl.opengl.GL20;
 import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
-@RegEntityRender(EntityTPMarking.class)
-public class RenderMark extends Render<EntityTPMarking> {
+public class RenderEntityTPMarking extends Render<EntityTPMarking> {
     {
         shadowOpaque = 0;
     }
@@ -26,7 +24,7 @@ public class RenderMark extends Render<EntityTPMarking> {
     protected ResourceLocation[] tex = Resources.getEffectSeq("tp_mark", 7);
     protected SimpleModelBiped model = new SimpleModelBiped();
 
-    public RenderMark(RenderManager renderManager) {
+    public RenderEntityTPMarking(RenderManager renderManager) {
         super(renderManager);
     }
 

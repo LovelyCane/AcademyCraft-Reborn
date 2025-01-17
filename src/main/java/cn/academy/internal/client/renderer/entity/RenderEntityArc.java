@@ -1,7 +1,6 @@
 package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.internal.entity.EntityArc;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -11,9 +10,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-@RegEntityRender(EntityArc.class)
-public class RenderArc extends Render<EntityArc> {
-    public RenderArc(RenderManager renderManager) {
+public class RenderEntityArc extends Render<EntityArc> {
+    public RenderEntityArc(RenderManager renderManager) {
         super(renderManager);
     }
 

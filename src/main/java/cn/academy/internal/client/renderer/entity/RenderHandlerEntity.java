@@ -1,7 +1,8 @@
-package cn.academy.internal.ability.vanilla.electromaster.skill;
+package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
-import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.academy.internal.ability.vanilla.electromaster.skill.HandlerEntity;
+import cn.academy.internal.ability.vanilla.electromaster.skill.MineElem;
 import cn.lambdalib2.render.legacy.*;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.MathUtils;
@@ -12,9 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
-@RegEntityRender(HandlerEntity.class)
-@SuppressWarnings("unused")
-public class HandlerRender extends Render<HandlerEntity> {
+public class RenderHandlerEntity extends Render<HandlerEntity> {
     private final ResourceLocation texture = Resources.getTexture("effects/mineview");
     private final LegacyMesh mesh = LegacyMeshUtils.createBoxWithUV(null, 0.05, 0.05, 0.05, 0.9, 0.9, 0.9);
     private final SimpleMaterial material = new SimpleMaterial(texture).setIgnoreLight();
@@ -23,7 +22,7 @@ public class HandlerRender extends Render<HandlerEntity> {
             new Color(161, 181, 188, 0), // harvest level 0-3
             new Color(87, 231, 248, 0), new Color(97, 204, 94, 0), new Color(235, 109, 84, 0)};
 
-    public HandlerRender(RenderManager renderManager) {
+    public RenderHandlerEntity(RenderManager renderManager) {
         super(renderManager);
     }
 

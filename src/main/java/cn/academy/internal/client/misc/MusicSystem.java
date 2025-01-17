@@ -92,9 +92,9 @@ public class MusicSystem {
             soundSystem = (SoundSystem) soundSystemField.get(soundManager);
 
             if (soundSystem == null) {
-                AcademyCraft.log.error("Failed to initialize SoundSystem: soundSystem is null");
+                AcademyCraft.LOGGER.error("Failed to initialize SoundSystem: soundSystem is null");
             } else {
-                AcademyCraft.log.info("SoundSystem initialized successfully");
+                AcademyCraft.LOGGER.info("SoundSystem initialized successfully");
             }
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to initialize SoundSystem", e);
@@ -125,7 +125,7 @@ public class MusicSystem {
                 return jsonFiles;
             }
         } catch (IOException e) {
-            AcademyCraft.log.error("Error reading JSON files from directory: {}", MUSIC_INFO_FOLDER, e);
+            AcademyCraft.LOGGER.error("Error reading JSON files from directory: {}", MUSIC_INFO_FOLDER, e);
             return Collections.emptyList();
         }
     }
@@ -142,7 +142,7 @@ public class MusicSystem {
 
             return new Music(name, fileName, filePath, iconPath, description);
         } catch (IOException e) {
-            AcademyCraft.log.error("Failed to load music from JSON file: {}", jsonFile, e);
+            AcademyCraft.LOGGER.error("Failed to load music from JSON file: {}", jsonFile, e);
             return null;
         }
     }
@@ -159,7 +159,7 @@ public class MusicSystem {
             soundSystem.play(MEDIA_ID);
             setPlayState(PlayState.PLAYING);
         } else {
-            AcademyCraft.log.error("Can't find music file from {}", music.getFilePath());
+            AcademyCraft.LOGGER.error("Can't find music file from {}", music.getFilePath());
         }
     }
 
@@ -206,7 +206,7 @@ public class MusicSystem {
         try {
             return new VorbisFile(MUSIC_FILES_FOLDER + File.separator + music.getFileName());
         } catch (JOrbisException e) {
-            AcademyCraft.log.error("Failed to get music vorbis file: {}", music.getFilePath(), e);
+            AcademyCraft.LOGGER.error("Failed to get music vorbis file: {}", music.getFilePath(), e);
             throw new RuntimeException(e);
         }
     }
@@ -226,11 +226,11 @@ public class MusicSystem {
     private void createDirectoryIfNotExists(Path... paths) {
         for (Path path : paths) {
             if (!path.toFile().exists()) {
-                AcademyCraft.log.info("Path {} does not exist. Creating one...", path);
+                AcademyCraft.LOGGER.info("Path {} does not exist. Creating one...", path);
                 if (path.toFile().mkdirs()) {
-                    AcademyCraft.log.info("Path {} created.", path);
+                    AcademyCraft.LOGGER.info("Path {} created.", path);
                 } else {
-                    AcademyCraft.log.error("Path {} could not be created.", path);
+                    AcademyCraft.LOGGER.error("Path {} could not be created.", path);
                 }
             }
         }

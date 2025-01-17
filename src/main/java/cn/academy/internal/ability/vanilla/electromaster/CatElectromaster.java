@@ -86,14 +86,14 @@ public class CatElectromaster extends Category {
                     if (block != null) {
                         itemSet.add((T) block);
                     } else {
-                        AcademyCraft.log.error("The block {} is not found!", item);
+                        AcademyCraft.LOGGER.error("The block {} is not found!", item);
                     }
                 } else {
                     Class<? extends Entity> entityClass = EntityList.getClass(resourceLocation);
                     if (entityClass != null) {
                         itemSet.add((T) entityClass);
                     } else {
-                        AcademyCraft.log.error("The entity {} is not found!", modid + ":" + item);
+                        AcademyCraft.LOGGER.error("The entity {} is not found!", modid + ":" + item);
                     }
                 }
             }

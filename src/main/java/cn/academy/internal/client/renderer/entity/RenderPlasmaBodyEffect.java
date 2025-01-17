@@ -1,7 +1,7 @@
-package cn.academy.internal.ability.vanilla.vecmanip.client.effect;
+package cn.academy.internal.client.renderer.entity;
 
+import cn.academy.internal.ability.vanilla.vecmanip.client.effect.PlasmaBodyEffect;
 import cn.academy.internal.client.CameraPosition;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.render.legacy.GLSLMesh;
 import cn.lambdalib2.render.legacy.LegacyMeshUtils;
 import cn.lambdalib2.render.legacy.LegacyShaderProgram;
@@ -21,16 +21,14 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-@RegEntityRender(PlasmaBodyEffect.class)
-@SuppressWarnings("unused")
-public class PlasmaBodyRenderer extends Render<PlasmaBodyEffect> {
+public class RenderPlasmaBodyEffect extends Render<PlasmaBodyEffect> {
     private final GLSLMesh mesh;
     private final LegacyShaderProgram shader;
     private final int pos_ballCount;
     private final int pos_balls;
     private final int pos_alpha;
 
-    public PlasmaBodyRenderer(RenderManager m) {
+    public RenderPlasmaBodyEffect(RenderManager m) {
         super(m);
         this.mesh = LegacyMeshUtils.createBillboard(new GLSLMesh(), -0.5, -0.5, 0.5, 0.5);
         this.shader = new LegacyShaderProgram();

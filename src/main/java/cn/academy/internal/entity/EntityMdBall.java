@@ -1,30 +1,20 @@
 package cn.academy.internal.entity;
 
-import cn.academy.Resources;
-import cn.lambdalib2.registry.mc.RegEntityRender;
-import cn.lambdalib2.render.legacy.ShaderSimple;
-import cn.lambdalib2.template.client.render.RenderIcon;
-import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 /**
  * @author WeAthFolD
@@ -36,7 +26,7 @@ public class EntityMdBall extends EntityAdvanced {
     private static final DataParameter<Float> SUB_Z = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.FLOAT);
     private static final DataParameter<Integer> LIFE = EntityDataManager.createKey(EntityMdBall.class, DataSerializers.VARINT);
 
-    static final int MAX_TETXURES = 5;
+    public static final int MAX_TETXURES = 5;
 
     static final float RANGE_FROM = 0.8f, RANGE_TO = 1.3f;
 
@@ -48,15 +38,17 @@ public class EntityMdBall extends EntityAdvanced {
     int life = 50;
 
     //Client-side data
-    int texID;
+    public int texID;
 
     double spawnTime;
     double lastTime;
     double burstTime = 0.4;
-    float alphaWiggle = 0.8f;
+    public float alphaWiggle = 0.8f;
     double accel;
 
-    double offsetX, offsetY, offsetZ;
+    public double offsetX;
+    public double offsetY;
+    public double offsetZ;
 
     public EntityMdBall(EntityPlayer player) {
         this(player, 2333333, null);
@@ -164,7 +156,7 @@ public class EntityMdBall extends EntityAdvanced {
     }
 
     @SideOnly(Side.CLIENT)
-    private boolean updateRenderTick() {
+    public boolean updateRenderTick() {
 
         if (spawner == null || (subX == 0 && subY == 0 && subZ == 0)) return false;
 
@@ -203,7 +195,7 @@ public class EntityMdBall extends EntityAdvanced {
         return true;
     }
 
-    private float getAlpha() {
+    public float getAlpha() {
         float lifeS = life * 0.05f;
         double time = GameTimer.getTime();
         float dt = (float) (time - spawnTime);
@@ -216,7 +208,7 @@ public class EntityMdBall extends EntityAdvanced {
         return 0.6f;
     }
 
-    private float getSize() {
+    public float getSize() {
         int lifeMS = life * 50;
         double time = GameTimer.getTime();
         double dt = time - spawnTime;
@@ -229,61 +221,4 @@ public class EntityMdBall extends EntityAdvanced {
     private void updatePosition() {
         setPosition(spawner.posX + subX, spawner.posY + subY, spawner.posZ + subZ);
     }
-
-    @RegEntityRender(EntityMdBall.class)
-    @SideOnly(Side.CLIENT)
-    public static class R extends RenderIcon<EntityMdBall> {
-
-        ResourceLocation[] textures;
-        ResourceLocation glowTexture;
-
-        public R(RenderManager manager) {
-            super(manager, null);
-            textures = Resources.getEffectSeq("mdball", MAX_TETXURES);
-            glowTexture = Resources.getTexture("effects/mdball/glow");
-            //this.minTolerateAlpha = 0.05f;
-            this.shadowOpaque = 0;
-        }
-
-        @Override
-        public void doRender(EntityMdBall ent, double x, double y, double z, float par8, float par9) {
-            if (!ent.updateRenderTick()) return;
-
-            EntityPlayer clientPlayer = Minecraft.getMinecraft().player;
-
-            //HACK: Force set the render pos to prevent glitches
-            {
-                x = ent.posX - clientPlayer.posX;
-                y = ent.posY - clientPlayer.posY + 1.6;
-                z = ent.posZ - clientPlayer.posZ;
-            }
-
-            GL11.glDepthMask(false);
-
-            GL11.glPushMatrix();
-            {
-                ShaderSimple.instance().useProgram();
-                GL11.glTranslated(ent.offsetX, ent.offsetY, ent.offsetZ);
-
-                float alpha = ent.getAlpha();
-                float size = ent.getSize();
-
-                //Glow texture
-                this.color.setAlpha(Colors.f2i(alpha * (0.3f + ent.alphaWiggle * 0.7f)));
-                this.icon = glowTexture;
-                this.setSize(0.7f * size);
-                super.doRender(ent, x, y, z, par8, par9);
-
-                //Core
-                this.color.setAlpha(Colors.f2i(alpha * (0.8f + 0.2f * ent.alphaWiggle)));
-                this.icon = textures[ent.texID];
-                this.setSize(0.5f * size);
-                super.doRender(ent, x, y, z, par8, par9);
-                GL20.glUseProgram(0);
-            }
-            GL11.glPopMatrix();
-        }
-
-    }
-
 }

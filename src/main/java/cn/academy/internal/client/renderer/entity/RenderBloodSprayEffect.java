@@ -1,7 +1,7 @@
-package cn.academy.internal.ability.vanilla.generic.client.effect;
+package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
-import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.academy.internal.ability.vanilla.generic.client.effect.BloodSprayEffect;
 import cn.lambdalib2.render.legacy.LegacyMesh;
 import cn.lambdalib2.render.legacy.LegacyMeshUtils;
 import cn.lambdalib2.render.legacy.SimpleMaterial;
@@ -11,19 +11,17 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.util.stream.IntStream;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-@RegEntityRender(BloodSprayEffect.class)
-@SuppressWarnings("unused")
-public class BloodSprayRenderer extends Render<BloodSprayEffect> {
+public class RenderBloodSprayEffect extends Render<BloodSprayEffect> {
     private final List<ResourceLocation> texGrnd;
     private final List<ResourceLocation> texWall;
     private final LegacyMesh mesh;
     private final SimpleMaterial material;
 
-    public BloodSprayRenderer(RenderManager manager) {
+    public RenderBloodSprayEffect(RenderManager manager) {
         super(manager);
         this.texGrnd = seq("grnd", 3);
         this.texWall = seq("wall", 3);

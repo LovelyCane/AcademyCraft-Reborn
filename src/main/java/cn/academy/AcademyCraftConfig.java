@@ -246,7 +246,7 @@ public class AcademyCraftConfig {
                 fileWriter.write(json);
             }
         } catch (IOException e) {
-            AcademyCraft.log.error("Error while saving academy craft config", e);
+            AcademyCraft.LOGGER.error("Error while saving academy craft config", e);
         }
     }
 }

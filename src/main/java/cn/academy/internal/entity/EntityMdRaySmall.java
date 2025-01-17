@@ -1,15 +1,11 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
-import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.client.renderer.particle.MdParticleFactory;
+import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.particle.Particle;
-import cn.lambdalib2.registry.mc.RegEntityRender;
-import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.VecUtils;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -21,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class EntityMdRaySmall extends EntityRayBase {
-
     public EntityMdRaySmall(World world) {
         super(world);
         this.blendInTime = 200;
@@ -58,22 +53,4 @@ public class EntityMdRaySmall extends EntityRayBase {
         
         return 1.0;
     }
-
-    @RegEntityRender(EntityMdRaySmall.class)
-    public static class SmallMdRayRender extends RenderRayComposite {
-
-        public SmallMdRayRender(RenderManager manager) {
-            super(manager, "mdray_small");
-            this.cylinderIn.width = 0.03;
-            this.cylinderIn.color.set(216, 248, 216, 230);
-            
-            this.cylinderOut.width = 0.045;
-            this.cylinderOut.color.set(106, 242, 106, 50);
-            
-            this.glow.width = 0.3;
-            this.glow.color.setAlpha(Colors.f2i(0.5f));
-        }
-        
-    }
-
 }

@@ -1,7 +1,7 @@
-package cn.academy.internal.ability.vanilla.vecmanip.client.effect;
+package cn.academy.internal.client.renderer.entity;
 
 import cn.academy.Resources;
-import cn.lambdalib2.registry.mc.RegEntityRender;
+import cn.academy.internal.ability.vanilla.vecmanip.client.effect.WaveEffect;
 import cn.lambdalib2.render.legacy.LegacyMesh;
 import cn.lambdalib2.render.legacy.LegacyMeshUtils;
 import cn.lambdalib2.render.legacy.SimpleMaterial;
@@ -16,16 +16,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-@RegEntityRender(WaveEffect.class)
-@SuppressWarnings("unused")
-public class WaveEffectRenderer extends Render<WaveEffect> {
+public class RenderWaveEffect extends Render<WaveEffect> {
     private final CubicCurve alphaCurve = new CubicCurve();
     private final ResourceLocation texture = Resources.getTexture("effects/glow_circle");
     private final LegacyMesh mesh = new LegacyMesh();
     private final SimpleMaterial material = new SimpleMaterial(texture).setIgnoreLight();
     private final CubicCurve sizeCurve = new CubicCurve();
 
-    public WaveEffectRenderer(RenderManager m) {
+    public RenderWaveEffect(RenderManager m) {
         super(m);
         alphaCurve.addPoint(0, 0);
         alphaCurve.addPoint(0.2, 1);

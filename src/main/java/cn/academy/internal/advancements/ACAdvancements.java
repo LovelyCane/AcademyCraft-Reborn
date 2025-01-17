@@ -84,7 +84,7 @@ public class ACAdvancements {
 
         ICriterionTrigger ach = CriteriaTriggers.get(achid);
         if ((!(ach instanceof ACTrigger))) {
-            AcademyCraft.log.warn("AC Achievement '{}' does not exist", achid);
+            AcademyCraft.LOGGER.warn("AC Achievement '{}' does not exist", achid);
             return false;
         }
         ((ACTrigger) ach).trigger((EntityPlayerMP) player);

@@ -152,7 +152,7 @@ public class CPBar extends Widget {
             this.shaderOverloaded = new ShaderOverloaded();
             shaderLoaded = true;
         } catch (Exception e) {
-            AcademyCraft.log.error("Errow while loading CPBar shader", e);
+            AcademyCraft.LOGGER.error("Errow while loading CPBar shader", e);
         }
 
         transform.setSize(WIDTH, HEIGHT);

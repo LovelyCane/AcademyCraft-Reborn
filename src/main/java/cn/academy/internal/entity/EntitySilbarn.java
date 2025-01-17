@@ -5,16 +5,15 @@ import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.particle.ParticleFactory;
 import cn.lambdalib2.particle.decorators.ParticleDecorator;
 import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.registry.mc.RegEntityRender;
-import cn.lambdalib2.render.obj.ObjLegacyRender;
-import cn.lambdalib2.util.*;
+import cn.lambdalib2.util.EntitySelectors;
+import cn.lambdalib2.util.GameTimer;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.SideUtils;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import cn.lambdalib2.util.entityx.EntityCallback;
 import cn.lambdalib2.util.entityx.MotionHandler;
 import cn.lambdalib2.util.entityx.event.CollideEvent;
 import cn.lambdalib2.util.entityx.handlers.Rigidbody;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,16 +21,12 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
 
 /**
  * @author WeathFolD
@@ -89,11 +84,11 @@ public class EntitySilbarn extends EntityAdvanced {
         });
     }
 
-    boolean hit;
+    public boolean hit;
 
-    double createTime;
+    public double createTime;
 
-    Vec3d axis = new Vec3d(rand.nextInt(), rand.nextInt(), rand.nextInt());
+    public Vec3d axis = new Vec3d(rand.nextInt(), rand.nextInt(), rand.nextInt());
 
     {
         final Rigidbody rigidbody = new Rigidbody();
@@ -213,41 +208,6 @@ public class EntitySilbarn extends EntityAdvanced {
         //TileMatrix
     }
 
-    @SideOnly(Side.CLIENT)
-    @RegEntityRender(EntitySilbarn.class)
-    public static class RenderSibarn extends Render<EntitySilbarn> {
-
-        private final ObjLegacyRender model = Resources.getModel("silbarn");
-        private final ResourceLocation tex = Resources.getTexture("models/silbarn");
-
-        public RenderSibarn(RenderManager renderManager) {
-            super(renderManager);
-        }
-
-        @Override
-        public void doRender(EntitySilbarn var1, double x, double y, double z, float var8, float var9) {
-            EntitySilbarn sibarn = (EntitySilbarn) var1;
-            if (sibarn.hit)
-                return;
-            GL11.glPushMatrix();
-            GL11.glTranslated(x, y, z);
-            RenderUtils.loadTexture(tex);
-            double scale = .05;
-            GL11.glScaled(scale, scale, scale);
-            GL11.glRotated(0.03 * (long) ((GameTimer.getTime() - sibarn.createTime) * 1000), sibarn.axis.x, sibarn.axis.y, sibarn.axis.z);
-            GL11.glRotated(-var1.rotationYaw, 0, 1, 0);
-            GL11.glRotated(90, 1, 0, 0);
-            model.renderAll();
-            GL11.glPopMatrix();
-        }
-
-        @Nullable
-        @Override
-        protected ResourceLocation getEntityTexture(EntitySilbarn entity) {
-            return null;
-        }
-    }
-
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
         setDead();
@@ -256,5 +216,4 @@ public class EntitySilbarn extends EntityAdvanced {
     @Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
     }
-
 }

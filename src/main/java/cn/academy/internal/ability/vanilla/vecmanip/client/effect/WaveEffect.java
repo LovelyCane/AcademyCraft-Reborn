@@ -11,7 +11,6 @@ import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class WaveEffect extends LocalEntity {
-
     public static class Ring {
         public int life;
         public double offset;

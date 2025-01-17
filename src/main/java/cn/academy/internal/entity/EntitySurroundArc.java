@@ -1,26 +1,19 @@
 package cn.academy.internal.entity;
 
-import cn.academy.internal.client.renderer.util.IPointFactory;
-import cn.academy.internal.client.renderer.util.CubePointFactory;
 import cn.academy.internal.client.renderer.util.ArcFactory;
 import cn.academy.internal.client.renderer.util.ArcFactory.Arc;
+import cn.academy.internal.client.renderer.util.CubePointFactory;
+import cn.academy.internal.client.renderer.util.IPointFactory;
 import cn.academy.internal.client.renderer.util.SubArcHandler;
-import cn.lambdalib2.registry.mc.RegEntityRender;
 import cn.lambdalib2.util.entityx.EntityAdvanced;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
 
 /**
  * Spawn a surround arc effect around the specific entity or block.
@@ -69,7 +62,7 @@ public class EntitySurroundArc extends EntityAdvanced {
     
     public int life = 100;
 
-    SubArcHandler arcHandler;
+    public SubArcHandler arcHandler;
     
     IPointFactory pointFactory;
     
@@ -181,37 +174,6 @@ public class EntitySurroundArc extends EntityAdvanced {
         void tick() {}
     }
 
-    @RegEntityRender(EntitySurroundArc.class)
-    public static class Renderer extends Render<EntitySurroundArc> {
-
-        public Renderer(RenderManager renderManager) {
-            super(renderManager);
-        }
-
-        @Override
-        public void doRender(EntitySurroundArc esa, double x,
-                double y, double z, float a,
-                float b) {
-            if(esa.draw && esa.arcHandler != null) {
-                GL11.glPushMatrix();
-                
-                GL11.glTranslated(x, y, z);
-                
-                GL11.glRotatef(-esa.rotationYaw, 0, 1, 0);
-                esa.arcHandler.drawAll();
-                
-                GL11.glPopMatrix();
-            }
-        }
-
-        @Nullable
-        @Override
-        protected ResourceLocation getEntityTexture(EntitySurroundArc entity) {
-            return null;
-        }
-
-    }
-    
     private class EntityPos extends PosObject {
         
         final Entity entity;

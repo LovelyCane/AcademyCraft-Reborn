@@ -307,7 +307,7 @@ public class WiWorldData extends WorldSavedData {
     }
     
     private void debug(Object msg) {
-        AcademyCraft.log.info("WiWorldData: " + msg);
+        AcademyCraft.LOGGER.info("WiWorldData: " + msg);
     }
 
 }

@@ -165,7 +165,7 @@ public class Context<TSkill extends Skill> implements IMessageDelegate {
     }
 
     protected void debug(Object message) {
-        AcademyCraft.log.info("[CTX]{}", message);
+        AcademyCraft.LOGGER.info("[CTX]{}", message);
     }
 
     // Ugly hacks
