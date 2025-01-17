@@ -48,7 +48,7 @@ public class TerminalInstallEffect extends AuxGui {
             if (this.getTimeActive() >= ANIM_LENGTH + WAIT) {
                 dispose();
                 TerminalUI.keyHandler.onKeyUp();
-                PlayerUtils.sendChat(Minecraft.getMinecraft().player, "ac.terminal.key_hint", KeyManager.getKeyName(ACKeyManager.instance.getKeyID(TerminalUI.keyHandler)));
+                PlayerUtils.sendChat(Minecraft.getMinecraft().player, "ac.terminal.key_hint", KeyManager.getKeyName(ACKeyManager.INSTANCE.getKeyID(TerminalUI.keyHandler)));
             }
 
             if (prog > 1.0) {

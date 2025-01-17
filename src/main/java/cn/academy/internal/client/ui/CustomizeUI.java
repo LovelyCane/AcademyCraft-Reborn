@@ -26,9 +26,9 @@ import java.util.function.Consumer;
 public class CustomizeUI extends CGuiScreen {
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
-        SettingsUI.addCallback("edit_ui", "misc", () -> {
+        SettingsUI.addCallback("edit_ui", () -> {
             Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
-        }, false);
+        });
 
         doc = CGUIDocument.read(new ResourceLocation("academy:guis/ui_edit.xml"));
     }

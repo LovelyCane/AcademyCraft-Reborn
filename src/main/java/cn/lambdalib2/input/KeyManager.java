@@ -1,10 +1,9 @@
 package cn.lambdalib2.input;
 
+import cn.academy.AcademyCraft;
+import cn.academy.AcademyCraftConfig;
 import cn.lambdalib2.util.ClientUtils;
-import cn.lambdalib2.util.Debug;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -32,18 +31,17 @@ public class KeyManager {
      */
     public static final KeyManager dynamic = new KeyManager();
 
-    public static final int
-            MOUSE_LEFT = -100, MOUSE_MIDDLE = -98, MOUSE_RIGHT = -99,
-            MWHEELDOWN = -50, MWHEELUP = -49;
+    public static final int MOUSE_LEFT = -100;
+    public static final int MOUSE_RIGHT = -99;
 
     public static String getKeyName(int keyid) {
+        String ret;
         if (keyid >= 0) {
-            String ret = Keyboard.getKeyName(keyid);
-            return ret == null ? "undefined" : ret;
+            ret = Keyboard.getKeyName(keyid);
         } else {
-            String ret = Mouse.getButtonName(keyid + 100);
-            return ret == null ? "undefined" : ret;
+            ret = Mouse.getButtonName(keyid + 100);
         }
+        return ret == null ? "undefined" : ret;
     }
 
     public static boolean getKeyDown(int keyID) {
@@ -54,10 +52,7 @@ public class KeyManager {
         return Mouse.isButtonDown(keyID + 100);
     }
 
-
     private boolean active = true;
-
-    private int _anonymousHandlerCount = 0;
 
     private final Map<String, KeyHandlerState> _bindingMap = new HashMap<>();
 
@@ -72,18 +67,6 @@ public class KeyManager {
     public int getKeyID(KeyHandler handler) {
         KeyHandlerState kb = getKeyBinding(handler);
         return kb == null ? -1 : kb.keyID;
-    }
-
-    public void addKeyHandler(int keyID, KeyHandler handler) {
-        addKeyHandler(keyID, false, handler);
-    }
-
-    public void addKeyHandler(int keyID, boolean global, KeyHandler handler) {
-        Debug.require(getConfig() == null, "You can't use anonymous key handlers on KeyHandler with config!");
-
-        String name = "_anonymous_" + _anonymousHandlerCount;
-        addKeyHandler(name, "", keyID, global, handler);
-        ++_anonymousHandlerCount;
     }
 
     public void addKeyHandler(String name, int defKeyID, KeyHandler handler) {
@@ -105,11 +88,9 @@ public class KeyManager {
         if (_bindingMap.containsKey(name))
             throw new RuntimeException("Duplicate key: " + name + " of object " + handler);
 
-        Configuration conf = getConfig();
+        AcademyCraftConfig config = AcademyCraft.academyCraftConfig;
         int keyID = defKeyID;
-        if (conf != null) {
-            keyID = conf.getInt(name, "keys", defKeyID, -1000, 1000, keyDesc);
-        }
+        keyID = config.getKey(name, defKeyID);
         KeyHandlerState kb = new KeyHandlerState(handler, keyID, global);
         _bindingMap.put(name, kb);
     }
@@ -126,22 +107,14 @@ public class KeyManager {
     public void resetBindingKey(String name, int newKey) {
         KeyHandlerState kb = _bindingMap.get(name);
         if (kb != null) {
-            Configuration cfg = getConfig();
-            if (cfg != null) {
-                Property p = cfg.get("keys", name, kb.keyID);
-                p.set(newKey);
-            }
-
+            AcademyCraftConfig config = AcademyCraft.academyCraftConfig;
+            config.setKey(name, newKey);
             kb.keyID = newKey;
             if (kb.keyDown)
                 kb.handler.onKeyAbort();
 
             kb.keyDown = false;
         }
-    }
-
-    protected Configuration getConfig() {
-        return null;
     }
 
     private void tick() {
@@ -151,11 +124,11 @@ public class KeyManager {
         while (iter.hasNext()) {
             Entry<String, KeyHandlerState> entry = iter.next();
             KeyHandlerState kb = entry.getValue();
+            AcademyCraft.LOGGER.info(entry.getKey());
             if (kb.dead) {
                 iter.remove();
             } else {
                 boolean down = getKeyDown(kb.keyID);
-
                 if (kb.keyDown && shouldAbort) {
                     kb.keyDown = false;
                     kb.keyAborted = true;
@@ -163,10 +136,10 @@ public class KeyManager {
                 } else if (!kb.keyDown && down && !shouldAbort && !kb.keyAborted) {
                     kb.keyDown = true;
                     kb.handler.onKeyDown();
-                } else if (kb.keyDown && !down && !shouldAbort) {
+                } else if (kb.keyDown && !down) {
                     kb.keyDown = false;
                     kb.handler.onKeyUp();
-                } else if (kb.keyDown && down && !shouldAbort) {
+                } else if (kb.keyDown) {
                     kb.handler.onKeyTick();
                 }
 
@@ -194,7 +167,7 @@ public class KeyManager {
         }
     }
 
-    private class KeyHandlerState {
+    private static class KeyHandlerState {
         KeyHandler handler;
         boolean isGlobal;
 

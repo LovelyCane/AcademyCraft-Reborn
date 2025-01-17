@@ -1,6 +1,5 @@
 package cn.academy.internal.event;
 
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
@@ -8,11 +7,13 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * @author WeAthFolD
  */
 public class ConfigModifyEvent extends Event {
+    // key name
+    public final String name;
+    // key value
+    public final int value;
     
-    public final Property property;
-    
-    public ConfigModifyEvent(Property _prop) {
-        property = _prop;
+    public ConfigModifyEvent(String name,int value) {
+        this.name = name;
+        this.value = value;
     }
-    
 }

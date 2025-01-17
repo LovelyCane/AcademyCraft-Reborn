@@ -1,6 +1,7 @@
 package cn.academy.internal.ability.ctrl;
 
 import cn.academy.AcademyCraft;
+import cn.academy.AcademyCraftConfig;
 import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.client.ui.auxgui.CPBar;
 import cn.academy.internal.client.ui.auxgui.PresetEditUI;
@@ -10,18 +11,13 @@ import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.event.ConfigModifyEvent;
 import cn.academy.internal.event.ability.FlushControlEvent;
 import cn.academy.internal.event.ability.PresetSwitchEvent;
-import cn.academy.internal.terminal.app.settings.PropertyElements;
-import cn.academy.internal.terminal.app.settings.SettingsUI;
 import cn.academy.internal.util.RegACKeyHandler;
 import cn.lambdalib2.input.KeyHandler;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.GameTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,18 +36,14 @@ public final class ClientHandler {
 
     private static final int[] keyIDs = new int[keyIDsInit.length];
 
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
+    public static void init() {
         updateAbilityKeys();
-        for (int i = 0; i < keyIDsInit.length; ++i) {
-            SettingsUI.addProperty(PropertyElements.KEY, "keys", "ability_" + i, keyIDsInit[i], false);
-        }
     }
 
     private static void updateAbilityKeys() {
-        Configuration cfg = AcademyCraft.config;
+        AcademyCraftConfig config = AcademyCraft.academyCraftConfig;
         for (int i = 0; i < getKeyCount(); ++i) {
-            keyIDs[i] = cfg.getInt("ability_" + i, "keys", keyIDsInit[i], -1000, 1000, "Ability control key #" + i);
+            keyIDs[i] = config.getKey("ability_" + i, keyIDsInit[i]);
         }
 
         MinecraftForge.EVENT_BUS.post(new FlushControlEvent());

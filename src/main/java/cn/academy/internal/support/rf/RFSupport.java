@@ -18,8 +18,9 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class RFSupport {
+import static cn.academy.AcademyCraftTileEntityList.TILE_ENTITY_LIST;
 
+public class RFSupport {
     /**
      * The convert rate (1IF = <CONV_RATE> RF)
      */
@@ -65,7 +66,6 @@ public class RFSupport {
     @RegistryCallback
     @Optional.Method(modid = "redstoneflux")
     private static void registerBlocks(RegistryEvent.Register<Block> event) {
-
         rfInput.setRegistryName("academy:ac_rf_input");
         rfInput.setTranslationKey("ac_rf_input");
         event.getRegistry().register(rfInput);
@@ -74,6 +74,8 @@ public class RFSupport {
         rfOutput.setTranslationKey("ac_rf_output");
         event.getRegistry().register(rfOutput);
 
+        TILE_ENTITY_LIST.add(TileRFInput.class);
+        TILE_ENTITY_LIST.add(TileRFOutput.class);
     }
 
     @RegistryCallback

@@ -34,6 +34,18 @@ public class AcademyCraftConfig {
         return gui;
     }
 
+    @SerializedName("key")
+    private Map<String, Integer> key = new HashMap<>();
+
+    public int getKey(String name, int defaultValue) {
+        return key.getOrDefault(name, defaultValue);
+    }
+
+    public void setKey(String name, int value) {
+        key.put(name, value);
+        saveConfig();
+    }
+
     public static class Ability {
         @SerializedName("cpRecoverSpeed")
         private float cpRecoverSpeed;
@@ -67,6 +79,9 @@ public class AcademyCraftConfig {
             this.cpRecoverSpeed = cpRecoverSpeed;
             saveConfig();
         }
+
+        private Ability() {
+        }
     }
 
     public static class Generic {
@@ -81,6 +96,9 @@ public class AcademyCraftConfig {
 
         @SerializedName("useMouseWheel")
         private boolean useMouseWheel;
+
+        @SerializedName("playHeadsOrTails")
+        private boolean playHeadsOrTails;
 
         @SerializedName("genOres")
         private boolean genOres;
@@ -107,6 +125,10 @@ public class AcademyCraftConfig {
             return useMouseWheel;
         }
 
+        public boolean isPlayHeadsOrTails() {
+            return playHeadsOrTails;
+        }
+
         public boolean isGenOres() {
             return genOres;
         }
@@ -117,6 +139,9 @@ public class AcademyCraftConfig {
 
         public String[] getGenerateOresBlackList() {
             return generateOresBlackList;
+        }
+
+        private Generic() {
         }
     }
 
@@ -133,6 +158,9 @@ public class AcademyCraftConfig {
 
         public Map<String, Float> getFloatMap() {
             return floatMap;
+        }
+
+        private Skill() {
         }
     }
 
@@ -151,6 +179,9 @@ public class AcademyCraftConfig {
         public void setPos(double[] pos) {
             this.pos = pos;
             saveConfig();
+        }
+
+        private Node() {
         }
     }
 
@@ -248,7 +279,12 @@ public class AcademyCraftConfig {
 
     private static AcademyCraftConfig getDefaultConfig() {
         AcademyCraftConfig defaultConfig = new AcademyCraftConfig();
-        defaultConfig.getAbility().cpRecoverSpeed = 1.0f;
+        AcademyCraftConfig.Ability ability = new AcademyCraftConfig.Ability();
+        AcademyCraftConfig.Generic generic = new AcademyCraftConfig.Generic();
+        Map<String, Node> gui = defaultConfig.getGui();
+        Map<String, Integer> key = new HashMap<>();
+
+        ability.cpRecoverSpeed = 1.0f;
         Skill railGun = new Skill();
         railGun.getBooleanMap().put("enabled", true);
         railGun.getBooleanMap().put("destroyBlock", true);
@@ -256,13 +292,13 @@ public class AcademyCraftConfig {
         railGun.getFloatMap().put("cpConsumeSpeed", 1.0f);
         railGun.getFloatMap().put("overloadConsumeSpeed", 1.0f);
         railGun.getFloatMap().put("exp_incr_speed", 1.0f);
-        defaultConfig.getAbility().getSkills().put("railgun", railGun);
-        defaultConfig.getGeneric().genOres = true;
-        defaultConfig.getGeneric().genPhaseLiquid = true;
-        defaultConfig.getGui().put("cpbar", new Node(new double[]{-12, 12}));
-        defaultConfig.getGui().put("keyhint", new Node(new double[]{0, 30}));
-        defaultConfig.getGui().put("media", new Node(new double[]{-6, -6}));
-        defaultConfig.getGui().put("notification", new Node(new double[]{0, 15}));
+        ability.getSkills().put("railgun", railGun);
+        generic.genOres = true;
+        generic.genPhaseLiquid = true;
+        gui.put("cpbar", new Node(new double[]{-12, 12}));
+        gui.put("keyhint", new Node(new double[]{0, 30}));
+        gui.put("media", new Node(new double[]{-6, -6}));
+        gui.put("notification", new Node(new double[]{0, 15}));
         return defaultConfig;
     }
 

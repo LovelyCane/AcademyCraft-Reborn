@@ -384,7 +384,7 @@ public class ClientRuntime extends DataPart<EntityPlayer> {
         String getHint();
 
         default Optional<String> getHintTranslated() {
-            String keyName = KeyManager.getKeyName(ACKeyManager.instance.getKeyID(ClientHandler.keyActivate));
+            String keyName = KeyManager.getKeyName(ACKeyManager.INSTANCE.getKeyID(ClientHandler.keyActivate));
             String hint = ClientRuntime.instance().getActivateHandler().getHint();
             return hint == null ? Optional.empty() : Optional.of("[" + keyName + "]: " + I18n.format("ac.activate_key." + hint + ".desc"));
         }

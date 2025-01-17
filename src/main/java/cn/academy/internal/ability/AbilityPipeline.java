@@ -20,18 +20,18 @@ public class AbilityPipeline {
     /**
      * @return Whether we can break any block at all
      */
-    static boolean canBreakBlock(World world) {
+    public static boolean canBreakBlock(World world) {
         return propDestroyBlocks || ArrayUtils.contains(propWorldsDestroyingBlocks, String.valueOf(world.provider.getDimension())) || ArrayUtils.contains(propWorldsDestroyingBlocks, world.provider.getSaveFolder());
     }
 
-    static boolean isAllWorldDisableBreakBlock() {
+    public static boolean isAllWorldDisableBreakBlock() {
         return !propDestroyBlocks && propWorldsDestroyingBlocks.length == 0;
     }
 
     /**
      * @return Whether PvP is enabled.
      */
-    static boolean canAttackPlayer() {
+    public static boolean canAttackPlayer() {
         return propAttackPlayer;
     }
 
@@ -41,11 +41,11 @@ public class AbilityPipeline {
      *
      * @return Whether the block can be really broken.
      */
-    static boolean canBreakBlock(World world, EntityPlayer player, int x, int y, int z) {
+    public static boolean canBreakBlock(World world, EntityPlayer player, int x, int y, int z) {
         return !MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, player, new BlockPos(x, y, z)));
     }
 
-    static boolean canBreakBlock(World world, EntityPlayer player, BlockPos pos) {
+    public static boolean canBreakBlock(World world, EntityPlayer player, BlockPos pos) {
         return !MinecraftForge.EVENT_BUS.post(new BlockDestroyEvent(world, player, pos));
     }
 
@@ -59,7 +59,6 @@ public class AbilityPipeline {
     private static final boolean propDestroyBlocks = generic.isDestroyBlocks();
     private static final String[] propWorldsDestroyingBlocks = generic.getWorldsWhitelistedDestroyingBlocks();
     private static final boolean propUseMouseWheel = generic.isUseMouseWheel();
-
 
     @SubscribeEvent
     public static void onBlockDestroy(BlockDestroyEvent event) {

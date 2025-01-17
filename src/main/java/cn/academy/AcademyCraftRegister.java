@@ -55,11 +55,15 @@ public class AcademyCraftRegister {
 
     public static void registerAllDuringInit() {
         registerEntity();
-        registerTileEntityRender();
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            registerTileEntityRender();
+        }
     }
 
     public static void registerAllDuringPreInit() {
-        registerEntityRenderer();
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+            registerEntityRenderer();
+        }
     }
 
     private static void registerEntity() {
@@ -70,7 +74,8 @@ public class AcademyCraftRegister {
         }
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SideOnly(Side.CLIENT)
     private static void registerEntityRenderer() {
         for (Class<? extends Render> render : AcademyCraftEntityRenderList.ENTITY_RENDER_MAP.keySet()) {
             try {
@@ -90,7 +95,8 @@ public class AcademyCraftRegister {
         }
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SideOnly(Side.CLIENT)
     private static void registerTileEntityRender() {
         for (AcademyCraftTileEntityRendererList.TileEntityRenderer tileEntityRenderer : AcademyCraftTileEntityRendererList.TILE_ENTITY_RENDERER_LIST) {
             ClientRegistry.bindTileEntitySpecialRenderer(tileEntityRenderer.tileEntityClass, tileEntityRenderer.specialRenderer);

@@ -29,7 +29,7 @@ class RegACKeyHandlerImpl {
             field.setAccessible(true);
             RegACKeyHandler anno = field.getAnnotation(RegACKeyHandler.class);
             try {
-                ACKeyManager.instance.addKeyHandler(anno.name(), anno.comment(), anno.keyID(), (KeyHandler) field.get(null));
+                ACKeyManager.INSTANCE.addKeyHandler(anno.name(), anno.comment(), anno.keyID(), (KeyHandler) field.get(null));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

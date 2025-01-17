@@ -12,6 +12,7 @@ import cn.academy.internal.datapart.CPData;
 import cn.academy.internal.datapart.CooldownData;
 import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.energy.impl.WirelessSystem;
+import cn.academy.internal.util.ACKeyManager;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.particle.ParticleFactoryBase;
 import cn.lambdalib2.util.ControlOverrider;
@@ -24,20 +25,21 @@ public class AcademyCraftEventManager {
         MinecraftForge.EVENT_BUS.register(AcademyCraft.class);
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(MusicSystem.class);
+            MinecraftForge.EVENT_BUS.register(ClientRuntime.Events.class);
+            MinecraftForge.EVENT_BUS.register(ClientHandler.ConfigHandler.class);
+            MinecraftForge.EVENT_BUS.register(ACKeyManager.INSTANCE);
+            MinecraftForge.EVENT_BUS.register(VanillaHandRenderer.EventHandler.class);
+            MinecraftForge.EVENT_BUS.register(CriticalHitEffect.class);
+            MinecraftForge.EVENT_BUS.register(ParticleFactoryBase.EventHandlers.class);
+            MinecraftForge.EVENT_BUS.register(ControlOverrider.Events.class);
+            MinecraftForge.EVENT_BUS.register(AuxGuiHandler.class);
         }
         MinecraftForge.EVENT_BUS.register(AcademyCraftRegister.class);
-        MinecraftForge.EVENT_BUS.register(ClientRuntime.Events.class);
-        MinecraftForge.EVENT_BUS.register(ClientHandler.ConfigHandler.class);
-        MinecraftForge.EVENT_BUS.register(CriticalHitEffect.class);
-        MinecraftForge.EVENT_BUS.register(VanillaHandRenderer.EventHandler.class);
         MinecraftForge.EVENT_BUS.register(CPData.Events.class);
         MinecraftForge.EVENT_BUS.register(CooldownData.Events.class);
         MinecraftForge.EVENT_BUS.register(PresetData.Events.class);
         MinecraftForge.EVENT_BUS.register(WirelessSystem.class);
-        MinecraftForge.EVENT_BUS.register(ParticleFactoryBase.EventHandlers.class);
         MinecraftForge.EVENT_BUS.register(GameTimer.class);
-        MinecraftForge.EVENT_BUS.register(ControlOverrider.Events.class);
-        MinecraftForge.EVENT_BUS.register(AuxGuiHandler.class);
         MinecraftForge.EVENT_BUS.register(AbilityPipeline.class);
     }
 }

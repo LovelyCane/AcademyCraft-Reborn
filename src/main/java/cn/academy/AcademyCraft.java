@@ -1,5 +1,6 @@
 package cn.academy;
 
+import cn.academy.internal.ability.ctrl.ClientHandler;
 import cn.academy.internal.event.AcademyCraftEventManager;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.registry.RegistryMod;
@@ -8,14 +9,14 @@ import net.minecraft.command.ICommand;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +36,6 @@ public class AcademyCraft {
     public static AcademyCraft instance;
     public static final boolean DEBUG_MODE = false;
     public static final Logger LOGGER = LogManager.getLogger("AcademyCraft");
-    public static Configuration config;
     public static AcademyCraftConfig academyCraftConfig;
     public static final File configFile;
 
@@ -78,26 +78,16 @@ public class AcademyCraft {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             OBJLoader.INSTANCE.addDomain(Tags.MOD_ID);
         }
-
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        config.load();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
         AcademyCraftRegister.registerAllDuringInit();
-        AuxGuiHandler.init();
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        config.save();
-    }
-
-    @EventHandler
-    public void serverStopping(FMLServerStoppingEvent event) {
-        config.save();
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            AuxGuiHandler.init();
+            ClientHandler.init();
+        }
+        OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
     }
 
     @EventHandler
@@ -105,10 +95,5 @@ public class AcademyCraft {
         for (ICommand command : AcademyCraftCommandList.COMMAND_LIST) {
             event.registerServerCommand(command);
         }
-    }
-
-    @SubscribeEvent
-    public void onClientDisconnectionFromServer(ClientDisconnectionFromServerEvent e) {
-        config.save();
     }
 }

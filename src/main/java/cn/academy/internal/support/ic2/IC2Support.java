@@ -6,6 +6,8 @@ import cn.academy.AcademyCraftItemList;
 import cn.academy.internal.support.EnergyBlockHelper;
 import cn.academy.internal.support.EnergyItemHelper;
 import cn.academy.internal.support.EnergyItemHelper.EnergyItemManager;
+import cn.academy.internal.support.rf.TileRFInput;
+import cn.academy.internal.support.rf.TileRFOutput;
 import cn.lambdalib2.registry.RegistryCallback;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.SideUtils;
@@ -26,12 +28,14 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import static cn.academy.AcademyCraftTileEntityList.TILE_ENTITY_LIST;
+
 /**
  * 
  * @author KSkun
  */
 public class IC2Support {
-    static final String IC2_MODID = "ic2";
+    public static final String IC2_MODID = "ic2";
 
     // A placeholder interface to express @Optional.Interface dependency
     static final String IC2_IFACE = "ic2.api.energy.tile.IEnergySource";
@@ -98,6 +102,9 @@ public class IC2Support {
         euOutput.setRegistryName("academy:eu_output");
         euOutput.setTranslationKey("ac_eu_output");
         event.getRegistry().register(euOutput);
+
+        TILE_ENTITY_LIST.add(TileEUInput.class);
+        TILE_ENTITY_LIST.add(TileEUOutput.class);
     }
 
     @Optional.Method(modid= IC2_MODID)

@@ -2,9 +2,7 @@ package cn.academy.internal.entity;
 
 import cn.academy.AcademyCraft;
 import cn.academy.AcademyCraftItemList;
-import cn.academy.internal.event.ConfigModifyEvent;
 import cn.academy.internal.item.ItemCoin;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.util.PlayerUtils;
 import cn.lambdalib2.util.RandUtils;
@@ -21,15 +19,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author KSkun
  */
 public class EntityCoinThrowing extends EntityAdvanced {
-    public static boolean PLAY_HEADS_OR_TAILS;
+    public static boolean PLAY_HEADS_OR_TAILS = AcademyCraft.academyCraftConfig.getGeneric().isPlayHeadsOrTails();
     public EnumHand hand = EnumHand.MAIN_HAND;
 
     static {
@@ -171,21 +166,5 @@ public class EntityCoinThrowing extends EntityAdvanced {
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
-
-    }
-
-    public enum EventListener {
-        instance;
-
-        @StateEventCallback
-        private static void init(FMLInitializationEvent event) {
-            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails", "generic", false, "Show heads or tails after throwing a coin.");
-            MinecraftForge.EVENT_BUS.register(instance);
-        }
-
-        @SubscribeEvent
-        public void onConfigModified(ConfigModifyEvent e) {
-            PLAY_HEADS_OR_TAILS = AcademyCraft.config.getBoolean("headsOrTails", "generic", false, "Show heads or tails after throwing a coin.");
-        }
     }
 }

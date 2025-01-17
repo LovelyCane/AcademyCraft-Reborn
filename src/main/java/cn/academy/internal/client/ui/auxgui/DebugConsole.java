@@ -53,7 +53,7 @@ public class DebugConsole extends AuxGui {
 
     @StateEventCallback
     private static void init(FMLInitializationEvent event) {
-        ACKeyManager.instance.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
+        ACKeyManager.INSTANCE.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
             @Override
             public void onKeyDown() {
                 State[] states = State.values();
