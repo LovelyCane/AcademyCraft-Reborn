@@ -124,7 +124,6 @@ public class KeyManager {
         while (iter.hasNext()) {
             Entry<String, KeyHandlerState> entry = iter.next();
             KeyHandlerState kb = entry.getValue();
-            AcademyCraft.LOGGER.info(entry.getKey());
             if (kb.dead) {
                 iter.remove();
             } else {

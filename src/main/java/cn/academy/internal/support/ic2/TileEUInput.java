@@ -18,7 +18,6 @@ import static cn.academy.internal.support.ic2.IC2Support.if2eu;
  */
 @Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
-    
     private boolean isRegistered  = false;
 
     public TileEUInput() {

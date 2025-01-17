@@ -19,7 +19,6 @@ import java.util.UUID;
  */
 @SideOnly(Side.SERVER)
 public final class BukkitAdapter {
-
     public static final BukkitAdapter INSTANCE = new BukkitAdapter();
 
     private static boolean registered = false;

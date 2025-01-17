@@ -6,9 +6,6 @@ import cn.academy.AcademyCraftItemList;
 import cn.academy.internal.support.EnergyBlockHelper;
 import cn.academy.internal.support.EnergyItemHelper;
 import cn.academy.internal.support.EnergyItemHelper.EnergyItemManager;
-import cn.academy.internal.support.rf.TileRFInput;
-import cn.academy.internal.support.rf.TileRFOutput;
-import cn.lambdalib2.registry.RegistryCallback;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.SideUtils;
 import com.google.common.base.Preconditions;
@@ -23,9 +20,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static cn.academy.AcademyCraftTileEntityList.TILE_ENTITY_LIST;
@@ -65,6 +64,7 @@ public class IC2Support {
     @Optional.Method(modid= IC2_MODID)
     @StateEventCallback
     public static void init(FMLInitializationEvent event){
+        MinecraftForge.EVENT_BUS.register(IC2Support.class);
         EnergyBlockHelper.register(new EUSinkManager());
         EnergyBlockHelper.register(new EUSourceManager());
 
@@ -90,8 +90,8 @@ public class IC2Support {
 
 
     @Optional.Method(modid= IC2_MODID)
-    @RegistryCallback
-    private static void registerBlocks(RegistryEvent.Register<Block> event) {
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
         helper = new IC2SkillHelper();
         helper.init();
 
@@ -108,8 +108,8 @@ public class IC2Support {
     }
 
     @Optional.Method(modid= IC2_MODID)
-    @RegistryCallback
-    private static void registerItems(RegistryEvent.Register<Item> event){
+    @SubscribeEvent
+    public static void registerItems(RegistryEvent.Register<Item> event){
         item_euInput.setRegistryName(euInput.getRegistryName());
         item_euInput.setTranslationKey(euInput.getTranslationKey());
         event.getRegistry().register(item_euInput);
@@ -131,7 +131,6 @@ public class IC2Support {
     public static IC2SkillHelper getHelper() {
         return helper;
     }
-
 }
 
 class IC2EnergyItemManager implements EnergyItemManager {

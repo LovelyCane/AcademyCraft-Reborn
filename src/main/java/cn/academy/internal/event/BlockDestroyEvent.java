@@ -15,7 +15,6 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  */
 @Cancelable
 public final class BlockDestroyEvent extends Event {
-
     public final World world;
     public final EntityPlayer player;
     public final BlockPos pos;
@@ -35,5 +34,4 @@ public final class BlockDestroyEvent extends Event {
     public BlockDestroyEvent(EntityPlayer player_, BlockPos pos) {
         this(player_.world, player_, pos);
     }
-
 }

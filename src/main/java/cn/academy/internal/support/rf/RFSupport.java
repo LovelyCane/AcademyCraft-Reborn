@@ -3,7 +3,6 @@ package cn.academy.internal.support.rf;
 import cn.academy.AcademyCraftBlockList;
 import cn.academy.AcademyCraftItemList;
 import cn.academy.internal.support.EnergyBlockHelper;
-import cn.lambdalib2.registry.RegistryCallback;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.SideUtils;
 import net.minecraft.block.Block;
@@ -13,9 +12,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static cn.academy.AcademyCraftTileEntityList.TILE_ENTITY_LIST;
@@ -52,6 +53,7 @@ public class RFSupport {
     @StateEventCallback
     @Optional.Method(modid = "redstoneflux")
     private static void init(FMLInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(RFSupport.class);
         EnergyBlockHelper.register(new RFProviderManager());
         EnergyBlockHelper.register(new RFReceiverManager());
 
@@ -63,9 +65,9 @@ public class RFSupport {
         GameRegistry.addShapedRecipe(new ResourceLocation("academy", "rf_output_input"), null, new ItemStack(rfOutput), "X", 'X', new ItemStack(rfInput));
     }
 
-    @RegistryCallback
+    @SubscribeEvent
     @Optional.Method(modid = "redstoneflux")
-    private static void registerBlocks(RegistryEvent.Register<Block> event) {
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
         rfInput.setRegistryName("academy:ac_rf_input");
         rfInput.setTranslationKey("ac_rf_input");
         event.getRegistry().register(rfInput);
@@ -78,9 +80,9 @@ public class RFSupport {
         TILE_ENTITY_LIST.add(TileRFOutput.class);
     }
 
-    @RegistryCallback
+    @SubscribeEvent
     @Optional.Method(modid = "redstoneflux")
-    private static void registerItems(RegistryEvent.Register<Item> event) {
+    public static void registerItems(RegistryEvent.Register<Item> event) {
         item_rfInput.setRegistryName(rfInput.getRegistryName());
         item_rfInput.setTranslationKey(rfInput.getTranslationKey());
         event.getRegistry().register(item_rfInput);
@@ -94,7 +96,5 @@ public class RFSupport {
         if (SideUtils.isClient()) {
             ModelLoader.setCustomModelResourceLocation(item_rfOutput, 0, new ModelResourceLocation("academy:eu_input", "inventory"));
         }
-
     }
-
 }
