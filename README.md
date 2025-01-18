@@ -18,6 +18,22 @@ For example, the original project included a feature that collected in-game usag
 
 Please go to [Issues](https://github.com/LovelyCane/AcademyCraft-Reborn/issues) and submit a new ticket.
 
+# For Players
+
+The pre-release version of 1.1.8 will remain for a long time.
+
+Currently, this mod has many bugs.
+
+Please try to keep the latest version as much as possible.
+
+# 致玩家
+
+1.1.8的pre版本会持续很长时间。
+
+目前这个模组有许多bug。
+
+请尽量保持mod版本为最新版。
+
 # Development
 
 ## Workspace
