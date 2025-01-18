@@ -18,10 +18,10 @@ import static cn.lambdalib2.util.VecUtils.setMotion;
 
 @SuppressWarnings("unused")
 public class BlastwaveContext extends Context<DirectedBlastwave> implements IConsumptionProvider {
-    private static final String MSG_EFFECT = "effect";
-    private static final String MSG_PERFORM = "perform";
-    private static final String MSG_ATTACK_ENTITY = "entity";
-    private static final String MSG_GENERATE_EFFECT_BLOCKS = "effect_blocks";
+    public static final String MSG_EFFECT = "effect";
+    public static final String MSG_PERFORM = "perform";
+    public static final String MSG_ATTACK_ENTITY = "entity";
+    public static final String MSG_GENERATE_EFFECT_BLOCKS = "effect_blocks";
 
     private static final int MIN_TICKS = 6;
     private static final int MAX_ACCEPTED_TICKS = 50;
@@ -123,8 +123,6 @@ public class BlastwaveContext extends Context<DirectedBlastwave> implements ICon
                     double distSq = dx * dx + dy * dy + dz * dz;
                     if (distSq <= 6 && (distSq == 0 || RandUtils.RNG.nextFloat() < breakProb)) {
                         BlockPos bPos = new BlockPos(i, j, k);
-                        // logic to break block
-                        // logic to drop item if needed
                     }
                 }
             }

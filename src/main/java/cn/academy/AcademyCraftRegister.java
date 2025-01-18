@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -44,6 +45,12 @@ public class AcademyCraftRegister {
             String name = tileEntityClass.getSimpleName().replace("TileEntity", "").replaceAll("([a-z])([A-Z])", "$1_$2").replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").toLowerCase();
             GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation(Tags.MOD_ID, name));
         }
+    }
+
+    @SubscribeEvent
+    public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
+        GameRegistry.addSmelting(AcademyCraftBlockList.CONSTRAINT_METAL, AcademyCraftItemList.CONSTRAINT_INGOT.getDefaultInstance(), 0.7F);
+        GameRegistry.addSmelting(AcademyCraftBlockList.IMAGSIL_ORE, AcademyCraftItemList.IMAG_SILICON_INGOT.getDefaultInstance(), 0.7F);
     }
 
     @SideOnly(Side.CLIENT)

@@ -4,9 +4,9 @@ import cn.academy.api.ability.AbilityAPIExt;
 import cn.academy.internal.ability.context.ClientContext;
 import cn.academy.internal.ability.context.RegClientContext;
 import cn.academy.internal.ability.vanilla.vecmanip.client.effect.WaveEffect;
-import cn.academy.internal.datapart.HandRenderOverrideData;
 import cn.academy.internal.client.renderer.util.IHandRenderer;
 import cn.academy.internal.client.renderer.util.VanillaHandRenderer;
+import cn.academy.internal.datapart.HandRenderOverrideData;
 import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
 import cn.lambdalib2.util.GameTimer;
@@ -20,6 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.function.Supplier;
 
+import static cn.academy.internal.ability.vanilla.vecmanip.skill.BlastwaveContext.MSG_EFFECT;
+import static cn.academy.internal.ability.vanilla.vecmanip.skill.BlastwaveContext.MSG_PERFORM;
 import static cn.academy.internal.client.renderer.util.AnimPresets.createPrepareAnim;
 import static cn.academy.internal.client.renderer.util.AnimPresets.createPunchAnim;
 import static cn.lambdalib2.util.RandUtils.rangef;
@@ -29,9 +31,6 @@ import static cn.lambdalib2.util.RandUtils.rangei;
 @RegClientContext(BlastwaveContext.class)
 @SuppressWarnings("unused")
 public class BlastwaveContextC extends ClientContext {
-    public static final String MSG_EFFECT = "effect";
-    public static final String MSG_PERFORM = "perform";
-
     private IHandRenderer handEffect;
     private CompTransformAnim anim;
     private Supplier<Double> timeProvider;
@@ -46,11 +45,7 @@ public class BlastwaveContextC extends ClientContext {
 
         WaveEffect effect = new WaveEffect(world(), rangei(2, 3), 1);
         Vec3d headPosition = VecUtils.entityHeadPos(player);
-        effect.setPosition(
-                MathUtils.lerp(headPosition.x, pos.x, 0.7),
-                MathUtils.lerp(headPosition.y, pos.y, 0.7),
-                MathUtils.lerp(headPosition.z, pos.z, 0.7)
-        );
+        effect.setPosition(MathUtils.lerp(headPosition.x, pos.x, 0.7), MathUtils.lerp(headPosition.y, pos.y, 0.7), MathUtils.lerp(headPosition.z, pos.z, 0.7));
         effect.rotationYaw = player.rotationYawHead + rangef(-20, 20);
         effect.rotationPitch = player.rotationPitch + rangef(-10, 10);
 

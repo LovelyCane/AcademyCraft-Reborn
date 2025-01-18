@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * <p>
  * Use <code>NetworkMessage.sendXXX</code> to send a message to some object.
  * The object is then retrieved using deserialization in receiver side, and all event
- * listeners (methods decorated with {@link Listener} within the object
+ * listeners (methods decorated with {@link Listener} within the object)
  * is invoked with given parameters supplied. This could be really useful
  * in small synchronizations of objects that can be retrieved in both sides,
  * e.g. TileEntities, Entities and many else. <br>
@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
 public class NetworkMessage {
     static final SimpleNetworkWrapper network = LambdaLib2.channel;
     private static final Map<ChannelID, List<INetworkListener>> cachedListeners = new HashMap<>();
-    private static Map<Class, ClassDelegate> classDelegates = new HashMap<>();
+    private static final Map<Class<?>, ClassDelegate> classDelegates = new HashMap<>();
 
     static {
         NetworkS11n.addDirect(ClassDelegate.class, new NetS11nAdaptor<ClassDelegate>() {
@@ -105,10 +105,6 @@ public class NetworkMessage {
         }
     }
 
-    public static void sendToAll(Object instance, String channel, Object... params) {
-        network.sendToAll(new Message(instance, channel, params));
-    }
-
     public static void sendToAllAround(TargetPoint trg, Object instance, String channel, Object... params) {
         network.sendToAllAround(new Message(instance, channel, params), trg);
     }
@@ -119,7 +115,7 @@ public class NetworkMessage {
 
     // ---
 
-    private static ChannelID id(Class c, String channel, Side side) {
+    private static ChannelID id(Class<?> c, String channel, Side side) {
         return new ChannelID(c, channel, side);
     }
 
@@ -142,8 +138,7 @@ public class NetworkMessage {
         // Check parameter size
         final int paramc = m.getParameterCount();
         if (paramc > params.length) {
-            throw new RuntimeException("Too few arguments in event " + eventSignature(instance, channel)
-                    + " for event listener [" + m + "]. Expected at least " + paramc + " arguments");
+            throw new RuntimeException("Too few arguments in event " + eventSignature(instance, channel) + " for event listener [" + m + "]. Expected at least " + paramc + " arguments");
         } else {
             Object[] paramsArg;
             if (paramc == params.length || paramc == -1) {
@@ -167,7 +162,7 @@ public class NetworkMessage {
     }
 
     private static List<INetworkListener> getListeners(Object instance, String channel, Side side) {
-        final Class type = instance.getClass();
+        final Class<?> type = instance.getClass();
         final ChannelID cid = id(type, channel, side);
 
         List<INetworkListener> result = cachedListeners.get(cid);
@@ -183,30 +178,24 @@ public class NetworkMessage {
     private static boolean matches(ChannelID cid, Method m) {
         Listener anno = m.getAnnotation(Listener.class);
 
-        if (anno == null || !anno.channel().equals(cid.channel)) {
-            return false;
-        } else {
+        if (anno != null && anno.channel().equals(cid.channel)) {
             for (Side s : anno.side()) {
                 if (s == cid.side) {
                     return true;
                 }
             }
-            return false;
         }
+        return false;
     }
 
     private static void buildCache(ChannelID cid, List<INetworkListener> out) {
-        out.addAll(ReflectionUtils.getAccessibleMethods(cid.c)
-                .stream()
-                .filter(m -> matches(cid, m))
-                .map(NetworkMessage::methodListener)
-                .collect(Collectors.toList()));
+        out.addAll(ReflectionUtils.getAccessibleMethods(cid.c).stream().filter(m -> matches(cid, m)).map(NetworkMessage::methodListener).collect(Collectors.toList()));
     }
 
     private static INetworkListener methodListener(Method m) {
         return new INetworkListener() {
 
-            BitSet nullUnchecked = new BitSet();
+            final BitSet nullUnchecked = new BitSet();
 
             {
                 for (int i = 0; i < m.getParameterCount(); ++i) {
@@ -289,11 +278,11 @@ public class NetworkMessage {
     }
 
     private static class ChannelID {
-        public final Class c;
+        public final Class<?> c;
         public final String channel;
         public final Side side;
 
-        public ChannelID(Class _c, String _channel, Side _side) {
+        public ChannelID(Class<?> _c, String _channel, Side _side) {
             c = _c;
             channel = _channel;
             side = _side;
@@ -367,22 +356,15 @@ public class NetworkMessage {
     }
 
     public static class Handler implements IMessageHandler<Message, IMessage> {
-
         @Override
         public IMessage onMessage(Message message, MessageContext ctx) {
             if (message.valid) {
-                // LambdaLib.log.info("Received message " + message.channel + " on " + message.instance);
                 Side side = FMLCommonHandler.instance().getEffectiveSide();
                 if (side == Side.SERVER) {
                     EntityPlayerMP serverPlayer = ctx.getServerHandler().player;
-                    // Execute the action on the main server thread by adding it as a scheduled task
-                    serverPlayer.getServerWorld().addScheduledTask(() -> {
-                        processMessage(message.instance, message.channel, message.params);
-                    });
+                    serverPlayer.getServerWorld().addScheduledTask(() -> processMessage(message.instance, message.channel, message.params));
                 } else {
-                    Minecraft.getMinecraft().addScheduledTask(() -> {
-                        processMessage(message.instance, message.channel, message.params);
-                    });
+                    Minecraft.getMinecraft().addScheduledTask(() -> processMessage(message.instance, message.channel, message.params));
                 }
             } else if (LambdaLib2.DEBUG) {
                 Debug.log("Ignored network message " + message.instance + ", " + message.channel + ", reason: " + message.failReason);
@@ -393,24 +375,22 @@ public class NetworkMessage {
 
     @NetworkS11nType
     public static class ClassDelegate implements IMessageDelegate {
+        final Class<?> type;
+        final LoadingCache<ChannelID, List<INetworkListener>> cache = CacheBuilder.newBuilder().build(new CacheLoader<ChannelID, List<INetworkListener>>() {
+            @Override
+            public List<INetworkListener> load(ChannelID key) {
+                ArrayList<INetworkListener> ret = new ArrayList<>();
 
-        final Class type;
-        final LoadingCache<ChannelID, List<INetworkListener>> cache = CacheBuilder.newBuilder()
-                .build(new CacheLoader<ChannelID, List<INetworkListener>>() {
-                    @Override
-                    public List<INetworkListener> load(ChannelID key) throws Exception {
-                        ArrayList<INetworkListener> ret = new ArrayList<>();
-
-                        for (Method m : type.getDeclaredMethods()) {
-                            if (Modifier.isStatic(m.getModifiers()) && matches(key, m)) {
-                                m.setAccessible(true);
-                                ret.add(methodListener(m));
-                            }
-                        }
-
-                        return ret;
+                for (Method m : type.getDeclaredMethods()) {
+                    if (Modifier.isStatic(m.getModifiers()) && matches(key, m)) {
+                        m.setAccessible(true);
+                        ret.add(methodListener(m));
                     }
-                });
+                }
+
+                return ret;
+            }
+        });
 
         ClassDelegate(Class<?> _type) {
             type = _type;
