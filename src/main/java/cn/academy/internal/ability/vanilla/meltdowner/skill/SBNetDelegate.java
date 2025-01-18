@@ -18,7 +18,6 @@ public class SBNetDelegate {
         NetworkS11n.addDirectInstance(SBNetDelegate.INSTANCE);
     }
 
-    @SideOnly(Side.CLIENT)
     @Listener(channel = MSG_EFFECT, side = Side.CLIENT)
     private void hSpawnEffect(Vec3d start, Vec3d end) {
         EntityPlayer player = Minecraft.getMinecraft().player;

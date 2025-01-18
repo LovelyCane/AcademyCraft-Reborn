@@ -94,11 +94,11 @@ public class AcademyCraft {
         if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             AuxGuiHandler.init();
             ClientHandler.init();
+            SBNetDelegate.init();
         }
         OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
         Controllable.init();
         VanillaCategories.init();
-        SBNetDelegate.init();
     }
 
     @EventHandler

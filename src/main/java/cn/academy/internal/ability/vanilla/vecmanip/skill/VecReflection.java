@@ -3,6 +3,8 @@ package cn.academy.internal.ability.vanilla.vecmanip.skill;
 import cn.academy.api.ability.Skill;
 import cn.academy.internal.ability.context.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class VecReflection extends Skill {
     public static VecReflection INSTANCE = new VecReflection();
@@ -14,6 +16,7 @@ public class VecReflection extends Skill {
         super("vec_reflection", 5);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void activate(ClientRuntime rt, int keyID) {
         rt.addKey(keyID, new KeyDelegate() {

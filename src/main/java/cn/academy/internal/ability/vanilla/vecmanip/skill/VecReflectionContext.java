@@ -1,6 +1,5 @@
 package cn.academy.internal.ability.vanilla.vecmanip.skill;
 
-import cn.academy.AcademyCraft;
 import cn.academy.internal.ability.context.ClientContext;
 import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
@@ -10,7 +9,9 @@ import cn.academy.internal.ability.vanilla.vecmanip.client.effect.WaveEffectUI;
 import cn.academy.internal.event.ability.ReflectEvent;
 import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.s11n.network.NetworkMessage;
-import cn.lambdalib2.util.*;
+import cn.lambdalib2.util.RandUtils;
+import cn.lambdalib2.util.Raytrace;
+import cn.lambdalib2.util.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,8 +39,6 @@ import static cn.academy.internal.ability.vanilla.vecmanip.skill.VecReflection.M
 import static cn.academy.internal.ability.vanilla.vecmanip.skill.VecReflection.MSG_REFLECT_ENTITY;
 import static cn.academy.internal.ability.vanilla.vecmanip.skill.VecReflectionContext.reflect;
 import static cn.lambdalib2.util.MathUtils.lerpf;
-import static cn.lambdalib2.util.RandUtils.rangef;
-import static cn.lambdalib2.util.RandUtils.rangei;
 import static cn.lambdalib2.util.VecUtils.*;
 
 public class VecReflectionContext extends Context<VecReflection> {
@@ -123,7 +122,6 @@ public class VecReflectionContext extends Context<VecReflection> {
         setMotion(fireball, vel);
         EntityAffection.mark(fireball);
         world().spawnEntity(fireball);
-
     }
 
     @NetworkMessage.Listener(channel = MSG_TICK, side = Side.CLIENT)
@@ -151,17 +149,6 @@ public class VecReflectionContext extends Context<VecReflection> {
             if (source != null) {
                 source.attackEntityFrom(evt.getSource(), evt.getAmount());
                 Vec3d pos = evt.getSource().getDamageLocation();
-
-                ACSounds.playClient(world(), pos.x, pos.y, pos.z, "vecmanip.directed_blast", SoundCategory.AMBIENT, 0.5f, 1.0f);
-
-                WaveEffect effect = new WaveEffect(world(), rangei(2, 3), 1);
-                Vec3d headPosition = VecUtils.entityHeadPos(player);
-                effect.setPosition(MathUtils.lerp(headPosition.x, pos.x, 0.7), MathUtils.lerp(headPosition.y, pos.y, 0.7), MathUtils.lerp(headPosition.z, pos.z, 0.7));
-                effect.rotationYaw = player.rotationYawHead + rangef(-20, 20);
-                effect.rotationPitch = player.rotationPitch + rangef(-10, 10);
-
-                world().spawnEntity(effect);
-                AcademyCraft.LOGGER.info("Effect DEBUG");
             }
         }
     }
@@ -219,62 +206,5 @@ public class VecReflectionContext extends Context<VecReflection> {
 
     private boolean consumeNormal() {
         return ctx.consume(0, lerpf(10, 5, ctx.getSkillExp()));
-    }
-}
-
-@SideOnly(Side.CLIENT)
-@RegClientContext(VecReflectionContext.class)
-class VecReflectionContextC extends ClientContext {
-    private ClientRuntime.IActivateHandler activateHandler;
-    VecReflectionContext par;
-    private final WaveEffectUI ui;
-
-    public VecReflectionContextC(VecReflectionContext par) {
-        super(par);
-        this.par = par;
-        this.ui = new WaveEffectUI(0.4f, 110, 1.6f);
-    }
-
-    @NetworkMessage.Listener(channel = MSG_MADEALIVE, side = Side.CLIENT)
-    private void l_alive() {
-        if (isLocal()) {
-            activateHandler = ClientRuntime.ActivateHandlers.terminatesContext(par);
-            ClientRuntime.instance().addActivateHandler(activateHandler);
-            MinecraftForge.EVENT_BUS.register(this);
-        }
-    }
-
-    @NetworkMessage.Listener(channel = MSG_TERMINATED, side = Side.CLIENT)
-    private void l_terminate() {
-        if (isLocal()) {
-            ClientRuntime.instance().removeActiveHandler(activateHandler);
-            MinecraftForge.EVENT_BUS.unregister(this);
-        }
-    }
-
-    @NetworkMessage.Listener(channel = MSG_REFLECT_ENTITY, side = Side.CLIENT)
-    private void c_reflectEntity(Entity entity) {
-        reflect(entity, player);
-        reflectEffect(entityHeadPos(entity));
-    }
-
-    private void reflectEffect(Vec3d point) {
-        WaveEffect eff = new WaveEffect(world(), 2, 1.1);
-        eff.setPosition(point.x, point.y, point.z);
-        eff.rotationYaw = player.rotationYawHead;
-        eff.rotationPitch = player.rotationPitch;
-        world().spawnEntity(eff);
-        playSound(point);
-    }
-
-    private void playSound(Vec3d pos) {
-        ACSounds.playClient(world(), pos.x, pos.y, pos.z, "vecmanip.vec_reflection", SoundCategory.AMBIENT, 0.5f, 1.0f);
-    }
-
-    @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent evt) {
-        if (evt.getType() == ElementType.CROSSHAIRS) {
-            ui.onFrame(evt.getResolution().getScaledWidth(), evt.getResolution().getScaledHeight());
-        }
     }
 }

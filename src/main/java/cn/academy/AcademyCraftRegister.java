@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -49,8 +50,8 @@ public class AcademyCraftRegister {
 
     @SubscribeEvent
     public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
-        GameRegistry.addSmelting(AcademyCraftBlockList.CONSTRAINT_METAL, AcademyCraftItemList.CONSTRAINT_INGOT.getDefaultInstance(), 0.7F);
-        GameRegistry.addSmelting(AcademyCraftBlockList.IMAGSIL_ORE, AcademyCraftItemList.IMAG_SILICON_INGOT.getDefaultInstance(), 0.7F);
+        GameRegistry.addSmelting(AcademyCraftBlockList.CONSTRAINT_METAL, new ItemStack(AcademyCraftItemList.CONSTRAINT_INGOT), 0.7F);
+        GameRegistry.addSmelting(AcademyCraftBlockList.IMAGSIL_ORE, new ItemStack(AcademyCraftItemList.IMAG_SILICON_INGOT), 0.7F);
     }
 
     @SideOnly(Side.CLIENT)
