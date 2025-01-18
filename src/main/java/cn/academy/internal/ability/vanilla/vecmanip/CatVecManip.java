@@ -17,7 +17,7 @@ public class CatVecManip extends Category {
         DirectedBlastwave.INSTANCE.setPosition(136, 80);
         StormWing.INSTANCE.setPosition(130, 20);
         BloodRetrograde.INSTANCE.setPosition(204, 83);
-        //     VecReflection.setPosition(210, 50);
+        VecReflection.INSTANCE.setPosition(210, 50);
         PlasmaCannon.INSTANCE.setPosition(175, 14);
 
         // Level 1
@@ -35,10 +35,8 @@ public class CatVecManip extends Category {
         // 4
         addSkill(BloodRetrograde.INSTANCE);
 
-
-        // addSkill(VecReflection$.MODULE$);
-
         // 5
+        addSkill(VecReflection.INSTANCE);
         addSkill(PlasmaCannon.INSTANCE);
 
         Groundshock.INSTANCE.setParent(DirectedShock.INSTANCE);

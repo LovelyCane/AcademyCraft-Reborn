@@ -42,7 +42,6 @@ public class AbilityContext {
         cdData = CooldownData.of(player);
     }
 
-
     /**
      * Make the player fire the attack with the given skill. The damage will be re-calculated according to the damage
      * scale specified globally and skill-locally, and influenced by passive skills.
