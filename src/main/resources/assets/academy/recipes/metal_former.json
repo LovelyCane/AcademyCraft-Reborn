@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "BCB",
+    "DED"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:shears"
+    },
+    "B": {
+      "item": "academy:calc_chip"
+    },
+    "C": {
+      "item": "academy:machine_frame"
+    },
+    "D": {
+      "item": "academy:constraint_plate"
+    },
+    "E": {
+      "item": "academy:empty_matter_unit"
+    }
+  },
+  "result": {
+    "item": "academy:metal_former",
+    "count": 1
+  }
+}

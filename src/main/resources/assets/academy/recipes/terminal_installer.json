@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "CDC",
+    "EFE"
+  ],
+  "key": {
+    "A": {
+      "item": "academy:data_chip"
+    },
+    "B": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "academy:calc_chip"
+    },
+    "D": {
+      "item": "academy:brain_component"
+    },
+    "E": {
+      "item": "academy:info_component"
+    },
+    "F": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "result": {
+    "item": "academy:terminal_installer",
+    "count": 1
+  }
+}

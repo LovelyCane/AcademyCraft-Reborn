@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AB "
+  ],
+  "key": {
+    "A": {
+      "item": "academy:data_chip"
+    },
+    "B": {
+      "item": "academy:reso_crystal"
+    }
+  },
+  "result": {
+    "item": "academy:calc_chip",
+    "count": 1
+  }
+}

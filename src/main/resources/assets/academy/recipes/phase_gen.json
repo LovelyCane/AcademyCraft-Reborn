@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "C C"
+  ],
+  "key": {
+    "A": {
+      "item": "academy:crystal_low"
+    },
+    "B": {
+      "item": "academy:machine_frame"
+    },
+    "C": {
+      "item": "academy:empty_matter_unit"
+    }
+  },
+  "result": {
+    "item": "academy:phase_gen",
+    "count": 1
+  }
+}

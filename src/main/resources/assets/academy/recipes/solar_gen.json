@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    " B ",
+    "CDC"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:glass_pane"
+    },
+    "B": {
+      "item": "academy:imag_silicon_piece"
+    },
+    "C": {
+      "item": "academy:energy_convert_component"
+    },
+    "D": {
+      "item": "academy:machine_frame"
+    }
+  },
+  "result": {
+    "item": "academy:solar_gen",
+    "count": 1
+  }
+}
