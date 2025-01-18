@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "DEF",
+    "GHG"
+  ],
+  "key": {
+    "A": {
+      "item": "academy:data_chip"
+    },
+    "B": {
+      "item": "minecraft:glass_pane"
+    },
+    "C": {
+      "item": "academy:calc_chip"
+    },
+    "D": {
+      "item": "academy:brain_component"
+    },
+    "E": {
+      "item": "academy:info_component"
+    },
+    "F": {
+      "item": "academy:energy_convert_component"
+    },
+    "G": {
+      "item": "academy:constraint_plate"
+    },
+    "H": {
+      "item": "academy:crystal_low"
+    }
+  },
+  "result": {
+    "item": "academy:developer_portable",
+    "count": 1
+  }
+}
