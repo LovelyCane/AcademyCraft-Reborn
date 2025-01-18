@@ -69,7 +69,8 @@ public class AcademyCraftRegister {
     private static void registerEntity() {
         int num = 0;
         for (Class<? extends Entity> entity : AcademyCraftEntityList.ENTITY_LIST) {
-            EntityRegistry.registerModEntity(new ResourceLocation(Tags.MOD_ID, entity.getSimpleName().toLowerCase()), entity, entity.getSimpleName().toLowerCase(), num, AcademyCraft.instance, 32, 3, true);
+            String name = entity.getSimpleName().replace("Entity", "").replaceAll("([a-z])([A-Z])", "$1_$2").replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").toLowerCase();
+            EntityRegistry.registerModEntity(new ResourceLocation(Tags.MOD_ID, name), entity, entity.getSimpleName().toLowerCase(), num, AcademyCraft.instance, 32, 3, true);
             num++;
         }
     }

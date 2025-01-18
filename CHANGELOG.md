@@ -74,4 +74,5 @@
 - Remove Old Config System.
 - Remove DonatorList and AppAbout.
 - Remove MagManip.
-- Remove BodyIntensify.
+- Remove MineDetect.
+- Add VecReflection.

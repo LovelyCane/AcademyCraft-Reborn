@@ -67,7 +67,7 @@ public class AcademyCraft {
         }
     }
 
-    public static CreativeTabs cct = new CreativeTabs("AcademyCraft") {
+    public static final CreativeTabs CREATIVE_TABS = new CreativeTabs("AcademyCraft") {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(AcademyCraftItemList.LOGO);

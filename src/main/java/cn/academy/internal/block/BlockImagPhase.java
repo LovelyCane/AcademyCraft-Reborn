@@ -17,7 +17,7 @@ public class BlockImagPhase extends BlockFluidClassic implements ITileEntityProv
 
     public BlockImagPhase() {
         super(ACFluids.fluidImagProj, Material.WATER);
-        setCreativeTab(AcademyCraft.cct);
+        setCreativeTab(AcademyCraft.CREATIVE_TABS);
 
         this.setQuantaPerBlock(3);
         

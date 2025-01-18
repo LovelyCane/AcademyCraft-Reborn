@@ -74,7 +74,7 @@ public class BlockNode extends ACBlockContainer {
 
     public BlockNode(NodeType _type) {
         super(Material.ROCK, guiHandler);
-        setCreativeTab(AcademyCraft.cct);
+        setCreativeTab(AcademyCraft.CREATIVE_TABS);
         setHardness(2.5f);
         setHarvestLevel("pickaxe", 1);
 

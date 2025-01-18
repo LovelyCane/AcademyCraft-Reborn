@@ -18,7 +18,7 @@ public class BlockGenericOre extends BlockOre {
     public BlockGenericOre(float hardness, int harvestLevel) {
         setHardness(hardness);
         setHarvestLevel("pickaxe", harvestLevel);
-        setCreativeTab(AcademyCraft.cct);
+        setCreativeTab(AcademyCraft.CREATIVE_TABS);
     }
     
     public BlockGenericOre setDropData(Item item) {

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CatElectromaster extends Category {
-    public static final Skill arcGen = ArcGen.instance, magManip = MagManip.INSTANCE, mineDetect = MineDetect.INSTANCE, railgun = Railgun.INSTANCE, magMovement = MagMovement.INSTANCE, currentCharging = CurrentCharging.INSTANCE, bodyIntensify = BodyIntensifyJava.INSTANCE, thunderBolt = ThunderBolt.INSTANCE, thunderClap = ThunderClap.INSTANCE;
+    public static final Skill arcGen = ArcGen.instance,  railgun = Railgun.INSTANCE, magMovement = MagMovement.INSTANCE, currentCharging = CurrentCharging.INSTANCE, bodyIntensify = BodyIntensifyJava.INSTANCE, thunderBolt = ThunderBolt.INSTANCE, thunderClap = ThunderClap.INSTANCE;
 
     public CatElectromaster() {
         super("electromaster");
@@ -26,18 +26,14 @@ public class CatElectromaster extends Category {
         arcGen.setPosition(24, 46);
         currentCharging.setPosition(55, 18);
         bodyIntensify.setPosition(97, 15);
-        mineDetect.setPosition(225, 12);
         magMovement.setPosition(137, 35);
         thunderBolt.setPosition(86, 67);
         railgun.setPosition(164, 59);
         thunderClap.setPosition(204, 80);
-        magManip.setPosition(204, 33);
 
         addSkill(arcGen);
         addSkill(currentCharging);
         addSkill(magMovement);
-        addSkill(magManip);
-        addSkill(mineDetect);
         addSkill(bodyIntensify);
         addSkill(thunderBolt);
         addSkill(railgun);
@@ -48,14 +44,12 @@ public class CatElectromaster extends Category {
         currentCharging.setParent(arcGen, 0.3f);
         magMovement.setParent(arcGen);
         magMovement.addSkillDep(currentCharging, 0.7f);
-        magManip.setParent(magMovement, 0.5f);
         bodyIntensify.setParent(arcGen, 1f);
         bodyIntensify.addSkillDep(currentCharging, 1f);
-        mineDetect.setParent(magManip, 1f);
         thunderBolt.setParent(arcGen);
         thunderBolt.addSkillDep(currentCharging, 0.7f);
         railgun.setParent(thunderBolt, 0.3f);
-        railgun.addSkillDep(magManip, 1f);
+        railgun.addSkillDep(magMovement, 1f);
         thunderClap.setParent(thunderBolt, 1f);
     }
 
@@ -97,7 +91,7 @@ public class CatElectromaster extends Category {
     }
 
     public static boolean isMetalBlock(Block block) {
-        return metalBlocks.contains(block);
+        return !metalBlocks.contains(block);
     }
 
     public static boolean isEntityMetallic(Entity entity) {

@@ -41,7 +41,7 @@ public class ItemApp extends Item {
         _appName = name;
 
         items.put(_appName, this);
-        setCreativeTab(AcademyCraft.cct);
+        setCreativeTab(AcademyCraft.CREATIVE_TABS);
 
     }
 

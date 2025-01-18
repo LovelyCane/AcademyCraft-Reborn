@@ -30,7 +30,7 @@ public abstract class ACBlockContainer extends BlockContainer {
     public ACBlockContainer(Material mat, GuiHandlerBase _guiHandler) {
         super(mat);
         guiHandler = _guiHandler;
-        setCreativeTab(AcademyCraft.cct);
+        setCreativeTab(AcademyCraft.CREATIVE_TABS);
     }
 
     @Override

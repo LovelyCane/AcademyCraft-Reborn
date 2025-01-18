@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,10 +51,15 @@ public class RFSupport {
         return (int) (ifEnergy * CONV_RATE);
     }
 
-    @StateEventCallback
     @Optional.Method(modid = "redstoneflux")
-    private static void init(FMLPreInitializationEvent event) {
+    @StateEventCallback
+    public static void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(RFSupport.class);
+    }
+
+    @SubscribeEvent
+    @Optional.Method(modid = "redstoneflux")
+    public static void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
         EnergyBlockHelper.register(new RFProviderManager());
         EnergyBlockHelper.register(new RFReceiverManager());
 

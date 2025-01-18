@@ -57,94 +57,94 @@ public class AcademyCraftItemList {
     static {
         AcademyCraftItemList.APP_FREQ_TRANSMITTER.setRegistryName("academy:app_freq_transmitter");
         AcademyCraftItemList.APP_FREQ_TRANSMITTER.setTranslationKey("ac_apps");
-        AcademyCraftItemList.APP_FREQ_TRANSMITTER.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.APP_FREQ_TRANSMITTER.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.APP_FREQ_TRANSMITTER);
 
         AcademyCraftItemList.APP_MEDIA_PLAYER.setRegistryName("academy:app_media_player");
         AcademyCraftItemList.APP_MEDIA_PLAYER.setTranslationKey("ac_apps");
-        AcademyCraftItemList.APP_MEDIA_PLAYER.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.APP_MEDIA_PLAYER.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.APP_MEDIA_PLAYER);
 
         AcademyCraftItemList.APP_SKILL_TREE.setRegistryName("academy:app_skill_tree");
         AcademyCraftItemList.APP_SKILL_TREE.setTranslationKey("ac_apps");
-        AcademyCraftItemList.APP_SKILL_TREE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.APP_SKILL_TREE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.APP_SKILL_TREE);
 
         AcademyCraftItemList.BRAIN_COMPONENT.setRegistryName("academy:brain_component");
         AcademyCraftItemList.BRAIN_COMPONENT.setTranslationKey("ac_brain_component");
-        AcademyCraftItemList.BRAIN_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.BRAIN_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.BRAIN_COMPONENT);
 
         AcademyCraftItemList.CALC_CHIP.setRegistryName("academy:calc_chip");
         AcademyCraftItemList.CALC_CHIP.setTranslationKey("ac_calc_chip");
-        AcademyCraftItemList.CALC_CHIP.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.CALC_CHIP.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.CALC_CHIP);
 
         AcademyCraftItemList.COIN.setRegistryName("academy:coin");
         AcademyCraftItemList.COIN.setTranslationKey("ac_coin");
-        AcademyCraftItemList.COIN.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.COIN.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.COIN);
 
         AcademyCraftItemList.CONSTRAINT_INGOT.setRegistryName("academy:constraint_ingot");
         AcademyCraftItemList.CONSTRAINT_INGOT.setTranslationKey("ac_constraint_ingot");
-        AcademyCraftItemList.CONSTRAINT_INGOT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.CONSTRAINT_INGOT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.CONSTRAINT_INGOT);
 
         AcademyCraftItemList.CONSTRAINT_PLATE.setRegistryName("academy:constraint_plate");
         AcademyCraftItemList.CONSTRAINT_PLATE.setTranslationKey("ac_constraint_plate");
-        AcademyCraftItemList.CONSTRAINT_PLATE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.CONSTRAINT_PLATE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.CONSTRAINT_PLATE);
 
         AcademyCraftItemList.CRYSTAL_LOW.setRegistryName("academy:crystal_low");
         AcademyCraftItemList.CRYSTAL_LOW.setTranslationKey("ac_crystal_low");
-        AcademyCraftItemList.CRYSTAL_LOW.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.CRYSTAL_LOW.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.CRYSTAL_LOW);
 
         AcademyCraftItemList.CRYSTAL_NORMAL.setRegistryName("academy:crystal_normal");
         AcademyCraftItemList.CRYSTAL_NORMAL.setTranslationKey("ac_crystal_normal");
-        AcademyCraftItemList.CRYSTAL_NORMAL.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.CRYSTAL_NORMAL.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.CRYSTAL_NORMAL);
 
         AcademyCraftItemList.CRYSTAL_PURE.setRegistryName("academy:crystal_pure");
         AcademyCraftItemList.CRYSTAL_PURE.setTranslationKey("ac_crystal_pure");
-        AcademyCraftItemList.CRYSTAL_PURE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.CRYSTAL_PURE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.CRYSTAL_PURE);
 
         AcademyCraftItemList.DATA_CHIP.setRegistryName("academy:data_chip");
         AcademyCraftItemList.DATA_CHIP.setTranslationKey("ac_data_chip");
-        AcademyCraftItemList.DATA_CHIP.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.DATA_CHIP.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.DATA_CHIP);
 
         AcademyCraftItemList.DEVELOPER_PORTABLE.setRegistryName("academy:developer_portable");
         AcademyCraftItemList.DEVELOPER_PORTABLE.setTranslationKey("ac_developer_portable");
-        AcademyCraftItemList.DEVELOPER_PORTABLE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.DEVELOPER_PORTABLE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.DEVELOPER_PORTABLE);
         AcademyCraftItemList.DEVELOPER_PORTABLE.afterRegistry();
 
         AcademyCraftItemList.ENERGY_CONVERT_COMPONENT.setRegistryName("academy:energy_convert_component");
         AcademyCraftItemList.ENERGY_CONVERT_COMPONENT.setTranslationKey("ac_energy_convert_component");
-        AcademyCraftItemList.ENERGY_CONVERT_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.ENERGY_CONVERT_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.ENERGY_CONVERT_COMPONENT);
 
         AcademyCraftItemList.ENERGY_UNIT.setRegistryName("academy:energy_unit");
         AcademyCraftItemList.ENERGY_UNIT.setTranslationKey("ac_energy_unit");
         AcademyCraftItemList.ENERGY_UNIT.setNoRepair();
-        AcademyCraftItemList.ENERGY_UNIT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.ENERGY_UNIT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.ENERGY_UNIT);
 
         AcademyCraftItemList.IMAG_SILICON_INGOT.setRegistryName("academy:imag_silicon_ingot");
         AcademyCraftItemList.IMAG_SILICON_INGOT.setTranslationKey("ac_imag_silicon_ingot");
-        AcademyCraftItemList.IMAG_SILICON_INGOT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.IMAG_SILICON_INGOT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.IMAG_SILICON_INGOT);
 
         AcademyCraftItemList.IMAG_SILICON_PIECE.setRegistryName("academy:imag_silicon_piece");
         AcademyCraftItemList.IMAG_SILICON_PIECE.setTranslationKey("ac_imag_silicon_piece");
-        AcademyCraftItemList.IMAG_SILICON_PIECE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.IMAG_SILICON_PIECE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.IMAG_SILICON_PIECE);
 
         AcademyCraftItemList.INFO_COMPONENT.setRegistryName("academy:info_component");
         AcademyCraftItemList.INFO_COMPONENT.setTranslationKey("ac_info_component");
-        AcademyCraftItemList.INFO_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.INFO_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.INFO_COMPONENT);
 
         AcademyCraftItemList.LOGO.setRegistryName("academy:logo");
@@ -153,59 +153,59 @@ public class AcademyCraftItemList {
 
         AcademyCraftItemList.MAG_HOOK.setRegistryName("academy:mag_hook");
         AcademyCraftItemList.MAG_HOOK.setTranslationKey("ac_mag_hook");
-        AcademyCraftItemList.MAG_HOOK.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.MAG_HOOK.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.MAG_HOOK);
         AcademyCraftItemList.MAG_HOOK.afterRegistry();
 
         AcademyCraftItemList.MAGNETIC_COIL.setRegistryName("academy:magnetic_coil");
         AcademyCraftItemList.MAGNETIC_COIL.setTranslationKey("ac_magnetic_coil");
-        AcademyCraftItemList.MAGNETIC_COIL.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.MAGNETIC_COIL.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.MAGNETIC_COIL);
 
         AcademyCraftItemList.EMPTY_MATTER_UNIT.setRegistryName("academy:empty_matter_unit");
         AcademyCraftItemList.EMPTY_MATTER_UNIT.setTranslationKey("ac_empty_matter_unit");
-        AcademyCraftItemList.EMPTY_MATTER_UNIT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.EMPTY_MATTER_UNIT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.EMPTY_MATTER_UNIT);
 
         AcademyCraftItemList.MATTER_UNIT_PHASE_LIQUID.setRegistryName("academy:matter_unit_phase_liquid");
         AcademyCraftItemList.MATTER_UNIT_PHASE_LIQUID.setTranslationKey("ac_matter_unit_phase_liquid");
-        AcademyCraftItemList.MATTER_UNIT_PHASE_LIQUID.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.MATTER_UNIT_PHASE_LIQUID.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.MATTER_UNIT_PHASE_LIQUID);
 
         AcademyCraftItemList.NEEDLE.setRegistryName("academy:needle");
         AcademyCraftItemList.NEEDLE.setTranslationKey("ac_needle");
-        AcademyCraftItemList.NEEDLE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.NEEDLE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.NEEDLE);
 
         AcademyCraftItemList.REINFORCED_IRON_PLATE.setRegistryName("academy:reinforced_iron_plate");
         AcademyCraftItemList.REINFORCED_IRON_PLATE.setTranslationKey("ac_reinforced_iron_plate");
-        AcademyCraftItemList.REINFORCED_IRON_PLATE.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.REINFORCED_IRON_PLATE.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.REINFORCED_IRON_PLATE);
 
         AcademyCraftItemList.RESO_CRYSTAL.setRegistryName("academy:reso_crystal");
         AcademyCraftItemList.RESO_CRYSTAL.setTranslationKey("ac_reso_crystal");
-        AcademyCraftItemList.RESO_CRYSTAL.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.RESO_CRYSTAL.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.RESO_CRYSTAL);
 
         AcademyCraftItemList.RESONANCE_COMPONENT.setRegistryName("academy:resonance_component");
         AcademyCraftItemList.RESONANCE_COMPONENT.setTranslationKey("ac_resonance_component");
-        AcademyCraftItemList.RESONANCE_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.RESONANCE_COMPONENT.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.RESONANCE_COMPONENT);
 
         AcademyCraftItemList.SILBARN.setRegistryName("academy:silbarn");
         AcademyCraftItemList.SILBARN.setTranslationKey("ac_silbarn");
-        AcademyCraftItemList.SILBARN.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.SILBARN.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.SILBARN);
         AcademyCraftItemList.SILBARN.afterRegistry();
 
         AcademyCraftItemList.TERMINAL_INSTALLER.setRegistryName("academy:terminal_installer");
         AcademyCraftItemList.TERMINAL_INSTALLER.setTranslationKey("ac_terminal_installer");
-        AcademyCraftItemList.TERMINAL_INSTALLER.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.TERMINAL_INSTALLER.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.TERMINAL_INSTALLER);
 
         AcademyCraftItemList.WAFER.setRegistryName("academy:wafer");
         AcademyCraftItemList.WAFER.setTranslationKey("ac_wafer");
-        AcademyCraftItemList.WAFER.setCreativeTab(cn.academy.AcademyCraft.cct);
+        AcademyCraftItemList.WAFER.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
         ITEM_LIST.add(AcademyCraftItemList.WAFER);
 
         AcademyCraftItemList.ITEM_CAT_ENGINE.setRegistryName("academy:cat_engine");

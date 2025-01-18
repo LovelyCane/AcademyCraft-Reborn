@@ -11,7 +11,6 @@ public class AcademyCraftEntityList {
 
     static {
         ENTITY_LIST.add(EntityMagHook.class);
-        ENTITY_LIST.add(MagManipEntityBlock.class);
         ENTITY_LIST.add(EntityMdBall.class);
         ENTITY_LIST.add(EntityBlock.class);
         ENTITY_LIST.add(EntitySilbarn.class);

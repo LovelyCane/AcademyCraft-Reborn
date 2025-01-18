@@ -20,15 +20,15 @@ public class MagMovement extends Skill {
 
     public static int getMaxDistance(AbilityData data) {
         // maybe? it's need to verify in anime,manga and novel.
-        return (int) (data.getLevel() * 5 + data.getSkillExp(MagMovement.INSTANCE) * 10);
+        return (int) (data.getLevel() * 20 + data.getSkillExp(MagMovement.INSTANCE) * 10);
     }
 
     public static Target toTarget(AbilityData aData, World world, RayTraceResult pos) {
         if (pos.typeOfHit == RayTraceResult.Type.BLOCK) {
-            if (aData.getSkillExp(MagMovement.INSTANCE) < 0.6f && !CatElectromaster.isMetalBlock(world.getBlockState(pos.getBlockPos()).getBlock())) {
+            if (aData.getSkillExp(MagMovement.INSTANCE) < 0.6f && CatElectromaster.isMetalBlock(world.getBlockState(pos.getBlockPos()).getBlock())) {
                 return null;
             }
-            if (!CatElectromaster.isMetalBlock(world.getBlockState(pos.getBlockPos()).getBlock())) {
+            if (CatElectromaster.isMetalBlock(world.getBlockState(pos.getBlockPos()).getBlock())) {
                 return null;
             }
             return new PointTarget(pos.hitVec.x, pos.hitVec.y, pos.hitVec.z);

@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -279,12 +280,14 @@ public class AcademyCraftConfig {
 
     private static AcademyCraftConfig getDefaultConfig() {
         AcademyCraftConfig defaultConfig = new AcademyCraftConfig();
-        AcademyCraftConfig.Ability ability = new AcademyCraftConfig.Ability();
-        AcademyCraftConfig.Generic generic = new AcademyCraftConfig.Generic();
+        AcademyCraftConfig.Ability ability = defaultConfig.getAbility();
+        AcademyCraftConfig.Generic generic = defaultConfig.getGeneric();
         Map<String, Node> gui = defaultConfig.getGui();
         Map<String, Integer> key = new HashMap<>();
+        Map<String, List<String>> metalBlocks = ability.getMetalBlocks();
+        Map<String, List<String>> metalEntities = ability.getMetalEntities();
 
-        ability.cpRecoverSpeed = 1.0f;
+        ability.cpRecoverSpeed = 0.0003f;
         Skill railGun = new Skill();
         railGun.getBooleanMap().put("enabled", true);
         railGun.getBooleanMap().put("destroyBlock", true);
@@ -292,6 +295,24 @@ public class AcademyCraftConfig {
         railGun.getFloatMap().put("cpConsumeSpeed", 1.0f);
         railGun.getFloatMap().put("overloadConsumeSpeed", 1.0f);
         railGun.getFloatMap().put("exp_incr_speed", 1.0f);
+
+        List<String> minecraftMetalBlocks = new ArrayList<>();
+        minecraftMetalBlocks.add("iron_block");
+        minecraftMetalBlocks.add("iron_bars");
+        minecraftMetalBlocks.add("iron_trapdoor");
+        minecraftMetalBlocks.add("gold_block");
+        List<String> academyMetalBlocks = new ArrayList<>();
+        academyMetalBlocks.add("machine_frame");
+        metalBlocks.put("minecraft", minecraftMetalBlocks);
+        metalBlocks.put("academy", academyMetalBlocks);
+
+        List<String> minecraftMetalEntities = new ArrayList<>();
+        minecraftMetalEntities.add("villager_golem");
+        List<String> academyMetalEntities = new ArrayList<>();
+        academyMetalEntities.add("mag_hook");
+        metalEntities.put("minecraft", minecraftMetalEntities);
+        metalEntities.put("academy", academyMetalEntities);
+
         ability.getSkills().put("railgun", railGun);
         generic.attackPlayer = true;
         generic.destroyBlocks = true;

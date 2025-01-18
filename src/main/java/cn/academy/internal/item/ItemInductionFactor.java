@@ -45,7 +45,7 @@ public class ItemInductionFactor extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (tab == AcademyCraft.cct) {
+        if (tab == AcademyCraft.CREATIVE_TABS) {
             for (Category c : CategoryManager.INSTANCE.getCategories()) {
                 items.add(create(c));
             }

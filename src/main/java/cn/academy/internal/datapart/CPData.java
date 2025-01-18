@@ -1,5 +1,6 @@
 package cn.academy.internal.datapart;
 
+import cn.academy.AcademyCraft;
 import cn.academy.internal.event.ability.*;
 import cn.academy.internal.event.ability.CalcEvent.CPRecoverSpeed;
 import cn.academy.internal.event.ability.CalcEvent.OverloadRecoverSpeed;
@@ -324,7 +325,7 @@ public class CPData extends DataPart<EntityPlayer> {
     }
 
     private float getCPRecoverSpeed() {
-        float raw = 0.0003f * maxCP * MathUtils.lerpf(1, 2, curCP / maxCP);
+        float raw = AcademyCraft.academyCraftConfig.getAbility().getCpRecoverSpeed() * maxCP * MathUtils.lerpf(1, 2, curCP / maxCP);
 
         return CalcEvent.calc(new CPRecoverSpeed(getEntity(), 1)) * raw;
     }
