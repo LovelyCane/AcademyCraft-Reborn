@@ -28,6 +28,8 @@ Please try to keep the latest version as much as possible.
 
 The repository includes a music pack ( AcademyMusicPack.zip ). Extract it into the resourcepacks folder ( must be extracted; the path to pack.mcmeta should approximately be resourcepacks/AcademyMusicPack/pack.mcmeta ). The folder name must remain unchanged.
 
+You can download the last version in Github Action.
+
 # 致玩家
 
 1.1.8的pre版本会持续很长时间。
@@ -37,6 +39,8 @@ The repository includes a music pack ( AcademyMusicPack.zip ). Extract it into t
 请尽量保持mod版本为最新版。
 
 仓库内有音乐包( AcademyMusicPack.zip ),解压到 resourcepacks 文件夹即可(必须为解压, pack.mcmeta 文件的路径大致为 resourcepacks/AcademyMusicPack/pack.mcmeta 文件夹名称不可变)
+
+你可以在 Github Action 下载到最新构建版.
 
 # Development
 
