@@ -3,7 +3,10 @@ package cn.academy.internal.client.renderer.entity;
 import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderEntityBarrageRayPre extends RenderRayComposite {
     public RenderEntityBarrageRayPre(RenderManager manager) {
         super(manager, "mdray_small");

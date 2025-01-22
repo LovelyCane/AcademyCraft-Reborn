@@ -6,14 +6,11 @@ import cn.lambdalib2.render.legacy.LegacyMeshUtils;
 import cn.lambdalib2.render.legacy.ShaderSimple;
 import cn.lambdalib2.renderhook.PlayerRenderHook;
 import cn.lambdalib2.util.RenderUtils;
-/*
-import cn.lambdalib2.util.renderhook.PlayerRenderHook;
-import cn.lambdalib2.util.shader.GLSLMesh;
-import cn.lambdalib2.util.shader.ShaderSimple;
-import cn.lambdalib2.util.deprecated.LegacyMeshUtils;*/
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL20;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -21,14 +18,14 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class RailgunHandEffect extends PlayerRenderHook {
-
     static final double PER_FRAME = 40 / 1000.0;
     static final int COUNT = 40;
 
     ResourceLocation[] textures;
     GLSLMesh mesh;
-    
+
     public RailgunHandEffect() {
         textures = Resources.getEffectSeq("arc_burst", COUNT);
         mesh = new GLSLMesh();
@@ -38,13 +35,13 @@ public class RailgunHandEffect extends PlayerRenderHook {
     @Override
     public void renderHand(boolean firstPerson) {
         double dt = getElapsedTime();
-        if(dt >= PER_FRAME * COUNT) {
+        if (dt >= PER_FRAME * COUNT) {
             dispose();
             return;
         }
-        
+
         int frame = (int) (dt / PER_FRAME);
-        
+
         glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, 0.0f);
         glDisable(GL_CULL_FACE);
@@ -53,7 +50,7 @@ public class RailgunHandEffect extends PlayerRenderHook {
         ShaderSimple.instance().useProgram();
         glPushMatrix();
         EntityPlayer player = Minecraft.getMinecraft().player;
-        if(firstPerson) {
+        if (firstPerson) {
             double pitchRad = Math.toRadians(player.rotationPitch);
             double eyeHeight = player.getEyeHeight();
             glTranslated(0, Math.cos(pitchRad) * eyeHeight, Math.sin(pitchRad) * eyeHeight);
@@ -70,5 +67,4 @@ public class RailgunHandEffect extends PlayerRenderHook {
         glAlphaFunc(GL_GEQUAL, 0.1f);
         glEnable(GL_CULL_FACE);
     }
-    
 }

@@ -1,6 +1,8 @@
 package cn.academy.internal.client.renderer.util;
 
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -9,17 +11,8 @@ import java.util.Random;
  * It is guaranteed that every point has the same appearing probablity.
  * @author WeathFolD
  */
+@SideOnly(Side.CLIENT)
 public class CubePointFactory implements IPointFactory {
-    
-    /*
-     * Face id: 
-     * 0 -Y
-     * 1 +Y
-     * 2 -Z
-     * 3 +Z
-     * 4 -X
-     * 5 +X
-     */
     private double w, h, l;
     private static final Random RNG = new Random();
     boolean centered;
@@ -38,17 +31,7 @@ public class CubePointFactory implements IPointFactory {
         h = _h;
         l = _l;
     }
-    
-    private double getArea(int f) {
-        if(f == 0 || f == 1) {
-            return w * l;
-        }
-        if(f == 2 || f == 3) {
-            return h * l;
-        }
-        return h * w;
-    }
-    
+
     private int randFace() {
         return RNG.nextInt(6);
     }
@@ -81,5 +64,4 @@ public class CubePointFactory implements IPointFactory {
         }
         return null; //Not supposed to happen
     }
-
 }

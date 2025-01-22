@@ -8,7 +8,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class SkillDamageSource extends EntityDamageSource {
-
     public final Skill skill;
 
     public SkillDamageSource(EntityPlayer player, Skill skill) {
@@ -19,10 +18,6 @@ public class SkillDamageSource extends EntityDamageSource {
     // Chat display
     @Override
     public ITextComponent getDeathMessage(EntityLivingBase target) {
-        return new TextComponentTranslation("death.attack.ac_skill",
-                target.getName(),
-                this.damageSourceEntity.getName(),
-                skill.getDisplayName());
+        return new TextComponentTranslation("death.attack.ac_skill", target.getName(), this.damageSourceEntity.getName(), skill.getDisplayName());
     }
-
 }

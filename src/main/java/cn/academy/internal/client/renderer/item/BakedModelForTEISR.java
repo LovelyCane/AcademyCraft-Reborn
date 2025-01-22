@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -19,14 +21,15 @@ import java.util.List;
 
 /**
  * A BakedModel that renders nothing, to facilitate rendering of {@link net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer}.
- * See: https://mcforge.readthedocs.io/en/latest/rendering/teisr/
+ * See: <a href="https://mcforge.readthedocs.io/en/latest/rendering/teisr/">...</a>
  */
+@SideOnly(Side.CLIENT)
 public class BakedModelForTEISR implements IBakedModel {
-    private ResourceLocation _location;
-    private Matrix4f[] _transformMapping = new Matrix4f[TransformType.values().length];
-    private IBakedModel[] _modelMapping = new IBakedModel[TransformType.values().length];
+    private final ResourceLocation _location;
+    private final Matrix4f[] _transformMapping = new Matrix4f[TransformType.values().length];
+    private final IBakedModel[] _modelMapping = new IBakedModel[TransformType.values().length];
 
-    private Matrix4f _identityMatrix = new Matrix4f();
+    private final Matrix4f _identityMatrix = new Matrix4f();
 
     public Runnable fiddleRuntime;
 

@@ -4,10 +4,13 @@ import cn.academy.internal.entity.EntitySurroundArc;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class RenderEntitySurroundArc extends Render<EntitySurroundArc> {
     public RenderEntitySurroundArc(RenderManager renderManager) {
         super(renderManager);

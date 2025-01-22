@@ -4,10 +4,13 @@ import cn.academy.Resources;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.particle.ParticleFactory;
 import cn.lambdalib2.util.RandUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class MdParticleFactory extends ParticleFactory {
     static Particle template = new Particle();
 

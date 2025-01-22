@@ -9,12 +9,15 @@ import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@SideOnly(Side.CLIENT)
 public class RenderBloodSprayEffect extends Render<BloodSprayEffect> {
     private final List<ResourceLocation> texGrnd;
     private final List<ResourceLocation> texWall;

@@ -10,16 +10,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
- * Spawn a position mark indicating where the player would be teleport to. You
+ * Spawn a position mark indicating where the player would be teleported to. You
  * should spawn it in CLIENT ONLY.
  * 
  * @author WeathFolD
  */
 @SideOnly(Side.CLIENT)
 public class EntityTPMarking extends EntityAdvanced {
-
-//    static TPParticleFactory particleFac = TPParticleFactory.instance;
-
     final AbilityData data;
     protected final EntityPlayer player;
 
@@ -30,11 +27,6 @@ public class EntityTPMarking extends EntityAdvanced {
         data = AbilityData.get(player);
         this.player = player;
         setPosition(player.posX, player.posY, player.posZ);
-    }
-
-    @Override
-    protected void entityInit() {
-
     }
 
     @Override

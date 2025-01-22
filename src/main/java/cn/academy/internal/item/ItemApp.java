@@ -26,12 +26,7 @@ import java.util.Map;
  * @author WeAthFolD
  */
 public class ItemApp extends Item {
-    
     private static final Map<String, ItemApp> items = new HashMap<>();
-
-    public static ItemApp getItemForApp(App app) {
-        return items.get(app.getName());
-    }
 
     private final String _appName;
     
@@ -81,5 +76,4 @@ public class ItemApp extends Item {
     public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
         list.add(getApp().getDisplayName());
     }
-    
 }

@@ -12,7 +12,6 @@ import java.util.function.Function;
  *
  * @see RegClientContext
  */
-
 @SideOnly(Side.CLIENT)
 public class ClientContext extends Context {
     // RegClientContext support

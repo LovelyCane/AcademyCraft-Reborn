@@ -8,8 +8,11 @@ import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.ViewOptimize;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class RenderEntityRailgunFX extends RenderRayComposite {
     ArcFactory.Arc[] arcs;
     static final int ARC_SIZE = 15;

@@ -3,17 +3,20 @@ package cn.academy.internal.client.renderer.util;
 import cn.lambdalib2.util.HudUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SubArcHandler2D {
 
+@SideOnly(Side.CLIENT)
+public class SubArcHandler2D {
     public final ResourceLocation[] arcs;
     
-    List<SubArc2D> list = new LinkedList();
+    List<SubArc2D> list = new LinkedList<>();
     
     public double frameRate = 1.0, switchRate = 1.0;
     
@@ -79,5 +82,4 @@ public class SubArcHandler2D {
         GL11.glPopMatrix();
         GL11.glDepthMask(true);
     }
-
 }

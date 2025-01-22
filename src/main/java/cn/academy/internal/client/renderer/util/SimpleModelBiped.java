@@ -1,13 +1,15 @@
 package cn.academy.internal.client.renderer.util;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author WeathFolD
  *
  */
+@SideOnly(Side.CLIENT)
 public class SimpleModelBiped extends ModelBiped {
-
     public SimpleModelBiped() {
         super(0.0f);
     }
@@ -22,5 +24,4 @@ public class SimpleModelBiped extends ModelBiped {
         this.bipedLeftLeg.render(par7);
         this.bipedHeadwear.render(par7);
     }
-
 }

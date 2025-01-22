@@ -105,7 +105,7 @@ public class ChargingContextC extends ClientContext {
             z = mo.z;
         }
         if (arc != null) {
-            arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, x, y, z);
+            arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(), player.posZ, x, y, z);
         }
 
         if (surround != null) {

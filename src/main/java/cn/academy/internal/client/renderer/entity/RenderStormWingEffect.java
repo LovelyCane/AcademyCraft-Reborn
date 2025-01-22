@@ -6,8 +6,11 @@ import cn.academy.internal.ability.vanilla.vecmanip.client.effect.TornadoRendere
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class RenderStormWingEffect extends Render<StormWingEffect> {
     public RenderStormWingEffect(RenderManager manager) {
         super(manager);

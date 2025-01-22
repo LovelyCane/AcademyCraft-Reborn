@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -17,6 +19,7 @@ import org.lwjgl.opengl.GL20;
  * @author WeathFolD
  *
  */
+@SideOnly(Side.CLIENT)
 public class RenderEntityMarker extends Render<EntityMarker> {
     static final Tessellator t = Tessellator.instance;
     final double[][] mulArray = { { 0, 0, 0 }, { 1, 0, 0 }, { 1, 0, 1 }, { 0, 0, 1 }, { 0, 1, 0 }, { 1, 1, 0 },

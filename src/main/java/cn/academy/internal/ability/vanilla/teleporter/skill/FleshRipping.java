@@ -201,7 +201,7 @@ public class FleshRipping extends Skill
                 for(int i= 0,max = RandUtils.rangei(4, 6);i<max;i++) {
                     double y = e.posY + RandUtils.ranged(0, 1) * e.height;
                     if(e instanceof EntityPlayer )
-                        y += ACRenderingHelper.getHeightFix((EntityPlayer) e);
+                        y += ACRenderingHelper.getHeightFix();
                     double theta = RandUtils.ranged(0, Math.PI * 2);
                     double r = 0.5 * RandUtils.ranged(0.8 * e.width, e.width);
                     EntityBloodSplash splash = new EntityBloodSplash(player.world);

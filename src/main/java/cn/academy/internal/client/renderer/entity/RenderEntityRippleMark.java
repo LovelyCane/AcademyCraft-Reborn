@@ -10,12 +10,15 @@ import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class RenderEntityRippleMark extends Render<EntityRippleMark> {
     final double CYCLE = 3.6;
     final double timeOffsets[] = { 0, -1.2, -2.4};

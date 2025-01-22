@@ -7,11 +7,14 @@ import cn.lambdalib2.util.MathUtils;
 import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class TilePhaseGenRenderer extends TileEntitySpecialRenderer<TilePhaseGen> {
     ObjLegacyRender model;
     ResourceLocation[] textures;
@@ -32,5 +35,4 @@ public class TilePhaseGenRenderer extends TileEntitySpecialRenderer<TilePhaseGen
         model.renderAll();
         GL11.glPopMatrix();
     }
-
 }

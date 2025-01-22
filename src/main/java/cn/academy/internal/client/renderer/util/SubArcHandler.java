@@ -12,16 +12,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Create one for each entity that you wanna use to draw subArc. Provide the template pre-generated and
+ * Create one for each entity that you want to use to draw subArc. Provide the template pre-generated and
  * this class handles everything else.
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
 public class SubArcHandler {
-
     public final Arc[] arcs;
     
-    List<SubArc> list = new LinkedList();
+    List<SubArc> list = new LinkedList<>();
     
     public double frameRate = 1.0, switchRate = 1.0;
     

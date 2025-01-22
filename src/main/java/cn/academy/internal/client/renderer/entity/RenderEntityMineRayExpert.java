@@ -4,7 +4,10 @@ import cn.academy.internal.client.renderer.entity.ray.RenderRayComposite;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderEntityMineRayExpert extends RenderRayComposite {
     public RenderEntityMineRayExpert(RenderManager manager) {
         super(manager, "mdray_expert");

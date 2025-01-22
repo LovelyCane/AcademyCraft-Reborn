@@ -10,9 +10,12 @@ import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Color;
 
+@SideOnly(Side.CLIENT)
 public class RenderHandlerEntity extends Render<HandlerEntity> {
     private final ResourceLocation texture = Resources.getTexture("effects/mineview");
     private final LegacyMesh mesh = LegacyMeshUtils.createBoxWithUV(null, 0.05, 0.05, 0.05, 0.9, 0.9, 0.9);

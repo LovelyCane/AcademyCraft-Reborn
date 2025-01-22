@@ -8,11 +8,15 @@ import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.animation.FastTESR;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author WeAthFolD
  */
+
+@SideOnly(Side.CLIENT)
 public class TileCatEngineRenderer extends FastTESR<TileCatEngine> {
     static final ResourceLocation TEXTURE = Resources.getTexture("blocks/cat_engine");
 

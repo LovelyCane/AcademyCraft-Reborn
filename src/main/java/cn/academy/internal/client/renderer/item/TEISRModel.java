@@ -5,14 +5,16 @@ import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
 import java.nio.FloatBuffer;
 
+@SideOnly(Side.CLIENT)
 public class TEISRModel extends TileEntityItemStackRenderer {
-
     private final ObjLegacyRender _render;
     private final FloatBuffer _mat;
     private final ResourceLocation _tex;
@@ -33,5 +35,4 @@ public class TEISRModel extends TileEntityItemStackRenderer {
         _render.renderAll();
         GL11.glPopMatrix();
     }
-
 }

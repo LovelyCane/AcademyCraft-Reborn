@@ -3,7 +3,10 @@ package cn.academy.internal.client.renderer.entity;
 import cn.academy.internal.entity.EntityMdRayBarrage;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderEntityMdRayBarrage extends RenderEntityMdRaySmall {
     public RenderEntityMdRayBarrage(RenderManager manager) {
         super(manager);

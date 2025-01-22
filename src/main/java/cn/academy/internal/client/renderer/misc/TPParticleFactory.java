@@ -13,12 +13,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class TPParticleFactory extends ParticleFactory {
     public static TPParticleFactory instance;
 
     static Particle template;
 
-    @SideOnly(Side.CLIENT)
     @StateEventCallback(priority = -100)
     private static void postInit(FMLPostInitializationEvent ev) {
         template = new Particle();

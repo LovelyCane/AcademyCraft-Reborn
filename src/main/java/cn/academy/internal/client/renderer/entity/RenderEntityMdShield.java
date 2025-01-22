@@ -11,12 +11,15 @@ import cn.lambdalib2.util.RenderUtils;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class RenderEntityMdShield extends Render<EntityMdShield> {
     GLSLMesh mesh;
     ResourceLocation texture;

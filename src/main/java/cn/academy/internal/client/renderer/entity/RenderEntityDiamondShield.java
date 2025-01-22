@@ -7,12 +7,15 @@ import cn.lambdalib2.render.legacy.SimpleMaterial;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class RenderEntityDiamondShield extends Render<EntityDiamondShield> {
     LegacyMesh mesh;
     SimpleMaterial material;

@@ -17,6 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +27,7 @@ import java.lang.reflect.Method;
 /**
  * @author WeAthFolD
  */
+@SideOnly(Side.CLIENT)
 public class TileImagPhaseRenderer extends TileEntitySpecialRenderer<TileImagPhase> {
     private final ResourceLocation[] layers;
 

@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,6 @@ import static cn.lambdalib2.util.VecUtils.*;
  */
 @SideOnly(Side.CLIENT)
 public class ArcFactory {
-
     static final ResourceLocation TEXTURE = new ResourceLocation("academy:textures/effects/arc/line_segment.png");
 
     static Random rand = new Random();
@@ -44,8 +42,8 @@ public class ArcFactory {
     public Vec3d normal = new Vec3d(0, 0, 1);
 
     //States only used when generating
-    List<List<Segment>> listAll = new ArrayList();
-    List<List<Segment>> bufferAll = new ArrayList();
+    List<List<Segment>> listAll = new ArrayList<>();
+    List<List<Segment>> bufferAll = new ArrayList<>();
 
     /**
      * Handle a single list for 1 pass.
@@ -66,26 +64,23 @@ public class ArcFactory {
             z += off * cos;
             ave.pt = new Vec3d(x, y, z);
 
-            Segment s1 = s, s2 = new Segment(ave, s.end, s.alpha);
-            s1.end = ave;
-            buffer.add(s1);
+            Segment s2 = new Segment(ave, s.end, s.alpha);
+            s.end = ave;
+            buffer.add(s);
             buffer.add(s2);
 
             // Branching with probability
             if (rand.nextDouble() < branchFactor) {
                 matrix.setIdentity();
-                Vector3f v3f;
                 Vec3d dir = multiply(subtract(ave.pt, s.start.pt), lengthShrink);
                 dir = randomRotate(10, dir);
-                //matrix.rotate(GenericUtils.randIntv(-50, 50) / 180 * (float)Math.PI, asV3f(random()));
-                //dir = applyMatrix(matrix, dir);
 
                 double w2 = ave.width * widthShrink;
                 Point p1 = new Point(ave.pt, w2), p2 = new Point(add(ave.pt, dir), w2);
-                List<Segment> toAdd = new ArrayList();
+                List<Segment> toAdd = new ArrayList<>();
                 toAdd.add(new Segment(p1, p2, s.alpha * alphaShrink));
                 bufferAll.add(toAdd);
-                listAll.add(new ArrayList());
+                listAll.add(new ArrayList<>());
             }
         }
     }
@@ -105,10 +100,10 @@ public class ArcFactory {
         bufferAll.clear();
 
         Vec3d v0 = new Vec3d(0, 0, 0), v1 = new Vec3d(length, 0, 0);
-        List<Segment> init = new ArrayList();
+        List<Segment> init = new ArrayList<>();
         init.add(new Segment(new Point(v0, width), new Point(v1, width), 1.0));
         listAll.add(init);
-        bufferAll.add(new ArrayList());
+        bufferAll.add(new ArrayList<>());
 
         boolean flip = false;
         double offset = maxOffset;
@@ -140,7 +135,7 @@ public class ArcFactory {
         return ret;
     }
 
-    class Point {
+    static class Point {
         Vec3d pt;
         double width;
 
@@ -155,7 +150,7 @@ public class ArcFactory {
         return new Point(v, (pa.width + pb.width) / 2);
     }
 
-    class Segment {
+    static class Segment {
         Point start, end;
         double alpha;
 
@@ -176,7 +171,7 @@ public class ArcFactory {
         public final double length;
 
         public Arc(List<List<Segment>> list, Vec3d _normal, double len) {
-            segmentList = new ArrayList(list);
+            segmentList = new ArrayList<>(list);
             normal = _normal;
 
             buildList();
@@ -256,9 +251,7 @@ public class ArcFactory {
         }
 
         private void addVert(Vec3d vec, double u, double v) {
-            GL11.glTexCoord2d(u, v);
-            GL11.glVertex3d(vec.x, vec.y, vec.z);
+            RenderUtils.addVertexLegacy(vec, u, v);
         }
     }
-
 }

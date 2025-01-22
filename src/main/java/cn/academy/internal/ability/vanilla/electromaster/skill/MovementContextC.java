@@ -46,7 +46,7 @@ public class MovementContextC extends ClientContext {
 
     @Listener(channel = MSG_EFFECT_UPDATE, side = Side.CLIENT)
     private void c_updateEffect(Vec3d target) {
-        arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ, target.x, target.y, target.z);
+        arc.setFromTo(player.posX, player.posY + ACRenderingHelper.getHeightFix(), player.posZ, target.x, target.y, target.z);
     }
 
     @Listener(channel = AbilityAPIExt.MSG_TERMINATED, side = Side.CLIENT)

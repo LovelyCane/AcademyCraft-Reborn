@@ -5,10 +5,8 @@ import cn.lambdalib2.vis.animation.presets.CompTransformAnim;
 import cn.lambdalib2.vis.curve.CubicCurve;
 import cn.lambdalib2.vis.curve.IFittedCurve;
 
-public class AnimPresets
-{
-    public static CompTransformAnim createPrepareAnim()
-    {
+public class AnimPresets {
+    public static CompTransformAnim createPrepareAnim() {
         CompTransformAnim anim = new CompTransformAnim(new CompTransform());
 
         anim.animTransform.cy = new CubicCurve();
@@ -32,12 +30,10 @@ public class AnimPresets
         curverx.addPoint(0, 0);
         curverx.addPoint(1, -20);
 
-        // anim.animRotation.cx.addPoint(0)
         return anim;
     }
 
-    public static CompTransformAnim createPunchAnim()
-    {
+    public static CompTransformAnim createPunchAnim() {
         CompTransformAnim anim = new CompTransformAnim(new CompTransform());
 
         anim.animTransform.cy = new CubicCurve();
@@ -46,7 +42,7 @@ public class AnimPresets
         curvey.addPoint(0.5, 0.75);
         curvey.addPoint(1, 0);
 
-        anim.animTransform.cx  = new CubicCurve();
+        anim.animTransform.cx = new CubicCurve();
         IFittedCurve curvex = anim.animTransform.cx;
         curvex.addPoint(0, -0.04);
         curvex.addPoint(0.5, -0.04);
@@ -71,5 +67,5 @@ public class AnimPresets
         curvery.addPoint(1, 0);
 
         return anim;
-}
+    }
 }

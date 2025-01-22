@@ -31,7 +31,7 @@ public class EMContextC extends ClientContext {
             double r = ranged(0.5, 1);
             double theta = ranged(0, Math.PI * 2);
             double h = ranged(-1.2, 0);
-            Vec3d pos = VecUtils.add(new Vec3d(player.posX, player.posY + ACRenderingHelper.getHeightFix(player), player.posZ), new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)));
+            Vec3d pos = VecUtils.add(new Vec3d(player.posX, player.posY + ACRenderingHelper.getHeightFix(), player.posZ), new Vec3d(r * Math.sin(theta), h, r * Math.cos(theta)));
             Vec3d vel = new Vec3d(ranged(-0.02, 0.02), ranged(0.01, 0.05), ranged(-0.02, 0.02));
             player.world.spawnEntity(MdParticleFactory.INSTANCE.next(player.world, pos, vel));
         }

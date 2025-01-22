@@ -23,7 +23,6 @@ public class AcademyCraftItemList {
     public static final ItemBlock ITEM_PHASE_GEN = new ItemBlock(AcademyCraftBlockList.PHASE_GEN);
     public static final ItemBlock ITEM_RESO_ORE = new ItemBlock(AcademyCraftBlockList.RESO_ORE);
     public static final ItemBlock ITEM_SOLAR_GEN = new ItemBlock(AcademyCraftBlockList.SOLAR_GEN);
-    public static final ItemApp APP_FREQ_TRANSMITTER = new ItemApp("freq_transmitter");
     public static final ItemApp APP_MEDIA_PLAYER = new ItemApp("media_player");
     public static final ItemApp APP_SKILL_TREE = new ItemApp("skill_tree");
     public static final net.minecraft.item.Item BRAIN_COMPONENT = new net.minecraft.item.Item();
@@ -55,11 +54,6 @@ public class AcademyCraftItemList {
     public static final net.minecraft.item.Item WAFER = new net.minecraft.item.Item();
 
     static {
-        AcademyCraftItemList.APP_FREQ_TRANSMITTER.setRegistryName("academy:app_freq_transmitter");
-        AcademyCraftItemList.APP_FREQ_TRANSMITTER.setTranslationKey("ac_apps");
-        AcademyCraftItemList.APP_FREQ_TRANSMITTER.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);
-        ITEM_LIST.add(AcademyCraftItemList.APP_FREQ_TRANSMITTER);
-
         AcademyCraftItemList.APP_MEDIA_PLAYER.setRegistryName("academy:app_media_player");
         AcademyCraftItemList.APP_MEDIA_PLAYER.setTranslationKey("ac_apps");
         AcademyCraftItemList.APP_MEDIA_PLAYER.setCreativeTab(cn.academy.AcademyCraft.CREATIVE_TABS);

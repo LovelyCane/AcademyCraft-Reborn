@@ -10,11 +10,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
  * @author KSkun
  */
+@SideOnly(Side.CLIENT)
 public class RenderEntityCoinThrowing extends Render<EntityCoinThrowing> {
     private final Minecraft mc = Minecraft.getMinecraft();
 

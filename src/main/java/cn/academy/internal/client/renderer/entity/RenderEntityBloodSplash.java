@@ -4,10 +4,13 @@ import cn.academy.internal.entity.EntityBloodSplash;
 import cn.lambdalib2.template.client.render.RenderIcon;
 import cn.lambdalib2.util.MathUtils;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import static cn.academy.internal.entity.EntityBloodSplash.SPLASH;
 import static org.lwjgl.opengl.GL11.glDepthMask;
 
+@SideOnly(Side.CLIENT)
 public class RenderEntityBloodSplash extends RenderIcon<EntityBloodSplash> {
     public RenderEntityBloodSplash(RenderManager manager) {
         super(manager, null);
