@@ -10,6 +10,7 @@
       "translate": "advancements.general.getting_phase.desc"
     }
   },
+  "parent": "academy:root",
   "criteria":{
     "getting_phase": {
       "trigger": "academy:getting_phase"

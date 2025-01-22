@@ -26,12 +26,12 @@ import java.util.Map;
 public final class DispatcherAch {
 
     public static final DispatcherAch INSTANCE = new DispatcherAch();
-    
-    
+
+
     //net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent
-    
+
     private final HashMap<Item, HashSet<ACTrigger>> hcItemCrafted = new HashMap<>();
-    
+
     public void rgItemCrafted(Item item, ACTrigger ach) {
         if (hcItemCrafted.containsKey(item))
             hcItemCrafted.get(item).add(ach);
@@ -42,7 +42,7 @@ public final class DispatcherAch {
         }
         hcItemCrafted.get(item).add(ach);
     }
-    
+
     @SubscribeEvent
     public void onItemCrafted(ItemCraftedEvent event) {
         HashSet<ACTrigger> set = hcItemCrafted.get(event.crafting.getItem());
@@ -51,10 +51,10 @@ public final class DispatcherAch {
                 for (ACTrigger a : set)
                     ACAdvancements.trigger(event.player, a.getId());
     }
-    
-    
+
+
     //cn.academy.event.ability.LevelChangeEvent
-    
+
     private final HashMap<Category, ACTrigger[]> hcLevelChange = new HashMap<>();
 
     public void rgLevelChange(int lv, ACTrigger ach) {
@@ -80,16 +80,16 @@ public final class DispatcherAch {
         if (data.hasCategory()) {
             int xlv = data.getLevel() - 1;
             ACTrigger[] arr = hcLevelChange.get(data.getCategory());
-            if(event.player instanceof EntityPlayerMP){
+            if (event.player instanceof EntityPlayerMP) {
                 if (arr != null && xlv >= 0 && arr[xlv] != null)
                     ACAdvancements.trigger(event.player, arr[xlv].ID);
             }
         }
     }
-    
+
     @SubscribeEvent
     public void onMatterUnitHarvest(MatterUnitHarvestEvent event) {
-        if(event.player instanceof EntityPlayerMP)
+        if (event.player instanceof EntityPlayerMP)
             ACAdvancements.trigger(event.player, ACAdvancements.getting_phase.ID);
     }
 
@@ -99,58 +99,49 @@ public final class DispatcherAch {
     public void onSkillLearn(SkillLearnEvent event) {
         ACTrigger ach = hcSkillLearn.get(event.skill);//CHANGED HERE
         if (ach != null)
-            if(event.player instanceof EntityPlayerMP)
+            if (event.player instanceof EntityPlayerMP)
                 ach.trigger((EntityPlayerMP) event.player);
     }
 
     private final Map<Item, ACTrigger> hcPlayerPickup = new HashMap<>();
-    
-    public void rgPlayerPickup(ItemStack stack, ACTrigger ach) {
-        hcPlayerPickup.put(stack.getItem(), ach);
-    }
-    
+
     @SubscribeEvent
     public void onPlayerPickup(PlayerEvent.ItemPickupEvent event) {
         ItemStack stack = event.getStack();
         ACTrigger ach = hcPlayerPickup.get(stack.getItem());
-        if(ach != null) {
-            if(event.player instanceof EntityPlayerMP)
+        if (ach != null) {
+            if (event.player instanceof EntityPlayerMP)
                 ach.trigger((EntityPlayerMP) event.player);
         }
     }
 
     @SubscribeEvent
-    public void onPlayerTransformCategory(TransformCategoryEvent event)
-    {
+    public void onPlayerTransformCategory(TransformCategoryEvent event) {
         ACAdvancements.trigger(event.player, ACAdvancements.convert_category.ID);
     }
 
     @SubscribeEvent
-    public void onPlayerLearnSkill(SkillLearnEvent event)
-    {
+    public void onPlayerLearnSkill(SkillLearnEvent event) {
         ACAdvancements.trigger(event.player, ACAdvancements.ac_learning_skill.ID);
     }
 
     @SubscribeEvent
-    public void onSkillExpAdded(SkillExpAddedEvent event)
-    {
-        if(event.skill.getSkillExp(AbilityData.get(event.player))>=1.0f)
+    public void onSkillExpAdded(SkillExpAddedEvent event) {
+        if (event.skill.getSkillExp(AbilityData.get(event.player)) >= 1.0f)
             ACAdvancements.trigger(event.player, ACAdvancements.ac_exp_full.ID);
     }
 
     @SubscribeEvent
-    public void onPlayerOverload(OverloadEvent event)
-    {
+    public void onPlayerOverload(OverloadEvent event) {
         ACAdvancements.trigger(event.player, ACAdvancements.ac_overload.ID);
     }
-    
+
     //Init
-    
+
     private DispatcherAch() {
         MinecraftForge.EVENT_BUS.register(this);
-
     }
-    
+
     //stub method for loading
     public static void init() {
         INSTANCE.rgItemCrafted(AcademyCraftItemList.ITEM_PHASE_GEN, ACAdvancements.phase_generator);

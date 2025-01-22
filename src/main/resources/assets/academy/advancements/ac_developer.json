@@ -10,6 +10,7 @@
       "translate": "advancements.general.ac_developer.desc"
     }
   },
+  "parent": "academy:root",
   "criteria":{
     "ac_developer": {
       "trigger": "academy:ac_developer"

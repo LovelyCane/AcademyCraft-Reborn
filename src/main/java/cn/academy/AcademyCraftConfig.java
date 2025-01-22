@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class AcademyCraftConfig {
     @SerializedName("ability")
-    private Ability ability = new Ability();
+    private final Ability ability = new Ability();
 
     public Ability getAbility() {
         return ability;

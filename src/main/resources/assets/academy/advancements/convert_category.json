@@ -11,6 +11,7 @@
       "translate": "advancements.general.convert_category.desc"
     }
   },
+  "parent": "academy:root",
   "criteria":{
     "convert_category": {
       "trigger": "academy:convert_category"
