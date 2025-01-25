@@ -7,7 +7,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author WeAthFolD, KSkun
  */
-
 public class MineRayBasic extends MineRaysBase {
     public static final MineRayBasic INSTANCE = new MineRayBasic();
 

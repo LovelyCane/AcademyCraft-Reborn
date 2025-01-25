@@ -150,5 +150,4 @@ public class AbilityContext {
     private float getFinalConsO(float overload) {
         return skill.getOverloadConsumeSpeed() * overload;
     }
-
 }

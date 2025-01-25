@@ -256,7 +256,7 @@ public abstract class Skill extends Controllable {
     }
 
     @SideOnly(Side.CLIENT)
-    protected void activateSingleKey(ClientRuntime rt, int keyID, Function<EntityPlayer, Context> contextSupplier) {
+    protected void activateSingleKey(ClientRuntime rt, int keyID, Function<EntityPlayer, Context<?>> contextSupplier) {
         rt.addKey(keyID, new SingleKeyDelegate(contextSupplier));
     }
 
@@ -318,11 +318,11 @@ public abstract class Skill extends Controllable {
         return getFullName();
     }
 
-    public class SingleKeyDelegate extends KeyDelegate {
-        private final Function<EntityPlayer, Context> contextSupplier;
-        Context context;
+    public  class SingleKeyDelegate extends KeyDelegate {
+        private final Function<EntityPlayer, Context<?>> contextSupplier;
+        Context<?> context;
 
-        public SingleKeyDelegate(Function<EntityPlayer, Context> contextSupplier) {
+        public SingleKeyDelegate(Function<EntityPlayer, Context<?>> contextSupplier) {
             this.contextSupplier = contextSupplier;
         }
 

@@ -52,7 +52,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
     private static final SkillCooldown EMPTY_COOLDOWN = new SkillCooldown(100, 0);
 
     @SerializeIncluded
-    private Map<Integer, SkillCooldown> cooldownMap = new HashMap<>();
+    private final Map<Integer, SkillCooldown> cooldownMap = new HashMap<>();
     private final TickScheduler scheduler = new TickScheduler();
 
     {
@@ -103,10 +103,6 @@ public class CooldownData extends DataPart<EntityPlayer> {
         }
     }
 
-    public boolean isInCooldown(Controllable ctrl) {
-        return isInCooldown(ctrl, 0);
-    }
-
     public boolean isInCooldown(Controllable ctrl, int id) {
         return getSub(ctrl, id) != EMPTY_COOLDOWN;
     }
@@ -120,7 +116,7 @@ public class CooldownData extends DataPart<EntityPlayer> {
      */
     public SkillCooldown getSub(Controllable ctrl, int id) {
         int sid = toID(ctrl, id);
-        return cooldownMap.containsKey(sid) ? cooldownMap.get(sid) : EMPTY_COOLDOWN;
+        return cooldownMap.getOrDefault(sid, EMPTY_COOLDOWN);
     }
 
     public void clear() {
@@ -149,10 +145,6 @@ public class CooldownData extends DataPart<EntityPlayer> {
     public static class SkillCooldown {
         private int tickLeft;
         private int maxTick;
-
-        private SkillCooldown(int maxTick) {
-            this(maxTick, maxTick);
-        }
 
         private SkillCooldown(int maxTick, int tickLeft) {
             checkArgument(maxTick >= 0);

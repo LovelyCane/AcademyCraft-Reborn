@@ -1,16 +1,16 @@
 package cn.academy.internal.ability.vanilla.electromaster.skill;
 
-import cn.academy.internal.ability.AbilityContext;
 import cn.academy.api.ability.Skill;
+import cn.academy.internal.ability.AbilityContext;
 import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.DelegateState;
 import cn.academy.internal.ability.context.KeyDelegate;
+import cn.academy.internal.client.renderer.misc.RailgunHandEffect;
 import cn.academy.internal.datapart.CPData;
 import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.entity.EntityCoinThrowing;
 import cn.academy.internal.entity.EntityRailgunFX;
 import cn.academy.internal.event.CoinThrowEvent;
-import cn.academy.internal.client.renderer.misc.RailgunHandEffect;
 import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.util.RangedRayDamage;
 import cn.lambdalib2.renderhook.DummyRenderData;
@@ -38,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static cn.lambdalib2.util.MathUtils.lerp;
 import static cn.lambdalib2.util.MathUtils.lerpf;
@@ -157,13 +156,10 @@ public class Railgun extends Skill {
             float energy = lerpf(900, 2000, exp);
 
             double[] length = {45.0};
-            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, new Consumer<Entity>() {
-                @Override
-                public void accept(Entity reflector) {
-                    reflectServer(player, reflector);
-                    length[0] = Math.min(length[0], reflector.getDistance(player));
-                    NetworkMessage.sendToServer(Railgun.INSTANCE, MSG_REFLECT, player, reflector);
-                }
+            RangedRayDamage damage = new RangedRayDamage.Reflectible(ctx, 2, energy, reflector -> {
+                reflectServer(player, reflector);
+                length[0] = Math.min(length[0], reflector.getDistance(player));
+                NetworkMessage.sendToServer(Railgun.INSTANCE, MSG_REFLECT, player, reflector);
             });
             damage.startDamage = dmg;
             damage.perform();
@@ -200,7 +196,7 @@ public class Railgun extends Skill {
         }
     }
 
-    private class Delegate extends KeyDelegate {
+    private static class Delegate extends KeyDelegate {
         private EntityCoinThrowing coin;
         private int chargeTicks = -1;
 
