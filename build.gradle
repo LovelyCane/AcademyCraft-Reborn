@@ -63,7 +63,7 @@ dependencies {
         }
         annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
         annotationProcessor 'com.google.guava:guava:33.4.0-jre'
-        annotationProcessor 'com.google.code.gson:gson:2.11.0'
+        annotationProcessor 'com.google.code.gson:gson:2.12.0'
         annotationProcessor(mixin) {
             transitive = false
         }
