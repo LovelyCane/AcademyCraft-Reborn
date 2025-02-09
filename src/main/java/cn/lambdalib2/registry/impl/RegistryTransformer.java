@@ -44,11 +44,6 @@ public class RegistryTransformer implements IClassTransformer {
             visitRegistryHook(FMLServerStoppingEvent.class);
             visitRegistryHook(FMLServerStartingEvent.class);
             visitRegistryHook(FMLServerAboutToStartEvent.class);
-
-            // !!! During FMLConstructionEvent, LL2 can't access other mods' classes in actual game environment,
-            //      because at that time other mods' class URL lookup aren't setup yet.
-//            visitRegistryHook(FMLConstructionEvent.class);
-
             visitRegistryHook(FMLPreInitializationEvent.class);
             visitRegistryHook(FMLInitializationEvent.class);
             visitRegistryHook(FMLPostInitializationEvent.class);

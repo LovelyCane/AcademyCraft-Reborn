@@ -1,88 +1,14 @@
 package cn.lambdalib2.s11n.network;
 
-import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.s11n.network.NetworkMessage.NullablePar;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
-import cn.lambdalib2.util.SideUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerDisconnectionFromClientEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
-@NetworkS11nType
-enum FutureManager {
-    instance;
-
-    private static final String MSG_RESULT = "result";
-
-    ThreadLocal<Context> threadContext = ThreadLocal.withInitial(Context::new);
-
-    void init() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    <T> Future<T> create(Consumer<T> callback) {
-        Context ctx = threadContext.get();
-
-        ++ctx.increm;
-
-        Future<T> fut = new Future<>();
-        fut.increm = ctx.increm;
-        fut.callback = callback;
-        fut.creator = SideUtils.getThePlayer(); // null if in server, thePlayer if in client
-
-        ctx.waitingFutures.put(ctx.increm, fut);
-
-        return fut;
-    }
-
-    <T> void sendResult(Future<T> fut, T value) {
-        if (fut.getSide() == SideUtils.getRuntimeSide()) {
-            throw new IllegalStateException("Trying to sendResult in creation side of Future");
-        }
-
-        if (SideUtils.isClient()) {
-            NetworkMessage.sendToServer(instance, MSG_RESULT, fut.increm, value);
-        } else {
-            NetworkMessage.sendTo(fut.creator, instance, MSG_RESULT, fut.increm, value);
-        }
-    }
-
-    @Listener(channel = MSG_RESULT, side = {Side.CLIENT, Side.SERVER})
-    private <T> void hReceiveResult(int increm, @NullablePar T value) {
-        Context ctx = threadContext.get();
-
-        Future future = ctx.waitingFutures.get(increm);
-        if (future != null) {
-            future.callback.accept(value);
-            ctx.waitingFutures.remove(future.increm);
-        }
-    }
-
-    @SubscribeEvent
-    public void __onClientDisconnect(ClientDisconnectionFromServerEvent evt) {
-        disconnect();
-    }
-
-    @SubscribeEvent
-    public void __onServerDisconnect(ServerDisconnectionFromClientEvent evt) {
-        disconnect();
-    }
-
-    private void disconnect() {
-        threadContext.get().waitingFutures.clear();
-    }
-}
 
 /**
  * {@link Future} is a object that receives a callback when its value becomes available. This Future specially designed
@@ -101,12 +27,6 @@ public class Future<T> {
     int increm;
     Consumer<T> callback; // Valid only on creation side
     EntityPlayer creator; // Valid only if created in client
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent event) {
-        NetworkS11n.addDirect(Future.class, new S11nHandler());
-        FutureManager.instance.init();
-    }
 
     public static <T> Future<T> create(Consumer<T> callback) {
         return FutureManager.instance.create(callback);

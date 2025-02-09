@@ -6,7 +6,6 @@
  */
 package cn.lambdalib2.util;
 
-import cn.lambdalib2.registry.StateEventCallback;
 import com.google.common.base.Throwables;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,7 +13,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.IntHashMap;
 import net.minecraftforge.client.settings.KeyBindingMap;
 import net.minecraftforge.client.settings.KeyModifier;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -47,8 +45,7 @@ public class ControlOverrider {
     private static boolean completeOverriding;
     private static GuiScreen lastTickGui;
 
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
+    public static void init() {
         try {
             kbMapField = ReflectionUtils.getObfField(KeyBindingMap.class, "map", "field_180218_a");
 

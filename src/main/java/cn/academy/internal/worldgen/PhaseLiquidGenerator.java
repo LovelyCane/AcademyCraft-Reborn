@@ -1,13 +1,11 @@
 package cn.academy.internal.worldgen;
 
-import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Random;
@@ -15,19 +13,16 @@ import java.util.Random;
 /**
  * @author WeAthFolD
  */
-
 public class PhaseLiquidGenerator implements IWorldGenerator {
-    //@RegWorldGen(1)
-    @StateEventCallback
-    public static void preInit(FMLPreInitializationEvent event) {
-        GameRegistry.registerWorldGenerator(INSTANCE, 1);
-    }
-
     public static final PhaseLiquidGenerator INSTANCE = new PhaseLiquidGenerator();
 
     WorldGenPhaseLiq genLakes = new WorldGenPhaseLiq();
 
     public PhaseLiquidGenerator() {
+    }
+
+    public static void preInit() {
+        GameRegistry.registerWorldGenerator(INSTANCE, 1);
     }
 
     @Override

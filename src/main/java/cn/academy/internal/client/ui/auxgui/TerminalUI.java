@@ -6,7 +6,7 @@ import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.terminal.App;
 import cn.academy.internal.terminal.AppEnvironment;
 import cn.academy.internal.terminal.TerminalData;
-import cn.academy.internal.util.RegACKeyHandler;
+import cn.academy.internal.util.ACKeyManager;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.cgui.CGui;
@@ -19,7 +19,6 @@ import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
 import cn.lambdalib2.input.KeyHandler;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.*;
 import com.google.common.base.Preconditions;
 import net.minecraft.client.Minecraft;
@@ -32,7 +31,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,51 +42,55 @@ import org.lwjgl.util.glu.GLU;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL20.*;
-
 /**
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
 public class TerminalUI extends AuxGui {
-
     private static final String OVERRIDE_GROUP = "AC_Terminal";
-
     private static AuxGui current = null;
-
     private static final double BALANCE_SPEED = 3000; //pixel/s
     public static final int MAX_MX = 605, MAX_MY = 740;
-
     static final ResourceLocation APP_BACK = tex("app_back"), APP_BACK_HDR = tex("app_back_highlight"), CURSOR = tex("cursor");
-
     final double SENSITIVITY = 0.7;
-
-    private static WidgetContainer loaded;
-
-    @StateEventCallback
-    @SuppressWarnings("unused")
-    private static void init(FMLInitializationEvent ev) {
-        loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal.xml"));
-    }
-
+    private static final WidgetContainer loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal.xml"));
     CGui gui;
-
     Widget root;
-
     TerminalMouseHelper helper;
     MouseHelper oldHelper;
     LeftClickHandler clickHandler;
-
     float mouseX, mouseY;
     float buffX, buffY; //Used for rotation judging. Will balance to mouseX and mouseY at the rate of BALANCE_SPEED.
-
     double createTime;
     double lastFrameTime;
-
     int selection = 0;
     int scroll = 0;
-
     List<Widget> apps = new ArrayList<>();
+
+    public static KeyHandler keyHandler = new KeyHandler() {
+        @Override
+        public void onKeyUp() {
+            EntityPlayer player = getPlayer();
+            TerminalData tData = TerminalData.get(player);
+
+            if (tData.isTerminalInstalled()) {
+                if (current == null || current.disposed) {
+                    current = new TerminalUI();
+                    AuxGuiHandler.register(current);
+                } else if (current instanceof TerminalUI) {
+                    current.dispose();
+                    current = null;
+                }
+            } else {
+                player.sendMessage(new TextComponentTranslation("ac.terminal.notinstalled"));
+            }
+        }
+
+    };
+
+    static {
+        ACKeyManager.INSTANCE.addKeyHandler("open_data_terminal", Keyboard.KEY_LMENU, keyHandler);
+    }
 
     public TerminalUI() {
         gui = new CGui();
@@ -119,13 +121,6 @@ public class TerminalUI extends AuxGui {
         mc.mouseHelper = oldHelper;
         KeyManager.dynamic.removeKeyHandler("terminal_click");
         ControlOverrider.endOverride(OVERRIDE_GROUP);
-    }
-
-    private int createShader(String source, int type) {
-        int shader = glCreateShader(type);
-        glShaderSource(shader, source);
-        glCompileShader(shader);
-        return shader;
     }
 
     @Override
@@ -341,29 +336,6 @@ public class TerminalUI extends AuxGui {
         current = newGui;
         AuxGuiHandler.register(current);
     }
-
-    @RegACKeyHandler(name = "open_data_terminal", keyID = Keyboard.KEY_LMENU)
-    public static KeyHandler keyHandler = new KeyHandler() {
-
-        @Override
-        public void onKeyUp() {
-            EntityPlayer player = getPlayer();
-            TerminalData tData = TerminalData.get(player);
-
-            if (tData.isTerminalInstalled()) {
-                if (current == null || current.disposed) {
-                    current = new TerminalUI();
-                    AuxGuiHandler.register(current);
-                } else if (current instanceof TerminalUI) {
-                    current.dispose();
-                    current = null;
-                }
-            } else {
-                player.sendMessage(new TextComponentTranslation("ac.terminal.notinstalled"));
-            }
-        }
-
-    };
 
     private class AppHandler extends Component {
 

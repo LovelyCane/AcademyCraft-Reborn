@@ -1,5 +1,6 @@
 package cn.academy.internal.terminal.app.settings;
 
+import cn.academy.internal.client.ui.CustomizeUI;
 import cn.lambdalib2.cgui.CGuiScreen;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.WidgetContainer;
@@ -9,6 +10,7 @@ import cn.lambdalib2.cgui.component.TextBox;
 import cn.lambdalib2.cgui.event.DragEvent;
 import cn.lambdalib2.cgui.event.LeftClickEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,6 +25,12 @@ import java.util.List;
 public class SettingsUI extends CGuiScreen {
     static WidgetContainer document = CGUIDocument.read(new ResourceLocation("academy:guis/settings.xml"));
     private static final List<Widget> widgets = new ArrayList<>();
+
+    static {
+        SettingsUI.addCallback("edit_ui", () -> {
+            Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
+        });
+    }
 
     public static void addKey(String name, int value) {
         Widget ret = SettingsUI.document.getWidget("t_key").copy();

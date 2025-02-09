@@ -8,9 +8,14 @@ import cn.academy.internal.ability.vanilla.electromaster.CatElectromaster;
 import cn.academy.internal.ability.vanilla.meltdowner.skill.ElectronBomb;
 import cn.academy.internal.ability.vanilla.meltdowner.skill.SBNetDelegate;
 import cn.academy.internal.advancements.ACAdvancements;
+import cn.academy.internal.client.ui.NotifyUI;
 import cn.academy.internal.event.AcademyCraftEventManager;
+import cn.academy.internal.worldgen.PhaseLiquidGenerator;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.registry.RegistryMod;
+import cn.lambdalib2.s11n.network.FutureManager;
+import cn.lambdalib2.s11n.network.NetworkS11n;
+import cn.lambdalib2.util.ControlOverrider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.creativetab.CreativeTabs;
@@ -87,6 +92,9 @@ public class AcademyCraft {
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             OBJLoader.INSTANCE.addDomain(Tags.MOD_ID);
         }
+
+        NetworkS11n.preInit();
+        PhaseLiquidGenerator.preInit();
     }
 
     @EventHandler
@@ -96,11 +104,14 @@ public class AcademyCraft {
             AuxGuiHandler.init();
             ClientHandler.init();
             SBNetDelegate.init();
+            NotifyUI.init();
+            ControlOverrider.init();
         }
         OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
         Controllable.init();
         VanillaCategories.init();
         ACAdvancements.init();
+        FutureManager.instance.init();
     }
 
     @EventHandler

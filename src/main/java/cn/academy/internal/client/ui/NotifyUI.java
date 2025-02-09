@@ -4,7 +4,6 @@ import cn.academy.Resources;
 import cn.academy.internal.client.ui.auxgui.ACHud;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.event.FrameEvent;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.*;
@@ -12,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -24,8 +22,7 @@ import org.lwjgl.util.Color;
 
 @SideOnly(Side.CLIENT)
 public class NotifyUI extends Widget {
-    @StateEventCallback
-    private static void init(FMLInitializationEvent event) {
+    public static void init() {
         final ResourceLocation texture = Resources.getTexture("guis/edit_preview/notify_logo");
         final INotification dummy = new INotification() {
             @Override

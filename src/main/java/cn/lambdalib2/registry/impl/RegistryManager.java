@@ -46,12 +46,6 @@ public enum RegistryManager {
 
     private boolean initialized = false;
 
-    private Object activeMod;
-
-    public Object getActiveMod() {
-        return Debug.assertNotNull(activeMod, "No mod is currently being loaded");
-    }
-
     public ModContext findMod(String classPath) {
         for (Entry<String, ModContext> entry : registryMods.entrySet()) {
             if (classPath.startsWith(entry.getValue().packageRoot)) {
@@ -82,17 +76,14 @@ public enum RegistryManager {
 
         List<Method> methods = ctx.loadCallbacks.get(event.getClass());
         if (methods != null) {
-            activeMod = mod;
             for (Method m : methods) {
                 try {
                     m.setAccessible(true);
                     m.invoke(null, event);
                 } catch (Exception ex) {
                     Debug.log("Error when calling StateEventCallback@" + event.getClass().getSimpleName() + " " + m);
-                    ex.printStackTrace();
                 }
             }
-            activeMod = null;
         }
     }
 

@@ -11,7 +11,7 @@ import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.event.ConfigModifyEvent;
 import cn.academy.internal.event.ability.FlushControlEvent;
 import cn.academy.internal.event.ability.PresetSwitchEvent;
-import cn.academy.internal.util.RegACKeyHandler;
+import cn.academy.internal.util.ACKeyManager;
 import cn.lambdalib2.input.KeyHandler;
 import cn.lambdalib2.input.KeyManager;
 import cn.lambdalib2.util.GameTimer;
@@ -61,7 +61,6 @@ public final class ClientHandler {
      * The key to activate and deactivate the ability, might have other uses in certain circumstances,
      * e.g. quit charging when using ability.
      */
-    @RegACKeyHandler(name = KEY_ACTIVATE_ABILITY, keyID = Keyboard.KEY_V)
     public static KeyHandler keyActivate = new KeyHandler() {
 
         double lastKeyDown;
@@ -93,7 +92,6 @@ public final class ClientHandler {
 
     };
 
-    @RegACKeyHandler(name = KEY_EDIT_PRESET, keyID = Keyboard.KEY_N)
     public static KeyHandler keyEditPreset = new KeyHandler() {
         @Override
         public void onKeyDown() {
@@ -103,7 +101,6 @@ public final class ClientHandler {
         }
     };
 
-    @RegACKeyHandler(name = KEY_SWITCH_PRESET, keyID = Keyboard.KEY_C)
     public static KeyHandler keySwitchPreset = new KeyHandler() {
         @Override
         public void onKeyDown() {
@@ -118,6 +115,11 @@ public final class ClientHandler {
         }
     };
 
+    static {
+        ACKeyManager.INSTANCE.addKeyHandler(KEY_ACTIVATE_ABILITY, Keyboard.KEY_V, keyActivate);
+        ACKeyManager.INSTANCE.addKeyHandler(KEY_EDIT_PRESET, Keyboard.KEY_N, keyEditPreset);
+        ACKeyManager.INSTANCE.addKeyHandler(KEY_SWITCH_PRESET, Keyboard.KEY_C, keySwitchPreset);
+    }
 
     @SideOnly(Side.CLIENT)
     public static class ConfigHandler {

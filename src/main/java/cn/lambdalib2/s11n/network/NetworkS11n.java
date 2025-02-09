@@ -6,8 +6,7 @@
  */
 package cn.lambdalib2.s11n.network;
 
-import cn.academy.internal.ability.vanilla.teleporter.skill.LTNetDelegate;
-import cn.lambdalib2.registry.StateEventCallback;
+import cn.academy.internal.datapart.CooldownData;
 import cn.lambdalib2.s11n.SerializationHelper;
 import cn.lambdalib2.s11n.SerializeDynamic;
 import cn.lambdalib2.s11n.SerializeNullable;
@@ -31,7 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,7 +46,6 @@ import java.util.function.Supplier;
  *
  * @author WeAthFolD
  */
-
 public class NetworkS11n {
     private static final SerializationHelper serHelper = new SerializationHelper();
     private static final short IDX_NULL = -1, IDX_ARRAY = -2;
@@ -298,7 +295,7 @@ public class NetworkS11n {
                 buf.writeShort(obj.dimension);
                 // note: only support EntityDragon
                 if (obj instanceof MultiPartEntityPart) {
-                    Entity parent = (Entity)((MultiPartEntityPart) obj).parent;
+                    Entity parent = (Entity) ((MultiPartEntityPart) obj).parent;
                     buf.writeInt(parent.getEntityId());
                     if (parent instanceof EntityDragon) {
                         buf.writeInt(obj.getEntityId());
@@ -479,8 +476,19 @@ public class NetworkS11n {
             }
         });
 
-        NetworkS11n.register(ArrayList.class);
-        NetworkS11n.addDirectInstance(new LTNetDelegate());
+        NetworkS11n.addDirect(CooldownData.SkillCooldown.class, new NetS11nAdaptor<CooldownData.SkillCooldown>() {
+            @Override
+            public void write(ByteBuf buf, CooldownData.SkillCooldown obj) {
+                buf.writeShort(obj.maxTick).writeShort(obj.tickLeft);
+            }
+
+            @Override
+            public CooldownData.SkillCooldown read(ByteBuf buf) throws ContextException {
+                return new CooldownData.SkillCooldown(buf.readShort(), buf.readShort());
+            }
+        });
+
+        NetworkS11n.addDirect(Future.class, new S11nHandler());
     }
 
     private NetworkS11n() {
@@ -510,8 +518,7 @@ public class NetworkS11n {
         suppliers.put(type, supplier);
     }
 
-    @StateEventCallback
-    private static void preInit(FMLPreInitializationEvent event) {
+    public static void preInit() {
         registerAll();
     }
 

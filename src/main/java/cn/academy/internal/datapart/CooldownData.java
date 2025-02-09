@@ -5,17 +5,11 @@ import cn.academy.internal.event.ability.CategoryChangeEvent;
 import cn.lambdalib2.datapart.DataPart;
 import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.datapart.RegDataPart;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.SerializeIncluded;
 import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.s11n.network.NetworkS11n;
-import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
-import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
 import cn.lambdalib2.util.TickScheduler;
 import com.google.common.base.Preconditions;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -32,21 +26,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class CooldownData extends DataPart<EntityPlayer> {
     public static CooldownData of(EntityPlayer player) {
         return EntityData.get(player).getPart(CooldownData.class);
-    }
-
-    @StateEventCallback
-    private static void _init(FMLInitializationEvent ev) {
-        NetworkS11n.addDirect(SkillCooldown.class, new NetS11nAdaptor<SkillCooldown>() {
-            @Override
-            public void write(ByteBuf buf, SkillCooldown obj) {
-                buf.writeShort(obj.maxTick).writeShort(obj.tickLeft);
-            }
-
-            @Override
-            public SkillCooldown read(ByteBuf buf) throws ContextException {
-                return new SkillCooldown(buf.readShort(), buf.readShort());
-            }
-        });
     }
 
     private static final SkillCooldown EMPTY_COOLDOWN = new SkillCooldown(100, 0);
@@ -143,10 +122,10 @@ public class CooldownData extends DataPart<EntityPlayer> {
     }
 
     public static class SkillCooldown {
-        private int tickLeft;
-        private int maxTick;
+        public int tickLeft;
+        public int maxTick;
 
-        private SkillCooldown(int maxTick, int tickLeft) {
+        public SkillCooldown(int maxTick, int tickLeft) {
             checkArgument(maxTick >= 0);
             this.maxTick = maxTick;
             this.tickLeft = tickLeft;
