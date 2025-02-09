@@ -33,7 +33,8 @@ public class EntitySilbarn extends EntityAdvanced {
     @SideOnly(Side.CLIENT)
     static ParticleFactory particles;
 
-    static {
+    @SideOnly(Side.CLIENT)
+    public static void init() {
         Particle p = new Particle();
         p.texture = Resources.getTexture("entities/silbarn_frag");
         p.size = 0.1f;

@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 
 @SideOnly(Side.CLIENT)
 public class RegClientContextImpl {
+    @SideOnly(Side.CLIENT)
     public static void init() {
         ReflectionUtils.getClasses(RegClientContext.class).forEach(type -> {
             RegClientContext anno = type.getAnnotation(RegClientContext.class);

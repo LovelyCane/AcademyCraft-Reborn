@@ -11,6 +11,7 @@ import cn.academy.internal.ability.vanilla.meltdowner.skill.SBNetDelegate;
 import cn.academy.internal.advancements.ACAdvancements;
 import cn.academy.internal.client.ui.NotifyUI;
 import cn.academy.internal.crafting.MFIFRecipes;
+import cn.academy.internal.entity.EntitySilbarn;
 import cn.academy.internal.event.AcademyCraftEventManager;
 import cn.academy.internal.support.ic2.IC2Support;
 import cn.academy.internal.support.rf.RFSupport;
@@ -101,6 +102,7 @@ public class AcademyCraft {
 
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             OBJLoader.INSTANCE.addDomain(Tags.MOD_ID);
+            EntitySilbarn.init();
         }
 
         NetworkS11n.preInit();
@@ -120,6 +122,7 @@ public class AcademyCraft {
             SBNetDelegate.init();
             NotifyUI.init();
             ControlOverrider.init();
+            RegClientContextImpl.init();
         }
         OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
         Controllable.init();
@@ -127,7 +130,6 @@ public class AcademyCraft {
         ACAdvancements.init();
         FutureManager.instance.init();
         MFIFRecipes.init();
-        RegClientContextImpl.init();
         RegGuiHandlerImpl.init();
     }
 

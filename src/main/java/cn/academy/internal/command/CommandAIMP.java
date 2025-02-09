@@ -34,9 +34,7 @@ public class CommandAIMP extends CommandAIMBase {
 
         if (player != null) {
             String[] newPars = new String[pars.length - 1];
-            for (int i = 0; i < newPars.length; ++i) {
-                newPars[i] = pars[i + 1];
-            }
+            System.arraycopy(pars, 1, newPars, 0, newPars.length);
 
             matchCommands(ics, player, newPars);
         } else if (pars[0].equals("catlist")) {

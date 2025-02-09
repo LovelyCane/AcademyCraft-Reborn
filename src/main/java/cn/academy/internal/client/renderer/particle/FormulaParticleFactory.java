@@ -31,5 +31,4 @@ public class FormulaParticleFactory extends ParticleFactory {
             particle.fadeAfter(RandUtils.rangei(10, 15), 20);
         });
     }
-
 }
