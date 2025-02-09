@@ -61,7 +61,7 @@ public final class DispatcherAch {
         rgLevelChange(VanillaCategories.electromaster, lv, ach);
         rgLevelChange(VanillaCategories.meltdowner, lv, ach);
         rgLevelChange(VanillaCategories.teleporter, lv, ach);
-        rgLevelChange(VanillaCategories.vecManip, lv, ach);
+        rgLevelChange(VanillaCategories.vecmanip, lv, ach);
     }
 
     public void rgLevelChange(Category cat, int lv, ACTrigger ach) {

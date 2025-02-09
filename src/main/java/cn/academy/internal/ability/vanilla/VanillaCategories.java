@@ -3,7 +3,7 @@ package cn.academy.internal.ability.vanilla;
 import cn.academy.AcademyCraftItemList;
 import cn.academy.api.ability.Category;
 import cn.academy.api.ability.Skill;
-import cn.academy.internal.ability.RegCategory;
+import cn.academy.internal.ability.CategoryManager;
 import cn.academy.internal.ability.develop.condition.DevConditionAnySkillOfLevel;
 import cn.academy.internal.ability.vanilla.electromaster.CatElectromaster;
 import cn.academy.internal.ability.vanilla.generic.skill.SkillBrainCourse;
@@ -18,23 +18,20 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class VanillaCategories {
-    @RegCategory
     public static final CatElectromaster electromaster = new CatElectromaster();
-
-    @RegCategory
     public static final CatMeltdowner meltdowner = new CatMeltdowner();
-
-    @RegCategory
     public static final CatTeleporter teleporter = new CatTeleporter();
-
-    @RegCategory
-    public static final CatVecManip vecManip = new CatVecManip();
+    public static final CatVecManip vecmanip = new CatVecManip();
 
     public static void init() {
         MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.REINFORCED_IRON_PLATE), new ItemStack(AcademyCraftItemList.NEEDLE, 6), Mode.INCISE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(Blocks.RAIL), new ItemStack(AcademyCraftItemList.NEEDLE, 2), Mode.INCISE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.REINFORCED_IRON_PLATE, 2), new ItemStack(AcademyCraftItemList.COIN, 3), Mode.PLATE);
         MetalFormerRecipes.INSTANCE.add(new ItemStack(AcademyCraftItemList.WAFER), new ItemStack(AcademyCraftItemList.SILBARN), Mode.ETCH);
+        CategoryManager.INSTANCE.register(electromaster);
+        CategoryManager.INSTANCE.register(meltdowner);
+        CategoryManager.INSTANCE.register(teleporter);
+        CategoryManager.INSTANCE.register(vecmanip);
     }
 
     public static void addGenericSkills(Category category) {

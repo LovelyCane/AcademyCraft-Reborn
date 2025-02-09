@@ -25,33 +25,33 @@ import org.lwjgl.util.Color;
 public class BackgroundMask extends AuxGui {
     public static final BackgroundMask INSTANCE = new BackgroundMask();
     final ResourceLocation MASK = Resources.preloadMipmapTexture("effects/screen_mask");
-    
+
     final Color CRL_OVERRIDE = new Color(208, 20, 20, 170);
-    
+
     static final double CHANGE_PER_SEC = 1;
-    
+
     double r, g, b, a;
-    
+
     long lastFrame;
 
     @Override
     public void draw(ScaledResolution sr) {
         double time = GameTimer.getTime();
-        
+
         EntityPlayer player = Minecraft.getMinecraft().player;
         AbilityData aData = AbilityData.get(player);
         CPData cpData = CPData.get(player);
-        
+
         double cr, cg, cb, ca;
-        
+
         Color color = null;
-        if(cpData.isOverloaded()) {
+        if (cpData.isOverloaded()) {
             color = CRL_OVERRIDE;
         } else if (cpData.isActivated()) {
             color = aData.getCategory().getColorStyle();
         }
-        
-        if(color == null) {
+
+        if (color == null) {
             cr = r;
             cg = g;
             cb = b;
@@ -62,14 +62,14 @@ public class BackgroundMask extends AuxGui {
             cb = Colors.i2f(color.getBlue());
             ca = Colors.i2f(color.getAlpha());
         }
-        
-        if(ca != 0 || a != 0) {
+
+        if (ca != 0 || a != 0) {
             long dt = lastFrame == 0 ? 0 : (long) (time * 1000) - lastFrame;
             r = balanceTo(r, cr, dt);
             g = balanceTo(g, cg, dt);
             b = balanceTo(b, cb, dt);
             a = balanceTo(a, ca, dt);
-            
+
             GL11.glColor4d(r, g, b, a);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             GlStateManager.bindTexture(0);
@@ -82,7 +82,6 @@ public class BackgroundMask extends AuxGui {
             g = cg;
             b = cb;
         }
-        
         lastFrame = (long) (time * 1000);
     }
 
@@ -91,5 +90,5 @@ public class BackgroundMask extends AuxGui {
         delta = Math.signum(delta) * Math.min(Math.abs(delta), dt / 1000.0 * CHANGE_PER_SEC);
         return from + delta;
     }
-    
+
 }

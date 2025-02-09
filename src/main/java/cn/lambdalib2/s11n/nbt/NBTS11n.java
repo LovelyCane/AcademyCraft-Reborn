@@ -1,6 +1,7 @@
 package cn.lambdalib2.s11n.nbt;
 
-import cn.lambdalib2.LambdaLib2;
+import cn.academy.internal.ability.Controllable;
+import cn.academy.internal.datapart.PresetData;
 import cn.lambdalib2.s11n.SerializationHelper;
 import cn.lambdalib2.s11n.SerializeDynamic;
 import cn.lambdalib2.util.Debug;
@@ -14,6 +15,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Handles NBT (Notch Bull**** Tag) serialization.
@@ -298,7 +300,34 @@ public class NBTS11n {
                 }
             });
         }
+        NBTS11n.addBase(PresetData.Preset.class, new BaseSerializer<NBTBase, PresetData.Preset>() {
+            @Override
+            public NBTBase write(PresetData.Preset value) {
+                NBTTagCompound tag = new NBTTagCompound();
+                IntStream.range(0, PresetData.MAX_KEYS).forEach(idx -> {
+                    Controllable ctrl = value.data[idx];
+                    if (ctrl != null) {
+                        tag.setTag(String.valueOf(idx), NBTS11n.writeBase(ctrl, Controllable.class));
+                    }
+                });
+                return tag;
+            }
 
+            @Override
+            public PresetData.Preset read(NBTBase tag_, Class<? extends PresetData.Preset> type) {
+                NBTTagCompound tag = (NBTTagCompound) tag_;
+
+                Controllable[] data = new Controllable[PresetData.MAX_KEYS];
+                IntStream.range(0, PresetData.MAX_KEYS).forEach(idx -> {
+                    String tagName = String.valueOf(idx);
+                    if (tag.hasKey(tagName)) {
+                        data[idx] = NBTS11n.readBase(tag.getTag(tagName), Controllable.class);
+                    }
+                });
+
+                return new PresetData.Preset(data);
+            }
+        });
     }
 
     /**
@@ -362,8 +391,7 @@ public class NBTS11n {
                             f.set(obj, readBase(base, f.getType()));
                         }
                     }
-                } catch (IllegalAccessException |
-                        RuntimeException ex) {
+                } catch (IllegalAccessException | RuntimeException ex) {
                     ex.printStackTrace();
                     // LambdaLib.log.error("Error reading field " + f + " in object " + obj, ex);
                 }

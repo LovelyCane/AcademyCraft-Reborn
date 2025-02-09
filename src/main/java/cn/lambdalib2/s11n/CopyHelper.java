@@ -29,7 +29,7 @@ public class CopyHelper {
         T copy(T origin);
     }
 
-    private Map<Class<?>, ICopyFactory<?>> primitiveHandlers = new HashMap<>();
+    private final Map<Class<?>, ICopyFactory<?>> primitiveHandlers = new HashMap<>();
 
     /**
      * Directly returns the same reference (or box/unbox for primitive type), safe because they are immutable.

@@ -16,5 +16,4 @@ public class TextureImportSettings {
         this.filterMode = filterMode;
         this.wrapMode = wrapMode;
     }
-
 }

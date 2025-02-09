@@ -12,7 +12,6 @@ import java.util.List;
  */
 @SideOnly(Side.CLIENT)
 public class LegacyMesh {
-
     protected double[][] vertices;
 
     protected double[][] uvs;
@@ -21,7 +20,7 @@ public class LegacyMesh {
 
     protected int[] triangles;
 
-    protected List<LegacyMesh> sub = new ArrayList<LegacyMesh>();
+    protected List<LegacyMesh> sub = new ArrayList<>();
 
     /**
      * Determine whether this mesh needs to be buffered(Compiled into a display list).
@@ -31,19 +30,6 @@ public class LegacyMesh {
     int listID = -1;
 
     public LegacyMesh() {
-    }
-
-    public int addMesh(LegacyMesh m) {
-        sub.add(m);
-        return sub.size() - 1;
-    }
-
-    public void removeMesh(LegacyMesh m) {
-        sub.remove(m);
-    }
-
-    public LegacyMesh getSubMesh(int id) {
-        return sub.get(id);
     }
 
     public LegacyMesh setUVs(double[][] uvs) {
@@ -64,16 +50,6 @@ public class LegacyMesh {
         return this;
     }
 
-    public LegacyMesh setVertex(int ind, double[] vert) {
-        vertices[ind] = vert;
-        return this;
-    }
-
-    public LegacyMesh setUV(int ind, double[] uv) {
-        uvs[ind] = uv;
-        return this;
-    }
-
     public LegacyMesh setTriangles(int[] triangles) {
         this.triangles = triangles;
         return this;
@@ -84,14 +60,6 @@ public class LegacyMesh {
         for (int i = 0; i < vertices.length; ++i) {
             normals[i] = normal;
         }
-        return this;
-    }
-
-    public LegacyMesh setNormals(float[][] normals) {
-        if (vertices == null || vertices.length != uvs.length) {
-            throw new IllegalStateException("Normals size must be equal to vert size");
-        }
-        this.normals = normals;
         return this;
     }
 
@@ -164,10 +132,6 @@ public class LegacyMesh {
         if (doesBuffer) {
             GL11.glEndList();
         }
-    }
-
-    public void redraw(LegacyMaterial mat) {
-        redraw(mat, true);
     }
 
     public void redrawWithinBatch(LegacyMaterial mat) {

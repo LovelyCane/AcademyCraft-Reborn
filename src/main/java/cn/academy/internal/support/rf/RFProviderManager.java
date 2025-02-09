@@ -23,7 +23,7 @@ public class RFProviderManager implements IEnergyBlockManager {
     @Override
     public double getEnergy(TileEntity tile) {
         IEnergyProvider provider = asProvider(tile);
-        return provider.getEnergyStored(dir) * RFSupport.CONV_RATE;
+        return provider.getEnergyStored(dir) * RFSupportImpl.CONV_RATE;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class RFProviderManager implements IEnergyBlockManager {
     @Override
     public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
         IEnergyProvider provider = asProvider(tile);
-        return provider == null ? 0 : RFSupport.CONV_RATE * provider.extractEnergy(dir, (int) (amt / RFSupport.CONV_RATE), false);
+        return provider == null ? 0 : RFSupportImpl.CONV_RATE * provider.extractEnergy(dir, (int) (amt / RFSupportImpl.CONV_RATE), false);
     }
 
 }

@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DeveloperUI {
     public static <T extends IDeveloper> CGuiScreen apply(T tile) {
-        SkillTreeJava.TreeScreen ret = new SkillTreeJava.TreeScreen() {
+        SkillTree.TreeScreen ret = new SkillTree.TreeScreen() {
             @Override
             public void onGuiClosed() {
                 tile.onGuiClosed();
@@ -20,7 +20,7 @@ public class DeveloperUI {
 
         Runnable build = () -> {
             gui.clear();
-            gui.addWidget("main", SkillTreeJava.initialize(tile, gui));
+            gui.addWidget("main", SkillTree.initialize(tile, gui));
         };
 
         build.run();

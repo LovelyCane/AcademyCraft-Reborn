@@ -1,14 +1,11 @@
 package cn.lambdalib2.render;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import java.nio.FloatBuffer;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,53 +16,25 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.*;
 
 public class RenderMaterial {
-
     final ShaderScript shader;
 
-    private Map<Integer, Object> valueMapping = new HashMap<>();
-    private HashMap<Integer, Texture2D> textureMapping = new HashMap<>();
+    private final Map<Integer, Object> valueMapping = new HashMap<>();
+    private final HashMap<Integer, Texture2D> textureMapping = new HashMap<>();
 
     /**
      * Creates a new material from the shader
+     *
      * @param shader The shader that this material is based from
      */
     public RenderMaterial(ShaderScript shader) {
         this.shader = shader;
     }
 
-    /**
-     * Create a duplicate of given material.
-     * @param src LegacyMaterial to be copied
-     */
-    public RenderMaterial(RenderMaterial src) {
-        this(src.shader);
-    }
-
     public int getDrawOrder() {
         return 0;
     }
 
-    public ShaderScript getShader() {
-        return shader;
-    }
-
-    public void setFloat(String name, float value) {
-        setObj(name, value);
-    }
-
     public void setVec2(String name, Vector2f value) {
-        setObj(name, value);
-    }
-
-    public void setVec3(String name, Vector3f value) {
-        setObj(name, value);
-    }
-
-    public void setVec4(String name, Vector4f value) {
-        setObj(name, value);
-    }
-
-    public void setMat4(String name, Matrix4f value) {
         setObj(name, value);
     }
 
@@ -80,7 +49,7 @@ public class RenderMaterial {
 
     /**
      * Bind current shader program to this material's program,
-     *  and apply all the material's properties.
+     * and apply all the material's properties.
      */
     public void apply() {
         glUseProgram(shader.getProgramID());
@@ -152,9 +121,4 @@ public class RenderMaterial {
             glUniform1i(entry.getKey(), entry.getValue());
         }
     }
-
-    static void loadTexture(ResourceLocation src) {
-        Minecraft.getMinecraft().renderEngine.bindTexture(src);
-    }
-
 }

@@ -34,37 +34,6 @@ public class LegacyMeshUtils {
         mesh.setAllNormals(new float[] { 0, 0, 1 });
         return mesh;
     }
-    
-    public static LegacyMesh createBox(LegacyMesh mesh, double x0, double y0, double z0, double xw, double yw, double zw) {
-        if(mesh == null)
-            mesh = new LegacyMesh();
-        
-        double x1 = x0 + xw;
-        double y1 = y0 + yw;
-        double z1 = z0 + zw;
-        
-        mesh.setVertices(new double[][] {
-            { x0, y0, z0 },
-            { x1, y0, z0 },
-            { x1, y0, z1 },
-            { x0, y0, z1 },
-            { x0, y1, z0 },
-            { x1, y1, z0 },
-            { x1, y1, z1 },
-            { x0, y1, z1 }
-        });
-        
-        mesh.setQuads(new int[] {
-            0, 1, 2, 3,
-            4, 5, 6, 7,
-            5, 1, 2, 6,
-            6, 2, 3, 7,
-            7, 3, 0, 4,
-            4, 0, 1, 5
-        });
-        
-        return mesh;
-    }
 
     public static LegacyMesh createBoxWithUV(LegacyMesh mesh, double x0, double y0, double z0, double xw, double yw, double zw) {
         if(mesh == null)

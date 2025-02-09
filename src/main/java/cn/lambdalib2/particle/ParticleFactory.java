@@ -15,7 +15,7 @@ import java.util.List;
 public class ParticleFactory extends ParticleFactoryBase {
     public final Particle template;
 
-    private List<ParticleDecorator> decorators = new ArrayList<>();
+    private final List<ParticleDecorator> decorators = new ArrayList<>();
 
     double px, py, pz;
     double vx, vy, vz;

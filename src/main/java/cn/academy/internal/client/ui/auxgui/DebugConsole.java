@@ -8,14 +8,12 @@ import cn.academy.internal.datapart.CPData;
 import cn.academy.internal.util.ACKeyManager;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.input.KeyHandler;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontOption;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -33,6 +31,16 @@ import java.util.List;
 public class DebugConsole extends AuxGui {
     public static final DebugConsole INSTANCE = new DebugConsole();
 
+    static {
+        ACKeyManager.INSTANCE.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
+            @Override
+            public void onKeyDown() {
+                State[] states = State.values();
+                INSTANCE.state = states[(INSTANCE.state.ordinal() + 1) % states.length];
+            }
+        });
+    }
+
     private static class Text {
         final String text;
         final FontOption option;
@@ -49,17 +57,6 @@ public class DebugConsole extends AuxGui {
         public Text(String _text) {
             this(_text, 10);
         }
-    }
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent event) {
-        ACKeyManager.INSTANCE.addKeyHandler("debug_console", Keyboard.KEY_F4, new KeyHandler() {
-            @Override
-            public void onKeyDown() {
-                State[] states = State.values();
-                INSTANCE.state = states[(INSTANCE.state.ordinal() + 1) % states.length];
-            }
-        });
     }
 
     enum State {NONE, NORMAL, SHOW_EXP}

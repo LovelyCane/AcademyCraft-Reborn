@@ -3,10 +3,8 @@ package cn.academy.internal.client.renderer.misc;
 import cn.academy.Resources;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.particle.ParticleFactory;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.RandUtils;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,19 +13,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class TPParticleFactory extends ParticleFactory {
-    public static TPParticleFactory instance;
+    public static TPParticleFactory instance = new TPParticleFactory();
 
     static Particle template;
 
-    @StateEventCallback(priority = -100)
-    private static void postInit(FMLPostInitializationEvent ev) {
+    static {
         template = new Particle();
         template.texture = Resources.getTexture("effects/tp_particle");
         template.size = 0.1f;
         template.hasLight = false;
         template.color.set(255, 255, 255, 255);
-
-        instance = new TPParticleFactory();
     }
 
     public TPParticleFactory() {

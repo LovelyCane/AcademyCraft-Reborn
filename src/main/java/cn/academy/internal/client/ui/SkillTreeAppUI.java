@@ -8,10 +8,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SkillTreeAppUI {
     public static CGuiScreen apply() {
-        CGuiScreen ret = new SkillTreeJava.TreeScreen();
+        CGuiScreen ret = new SkillTree.TreeScreen();
         CGui gui = ret.getGui();
 
-        gui.addWidget(SkillTreeJava.initialize(null,gui));
+        gui.addWidget(SkillTree.initialize(null,gui));
 
         return ret;
     }

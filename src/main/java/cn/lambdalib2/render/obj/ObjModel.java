@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +37,6 @@ public class ObjModel {
             this.i0 = i0;
             this.i1 = i1;
             this.i2 = i2;
-        }
-
-        public void store(IntBuffer buffer) {
-            buffer.put(i0).put(i1).put(i2);
         }
 
         @Override

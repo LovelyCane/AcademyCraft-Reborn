@@ -12,10 +12,8 @@ package cn.lambdalib2.vis.curve;
  * @author WeAthFolD
  */
 public interface IFittedCurve {
-    
-    public static class Point implements Comparable<Point> {
+    class Point implements Comparable<Point> {
         public double x, y;
-        public Point() {}
         public Point(double _x, double _y) {
             x = _x;
             y = _y;
@@ -23,7 +21,7 @@ public interface IFittedCurve {
         
         @Override
         public int compareTo(Point arg0) {
-            return ((Double) x).compareTo(arg0.x);
+            return Double.compare(x, arg0.x);
         }
     }
     
@@ -37,15 +35,9 @@ public interface IFittedCurve {
      * Get the yval of the curve at given x coordinate.
      */
     double valueAt(double x);
-    
-    /**
-     * @return The count of control points
-     */
-    int pointCount();
-    
+
     /**
      * @return The control point with index i
-     * @throws IndexOutOfBoundsException
      */
     Point getPoint(int i);
     
@@ -53,5 +45,4 @@ public interface IFittedCurve {
      * Remove all the control points and reset the curve.
      */
     void reset();
-    
 }

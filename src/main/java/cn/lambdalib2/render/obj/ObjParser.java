@@ -188,12 +188,6 @@ public class ObjParser {
         return ret;
     }
 
-    private static void div(Vector3f v, float s) {
-        v.x /= s;
-        v.y /= s;
-        v.z /= s;
-    }
-
     private static int genIndex(GenContext ctx, VertexIdt idt) {
         int idx;
         if (ctx.generated.containsKey(idt)) {

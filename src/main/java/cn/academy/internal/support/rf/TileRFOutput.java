@@ -9,29 +9,29 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
-import static cn.academy.internal.support.rf.RFSupport.if2rf;
-import static cn.academy.internal.support.rf.RFSupport.rf2if;
+import static cn.academy.internal.support.rf.RFSupportImpl.if2rf;
+import static cn.academy.internal.support.rf.RFSupportImpl.rf2if;
+
 
 @Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyProvider")
-public class TileRFOutput extends TileReceiverBase implements IEnergyProvider
-{
+public class TileRFOutput extends TileReceiverBase implements IEnergyProvider {
 
     public TileRFOutput() {
         super("ac_rf_output", 0, 2000, 100);
     }
-    
+
     @Override
     public void update() {
         super.update();
         World world = getWorld();
-        if(!world.isRemote) {
-            for(EnumFacing dir : EnumFacing.VALUES) {
+        if (!world.isRemote) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
                 BlockPos pos = this.pos.add(dir.getDirectionVec());
                 TileEntity te = world.getTileEntity(pos);
-                if(te instanceof IEnergyReceiver && energy > 0) {
+                if (te instanceof IEnergyReceiver && energy > 0) {
                     IEnergyReceiver receiver = (IEnergyReceiver) te;
                     EnumFacing rev = dir.getOpposite();
-                    if(receiver.canConnectEnergy(rev)) {
+                    if (receiver.canConnectEnergy(rev)) {
                         int req = receiver.getMaxEnergyStored(rev) - receiver.getEnergyStored(rev);
                         req = Math.min(if2rf(energy), req);
                         energy -= rf2if(receiver.receiveEnergy(rev, req, false));
@@ -49,9 +49,9 @@ public class TileRFOutput extends TileReceiverBase implements IEnergyProvider
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         int e = (int) energy;
-        if(!simulate) {
+        if (!simulate) {
             energy -= rf2if(maxExtract);
-            if(energy < 0) energy = 0;
+            if (energy < 0) energy = 0;
         }
         return Math.min(if2rf(e), maxExtract);
     }

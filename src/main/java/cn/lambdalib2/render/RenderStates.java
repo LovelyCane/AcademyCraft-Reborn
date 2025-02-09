@@ -3,7 +3,6 @@ package cn.lambdalib2.render;
 import static org.lwjgl.opengl.GL11.*;
 
 public class RenderStates {
-
     public enum TestMode {
         Always(GL_ALWAYS),
         Never(GL_NEVER),
@@ -87,5 +86,4 @@ public class RenderStates {
             glDisable(GL_BLEND);
         }
     }
-
 }

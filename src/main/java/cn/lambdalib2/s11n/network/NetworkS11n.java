@@ -6,7 +6,13 @@
  */
 package cn.lambdalib2.s11n.network;
 
+import cn.academy.internal.ability.Controllable;
+import cn.academy.internal.client.ui.NetDelegate;
+import cn.academy.internal.client.ui.WirelessNetDelegate;
+import cn.academy.internal.crafting.MetalFormerRecipes;
+import cn.academy.internal.crafting.client.ui.MFNetDelegate;
 import cn.academy.internal.datapart.CooldownData;
+import cn.academy.internal.datapart.PresetData;
 import cn.lambdalib2.s11n.SerializationHelper;
 import cn.lambdalib2.s11n.SerializeDynamic;
 import cn.lambdalib2.s11n.SerializeNullable;
@@ -40,6 +46,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * This class handles recursive s11n on netty {@link ByteBuf}.
@@ -51,11 +58,11 @@ public class NetworkS11n {
     private static final short IDX_NULL = -1, IDX_ARRAY = -2;
     private static final BiMap<Integer, Class<?>> serTypesHashLookup = HashBiMap.create();
 
-    private static Map<Class<?>, NetS11nAdaptor> adaptors = new HashMap<>();
-    private static Map<Class, Supplier> suppliers = new HashMap<>();
-    private static Map<Class, List<Field>> fieldCache = new HashMap<>();
+    private static final Map<Class<?>, NetS11nAdaptor> adaptors = new HashMap<>();
+    private static final Map<Class, Supplier> suppliers = new HashMap<>();
+    private static final Map<Class, List<Field>> fieldCache = new HashMap<>();
 
-    private static byte MAGIC = 0x47;
+    private static final byte MAGIC = 0x47;
 
     // default s11n types
     static {
@@ -343,7 +350,7 @@ public class NetworkS11n {
             @SideOnly(Side.CLIENT)
             private boolean checkClientCanRead() {
                 Minecraft mc = Minecraft.getMinecraft();
-                return mc != null && mc.player != null;
+                return mc.player != null;
             }
         });
         addDirect(World.class, new NetS11nAdaptor<World>() {
@@ -489,6 +496,45 @@ public class NetworkS11n {
         });
 
         NetworkS11n.addDirect(Future.class, new S11nHandler());
+        NetworkS11n.addDirectInstance(WirelessNetDelegate.INSTANCE);
+        NetworkS11n.addDirectInstance(NetDelegate.INSTANCE);
+        NetworkS11n.addDirect(MetalFormerRecipes.RecipeObject.class, new NetS11nAdaptor<MetalFormerRecipes.RecipeObject>() {
+            @Override
+            public void write(ByteBuf buf, MetalFormerRecipes.RecipeObject obj) {
+                buf.writeByte(obj.id);
+            }
+
+            @Override
+            public MetalFormerRecipes.RecipeObject read(ByteBuf buf) throws ContextException {
+                return MetalFormerRecipes.INSTANCE.objects.get(buf.readByte());
+            }
+        });
+        NetworkS11n.addDirectInstance(MFNetDelegate.INSTANCE);
+        NetworkS11n.addDirect(PresetData.Preset.class, new NetS11nAdaptor<PresetData.Preset>() {
+            @Override
+            public void write(ByteBuf buf, PresetData.Preset obj) {
+                int count = (int) IntStream.range(0, PresetData.MAX_KEYS).filter(idx -> obj.hasMapping(idx)).count();
+                buf.writeByte(count);
+
+                IntStream.range(0, PresetData.MAX_KEYS).forEach(idx -> {
+                    if (obj.hasMapping(idx)) {
+                        buf.writeByte(idx);
+                        NetworkS11n.serializeWithHint(buf, obj.getControllable(idx), Controllable.class);
+                    }
+                });
+            }
+
+            @Override
+            public PresetData.Preset read(ByteBuf buf) throws ContextException {
+                PresetData.Preset ret = new PresetData.Preset();
+                int count = buf.readByte();
+                while (count-- > 0) {
+                    int id = buf.readByte();
+                    ret.data[id] = NetworkS11n.deserializeWithHint(buf, Controllable.class);
+                }
+                return ret;
+            }
+        });
     }
 
     private NetworkS11n() {
@@ -623,7 +669,7 @@ public class NetworkS11n {
     public static <T> void serializeWithHint(ByteBuf buf, T obj, Class<? super T> type) {
         _check(obj != null, "Hintted serialization doesn't take null");
 
-        NetS11nAdaptor<? super T> adaptor = (NetS11nAdaptor) _adaptor(type);
+        NetS11nAdaptor<? super T> adaptor = _adaptor(type);
         if (adaptor != null) { // Serialize direct types
             adaptor.write(buf, obj);
         } else if (type.isEnum()) { // Serialize enum
@@ -689,7 +735,7 @@ public class NetworkS11n {
      */
     public static <T, U extends T> T deserializeWithHint(ByteBuf buf, Class<U> type) {
 //        Debug.log("DeserializeWithHint " + type + "/" + buf.writerIndex());
-        NetS11nAdaptor<? super U> adaptor = (NetS11nAdaptor) _adaptor(type);
+        NetS11nAdaptor<? super U> adaptor = _adaptor(type);
         // System.out.println("adaptor " + type + " is " + adaptor);
         if (adaptor != null) {
             // Note that if adaptor's real type doesn't extend T there will be a cast exception.
@@ -757,7 +803,7 @@ public class NetworkS11n {
         if (ret == null) {
             ret = Lists.newArrayList(serHelper.getExposedFields(type));
             // Sort to preserve s11n order
-            Collections.sort(ret, (lhs, rhs) -> lhs.getName().compareTo(rhs.getName()));
+            ret.sort(Comparator.comparing(Field::getName));
             fieldCache.put(type, ret);
         }
 
@@ -780,6 +826,7 @@ public class NetworkS11n {
             cur = cur.getSuperclass();
         }
 
+        assert topClass != null;
         for (Class<?> itf : topClass.getInterfaces()) {
             ret = adaptors.get(itf);
             if (ret != null) {

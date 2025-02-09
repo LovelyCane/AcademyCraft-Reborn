@@ -62,7 +62,7 @@ public class TextSplitter {
                             ++i;
                         }
 
-                        builder.append(content.substring(0, i));
+                        builder.append(content, 0, i);
                         String add = builder.toString();
                         ret.add(add);
 

@@ -40,9 +40,9 @@ public class EUSourceManager implements IEnergyBlockManager {
     public double pull(TileEntity tile, double amt, boolean ignoreBandwidth) {
         IEnergySource src = asSource(tile);
         if(src != null) {
-            double todraw = Math.min(src.getOfferedEnergy(), amt / IC2Support.CONV_RATE);
+            double todraw = Math.min(src.getOfferedEnergy(), amt / IC2SupportImpl.CONV_RATE);
             src.drawEnergy(todraw);
-            return todraw * IC2Support.CONV_RATE;
+            return todraw * IC2SupportImpl.CONV_RATE;
         }
         return 0;
     }

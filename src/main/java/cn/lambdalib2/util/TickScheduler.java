@@ -13,8 +13,7 @@ import java.util.function.Supplier;
  * Util to aid timed tick(frame) scheduling. You can use it at anywhere that requires ticking to handle multiple schedules.
  */
 public class TickScheduler {
-
-    private class Schedule {
+    private static class Schedule {
 
         Optional<Supplier<Boolean>> condition;
         Optional<String> name;
@@ -26,7 +25,7 @@ public class TickScheduler {
 
     }
 
-    private List<Schedule> schedules = new LinkedList<>();
+    private final List<Schedule> schedules = new LinkedList<>();
 
     public class ScheduleCreator {
 
@@ -63,12 +62,12 @@ public class TickScheduler {
             return this;
         }
 
-        public ScheduleCreator run(Runnable _task) {
+        public void run(Runnable _task) {
             if (shouldIgnore())
-                return this;
+                return;
 
             check(name.equals(Optional.empty()) ||
-                    !schedules.stream().anyMatch(s -> s.name.equals(name)), "Name collide: " + name);
+                    schedules.stream().noneMatch(s -> s.name.equals(name)), "Name collide: " + name);
             Schedule add = new Schedule();
             add.name = name;
             add.condition = condition;
@@ -76,7 +75,6 @@ public class TickScheduler {
             add.runnable = _task;
             add.counter = timeIntv;
             schedules.add(add);
-            return this;
         }
 
         private boolean shouldIgnore() {
@@ -104,16 +102,6 @@ public class TickScheduler {
                 .forEach(s -> s.disposed = true);
     }
 
-    public void updateInterval(String name, int newInterval) {
-        updateIntervalSec(name, newInterval / 20f);
-    }
-
-    public void updateIntervalSec(String name, float newInterval) {
-        find(name).ifPresent(s -> {
-            s.interval = newInterval;
-        });
-    }
-
     public void runTick() {
         runFrame(0.05f);
     }
@@ -139,10 +127,4 @@ public class TickScheduler {
     private void check(boolean pred, String msg) {
         if (!pred) throw new RuntimeException("TickScheduler: " + msg);
     }
-
-    private Optional<Schedule> find(String name) {
-        Optional<String> cmp = Optional.of(name);
-        return schedules.stream().filter(s -> s.name.equals(cmp)).findFirst();
-    }
-
 }

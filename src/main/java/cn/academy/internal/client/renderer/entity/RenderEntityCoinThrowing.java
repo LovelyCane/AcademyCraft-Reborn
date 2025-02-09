@@ -14,6 +14,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author KSkun
  */
@@ -60,7 +62,7 @@ public class RenderEntityCoinThrowing extends Render<EntityCoinThrowing> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityCoinThrowing entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityCoinThrowing entity) {
         return null;
     }
 }

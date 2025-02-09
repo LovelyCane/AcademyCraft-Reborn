@@ -3,7 +3,6 @@ package cn.lambdalib2.render;
 import cn.lambdalib2.render.ShaderScript.PropertyType;
 import cn.lambdalib2.util.Debug;
 import cn.lambdalib2.util.ResourceUtils;
-import com.google.common.base.Charsets;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -69,14 +68,6 @@ public class ShaderScript {
         }
     }
 
-    public static ShaderScript loadFromResource(String path) {
-        try {
-            return load(IOUtils.toString(ShaderScript.class.getResource(path), Charsets.UTF_8));
-        } catch (Exception ex) {
-            throw new RuntimeException("Error loading shader script at " + path, ex);
-        }
-    }
-
     public final List<Property> uniformProperties = new ArrayList<>();
     public final List<InstanceProperty> instanceProperties = new ArrayList<>();
     public int drawOrder;
@@ -125,17 +116,17 @@ final class ShaderScriptParser {
             regexEq = "=",
             regexComma = ",";
 
-    private static Token tknID = new Token("ID", regexID),
-            tknSpace = new Token("SPACE", regexSpace),
-            tknLeftBrace = new Token("LEFT_BRACE", regexLeftBrace),
-            tknRightBrace = new Token("RIGHT_BRACE", regexRightBrace),
-            tknInt = new Token("INT", "[+\\-]?[0-9]+"),
-            tknFloat = new Token("FLOAT", "[+\\-]?[0-9]+\\.[0-9]*([eE][0-9]+)?"),
-            tknSemi = new Token("SEMI", ";"),
-            tknLeftParen = new Token("LEFT_PAREN", regexLeftParen),
-            tknRightParen = new Token("RIGHT_PAREN", regexRightParen),
-            tknEq = new Token("EQ", regexEq),
-            tknComma = new Token("COMMA", regexComma);
+    private static final Token tknID = new Token("ID", regexID);
+    private static final Token tknSpace = new Token("SPACE", regexSpace);
+    private static final Token tknLeftBrace = new Token("LEFT_BRACE", regexLeftBrace);
+    private static final Token tknRightBrace = new Token("RIGHT_BRACE", regexRightBrace);
+    private static final Token tknInt = new Token("INT", "[+\\-]?[0-9]+");
+    private static final Token tknFloat = new Token("FLOAT", "[+\\-]?[0-9]+\\.[0-9]*([eE][0-9]+)?");
+    private static final Token tknSemi = new Token("SEMI", ";");
+    private static final Token tknLeftParen = new Token("LEFT_PAREN", regexLeftParen);
+    private static final Token tknRightParen = new Token("RIGHT_PAREN", regexRightParen);
+    private static final Token tknEq = new Token("EQ", regexEq);
+    private static final Token tknComma = new Token("COMMA", regexComma);
 
 
     public static ShaderScript load(String content) {
@@ -242,11 +233,7 @@ final class ShaderScriptParser {
                 va.type = GLPropertyType.fromGLType(typeBuffer.get());
             }
 
-            ShaderScript.InstanceProperty ip =
-                script.instanceProperties.stream().filter(it -> it.name.equals(name)).findAny().orElse(null);
-            if (ip != null) {
-                ip.location = index;
-            }
+            script.instanceProperties.stream().filter(it -> it.name.equals(name)).findAny().ifPresent(ip -> ip.location = index);
         }
 
         // Remove invalid attributes
@@ -287,7 +274,7 @@ final class ShaderScriptParser {
                 tknID, tknSpace, tknLeftParen, tknRightParen, tknSemi, tknComma,
                 tknLeftBrace, tknRightBrace, tknEq, tknFloat, tknInt);
 
-        lexer.setInitPos(lineNumber, 0);
+        lexer.setInitPos(lineNumber);
 
         // section-list := section-list data-section | data-section
         while (true) {
@@ -297,135 +284,141 @@ final class ShaderScriptParser {
             if (t.token == tknID) {
                 assertToken(lexer, nextTokenSkipSpaces(lexer), tknLeftBrace);
 
-                switch (t.content) {
-                    case "VertexLayout": {
-                        // layout-list := layout-list layout-statement | layout-list
-                        // layout-statement := property-name EQ semantic-name SEMI;
-                        while (true) {
-                            MatchedToken tName = assertNext(lexer, tknRightBrace, tknID);
+                if (t.content.equals("VertexLayout")) {// layout-list := layout-list layout-statement | layout-list
+                    // layout-statement := property-name EQ semantic-name SEMI;
+                    while (true) {
+                        MatchedToken tName = assertNext(lexer, tknRightBrace, tknID);
 
-                            if (tName.token == tknID) {
-                                assertNext(lexer, tknEq);
-                                String semantic = assertNext(lexer, tknID).content;
-                                assertNext(lexer, tknSemi);
+                        if (tName.token == tknID) {
+                            assertNext(lexer, tknEq);
+                            String semantic = assertNext(lexer, tknID).content;
+                            assertNext(lexer, tknSemi);
 
-                                Mesh.DataType dataType = semanticToDataType(lexer, semantic);
+                            Mesh.DataType dataType = semanticToDataType(lexer, semantic);
 
-                                ShaderScript.VertexAttribute va = new ShaderScript.VertexAttribute();
-                                va.semantic = dataType;
-                                va.index = -1;
-                                va.name = tName.content;
+                            ShaderScript.VertexAttribute va = new ShaderScript.VertexAttribute();
+                            va.semantic = dataType;
+                            va.index = -1;
+                            va.name = tName.content;
 
-                                shader.vertexLayout.put(tName.content, va);
-                            } else { // right brace
-                                break;
-                            }
+                            shader.vertexLayout.put(tName.content, va);
+                        } else { // right brace
+                            break;
                         }
-
-                    } break;
-                    default: {
-                        boolean isInstance;
-                        switch (t.content) {
-                            case "Uniform": isInstance = false; break;
-                            case "Instance": isInstance = true; break;
-                            default: throw errorLexer(lexer,
+                    }
+                } else {
+                    boolean isInstance;
+                    switch (t.content) {
+                        case "Uniform":
+                            isInstance = false;
+                            break;
+                        case "Instance":
+                            isInstance = true;
+                            break;
+                        default:
+                            throw errorLexer(lexer,
                                     String.format("Invalid section name %s, must be Uniform, Instance or VertexLayout",
                                             t.content));
-                        }
+                    }
 
-                        List<ShaderScript.BaseProperty> propertyList = (List) (isInstance ? shader.instanceProperties : shader.uniformProperties);
+                    List<ShaderScript.BaseProperty> propertyList = (List) (isInstance ? shader.instanceProperties : shader.uniformProperties);
 
-                        // data-section := section_name { property-list }
-                        // property-list := property-list property-statement | property-statement
-                        // property-statement := property-name EQ initializer SEMI
-                        // initializer := FLOAT | INT | vec2(...) | vec3(...) | vec4(...) | pass_data(ID) | sampler2D
+                    // data-section := section_name { property-list }
+                    // property-list := property-list property-statement | property-statement
+                    // property-statement := property-name EQ initializer SEMI
+                    // initializer := FLOAT | INT | vec2(...) | vec3(...) | vec4(...) | pass_data(ID) | sampler2D
 
-                        while (true) {
-                            MatchedToken tName = nextTokenSkipSpaces(lexer);
-                            if (tName.token == tknRightBrace) {
-                                break;
-                            } else if (tName.token == tknID) {
-                                String propertyName = tName.content;
-                                assertNext(lexer, tknEq);
+                    while (true) {
+                        MatchedToken tName = nextTokenSkipSpaces(lexer);
+                        if (tName.token == tknRightBrace) {
+                            break;
+                        } else if (tName.token == tknID) {
+                            String propertyName = tName.content;
+                            assertNext(lexer, tknEq);
 
-                                ShaderScript.BaseProperty property = isInstance ? new ShaderScript.InstanceProperty() : new ShaderScript.Property();
-                                property.name = propertyName;
+                            ShaderScript.BaseProperty property = isInstance ? new ShaderScript.InstanceProperty() : new ShaderScript.Property();
+                            property.name = propertyName;
 
-                                MatchedToken tInitHead = nextTokenSkipSpaces(lexer);
-                                if (tInitHead.token == tknID) {
-                                    switch (tInitHead.content) {
-                                        case "pass_data": {
-                                            assertNext(lexer, tknLeftParen);
-                                            String dataSource = assertNext(lexer, tknID).content;
-                                            assertNext(lexer, tknRightParen);
+                            MatchedToken tInitHead = nextTokenSkipSpaces(lexer);
+                            if (tInitHead.token == tknID) {
+                                switch (tInitHead.content) {
+                                    case "pass_data": {
+                                        assertNext(lexer, tknLeftParen);
+                                        String dataSource = assertNext(lexer, tknID).content;
+                                        assertNext(lexer, tknRightParen);
 
-                                            property.type = PropertyType.PassData;
-                                            property.value = dataSource;
-                                        } break;
-                                        case "vec2": {
-                                            Vector2f vec = new Vector2f();
-                                            assertNext(lexer, tknLeftParen);
-                                            vec.x = assertNextNumber(lexer);
-                                            assertNext(lexer, tknComma);
-                                            vec.y = assertNextNumber(lexer);
-                                            assertNext(lexer, tknRightParen);
-
-                                            property.type = PropertyType.Vec2;
-                                            property.value = vec;
-                                        } break;
-                                        case "vec3": {
-                                            Vector3f vec = new Vector3f();
-                                            assertNext(lexer, tknLeftParen);
-                                            vec.x = assertNextNumber(lexer);
-                                            assertNext(lexer, tknComma);
-                                            vec.y = assertNextNumber(lexer);
-                                            assertNext(lexer, tknComma);
-                                            vec.z = assertNextNumber(lexer);
-                                            assertNext(lexer, tknRightParen);
-
-                                            property.type = PropertyType.Vec3;
-                                            property.value = vec;
-                                        } break;
-                                        case "vec4": {
-                                            Vector4f vec = new Vector4f();
-                                            assertNext(lexer, tknLeftParen);
-                                            vec.x = assertNextNumber(lexer);
-                                            assertNext(lexer, tknComma);
-                                            vec.y = assertNextNumber(lexer);
-                                            assertNext(lexer, tknComma);
-                                            vec.z = assertNextNumber(lexer);
-                                            assertNext(lexer, tknComma);
-                                            vec.w = assertNextNumber(lexer);
-                                            assertNext(lexer, tknRightParen);
-
-                                            property.type = PropertyType.Vec4;
-                                            property.value = vec;
-                                        } break;
-                                        case "sampler2D": {
-                                            property.type = PropertyType.Sampler2D;
-                                            property.value = null;
-                                        } break;
-                                        case "mat4": {
-                                            property.type = PropertyType.Mat4;
-                                            property.value = new Matrix4f();
-                                        } break;
-                                        default: {
-                                            throw errorLexer(lexer, "Unsupported property type " + tInitHead.content);
-                                        }
+                                        property.type = PropertyType.PassData;
+                                        property.value = dataSource;
                                     }
-                                } else if (tInitHead.token == tknInt || tInitHead.token == tknFloat) {
-                                    property.type = PropertyType.Float;
-                                    property.value = Float.parseFloat(tInitHead.content);
-                                } else {
-                                    throw errorLexerUnexpected(lexer, tInitHead, tknID, tknInt, tknFloat);
+                                    break;
+                                    case "vec2": {
+                                        Vector2f vec = new Vector2f();
+                                        assertNext(lexer, tknLeftParen);
+                                        vec.x = assertNextNumber(lexer);
+                                        assertNext(lexer, tknComma);
+                                        vec.y = assertNextNumber(lexer);
+                                        assertNext(lexer, tknRightParen);
+
+                                        property.type = PropertyType.Vec2;
+                                        property.value = vec;
+                                    }
+                                    break;
+                                    case "vec3": {
+                                        Vector3f vec = new Vector3f();
+                                        assertNext(lexer, tknLeftParen);
+                                        vec.x = assertNextNumber(lexer);
+                                        assertNext(lexer, tknComma);
+                                        vec.y = assertNextNumber(lexer);
+                                        assertNext(lexer, tknComma);
+                                        vec.z = assertNextNumber(lexer);
+                                        assertNext(lexer, tknRightParen);
+
+                                        property.type = PropertyType.Vec3;
+                                        property.value = vec;
+                                    }
+                                    break;
+                                    case "vec4": {
+                                        Vector4f vec = new Vector4f();
+                                        assertNext(lexer, tknLeftParen);
+                                        vec.x = assertNextNumber(lexer);
+                                        assertNext(lexer, tknComma);
+                                        vec.y = assertNextNumber(lexer);
+                                        assertNext(lexer, tknComma);
+                                        vec.z = assertNextNumber(lexer);
+                                        assertNext(lexer, tknComma);
+                                        vec.w = assertNextNumber(lexer);
+                                        assertNext(lexer, tknRightParen);
+
+                                        property.type = PropertyType.Vec4;
+                                        property.value = vec;
+                                    }
+                                    break;
+                                    case "sampler2D": {
+                                        property.type = PropertyType.Sampler2D;
+                                        property.value = null;
+                                    }
+                                    break;
+                                    case "mat4": {
+                                        property.type = PropertyType.Mat4;
+                                        property.value = new Matrix4f();
+                                    }
+                                    break;
+                                    default: {
+                                        throw errorLexer(lexer, "Unsupported property type " + tInitHead.content);
+                                    }
                                 }
-
-                                propertyList.add(property);
-
-                                assertToken(lexer, nextTokenSkipSpaces(lexer), tknSemi);
+                            } else if (tInitHead.token == tknInt || tInitHead.token == tknFloat) {
+                                property.type = PropertyType.Float;
+                                property.value = Float.parseFloat(tInitHead.content);
                             } else {
-                                throw errorLexerUnexpected(lexer, tName, tknRightBrace, tknID);
+                                throw errorLexerUnexpected(lexer, tInitHead, tknID, tknInt, tknFloat);
                             }
+
+                            propertyList.add(property);
+
+                            assertToken(lexer, nextTokenSkipSpaces(lexer), tknSemi);
+                        } else {
+                            throw errorLexerUnexpected(lexer, tName, tknRightBrace, tknID);
                         }
                     }
                 }
@@ -450,7 +443,7 @@ final class ShaderScriptParser {
 
     private static void parseSettings(ShaderScript shader, String content, int lineNumber) {
         Lexer lexer = new Lexer(content, tknID, tknSpace, tknFloat, tknInt, tknSemi);
-        lexer.setInitPos(lineNumber, 0);
+        lexer.setInitPos(lineNumber);
 
         RenderStates renderStates = shader.renderStates;
 
@@ -649,9 +642,9 @@ final class Lexer {
         this.tokens = tokens;
     }
 
-    void setInitPos(int lineNumber, int colNumber) {
+    void setInitPos(int lineNumber) {
         this.lineNumber = lineNumber;
-        this.colNumber = colNumber;
+        this.colNumber = 0;
     }
 
     boolean hasNext() {

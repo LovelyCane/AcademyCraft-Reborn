@@ -1,23 +1,14 @@
 package cn.academy.internal.energy.api;
 
 import cn.academy.internal.energy.api.block.IWirelessNode;
-import cn.academy.internal.support.EnergyBlockHelper;
 import cn.academy.internal.support.EnergyBlockHelper.IEnergyBlockManager;
-import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 /**
  * @author WeAthFolD
  */
-
 public class IFNodeManager implements IEnergyBlockManager {
-    public static IFNodeManager instance = new IFNodeManager();
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
-        EnergyBlockHelper.register(instance);
-    }
+    public static final IFNodeManager INSTANCE = new IFNodeManager();
 
     @Override
     public boolean isSupported(TileEntity tile) {
@@ -39,8 +30,7 @@ public class IFNodeManager implements IEnergyBlockManager {
         IWirelessNode node = ((IWirelessNode) tile);
         double max = node.getMaxEnergy() - node.getEnergy();
         double chg = Math.min(amt, max);
-        if (!ignoreBandwidth)
-            chg = Math.min(node.getBandwidth(), chg);
+        if (!ignoreBandwidth) chg = Math.min(node.getBandwidth(), chg);
 
         node.setEnergy(node.getEnergy() + chg);
         return amt - chg;
@@ -51,8 +41,7 @@ public class IFNodeManager implements IEnergyBlockManager {
         IWirelessNode node = (IWirelessNode) tile;
         double max = node.getEnergy();
         double pull = Math.min(max, amt);
-        if (!ignoreBandwidth)
-            pull = Math.min(node.getBandwidth(), pull);
+        if (!ignoreBandwidth) pull = Math.min(node.getBandwidth(), pull);
 
         node.setEnergy(node.getEnergy() - pull);
         return pull;

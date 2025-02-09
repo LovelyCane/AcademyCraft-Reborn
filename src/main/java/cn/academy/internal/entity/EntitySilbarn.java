@@ -4,7 +4,6 @@ import cn.academy.Resources;
 import cn.lambdalib2.particle.Particle;
 import cn.lambdalib2.particle.ParticleFactory;
 import cn.lambdalib2.particle.decorators.ParticleDecorator;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.EntitySelectors;
 import cn.lambdalib2.util.GameTimer;
 import cn.lambdalib2.util.RandUtils;
@@ -20,11 +19,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,9 +33,7 @@ public class EntitySilbarn extends EntityAdvanced {
     @SideOnly(Side.CLIENT)
     static ParticleFactory particles;
 
-    @SideOnly(Side.CLIENT)
-    @StateEventCallback
-    public static void init(FMLInitializationEvent event) {
+    static {
         Particle p = new Particle();
         p.texture = Resources.getTexture("entities/silbarn_frag");
         p.size = 0.1f;
@@ -49,7 +43,8 @@ public class EntitySilbarn extends EntityAdvanced {
         particles = new ParticleFactory(p);
         particles.addDecorator(new ParticleDecorator() {
 
-            double vx, vy;
+            final double vx;
+            final double vy;
             final double fac = 25;
 
             {
@@ -75,12 +70,11 @@ public class EntitySilbarn extends EntityAdvanced {
 
                     @Override
                     public void onUpdate() {
-                        particle.rotationYaw += vx * fac;
-                        particle.rotationPitch += vy * fac;
+                        particle.rotationYaw += (float) (vx * fac);
+                        particle.rotationPitch += (float) (vy * fac);
                     }
                 });
             }
-
         });
     }
 
@@ -111,8 +105,7 @@ public class EntitySilbarn extends EntityAdvanced {
                     hit = true;
                     if (event.result.entityHit instanceof EntitySilbarn)
                         playSound(Resources.sound("entity.silbarn_heavy"), 0.5f, 1.0f);
-                    else
-                        playSound(Resources.sound("entity.silbarn_light"), 0.5f, 1.0f);
+                    else playSound(Resources.sound("entity.silbarn_light"), 0.5f, 1.0f);
                     executeAfter(Entity::setDead, 10);
                 }
             }
@@ -141,11 +134,7 @@ public class EntitySilbarn extends EntityAdvanced {
                 @SuppressWarnings("sideonly")
                 public void onEvent(CollideEvent event) {
                     if (!hit) {
-                        RayTraceResult res = event.result;
-                        EnumFacing dir = res.sideHit;
-                        final double mul = 0.1;
-                        double tx = res.hitVec.x + dir.getYOffset() * mul, ty = res.hitVec.y + dir.getYOffset() * mul, tz = res.hitVec.z + dir.getZOffset() * mul;
-                        spawnEffects(tx, ty, tz);
+                        spawnEffects();
                         setDead();
                     }
                     hit = true;
@@ -178,7 +167,7 @@ public class EntitySilbarn extends EntityAdvanced {
         if (world.isRemote) {
             boolean b = dataManager.get(HIT_SYNC) != 0;
             if (!hit && b) {
-                spawnEffects(posX, posY, posZ);
+                spawnEffects();
             }
             hit = b;
         } else {
@@ -192,7 +181,7 @@ public class EntitySilbarn extends EntityAdvanced {
     }
 
     @SideOnly(Side.CLIENT)
-    private void spawnEffects(double tx, double ty, double tz) {
+    private void spawnEffects() {
         int n = RandUtils.rangei(18, 27);
         for (int i = 0; i < n; ++i) {
             double vel = RandUtils.ranged(0.08, 0.18), vsq = vel * vel, vx = rand.nextDouble() * vel, vxsq = vx * vx, vy = rand.nextDouble() * Math.sqrt(vsq - vxsq), vz = Math.sqrt(vsq - vxsq - vy * vy);

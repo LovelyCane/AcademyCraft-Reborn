@@ -35,7 +35,7 @@ public class EUSinkManager implements IEnergyBlockManager {
     public double charge(TileEntity tile, double amt, boolean ignoreBandwidth) {
         IEnergySink sink = asSink(tile);
         if(sink != null) {
-            return IC2Support.CONV_RATE * sink.injectEnergy(EnumFacing.UP, amt / IC2Support.CONV_RATE, ignoreBandwidth ? 233333 : 1024);
+            return IC2SupportImpl.CONV_RATE * sink.injectEnergy(EnumFacing.UP, amt / IC2SupportImpl.CONV_RATE, ignoreBandwidth ? 233333 : 1024);
         }
         return amt;
     }

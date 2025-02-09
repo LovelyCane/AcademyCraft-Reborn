@@ -3,30 +3,8 @@ package cn.lambdalib2.render;
 import cn.lambdalib2.util.MathUtils;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Quaternion;
 
 public class TransformUtils {
-
-    public static Matrix4f perspective(float fov, float aspect, float zNear, float zFar) {
-        return perspective(fov, aspect, zNear, zFar, null);
-    }
-
-    public static Matrix4f perspective(float fov, float aspect, float zNear, float zFar, Matrix4f mat) {
-        mat = init(mat);
-        float yScale = (float) (1 / (Math.tan(Math.toRadians(fov / 2))));
-        float xScale = yScale / aspect;
-        float frustrumLength = zFar - zNear;
-
-        mat.m00 = xScale;
-        mat.m11 = yScale;
-        mat.m22 = -((zFar + zNear) / frustrumLength);
-        mat.m23 = -1;
-        mat.m32 = -((2 * zFar * zNear) / frustrumLength);
-        mat.m33 = 0;
-
-        return mat;
-    }
-
     public static Matrix4f translate(float dx, float dy, float dz) {
         return translate(dx, dy, dz, null);
     }
@@ -61,12 +39,8 @@ public class TransformUtils {
         return mat;
     }
 
-    public static Matrix4f rotateEuler(float x, float y, float z) {
-        return rotateEuler(x, y, z, null);
-    }
-
     // see: https://en.wikipedia.org/wiki/Euler_angles
-    public static Matrix4f rotateEuler(float x, float y, float z, Matrix4f mat) {
+    public static void rotateEuler(float x, float y, float z, Matrix4f mat) {
         mat = init(mat);
 
         float a3 = MathUtils.toRadians(x);
@@ -89,57 +63,6 @@ public class TransformUtils {
         mat.m21 = s1 * s3 - c1 * c3 * s2;
         mat.m22 = c2 * c3;
 
-        return mat;
-    }
-
-    public static Quaternion eulerToQuaternion(float x, float y, float z) {
-        Quaternion q = new Quaternion();
-        float f = (float) (Math.PI / 180);
-        x *= f; y *= f; z *= f;
-        float cz = MathHelper.cos(z * 0.5f);
-        float sz = MathHelper.sin(z * 0.5f);
-        float cx = MathHelper.cos(x * 0.5f);
-        float sx = MathHelper.sin(x * 0.5f);
-        float cy = MathHelper.cos(y * 0.5f);
-        float sy = MathHelper.sin(y * 0.5f);
-
-        q.w = cz * cx * cy + sz * sx * sy;
-        q.x = cz * sx * cy - sz * cx * sy;
-        q.y = cz * cx * sy + sz * sx * cy;
-        q.z = sz * cx * cy - cz * sx * sy;
-        return q;
-    }
-
-    public static Matrix4f quaternionToMatrix(Quaternion q) {
-        return quaternionToMatrix(q, null);
-    }
-
-    public static Matrix4f quaternionToMatrix(Quaternion q, Matrix4f matrix) {
-        matrix = init(matrix);
-        matrix.m00 = 1.0f - 2.0f * (q.getY() * q.getY() + q.getZ() * q.getZ());
-        matrix.m01 = 2.0f * (q.getX() * q.getY() + q.getZ() * q.getW());
-        matrix.m02 = 2.0f * (q.getX() * q.getZ() - q.getY() * q.getW());
-        matrix.m03 = 0.0f;
-
-        // Second row
-        matrix.m10 = 2.0f * (q.getX() * q.getY() - q.getZ() * q.getW());
-        matrix.m11 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getZ() * q.getZ());
-        matrix.m12 = 2.0f * (q.getZ() * q.getY() + q.getX() * q.getW());
-        matrix.m13 = 0.0f;
-
-        // Third row
-        matrix.m20 = 2.0f * (q.getX() * q.getZ() + q.getY() * q.getW());
-        matrix.m21 = 2.0f * (q.getY() * q.getZ() - q.getX() * q.getW());
-        matrix.m22 = 1.0f - 2.0f * (q.getX() * q.getX() + q.getY() * q.getY());
-        matrix.m23 = 0.0f;
-
-        // Fourth row
-        matrix.m30 = 0;
-        matrix.m31 = 0;
-        matrix.m32 = 0;
-        matrix.m33 = 1.0f;
-
-        return matrix;
     }
 
     public static javax.vecmath.Matrix4f toJavax(Matrix4f mat) {

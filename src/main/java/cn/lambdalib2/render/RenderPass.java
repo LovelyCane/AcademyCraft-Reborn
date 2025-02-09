@@ -12,21 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.System.out;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 
 public class RenderPass {
-
-    private List<DrawCall> drawCalls = new ArrayList<>();
-    private List<BatchGroup> batchList = new ArrayList<>();
+    private final List<DrawCall> drawCalls = new ArrayList<>();
+    private final List<BatchGroup> batchList = new ArrayList<>();
 
     private int instanceBuffer = -1;
 
@@ -48,9 +42,9 @@ public class RenderPass {
 
     public void dispatch() {
         drawCalls.sort((lhs, rhs) -> compareDict(
-             Integer.compare(lhs.material.getDrawOrder(), rhs.material.getDrawOrder()),
-             Integer.compare(lhs.material.hashCode(), rhs.material.hashCode()),
-             Integer.compare(lhs.mesh.hashCode(), rhs.mesh.hashCode())
+                Integer.compare(lhs.material.getDrawOrder(), rhs.material.getDrawOrder()),
+                Integer.compare(lhs.material.hashCode(), rhs.material.hashCode()),
+                Integer.compare(lhs.mesh.hashCode(), rhs.mesh.hashCode())
         ));
 
         // Batch draw calls
@@ -118,7 +112,7 @@ public class RenderPass {
             if (offset != null) {
                 glEnableVertexAttribArray(va.index);
                 glVertexAttribPointer(va.index, va.type.components, GL_FLOAT, false,
-                    4 * mesh.getFloatsPerVertex(), offset * 4);
+                        4 * mesh.getFloatsPerVertex(), offset * 4);
             }
         }
 
@@ -167,12 +161,12 @@ public class RenderPass {
                 Debug.assert2(ip.location != -1, () -> "Invalid instance property " + ip.name);
                 glEnableVertexAttribArray(ip.location);
                 glVertexAttribPointer(
-                    ip.location,
-                    ip.type.floatCount,
-                    GL_FLOAT,
-                    false,
-                    4 * shader.floatsPerInstance,
-                    (ip.offsetInBuf * 4)
+                        ip.location,
+                        ip.type.floatCount,
+                        GL_FLOAT,
+                        false,
+                        4 * shader.floatsPerInstance,
+                        (ip.offsetInBuf * 4L)
                 );
                 glVertexAttribDivisor(ip.location, 1);
             }

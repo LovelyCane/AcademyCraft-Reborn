@@ -7,7 +7,6 @@ import static org.lwjgl.opengl.GL11.*;
  * TODO: Remove when all errors are fixed
  */
 public class Tessellator {
-
     public static final Tessellator instance = new Tessellator();
 
     private double _dx, _dy, _dz;
@@ -40,14 +39,9 @@ public class Tessellator {
         glVertex3d(x + _dx, y + _dy, z + _dz);
     }
 
-    public void setColorOpaque_F(float r, float g, float b) {
-        glColor3f(r, g, b);
-    }
-
     public void setNormal(double x, double y, double z) {
         glNormal3d(x, y, z);
     }
 
     private Tessellator() {}
-
 }

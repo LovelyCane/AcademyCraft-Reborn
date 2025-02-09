@@ -14,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 
 @SerializeType
 public class CompTransform {
-
     public static final CompTransform identity = new CompTransform();
 
     public Vec3d transform = Vec3d.ZERO;
@@ -24,20 +23,14 @@ public class CompTransform {
     public Vec3d rotation = Vec3d.ZERO;
     
     public double scale = 1.0;
-    
-    public CompTransform setPivot(double x, double y, double z) {
-        pivotPt = new Vec3d(x, y, z);
-        return this;
-    }
-    
+
     public CompTransform setTransform(double x, double y, double z) {
         transform = new Vec3d(x, y, z);
         return this;
     }
     
-    public CompTransform setRotation(double x, double y, double z) {
+    public void setRotation(double x, double y, double z) {
         rotation = new Vec3d(x, y, z);
-        return this;
     }
     
     public CompTransform setScale(double val) {
@@ -56,5 +49,4 @@ public class CompTransform {
         
         RenderUtils.glTranslate(VecUtils.neg(pivotPt));
     }
-    
 }

@@ -43,7 +43,7 @@ import static cn.lambdalib2.util.MathUtils.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
-public class SkillTreeJava {
+public class SkillTree {
     public static final Widget template = CGUIDocument.read(Resources.getGui("rework/page_developer")).getWidget("main");
 
     public static final ResourceLocation texAreaBack = Resources.preloadTexture("guis/effect/effect_developer_background");
@@ -161,10 +161,10 @@ public class SkillTreeJava {
         Widget area = ret.getWidget("parent_right/area");
 
         if (!aData.hasCategory()) {
-            send(NetDelegateJava.MSG_START_LEVEL, devData, developer);
+            send(NetDelegate.MSG_START_LEVEL, devData, developer);
             devData.reset();
         } else if (Optional.of(player.getHeldItem(EnumHand.MAIN_HAND)).map(item -> item.getItem() == AcademyCraftItemList.MAGNETIC_COIL).orElse(false)) {
-            send(NetDelegateJava.MSG_RESET, devData, developer);
+            send(NetDelegate.MSG_RESET, devData, developer);
             devData.reset();
         } else {
             // Initialize skill area
@@ -428,7 +428,7 @@ public class SkillTreeJava {
                     } else {
                         DevelopData devData = DevelopData.get(player);
                         devData.reset();
-                        send(NetDelegateJava.MSG_START_SKILL, devData, developer, skill);
+                        send(NetDelegate.MSG_START_SKILL, devData, developer, skill);
                         canClose.set(false);
                         ret.listen(FrameEvent.class, () -> {
                             switch (devData.getState()) {
@@ -519,7 +519,7 @@ public class SkillTreeJava {
                 devData.reset();
                 canClose.set(false);
 
-                send(NetDelegateJava.MSG_START_LEVEL, devData, developer);
+                send(NetDelegate.MSG_START_LEVEL, devData, developer);
                 ret.listen(FrameEvent.class, () -> {
                     switch (devData.getState()) {
                         case IDLE:
@@ -645,6 +645,6 @@ public class SkillTreeJava {
     }
 
     public static void send(String channel, Object... args) {
-        NetworkMessage.sendToServer(NetDelegateJava.INSTANCE, channel, args);
+        NetworkMessage.sendToServer(NetDelegate.INSTANCE, channel, args);
     }
 }

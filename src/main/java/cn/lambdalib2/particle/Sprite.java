@@ -20,7 +20,6 @@ import org.lwjgl.util.Color;
  */
 @SideOnly(Side.CLIENT)
 public final class Sprite {
-
     /**
      * If the texture is null draw pure-colored sprite.
      */
@@ -30,12 +29,6 @@ public final class Sprite {
     public boolean hasLight = false;
     public boolean cullFace = true;
 
-    public Sprite() {
-    }
-
-    public Sprite(ResourceLocation rl) {
-        texture = rl;
-    }
 
     public Sprite setTexture(ResourceLocation rl) {
         texture = rl;
@@ -45,16 +38,6 @@ public final class Sprite {
     public Sprite setSize(float w, float h) {
         width = w;
         height = h;
-        return this;
-    }
-
-    public Sprite enableLight() {
-        hasLight = true;
-        return this;
-    }
-
-    public Sprite disableCullFace() {
-        cullFace = false;
         return this;
     }
 

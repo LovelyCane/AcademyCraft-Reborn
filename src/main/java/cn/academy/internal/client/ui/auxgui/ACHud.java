@@ -2,12 +2,14 @@ package cn.academy.internal.client.ui.auxgui;
 
 import cn.academy.AcademyCraft;
 import cn.academy.Resources;
+import cn.academy.internal.datapart.CPData;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.cgui.CGui;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.Transform;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,6 +30,7 @@ public class ACHud extends AuxGui {
 
     static {
         ACHud.INSTANCE.addElement(CPBar.INSTANCE, () -> true, "cpbar", new Widget().size(CPBar.WIDTH, CPBar.HEIGHT).scale(CPBar.SCALE).walign(Transform.WidthAlign.RIGHT).addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
+        ACHud.INSTANCE.addElement(new KeyHintUI(), () -> CPData.get(Minecraft.getMinecraft().player).isActivated(), "keyhint", KeyHintUI.display);
     }
 
     private ACHud() {

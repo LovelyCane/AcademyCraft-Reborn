@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class LegacyShaderProgram {
     private boolean compiled = false;
     private boolean valid = false;
-    private int programID;
+    private final int programID;
     private List<Integer> attachedShaders = new ArrayList<>();
     
     public LegacyShaderProgram() {
@@ -33,7 +33,7 @@ public class LegacyShaderProgram {
     }
     
     public void linkShader(ResourceLocation location, int type) {
-        if (!checkCapability())
+        if (checkCapability())
             return;
 
         try {
@@ -80,7 +80,7 @@ public class LegacyShaderProgram {
     }
     
     public void compile() {
-        if (!checkCapability()) {
+        if (checkCapability()) {
             compiled = true;
             return;
         }
@@ -109,13 +109,9 @@ public class LegacyShaderProgram {
         compiled = true;
     }
 
-    public boolean isValid() {
-        return valid;
-    }
-
     private boolean checkCapability() {
         String versionShort = GL11.glGetString(GL11.GL_VERSION).trim().substring(0, 3);
-        return "2.1".compareTo(versionShort) <= 0;
+        return "2.1".compareTo(versionShort) > 0;
     }
     
     /**

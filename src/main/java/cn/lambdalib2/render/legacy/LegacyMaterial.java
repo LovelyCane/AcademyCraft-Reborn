@@ -9,7 +9,6 @@ import org.lwjgl.util.Color;
  *
  */
 public abstract class LegacyMaterial {
-    
     public ResourceLocation mainTexture;
     public Color color = Colors.white();
 
@@ -19,5 +18,4 @@ public abstract class LegacyMaterial {
         mainTexture = tex;
         return this;
     }
-    
 }

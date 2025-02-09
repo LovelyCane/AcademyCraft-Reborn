@@ -16,6 +16,8 @@ import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.energy.impl.WirelessSystem;
 import cn.academy.internal.util.ACKeyManager;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
+import cn.lambdalib2.datapart.CapDataPartHandler;
+import cn.lambdalib2.datapart.EntityData;
 import cn.lambdalib2.particle.ParticleFactoryBase;
 import cn.lambdalib2.util.ControlOverrider;
 import cn.lambdalib2.util.GameTimer;
@@ -45,5 +47,7 @@ public class AcademyCraftEventManager {
         MinecraftForge.EVENT_BUS.register(GameTimer.class);
         MinecraftForge.EVENT_BUS.register(AbilityPipeline.class);
         MinecraftForge.EVENT_BUS.register(MDDamageHelper.Events.class);
+        MinecraftForge.EVENT_BUS.register(EntityData.EventListener.class);
+        MinecraftForge.EVENT_BUS.register(CapDataPartHandler.class);
     }
 }

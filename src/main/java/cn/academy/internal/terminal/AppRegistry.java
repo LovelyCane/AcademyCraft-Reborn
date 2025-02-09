@@ -1,6 +1,8 @@
 package cn.academy.internal.terminal;
 
 import cn.academy.internal.terminal.app.MusicApp;
+import cn.academy.internal.terminal.app.SkillTreeApp;
+import cn.academy.internal.terminal.app.settings.AppSettings;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ public class AppRegistry {
 
     static {
         AppRegistry.register(new MusicApp());
+        AppRegistry.register(new SkillTreeApp());
+        AppRegistry.register(new AppSettings());
     }
 
     public static void register(App app) {
@@ -38,6 +42,7 @@ public class AppRegistry {
         return ImmutableList.copyOf(appList);
     }
 
-    private AppRegistry() {}
+    private AppRegistry() {
+    }
 
 }

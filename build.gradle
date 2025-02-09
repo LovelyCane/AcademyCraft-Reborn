@@ -91,11 +91,6 @@ processResources {
 jar {
     archiveBaseName = mod_name
     archiveVersion = mod_version + "-Java" + JavaVersion.current().toString()
-
-    manifest {
-        attributes('FMLCorePluginContainsFMLMod': true,
-                'FMLCorePlugin': 'cn.lambdalib2.CorePlugin')
-    }
 }
 
 tasks.register('generateMixinJson') {

@@ -1,9 +1,6 @@
 package cn.academy.internal.worldgen;
 
 import cn.academy.AcademyCraft;
-import cn.lambdalib2.registry.StateEventCallback;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -13,20 +10,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * @author WeAthFolD, Shielian, KS
  */
 public class WorldGenInit {
-    public static boolean GENERATE_ORES, GENERATE_PHASE_LIQUID;
-    public static String[] GENERATE_ORES_BLACK_LIST;
+    public static boolean GENERATE_ORES = AcademyCraft.academyCraftConfig.getGeneric().isGenOres();
+    public static boolean GENERATE_PHASE_LIQUID = AcademyCraft.academyCraftConfig.getGeneric().isGenPhaseLiquid();
+    public static String[] GENERATE_ORES_BLACK_LIST = AcademyCraft.academyCraftConfig.getGeneric().getGenerateOresBlackList();
 
-    @StateEventCallback
-    public static void preInit(FMLPreInitializationEvent event) {
+    public static void preInit() {
         GameRegistry.registerWorldGenerator(worldGen, 2);
     }
 
     public static final ACWorldGen worldGen = new ACWorldGen();
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent event) {
-        GENERATE_ORES = AcademyCraft.academyCraftConfig.getGeneric().isGenOres();
-        GENERATE_PHASE_LIQUID = AcademyCraft.academyCraftConfig.getGeneric().isGenPhaseLiquid();
-        GENERATE_ORES_BLACK_LIST = AcademyCraft.academyCraftConfig.getGeneric().getGenerateOresBlackList();
-    }
 }

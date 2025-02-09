@@ -3,7 +3,6 @@ package cn.lambdalib2.util;
 import java.util.Random;
 
 public class RandUtils {
-
     public static final Random RNG = new Random();
     
     public static double ranged(double from, double to) {
@@ -29,5 +28,4 @@ public class RandUtils {
     public static int nextInt(int n) {
         return RNG.nextInt(n);
     }
-    
 }

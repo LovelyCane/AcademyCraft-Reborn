@@ -27,9 +27,7 @@ public class SettingsUI extends CGuiScreen {
     private static final List<Widget> widgets = new ArrayList<>();
 
     static {
-        SettingsUI.addCallback("edit_ui", () -> {
-            Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI());
-        });
+        SettingsUI.addCallback("edit_ui", () -> Minecraft.getMinecraft().displayGuiScreen(new CustomizeUI()));
     }
 
     public static void addKey(String name, int value) {

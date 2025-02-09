@@ -16,7 +16,6 @@ import cn.lambdalib2.cgui.component.Transform.HeightAlign;
 import cn.lambdalib2.cgui.component.Transform.WidthAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
@@ -30,7 +29,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -46,34 +44,16 @@ import java.util.List;
  */
 @SideOnly(Side.CLIENT)
 public class KeyHintUI extends Widget {
-
     static final float SCALE = 0.23f;
 
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
-        Widget child = new Widget()
-                .size(128, 193)
-                .addComponent(new DrawTexture()
-                        .setTex(Resources.getTexture("guis/edit_preview/key_hint")));
-        Widget display = new Widget()
-                .size(140, 210)
-                .scale(SCALE * 2)
-                .walign(WidthAlign.RIGHT)
-                .halign(HeightAlign.CENTER);
-        display.addWidget(child);
+    static Widget child = new Widget().size(128, 193).addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/key_hint")));
+    static Widget display = new Widget().size(140, 210).scale(SCALE * 2).walign(WidthAlign.RIGHT).halign(HeightAlign.CENTER);
 
-        ACHud.INSTANCE.addElement(new KeyHintUI(),
-                () -> CPData.get(Minecraft.getMinecraft().player).isActivated(), "keyhint", display);
+    static {
+        display.addWidget(child);
     }
 
-    ResourceLocation
-            TEX_BACK = tex("back"),
-            TEX_ICON_BACK = tex("icon_back"),
-            TEX_KEY_LONG = tex("key_long"),
-            TEX_KEY_SHORT = tex("key_short"),
-            TEX_MOUSE_L = tex("mouse_left"),
-            TEX_MOUSE_R = tex("mouse_right"),
-            TEX_MOUSE_GENERIC = tex("mouse_generic");
+    ResourceLocation TEX_BACK = tex("back"), TEX_ICON_BACK = tex("icon_back"), TEX_KEY_LONG = tex("key_long"), TEX_KEY_SHORT = tex("key_short"), TEX_MOUSE_L = tex("mouse_left"), TEX_MOUSE_R = tex("mouse_right"), TEX_MOUSE_GENERIC = tex("mouse_generic");
 
     double lastFrameTime, showTime;
     double mAlpha;
@@ -82,7 +62,7 @@ public class KeyHintUI extends Widget {
 
     final FontOption option = new FontOption(32, FontAlign.CENTER, Colors.fromHexColor(0xff194246));
 
-    private KeyHintUI() {
+    public KeyHintUI() {
         walign(WidthAlign.RIGHT);
         halign(HeightAlign.CENTER);
         size(140, 210);
@@ -115,10 +95,10 @@ public class KeyHintUI extends Widget {
 
             if (cpData.isActivated()) {
                 if (Minecraft.getMinecraft().player.isSpectator()) {
-                    player = (EntityPlayer) Minecraft.getMinecraft().player;
+                    player = Minecraft.getMinecraft().player;
                     AbilityData aData = AbilityData.get(player);
 
-                    if(aData.hasCategory()) {
+                    if (aData.hasCategory()) {
                         ClientRuntime.instance().getActivateHandler().onKeyDown(player);
                     }
                 }
@@ -134,8 +114,8 @@ public class KeyHintUI extends Widget {
                 });
 
                 int availIdx = 0;
-                for (int i = 0; i < groups.size(); ++i) {
-                    Collection<DelegateNode> nodes = map.get(groups.get(i));
+                for (String group : groups) {
+                    Collection<DelegateNode> nodes = map.get(group);
                     if (!nodes.isEmpty()) {
                         final double x = -200 - availIdx * 200;
                         double y = 0;
@@ -248,5 +228,4 @@ public class KeyHintUI extends Widget {
     private static ResourceLocation tex(String name) {
         return Resources.getTexture("guis/key_hint/" + name);
     }
-
 }

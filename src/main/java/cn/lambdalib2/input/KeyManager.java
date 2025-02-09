@@ -73,10 +73,6 @@ public class KeyManager {
         addKeyHandler(name, "", defKeyID, false, handler);
     }
 
-    public void addKeyHandler(String name, String keyDesc, int defKeyID, KeyHandler handler) {
-        addKeyHandler(name, keyDesc, defKeyID, false, handler);
-    }
-
     /**
      * Add a key handler.
      *
@@ -89,8 +85,8 @@ public class KeyManager {
             throw new RuntimeException("Duplicate key: " + name + " of object " + handler);
 
         AcademyCraftConfig config = AcademyCraft.academyCraftConfig;
-        int keyID = defKeyID;
-        keyID = config.getKey(name, defKeyID);
+
+        int keyID = config.getKey(name, defKeyID);
         KeyHandlerState kb = new KeyHandlerState(handler, keyID, global);
         _bindingMap.put(name, kb);
     }
@@ -100,8 +96,7 @@ public class KeyManager {
      */
     public void removeKeyHandler(String name) {
         KeyHandlerState kb = _bindingMap.get(name);
-        if (kb != null)
-            kb.dead = true;
+        if (kb != null) kb.dead = true;
     }
 
     public void resetBindingKey(String name, int newKey) {
@@ -110,8 +105,7 @@ public class KeyManager {
             AcademyCraftConfig config = AcademyCraft.academyCraftConfig;
             config.setKey(name, newKey);
             kb.keyID = newKey;
-            if (kb.keyDown)
-                kb.handler.onKeyAbort();
+            if (kb.keyDown) kb.handler.onKeyAbort();
 
             kb.keyDown = false;
         }
@@ -153,8 +147,7 @@ public class KeyManager {
 
     private KeyHandlerState getKeyBinding(KeyHandler handler) {
         for (KeyHandlerState kb : _bindingMap.values()) {
-            if (kb.handler == handler)
-                return kb;
+            if (kb.handler == handler) return kb;
         }
         return null;
     }

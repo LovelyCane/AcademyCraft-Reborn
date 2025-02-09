@@ -5,8 +5,9 @@ import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
-import static cn.academy.internal.support.rf.RFSupport.if2rf;
-import static cn.academy.internal.support.rf.RFSupport.rf2if;
+import static cn.academy.internal.support.rf.RFSupportImpl.if2rf;
+import static cn.academy.internal.support.rf.RFSupportImpl.rf2if;
+
 
 @Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyReceiver")
 public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
@@ -22,7 +23,7 @@ public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         int amount = (int) rf2if(maxReceive);
-        return (int) (maxReceive - if2rf(addEnergy(amount, simulate)));
+        return maxReceive - if2rf(addEnergy(amount, simulate));
     }
 
     @Override
@@ -32,7 +33,7 @@ public class TileRFInput extends TileGeneratorBase implements IEnergyReceiver {
 
     @Override
     public int getMaxEnergyStored(EnumFacing from) {
-        return (int) if2rf(2000);
+        return if2rf(2000);
     }
 
     @Override

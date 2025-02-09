@@ -1,7 +1,5 @@
 package cn.lambdalib2.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -9,53 +7,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-//import net.minecraft.util.AxisAlignedBB;
-//import net.minecraft.util.MathHelper;
-//import cn.lambdalib.util.helper.BlockPos;
-
 /**
  * Utils about block/entity lookup and interaction.
+ *
  * @author WeAthFolD
  */
 public class WorldUtils {
-
-    /**
-     * Judge whether a world is valid (e.g. currently in use), and false if world is null.
-     */
-    @SuppressWarnings("sideonly")
-    public static boolean isWorldValid(World world) {
-        if (world == null) {
-            return false;
-        }
-        if (SideUtils.isClient()) {
-            return worldValidC(world);
-        } else {
-            WorldServer[] wss = FMLCommonHandler.instance().getMinecraftServerInstance().worlds;
-            for (World w : wss) {
-                if (w == world) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static boolean worldValidC(World world) {
-        return Minecraft.getMinecraft().world == world;
-    }
-
     public static AxisAlignedBB getBoundingBox(Vec3d vec1, Vec3d vec2) {
-        double minX = 0.0, minY = 0.0, minZ = 0.0, maxX = 0.0, maxY = 0.0, maxZ = 0.0;
+        double minX, minY, minZ, maxX, maxY, maxZ;
         if (vec1.x < vec2.x) {
             minX = vec1.x;
             maxX = vec2.x;
@@ -119,10 +82,6 @@ public class WorldUtils {
         getBlocksWithin(outList, entity.world, entity.posX, entity.posY, entity.posZ, range, max, filters);
     }
 
-    public static void getBlocksWithin(List<BlockPos> outList, TileEntity te, double range, int max, IBlockSelector... filters) {
-        getBlocksWithin(outList, te.getWorld(), te.getPos().getX() + 0.5, te.getPos().getY() + 0.5, te.getPos().getZ() + 0.5, range, max, filters);
-    }
-
     public static void getBlocksWithin(
             List<BlockPos> outList,
             World world,
@@ -130,19 +89,13 @@ public class WorldUtils {
             double range, int max,
             IBlockSelector... filter) {
         IBlockSelector[] fs = new IBlockSelector[filter.length + 1];
-        for (int i = 0; i < filter.length; ++i)
-            fs[i] = filter[i];
+        System.arraycopy(filter, 0, fs, 0, filter.length);
 
         final double rangeSq = range * range;
 
-        fs[filter.length] = new IBlockSelector() {
-
-            @Override
-            public boolean accepts(World world, int xx, int yy, int zz, Block block) {
-                double dx = xx - x, dy = yy - y, dz = zz - z;
-                return dx * dx + dy * dy + dz * dz <= rangeSq;
-            }
-
+        fs[filter.length] = (world1, xx, yy, zz, block) -> {
+            double dx = xx - x, dy = yy - y, dz = zz - z;
+            return dx * dx + dy * dy + dz * dz <= rangeSq;
         };
 
         int minX = MathHelper.floor(x - range),
@@ -200,10 +153,7 @@ public class WorldUtils {
         return getEntities(world, box, EntitySelectors.within(x, y, z, range).and(filter));
     }
 
-    @SuppressWarnings("unchecked")
     public static List<Entity> getEntities(World world, AxisAlignedBB box, Predicate<Entity> predicate) {
-        return world.getEntitiesInAABBexcluding(null, box, predicate==null?null:predicate::test);
-        //return world.getEntitiesWithinAABBExcludingEntity(null, box);
+        return world.getEntitiesInAABBexcluding(null, box, predicate == null ? null : predicate::test);
     }
-
 }

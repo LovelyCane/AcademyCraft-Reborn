@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL20;
  * @author WeAthFolD
  */
 public class ShaderNotex extends LegacyShaderProgram {
-    
     private static ShaderNotex instance;
     
     public static ShaderNotex instance() {
@@ -21,5 +20,4 @@ public class ShaderNotex extends LegacyShaderProgram {
         this.linkShader(getShader("notex.frag"), GL20.GL_FRAGMENT_SHADER);
         this.compile();
     }
-    
 }

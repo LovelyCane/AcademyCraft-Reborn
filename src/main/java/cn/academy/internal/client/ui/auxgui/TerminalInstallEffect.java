@@ -12,13 +12,11 @@ import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.IGuiEventHandler;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
 import cn.lambdalib2.input.KeyManager;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,19 +30,14 @@ public class TerminalInstallEffect extends AuxGui {
     private static final double WAIT = 0.7;
     private static final double BLEND_IN = 0.2, BLEND_OUT = 0.2;
 
-    private static WidgetContainer loaded;
-
-    @StateEventCallback
-    private static void __init(FMLInitializationEvent ev) {
-        loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal_installing.xml"));
-    }
+    private static final WidgetContainer loaded = CGUIDocument.read(new ResourceLocation("academy:guis/terminal_installing.xml"));
 
     CGui gui = new CGui();
 
     public TerminalInstallEffect() {
         gui.addWidget("main", loaded.getWidget("main").copy());
         gui.getWidget("main/progbar").listen(FrameEvent.class, (w, e) -> {
-            double prog = (double) this.getTimeActive() / ANIM_LENGTH;
+            double prog = this.getTimeActive() / ANIM_LENGTH;
             if (this.getTimeActive() >= ANIM_LENGTH + WAIT) {
                 dispose();
                 TerminalUI.keyHandler.onKeyUp();
@@ -71,9 +64,9 @@ public class TerminalInstallEffect extends AuxGui {
 
     private void initBlender(Widget w) {
         w.listen(FrameEvent.class, new IGuiEventHandler<FrameEvent>() {
-            DrawTexture tex = DrawTexture.get(w);
-            TextBox text = TextBox.get(w);
-            ProgressBar bar = ProgressBar.get(w);
+            final DrawTexture tex = DrawTexture.get(w);
+            final TextBox text = TextBox.get(w);
+            final ProgressBar bar = ProgressBar.get(w);
 
             int texA, textA, barA;
 

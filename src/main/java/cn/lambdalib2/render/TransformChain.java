@@ -3,7 +3,6 @@ package cn.lambdalib2.render;
 import org.lwjgl.util.vector.Matrix4f;
 
 public class TransformChain {
-
     private static final Matrix4f _temp = new Matrix4f();
 
     private final Matrix4f _result = new Matrix4f();

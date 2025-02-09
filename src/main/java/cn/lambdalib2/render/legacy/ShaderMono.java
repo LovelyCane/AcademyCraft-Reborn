@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL20;
  * @author WeAthFolD
  */
 public class ShaderMono extends LegacyShaderProgram {
-    
     private static ShaderMono instance;
     
     public static ShaderMono instance() {
@@ -30,5 +29,4 @@ public class ShaderMono extends LegacyShaderProgram {
         GL20.glUniform1i(GL20.glGetUniformLocation(this.getProgramID(), "sampler"), 0);
         GL20.glUseProgram(0);
     }
-    
 }

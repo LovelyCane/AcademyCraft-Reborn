@@ -22,7 +22,7 @@ public class StackUtils {
 
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
-            if (stack != null && stack.getCount() > 0) {
+            if (stack.getCount() > 0) {
                 float rx = rand.nextFloat() * 0.8F + 0.1F;
                 float ry = rand.nextFloat() * 0.8F + 0.1F;
                 float rz = rand.nextFloat() * 0.8F + 0.1F;
@@ -30,7 +30,7 @@ public class StackUtils {
                 EntityItem entityItem = new EntityItem(world, pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz, stack.copy());
 
                 if (stack.hasTagCompound()) {
-                    entityItem.getItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+                    entityItem.getItem().setTagCompound(stack.getTagCompound().copy());
                 }
 
                 float factor = 0.05F;

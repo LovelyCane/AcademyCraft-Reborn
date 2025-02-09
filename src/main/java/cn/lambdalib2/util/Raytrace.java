@@ -1,124 +1,110 @@
 package cn.lambdalib2.util;
 
-import java.util.List;
-import java.util.function.Predicate;
-
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.world.World;
-import static cn.lambdalib2.util.VecUtils.*;
+import java.util.List;
+import java.util.function.Predicate;
+
+import static cn.lambdalib2.util.VecUtils.add;
+import static cn.lambdalib2.util.VecUtils.multiply;
 
 /**
  * A better wrap up for ray trace routines, supporting entity filtering, block filtering, and combined RayTrace of
  * blocks and entities. Also provided functions for fast implementation on entity looking traces.
+ *
  * @author WeAthFolD
  */
 public class Raytrace {
-
     private static RayTraceResult miss(Vec3d pos) {
-        RayTraceResult ret = new RayTraceResult(Type.MISS, pos, EnumFacing.UP,
-            new BlockPos((int) pos.x, (int) pos.y, (int) pos.z));
-        return ret;
+        return new RayTraceResult(Type.MISS, pos, EnumFacing.UP, new BlockPos((int) pos.x, (int) pos.y, (int) pos.z));
     }
 
     /**
      * Perform a ray trace.
-     * @param world The world to perform on
-     * @param vec1 Start point
-     * @param vec2 End point
+     *
+     * @param world      The world to perform on
+     * @param vec1       Start point
+     * @param vec2       End point
      * @param entityPred The entity predicate
-     * @param blockSel The block predicate
+     * @param blockSel   The block predicate
      * @return The trace result, might be null
      */
     public static RayTraceResult perform(World world, Vec3d vec1, Vec3d vec2, Predicate<Entity> entityPred, IBlockSelector blockSel) {
-        RayTraceResult
-            mop1 = rayTraceEntities(world, vec1, vec2, entityPred),
-            mop2 = rayTraceBlocks(world, vec1, vec2, blockSel);
+        RayTraceResult mop1 = rayTraceEntities(world, vec1, vec2, entityPred), mop2 = rayTraceBlocks(world, vec1, vec2, blockSel);
 
-        if(mop1 != null && mop2 != null) {
+        if (mop1 != null && mop2 != null) {
             double d1 = mop1.hitVec.distanceTo(vec1);
             double d2 = mop2.hitVec.distanceTo(vec1);
             return d1 <= d2 ? mop1 : mop2;
         }
-        if(mop1 != null)
-            return mop1;
-    
+        if (mop1 != null) return mop1;
+
         return mop2 == null ? miss(vec2) : mop2;
     }
-    
+
     public static RayTraceResult perform(World world, Vec3d vec1, Vec3d vec2, Predicate<Entity> entityPred) {
         return perform(world, vec1, vec2, entityPred, null);
     }
-    
+
     public static RayTraceResult perform(World world, Vec3d vec1, Vec3d vec2) {
         return perform(world, vec1, vec2, null, null);
     }
-    
+
     public static Pair<Vec3d, RayTraceResult> getLookingPos(EntityLivingBase living, double dist) {
         return getLookingPos(living, dist, null, null);
     }
-    
-    public static Pair<Vec3d, RayTraceResult> getLookingPos(EntityLivingBase living, double dist,
-                                                                 Predicate<Entity> pred) {
+
+    public static Pair<Vec3d, RayTraceResult> getLookingPos(EntityLivingBase living, double dist, Predicate<Entity> pred) {
         return getLookingPos(living, dist, pred, null);
     }
-    
-    public static Pair<Vec3d, RayTraceResult> getLookingPos(Entity living, double dist,
-                                                                 Predicate<Entity> esel, IBlockSelector bsel) {
+
+    public static Pair<Vec3d, RayTraceResult> getLookingPos(Entity living, double dist, Predicate<Entity> esel, IBlockSelector bsel) {
         RayTraceResult pos = traceLiving(living, dist, esel, bsel);
-        Vec3d end = null;
-        if(pos != null) {
-            end = pos.hitVec;
-            if(pos.entityHit != null)
-                end = new Vec3d(end.x, end.y + pos.entityHit.getEyeHeight() * 0.6, end.z);
-        }
-        if(end == null) {
+        Vec3d end;
+        end = pos.hitVec;
+        if (pos.entityHit != null) end = new Vec3d(end.x, end.y + pos.entityHit.getEyeHeight() * 0.6, end.z);
+        if (end == null) {
             Vec3d lookingPos = living.getLookVec();
-            end = VecUtils.add(living.getPositionVector(),VecUtils.multiply(lookingPos, dist));
+            end = VecUtils.add(living.getPositionVector(), VecUtils.multiply(lookingPos, dist));
         }
-        
+
         return Pair.of(end, pos);
     }
-    
+
     public static RayTraceResult rayTraceEntities(World world, Vec3d vec1, Vec3d vec2, Predicate<? super Entity> selector) {
         Entity entity = null;
         AxisAlignedBB boundingBox = WorldUtils.getBoundingBox(vec1, vec2);
-        List list = world.getEntitiesInAABBexcluding(null, boundingBox.expand(1.0D, 1.0D, 1.0D),
-                selector==null?null:selector::test);
+        List<Entity> list = world.getEntitiesInAABBexcluding(null, boundingBox.expand(1.0D, 1.0D, 1.0D), selector == null ? null : selector::test);
         //TODO Make sure which predicate to be used.
         double d0 = 0.0D;
 
-        for (int j = 0; j < list.size(); ++j) {
-            Entity entity1 = (Entity)list.get(j);
+        for (Entity value : list) {
 
-            if(!entity1.canBeCollidedWith() || (selector != null && !selector.test(entity1)))
-                continue;
-            
+            if (!value.canBeCollidedWith() || (selector != null && !selector.test(value))) continue;
+
             float f = 0.3F;
-            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expand(f, f, f);
+            AxisAlignedBB axisalignedbb = value.getEntityBoundingBox().expand(f, f, f);
             RayTraceResult mob1 = axisalignedbb.calculateIntercept(vec1, vec2);
 
             if (mob1 != null) {
                 double d1 = vec1.distanceTo(mob1.hitVec);
 
-                if (d1 < d0 || d0 == 0.0D)
-                {
-                    entity = entity1;
+                if (d1 < d0 || d0 == 0.0D) {
+                    entity = value;
                     d0 = d1;
                 }
             }
         }
 
         if (entity != null) {
-            RayTraceResult result = new RayTraceResult(entity);
 
             //note: fix, get real entityId for ender dragon, maybe some other mod have different structures
 //            if (entity instanceof MultiPartEntityPart) {
@@ -126,25 +112,25 @@ public class Raytrace {
 //                    result.entityHit = (Entity)((MultiPartEntityPart) entity).parent;
 //                }
 //            }
-            return result;
+            return new RayTraceResult(entity);
         }
         return null;
     }
-    
+
     /**
      * Mojang code with minor changes to support block filtering.
-     * @param world world
-     * @param start startPoint
-     * @param end endPoint
+     *
+     * @param world  world
+     * @param start  startPoint
+     * @param end    endPoint
      * @param filter BlockFilter
      * @return RayTraceResult
      */
     public static RayTraceResult rayTraceBlocks(World world, Vec3d start, Vec3d end, IBlockSelector filter) {
-        if(filter == null)
-            filter = BlockSelectors.filNormal;
+        if (filter == null) filter = BlockSelectors.filNormal;
 
         Vec3d current = VecUtils.copy(start);
-        
+
         final int x2 = MathHelper.floor(end.x);
         final int y2 = MathHelper.floor(end.y);
         final int z2 = MathHelper.floor(end.z);
@@ -157,10 +143,7 @@ public class Raytrace {
             IBlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
             if (filter.accepts(world, x1, y1, z1, block)) {
-                RayTraceResult result = state.collisionRayTrace(world, pos, current, end);
-                if (result != null) {
-                    return result;
-                }
+                return state.collisionRayTrace(world, pos, current, end);
             }
         }
 
@@ -224,7 +207,7 @@ public class Raytrace {
                 } else {
                     side = 5;
                 }
-                current = new Vec3d(nextX, current.y + dy * xFactor, current.z + dz*xFactor);
+                current = new Vec3d(nextX, current.y + dy * xFactor, current.z + dz * xFactor);
             } else if (yFactor < zFactor) {
                 if (y2 > y1) {
                     side = 0;
@@ -259,35 +242,31 @@ public class Raytrace {
             IBlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
             if (filter.accepts(world, x1, y1, z1, block)) {
-                RayTraceResult result = state.collisionRayTrace(world, pos, current, end);
-                if (result != null) {
-                    return result;
-                }
+                return state.collisionRayTrace(world, pos, current, end);
             }
         }
         return null;
     }
-    
+
     public static RayTraceResult traceLiving(Entity entity, double dist) {
         return traceLiving(entity, dist, null, null);
     }
-    
+
     public static RayTraceResult traceLiving(Entity entity, double dist, Predicate<Entity> pred) {
         return traceLiving(entity, dist, pred, null);
     }
-    
+
     /**
      * Performs a RayTrace starting from the target entity's eye towards its looking direction.
      * The trace will automatically ignore the target entity.
      */
     public static RayTraceResult traceLiving(Entity entity, double dist, Predicate<Entity> pred, IBlockSelector blockSel) {
-        Vec3d v1 = entity.getPositionEyes(1),
-                v2 = add(v1, multiply(entity.getLookVec(), dist));
-        
+        Vec3d v1 = entity.getPositionEyes(1), v2 = add(v1, multiply(entity.getLookVec(), dist));
+
         Predicate<Entity> exclude = EntitySelectors.exclude(entity);
-        
+
         return perform(entity.getEntityWorld(), v1, v2, pred == null ? exclude : exclude.and(pred), blockSel);
     }
-    
+
 
 }

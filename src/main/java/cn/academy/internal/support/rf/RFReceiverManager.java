@@ -24,7 +24,7 @@ public class RFReceiverManager implements IEnergyBlockManager {
     @Override
     public double getEnergy(TileEntity tile) {
         IEnergyReceiver rec = asReceiver(tile);
-        return rec == null ? 0 : rec.getEnergyStored(DEFAULT_DIR) * RFSupport.CONV_RATE;
+        return rec == null ? 0 : rec.getEnergyStored(DEFAULT_DIR) * RFSupportImpl.CONV_RATE;
     }
 
     @Override

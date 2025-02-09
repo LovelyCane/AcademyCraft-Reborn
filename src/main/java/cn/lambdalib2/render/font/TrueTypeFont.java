@@ -99,7 +99,7 @@ public class TrueTypeFont implements IFont {
         return generated.get(generated.size() - 1);
     }
 
-    private Font resolve(int codePoint) {
+    private Font resolve() {
         return font;
     }
 
@@ -241,7 +241,7 @@ public class TrueTypeFont implements IFont {
         int curtex = currentTexture();
 
         Graphics2D graphics = image.createGraphics();
-        Font drawFont = resolve(ch);
+        Font drawFont = resolve();
 
         graphics.setFont(drawFont);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

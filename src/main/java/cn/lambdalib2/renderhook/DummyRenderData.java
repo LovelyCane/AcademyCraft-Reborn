@@ -18,7 +18,6 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 @RegDataPart(value=EntityPlayer.class, side=Side.CLIENT)
 public class DummyRenderData extends DataPart<EntityPlayer> {
-
     public DummyRenderData() {
         setTick(true);
     }
@@ -61,9 +60,5 @@ public class DummyRenderData extends DataPart<EntityPlayer> {
         }
         
         renderers.add(hook);
-    }
-
-    @Override
-    public void toNBT(NBTTagCompound tag) {
     }
 }

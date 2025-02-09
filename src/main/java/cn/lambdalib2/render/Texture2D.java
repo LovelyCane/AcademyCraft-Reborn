@@ -26,7 +26,7 @@ public class Texture2D {
     }
 
     private static Texture2D loadFromStream(InputStream imageStream, TextureImportSettings settings) {
-        BufferedImage image = null;
+        BufferedImage image;
 
         try {
             image = ImageIO.read(imageStream);

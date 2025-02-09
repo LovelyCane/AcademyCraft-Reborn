@@ -1,6 +1,8 @@
 package cn.academy.internal.energy.api;
 
-import cn.academy.internal.energy.api.block.*;
+import cn.academy.internal.energy.api.block.IWirelessGenerator;
+import cn.academy.internal.energy.api.block.IWirelessNode;
+import cn.academy.internal.energy.api.block.IWirelessUser;
 import cn.academy.internal.energy.impl.NodeConn;
 import cn.academy.internal.energy.impl.WiWorldData;
 import cn.academy.internal.energy.impl.WirelessNet;
@@ -11,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,38 +22,11 @@ import java.util.List;
  */
 
 public class WirelessHelper {
-    //-----WirelessNetwork
-    public static WirelessNet getWirelessNet(IWirelessMatrix matrix) {
-        TileEntity tile = (TileEntity) matrix;
-        return WiWorldData.get(tile.getWorld()).getNetwork(matrix);
-    }
-
     public static WirelessNet getWirelessNet(IWirelessNode node) {
         TileEntity tile = (TileEntity) node;
         return WiWorldData.get(tile.getWorld()).getNetwork(node);
     }
 
-    /**
-     * @return Whether the wireless node is linked into a WEN
-     */
-    public static boolean isNodeLinked(IWirelessNode node) {
-        return getWirelessNet(node) != null;
-    }
-
-    /**
-     * @return Whether the matrix is initialized with an SSID
-     */
-    public static boolean isMatrixActive(IWirelessMatrix matrix) {
-        return getWirelessNet(matrix) != null;
-    }
-
-    /**
-     * Get a list of WirelessNet at the position within the given range.
-     */
-    public static Collection<WirelessNet> getNetInRange(World world, int x, int y, int z, double range, int max) {
-        WiWorldData data = WiWorldData.get(world);
-        return data.rangeSearch(x, y, z, range, max);
-    }
 
     //-----Node Connection
     public static NodeConn getNodeConn(IWirelessNode node) {
@@ -65,15 +39,11 @@ public class WirelessHelper {
         return WiWorldData.get(tile.getWorld()).getNodeConnection(gen);
     }
 
-    public static boolean isReceiverLinked(IWirelessReceiver rec) {
-        return getNodeConn(rec) != null;
-    }
-
     public static boolean isGeneratorLinked(IWirelessGenerator gen) {
         return getNodeConn(gen) != null;
     }
 
-    private static List<BlockPos> _blockPosBuffer = new ArrayList<>();
+    private static final List<BlockPos> _blockPosBuffer = new ArrayList<>();
 
     /**
      * Get a list of IWirelessNode that are linkable and can reach the given position.

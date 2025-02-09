@@ -2,6 +2,7 @@ package cn.academy;
 
 import cn.academy.internal.ability.CategoryManager;
 import cn.academy.internal.ability.Controllable;
+import cn.academy.internal.ability.context.RegClientContextImpl;
 import cn.academy.internal.ability.ctrl.ClientHandler;
 import cn.academy.internal.ability.vanilla.VanillaCategories;
 import cn.academy.internal.ability.vanilla.electromaster.CatElectromaster;
@@ -9,13 +10,20 @@ import cn.academy.internal.ability.vanilla.meltdowner.skill.ElectronBomb;
 import cn.academy.internal.ability.vanilla.meltdowner.skill.SBNetDelegate;
 import cn.academy.internal.advancements.ACAdvancements;
 import cn.academy.internal.client.ui.NotifyUI;
+import cn.academy.internal.crafting.MFIFRecipes;
 import cn.academy.internal.event.AcademyCraftEventManager;
+import cn.academy.internal.support.ic2.IC2Support;
+import cn.academy.internal.support.rf.RFSupport;
 import cn.academy.internal.worldgen.PhaseLiquidGenerator;
+import cn.academy.internal.worldgen.WorldGenInit;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
-import cn.lambdalib2.registry.RegistryMod;
+import cn.lambdalib2.datapart.CapDataPartHandler;
+import cn.lambdalib2.datapart.RegDataPartImpl;
+import cn.lambdalib2.registry.mc.gui.RegGuiHandlerImpl;
 import cn.lambdalib2.s11n.network.FutureManager;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.util.ControlOverrider;
+import cn.lambdalib2.util.ReflectionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.creativetab.CreativeTabs;
@@ -43,7 +51,6 @@ import java.io.IOException;
  * @author acaly, WeathFolD, KS
  */
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
-@RegistryMod(rootPackage = Tags.ROOT_PACKAGE + ".", resourceDomain = Tags.MOD_ID)
 public class AcademyCraft {
     @Instance("academy")
     public static AcademyCraft instance;
@@ -85,8 +92,11 @@ public class AcademyCraft {
         LOGGER.info("Starting AcademyCraft");
         LOGGER.info("Copyright (c) Lambda Innovation, 2013-2018");
 
+        ReflectionUtils._init(event.getAsmData());
+
         AcademyCraftEventManager.registerEventBus();
         AcademyCraftRegister.registerAllDuringPreInit();
+        RegDataPartImpl.init();
         ElectronBomb.EffectDelegate.preInit();
 
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
@@ -95,6 +105,10 @@ public class AcademyCraft {
 
         NetworkS11n.preInit();
         PhaseLiquidGenerator.preInit();
+        CapDataPartHandler.register();
+        WorldGenInit.preInit();
+        RFSupport.preInit();
+        IC2Support.preInit();
     }
 
     @EventHandler
@@ -112,6 +126,9 @@ public class AcademyCraft {
         VanillaCategories.init();
         ACAdvancements.init();
         FutureManager.instance.init();
+        MFIFRecipes.init();
+        RegClientContextImpl.init();
+        RegGuiHandlerImpl.init();
     }
 
     @EventHandler

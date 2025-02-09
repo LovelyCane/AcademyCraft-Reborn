@@ -1,14 +1,7 @@
 package cn.academy.internal.client.ui;
 
 import cn.academy.Resources;
-import cn.academy.internal.tileentity.TileNode;
-import cn.academy.internal.energy.api.WirelessHelper;
 import cn.academy.internal.energy.api.block.IWirelessNode;
-import cn.academy.internal.energy.api.block.IWirelessTile;
-import cn.academy.internal.energy.api.block.IWirelessUser;
-import cn.academy.internal.energy.impl.NodeConn;
-import cn.academy.internal.event.energy.LinkUserEvent;
-import cn.academy.internal.event.energy.UnlinkUserEvent;
 import cn.academy.internal.util.LocalHelper;
 import cn.lambdalib2.cgui.Widget;
 import cn.lambdalib2.cgui.component.*;
@@ -16,28 +9,16 @@ import cn.lambdalib2.cgui.event.GainFocusEvent;
 import cn.lambdalib2.cgui.event.LeftClickEvent;
 import cn.lambdalib2.cgui.event.LostFocusEvent;
 import cn.lambdalib2.cgui.loader.CGUIDocument;
-import cn.lambdalib2.registry.StateEventCallback;
-import cn.lambdalib2.s11n.SerializeIncluded;
-import cn.lambdalib2.s11n.SerializeNullable;
-import cn.lambdalib2.s11n.SerializeStrategy;
 import cn.lambdalib2.s11n.network.Future;
 import cn.lambdalib2.s11n.network.NetworkMessage;
-import cn.lambdalib2.s11n.network.NetworkMessage.Listener;
-import cn.lambdalib2.s11n.network.NetworkS11n;
-import cn.lambdalib2.s11n.network.NetworkS11nType;
 import cn.lambdalib2.util.Colors;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static cn.academy.internal.client.ui.WirelessNetDelegate.*;
 
@@ -130,11 +111,11 @@ public class WirelessPage {
     }
 
     private static void rebuild(TileEntity user, World world, Page ret) {
-        sendJava(MSG_FIND_NODES, user, Future.create((Consumer<WirelessNetDelegate.UserResult>) result -> {
+        send(MSG_FIND_NODES, user, Future.create((Consumer<WirelessNetDelegate.UserResult>) result -> {
             LinkedTarget linkedTarget = new LinkedTarget() {
                 @Override
                 public void disconnect() {
-                    sendJava(MSG_USER_DISCONNECT, user, newFuture(user, world, ret));
+                    send(MSG_USER_DISCONNECT, user, newFuture(user, world, ret));
                 }
 
                 @Override
@@ -155,7 +136,7 @@ public class WirelessPage {
 
                     @Override
                     public void connect(String pass) {
-                        sendJava(MSG_USER_CONNECT, user, node, pass, newFuture(user, world, ret));
+                        send(MSG_USER_CONNECT, user, node, pass, newFuture(user, world, ret));
                     }
 
                     @Override
@@ -188,80 +169,7 @@ public class WirelessPage {
         passBox.getComponent(TextBox.class).setContent("");
     }
 
-    private static void sendJava(String msg, Object... pars) {
+    private static void send(String msg, Object... pars) {
         NetworkMessage.sendToServer(WirelessNetDelegate.INSTANCE, msg, pars);
-    }
-}
-
-@SuppressWarnings("unused")
-class WirelessNetDelegate {
-    public static final WirelessNetDelegate INSTANCE = new WirelessNetDelegate();
-    public static final String MSG_FIND_NODES = "find_nodes";
-    public static final String MSG_USER_CONNECT = "user_connect";
-    public static final String MSG_USER_DISCONNECT = "unlink";
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
-        NetworkS11n.addDirectInstance(WirelessNetDelegate.INSTANCE);
-    }
-
-    @Listener(channel = MSG_USER_CONNECT, side = Side.SERVER)
-    private <T extends IWirelessTile> void hUserDisconnect(T user, TileNode target, String password, Future<Boolean> fut) {
-        LinkUserEvent evt = new LinkUserEvent(user, target, password);
-        boolean result = !MinecraftForge.EVENT_BUS.post(evt);
-        fut.sendResult(result);
-    }
-
-    @Listener(channel = MSG_USER_DISCONNECT, side = Side.SERVER)
-    private <T extends IWirelessTile> void hUserDisconnect(T user, Future<Boolean> fut) {
-        UnlinkUserEvent evt = new UnlinkUserEvent(user);
-        boolean result = !MinecraftForge.EVENT_BUS.post(evt);
-        fut.sendResult(result);
-    }
-
-    @Listener(channel = MSG_FIND_NODES, side = {Side.SERVER})
-    private <T extends TileEntity & IWirelessUser> void hFindNodes(T user, Future<UserResult> fut) {
-        NodeConn linkedConn = WirelessHelper.getNodeConn(user);
-        List<NodeData> nodes = WirelessHelper.getNodesInRange(user.getWorld(), user.getPos()).stream().map(WirelessHelper::getNodeConn).filter(conn -> linkedConn == null || !linkedConn.equals(conn)).map(this::convertToNodeData).collect(Collectors.toList());
-        UserResult data = new UserResult();
-        if (linkedConn != null) {
-            data.linked = convertToNodeData(linkedConn);
-        }
-        data.avail = nodes;
-        fut.sendResult(data);
-    }
-
-    private NodeData convertToNodeData(NodeConn conn) {
-        TileNode tile = (TileNode) conn.getNode();
-        NodeData nodeData = new NodeData();
-        nodeData.x = tile.getPos().getX();
-        nodeData.y = tile.getPos().getY();
-        nodeData.z = tile.getPos().getZ();
-        nodeData.encrypted = !tile.getPassword().isEmpty();
-        return nodeData;
-    }
-
-    @NetworkS11nType
-    public static class UserResult {
-        @SerializeIncluded
-        @SerializeNullable
-        public NodeData linked;
-        @SerializeIncluded
-        public List<NodeData> avail;
-    }
-
-    @NetworkS11nType
-    @SerializeStrategy(strategy = SerializeStrategy.ExposeStrategy.ALL)
-    public static class NodeData {
-        public int x;
-        public int y;
-        public int z;
-        public boolean encrypted;
-
-        public TileEntity tile(World world) {
-            BlockPos pos = new BlockPos(x, y, z);
-            TileEntity tile = world.getTileEntity(pos);
-            return (tile instanceof IWirelessNode) ? tile : null;
-        }
     }
 }

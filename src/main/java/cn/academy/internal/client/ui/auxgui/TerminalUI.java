@@ -6,7 +6,6 @@ import cn.academy.internal.sound.ACSounds;
 import cn.academy.internal.terminal.App;
 import cn.academy.internal.terminal.AppEnvironment;
 import cn.academy.internal.terminal.TerminalData;
-import cn.academy.internal.util.ACKeyManager;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.cgui.CGui;
@@ -34,7 +33,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -87,10 +85,6 @@ public class TerminalUI extends AuxGui {
         }
 
     };
-
-    static {
-        ACKeyManager.INSTANCE.addKeyHandler("open_data_terminal", Keyboard.KEY_LMENU, keyHandler);
-    }
 
     public TerminalUI() {
         gui = new CGui();

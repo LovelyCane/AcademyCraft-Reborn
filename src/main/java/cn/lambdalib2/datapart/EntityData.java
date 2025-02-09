@@ -1,6 +1,5 @@
 package cn.lambdalib2.datapart;
 
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.network.NetworkS11n;
 import cn.lambdalib2.s11n.network.NetworkS11n.ContextException;
 import cn.lambdalib2.s11n.network.NetworkS11n.NetS11nAdaptor;
@@ -14,12 +13,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -160,14 +157,6 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         return Debug.assertNotNull((T) constructed.get(type), () -> "No DataPart of type " + type + " in " + this);
     }
 
-    /**
-     * @return The datapart of exact type, or null if not present
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends Entity> DataPart<T> getPartNonCreate(Class<? extends DataPart<T>> type) {
-        return constructed.getOrDefault(type, null);
-    }
-
     public Ent getEntity() {
         return entity;
     }
@@ -218,16 +207,6 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         return bothSideList.get(id).type;
     }
 
-    private boolean needSyncDataPart(DataPart part) {
-        boolean need = false;
-        for (RegData data : bothSideList) {
-            if (data.type == part.getClass() && data.pred.test(this.entity.getClass())) {
-                need = true;
-                break;
-            }
-        }
-        return need;
-    }
 
     private void tick() {
         checkInit();
@@ -239,16 +218,9 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         }
     }
 
-    public enum EventListener {
-        instance;
-
-        @StateEventCallback
-        public static void preInit(FMLPreInitializationEvent event) {
-            MinecraftForge.EVENT_BUS.register(instance);
-        }
-
+    public static class EventListener {
         @SubscribeEvent
-        public void onLivingUpdate(LivingUpdateEvent evt) {
+        public static void onLivingUpdate(LivingUpdateEvent evt) {
             EntityData<Entity> data = EntityData.get(evt.getEntityLiving());
             if (data != null) {
                 data.tick();
@@ -256,7 +228,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         }
 
         @SubscribeEvent
-        public void onLivingDeath(LivingDeathEvent evt) {
+        public static void onLivingDeath(LivingDeathEvent evt) {
             if (evt.getEntityLiving() instanceof EntityPlayer) {
                 EntityData<EntityPlayer> playerData = EntityData.get((EntityPlayer) evt.getEntityLiving());
                 playerData.constructed.values().forEach(DataPart::onPlayerDead);
@@ -264,7 +236,7 @@ public final class EntityData<Ent extends Entity> implements IEntityData {
         }
 
         @SubscribeEvent
-        public void onPlayerClone(PlayerEvent.Clone evt) {
+        public static void onPlayerClone(PlayerEvent.Clone evt) {
             EntityData<EntityPlayer> data = EntityData.get(evt.getOriginal());
             if (data != null) {
                 // Keep the DataPart instance, re-serialize the data

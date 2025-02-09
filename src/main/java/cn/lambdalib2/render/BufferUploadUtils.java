@@ -7,7 +7,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 class BufferUploadUtils {
-
     private static ByteBuffer uploadBuffer;
 
     public static ByteBuffer requestByteBuffer(int size) {

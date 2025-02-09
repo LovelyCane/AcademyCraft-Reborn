@@ -21,12 +21,12 @@ public class SkillPosEditorUI {
     static CGui gui;
 
     public static CGuiScreen apply() {
-        SkillTreeJava.TreeScreen ret = new SkillTreeJava.TreeScreen();
+        SkillTree.TreeScreen ret = new SkillTree.TreeScreen();
         gui = ret.getGui();
 
         build();
 
-        gui.listen(SkillTreeJava.RebuildEvent.class, (w, event) -> build());
+        gui.listen(SkillTree.RebuildEvent.class, (w, event) -> build());
 
         return ret;
     }
@@ -34,7 +34,7 @@ public class SkillPosEditorUI {
     private static void build() {
         gui.clear();
 
-        Widget main = SkillTreeJava.initialize(null, gui);
+        Widget main = SkillTree.initialize(null, gui);
 
         gui.addWidget(main);
 
@@ -70,7 +70,7 @@ public class SkillPosEditorUI {
             try {
                 float num = Float.parseFloat(text.content);
                 callback.accept(num);
-                ret.getGui().postEvent(new SkillTreeJava.RebuildEvent());
+                ret.getGui().postEvent(new SkillTree.RebuildEvent());
             } catch (NumberFormatException ignored) {
             }
         });

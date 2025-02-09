@@ -1,25 +1,21 @@
 package cn.academy.internal.support;
 
 import cn.academy.internal.energy.api.IFItemManager;
-import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A generic-typed item energy helper.
- * 
+ *
  * @author WeAthFolD
  */
 public class EnergyItemHelper {
-
     private static List<EnergyItemManager> supported = new ArrayList<>();
 
-    @StateEventCallback
-    private static void init(FMLInitializationEvent event) {
+    static {
         register(IFItemManager.instance);
     }
 

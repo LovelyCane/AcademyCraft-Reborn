@@ -9,14 +9,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Optional;
 
-import static cn.academy.internal.support.ic2.IC2Support.eu2if;
-import static cn.academy.internal.support.ic2.IC2Support.if2eu;
+import static cn.academy.internal.support.ic2.IC2SupportImpl.eu2if;
+import static cn.academy.internal.support.ic2.IC2SupportImpl.if2eu;
 
 /**
  * 
  * @author KSkun
  */
-@Optional.Interface(modid = IC2Support.IC2_MODID, iface = IC2Support.IC2_IFACE)
+@Optional.Interface(modid = IC2SupportImpl.IC2_MODID, iface = IC2SupportImpl.IC2_IFACE)
 public class TileEUInput extends TileGeneratorBase implements IEnergySink {
     private boolean isRegistered  = false;
 
