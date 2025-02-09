@@ -7,16 +7,14 @@ import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
 import cn.academy.internal.ability.context.ContextManager;
 import cn.academy.internal.ability.context.IConsumptionProvider;
+import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.academy.internal.datapart.AbilityData;
 import cn.academy.internal.datapart.CPData;
 import cn.academy.internal.datapart.PresetData;
 import cn.academy.internal.event.ability.PresetSwitchEvent;
-import cn.academy.internal.client.renderer.util.ACRenderingHelper;
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.cgui.component.DrawTexture;
 import cn.lambdalib2.cgui.component.Transform.WidthAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
-import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.render.font.IFont;
 import cn.lambdalib2.render.font.IFont.FontAlign;
 import cn.lambdalib2.render.font.IFont.FontOption;
@@ -28,7 +26,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,29 +45,12 @@ import java.util.Optional;
 @SideOnly(Side.CLIENT)
 public class CPBar extends Widget {
     public static final CPBar INSTANCE = new CPBar();
-
     static final float WIDTH = 964, HEIGHT = 147;
     static final float SCALE = 0.2f;
-
     static final float CP_BALANCE_SPEED = 2.0f, O_BALANCE_SPEED = 2.0f;
-
     static double sin41 = Math.sin(Math.toRadians(44.0));
-
     static IConsumptionHintProvider chProvider;
     private float overload;
-
-    @StateEventCallback
-    private static void init(FMLInitializationEvent ev) {
-        ACHud.INSTANCE.addElement(INSTANCE, () -> true, "cpbar", new Widget().size(WIDTH, HEIGHT).scale(SCALE).walign(WidthAlign.RIGHT).addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
-    }
-
-    /**
-     * Please use IConsumptionProvider with {@link Context} instead.
-     */
-    @Deprecated
-    public static void setHintProvider(IConsumptionHintProvider provider) {
-        chProvider = provider;
-    }
 
     public static ResourceLocation TEX_BACK_NORMAL = tex("back_normal"), TEX_BACK_OVERLOAD = tex("back_overload"), TEX_CP = tex("cp"), TEX_FRONT_OVERLOAD = tex("front_overload"), TEX_OVERLOADED = tex("overloaded"), TEX_OVERLOAD_HIGHLIGHT = tex("highlight_overload"), TEX_MASK = tex("mask");
 

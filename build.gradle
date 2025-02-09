@@ -19,11 +19,6 @@ group = propertyString('root_package')
 
 tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources')
 
-configurations {
-    embed
-    implementation.extendsFrom(embed)
-}
-
 minecraft {
     mcVersion.set('1.12.2')
 
@@ -140,10 +135,6 @@ tasks.register('prioritizeCoremods') {
             }
         }
     }
-}
-
-tasks.withType(ScalaCompile) {
-    options.encoding = 'UTF-8'
 }
 
 idea {

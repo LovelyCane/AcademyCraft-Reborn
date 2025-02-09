@@ -1,9 +1,12 @@
 package cn.academy.internal.client.ui.auxgui;
 
 import cn.academy.AcademyCraft;
+import cn.academy.Resources;
 import cn.lambdalib2.auxgui.AuxGui;
 import cn.lambdalib2.cgui.CGui;
 import cn.lambdalib2.cgui.Widget;
+import cn.lambdalib2.cgui.component.DrawTexture;
+import cn.lambdalib2.cgui.component.Transform;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,10 +23,12 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ACHud extends AuxGui {
     public static final ACHud INSTANCE = new ACHud();
-
     private final List<Node> nodes = new ArrayList<>();
-
     private final CGui gui = new CGui();
+
+    static {
+        ACHud.INSTANCE.addElement(CPBar.INSTANCE, () -> true, "cpbar", new Widget().size(CPBar.WIDTH, CPBar.HEIGHT).scale(CPBar.SCALE).walign(Transform.WidthAlign.RIGHT).addComponent(new DrawTexture().setTex(Resources.getTexture("guis/edit_preview/cpbar"))));
+    }
 
     private ACHud() {
         foreground = false;

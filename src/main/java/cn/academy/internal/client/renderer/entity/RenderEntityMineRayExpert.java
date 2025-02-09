@@ -7,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class RenderEntityMineRayExpert extends RenderRayComposite {
     public RenderEntityMineRayExpert(RenderManager manager) {
@@ -22,7 +24,7 @@ public class RenderEntityMineRayExpert extends RenderRayComposite {
     }
 
     @Override
-    public void doRender(Entity ent, double x,
+    public void doRender(@Nonnull Entity ent, double x,
                          double y, double z, float a, float b) {
         this.cylinderIn.width = 0.045;
         this.cylinderIn.color.set(216, 248, 216, 180);

@@ -10,7 +10,6 @@ import org.lwjgl.opengl.GL11;
  * This class essentially transforms the origin to the player's hand in thirdPerson or firstPerson.
  * @author WeAthFolD
  */
-@Deprecated
 public class ViewOptimize {
     public interface IAssociatePlayer {
         EntityPlayer getPlayer();

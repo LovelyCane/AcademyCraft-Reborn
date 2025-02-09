@@ -6,6 +6,7 @@
  */
 package cn.lambdalib2.s11n.network;
 
+import cn.academy.internal.ability.vanilla.teleporter.skill.LTNetDelegate;
 import cn.lambdalib2.registry.StateEventCallback;
 import cn.lambdalib2.s11n.SerializationHelper;
 import cn.lambdalib2.s11n.SerializeDynamic;
@@ -477,6 +478,9 @@ public class NetworkS11n {
                 return new BlockPos(x, y, z);
             }
         });
+
+        NetworkS11n.register(ArrayList.class);
+        NetworkS11n.addDirectInstance(new LTNetDelegate());
     }
 
     private NetworkS11n() {

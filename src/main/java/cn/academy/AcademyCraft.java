@@ -7,6 +7,7 @@ import cn.academy.internal.ability.vanilla.VanillaCategories;
 import cn.academy.internal.ability.vanilla.electromaster.CatElectromaster;
 import cn.academy.internal.ability.vanilla.meltdowner.skill.ElectronBomb;
 import cn.academy.internal.ability.vanilla.meltdowner.skill.SBNetDelegate;
+import cn.academy.internal.advancements.ACAdvancements;
 import cn.academy.internal.event.AcademyCraftEventManager;
 import cn.lambdalib2.auxgui.AuxGuiHandler;
 import cn.lambdalib2.registry.RegistryMod;
@@ -99,6 +100,7 @@ public class AcademyCraft {
         OreDictionary.registerOre("plateIron", AcademyCraftItemList.REINFORCED_IRON_PLATE);
         Controllable.init();
         VanillaCategories.init();
+        ACAdvancements.init();
     }
 
     @EventHandler

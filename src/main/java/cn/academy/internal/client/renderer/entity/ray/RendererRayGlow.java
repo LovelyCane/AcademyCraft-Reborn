@@ -3,7 +3,6 @@ package cn.academy.internal.client.renderer.entity.ray;
 import cn.academy.Resources;
 import cn.academy.internal.entity.IRay;
 import cn.lambdalib2.render.legacy.ShaderSimple;
-import cn.lambdalib2.render.legacy.Tessellator;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.RenderUtils;
 import cn.lambdalib2.util.VecUtils;
@@ -19,7 +18,6 @@ import static org.lwjgl.opengl.GL11.*;
  * @author WeAthFolD
  */
 public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
-
     public static final double DEFAULT_WIDTH = 0.9;
 
     public double width;
@@ -39,7 +37,7 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
         setWidth(DEFAULT_WIDTH);
     }
 
-    public RendererRayGlow setWidth(double w) {
+    public RendererRayGlow<T> setWidth(double w) {
         width = w;
         return this;
     }
@@ -50,8 +48,6 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
         glAlphaFunc(GL_GREATER, 0.05f);
         glEnable(GL_BLEND);
         ShaderSimple.instance().useProgram();
-
-        Tessellator t = Tessellator.instance;
 
         Vec3d look = VecUtils.subtract(end, start).normalize();
 
@@ -82,14 +78,12 @@ public class RendererRayGlow<T extends IRay> extends RendererRayBaseGlow<T> {
         glAlphaFunc(GL_GEQUAL, 0.1f);
     }
 
-    public static RendererRayGlow createFromName(RenderManager m, String name) {
+    public static RendererRayGlow<IRay> createFromName(RenderManager m, String name) {
         try {
             ResourceLocation[] mats = Resources.getRayTextures(name);
-            return new RendererRayGlow(m, mats[0], mats[1], mats[2]);
+            return new RendererRayGlow<>(m, mats[0], mats[1], mats[2]);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
-
 }

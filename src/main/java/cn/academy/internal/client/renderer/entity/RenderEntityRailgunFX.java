@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class RenderEntityRailgunFX extends RenderRayComposite {
     ArcFactory.Arc[] arcs;
@@ -43,7 +45,7 @@ public class RenderEntityRailgunFX extends RenderRayComposite {
     }
 
     @Override
-    public void doRender(Entity ent, double x, double y, double z, float a, float b) {
+    public void doRender(@Nonnull Entity ent, double x, double y, double z, float a, float b) {
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         ViewOptimize.fix((ViewOptimize.IAssociatePlayer) ent);

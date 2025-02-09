@@ -7,6 +7,7 @@ import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.ctrl.ClientHandler;
 import cn.academy.internal.ability.vanilla.meltdowner.skill.MDDamageHelper;
 import cn.academy.internal.ability.vanilla.teleporter.client.CriticalHitEffect;
+import cn.academy.internal.client.CameraPosition;
 import cn.academy.internal.client.misc.MusicSystem;
 import cn.academy.internal.client.renderer.util.VanillaHandRenderer;
 import cn.academy.internal.datapart.CPData;
@@ -34,6 +35,7 @@ public class AcademyCraftEventManager {
             MinecraftForge.EVENT_BUS.register(ParticleFactoryBase.EventHandlers.class);
             MinecraftForge.EVENT_BUS.register(ControlOverrider.Events.class);
             MinecraftForge.EVENT_BUS.register(AuxGuiHandler.class);
+            MinecraftForge.EVENT_BUS.register(CameraPosition.class);
         }
         MinecraftForge.EVENT_BUS.register(AcademyCraftRegister.class);
         MinecraftForge.EVENT_BUS.register(CPData.Events.class);

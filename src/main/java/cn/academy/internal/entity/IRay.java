@@ -9,7 +9,6 @@ import net.minecraft.util.math.Vec3d;
  * @author WeAthFolD
  */
 public interface IRay extends ViewOptimize.IAssociatePlayer {
-    
     void onRenderTick();
     
     Vec3d getRayPosition();
@@ -23,12 +22,12 @@ public interface IRay extends ViewOptimize.IAssociatePlayer {
     
     //---TileEntityDeveloperAdvanced parameters
     /**
-     * @return An alpha multiplyer. Can be used for blend out.
+     * @return An alpha multiplier. Can be used for blend out.
      */
     double getAlpha();
     
     /**
-     * @return The alpha multiplyer of the glow texture.
+     * @return The alpha multiplier of the glow texture.
      */
     double getGlowAlpha();
     
@@ -38,8 +37,7 @@ public interface IRay extends ViewOptimize.IAssociatePlayer {
     double getStartFix();
     
     /**
-     * Get the current ray width multiplyer. Used for blending
+     * Get the current ray width multiplier. Used for blending
      */
     double getWidth();
-    
 }

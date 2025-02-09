@@ -17,9 +17,8 @@ import java.util.List;
  *
  * @author WeAthFolD
  */
-public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
-
-    public double width = 0.08;
+public class RendererRayCylinder extends RendererRayBaseSimple {
+    public double width;
 
     public double headFix = 1.0;
 
@@ -49,8 +48,6 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
 
                 List<double[]> vertices = new ArrayList<>();
                 List<Integer> faces = new ArrayList<>();
-
-                int vertOffset = 0;
 
                 double x = 0.0;
                 for (int i = 0; i <= D; ++i) { //Loop through the x+ axis
@@ -85,8 +82,8 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
                 head.setQuads(faces.toArray(new Integer[]{}));
             }
             { //Build the cylinder.
-                List<double[]> vertices = new ArrayList();
-                List<Integer> faces = new ArrayList();
+                List<double[]> vertices = new ArrayList<>();
+                List<Integer> faces = new ArrayList<>();
 
                 for (int j = 0; j < DIV; ++j) {
                     double[] p1 = new double[]{0, sins[j], cosines[j]};
@@ -112,12 +109,8 @@ public class RendererRayCylinder<T extends IRay> extends RendererRayBaseSimple {
                 cylinder.setQuads(faces.toArray(new Integer[]{}));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    public RendererRayCylinder(RenderManager rm) {
-        this(rm, 0.08);
     }
 
     public RendererRayCylinder(RenderManager renderManager, double width) {

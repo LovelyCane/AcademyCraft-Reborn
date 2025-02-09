@@ -17,12 +17,6 @@ public class LTNetDelegate {
     public static final String MSG_REMOVE = "remove";
     public static final String MSG_PERFORM = "perform";
 
-    @StateEventCallback
-    public static void _init(FMLInitializationEvent fMLInitializationEvent) {
-        NetworkS11n.register(ArrayList.class);
-        NetworkS11n.addDirectInstance(new LTNetDelegate());
-    }
-
     public static void send(String channel, Object... args) {
         NetworkMessage.sendToServer(new LTNetDelegate(), channel, args);
     }

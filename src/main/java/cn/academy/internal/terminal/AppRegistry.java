@@ -1,13 +1,17 @@
 package cn.academy.internal.terminal;
 
+import cn.academy.internal.terminal.app.MusicApp;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AppRegistry {
+    private static final List<App> appList = new ArrayList<>();
 
-    private static List<App> appList = new ArrayList<>();
+    static {
+        AppRegistry.register(new MusicApp());
+    }
 
     public static void register(App app) {
         appList.add(app);

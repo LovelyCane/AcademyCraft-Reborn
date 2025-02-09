@@ -9,12 +9,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class uses some little hacks. By rendering all the barrage rays within a 
- * single render we avoid a fair amount of perfomance overheads.
+ * single render we avoid a fair amount of performance overheads.
  * @author WeAthFolD
  */
 @SideOnly(Side.CLIENT)
 public class EntityMdRayBarrage extends EntityRayBase {
-
     public SubRay[] subrays;
 
     public EntityMdRayBarrage(World world, double x, double y, double z, float yaw, float pitch) {
@@ -46,7 +45,7 @@ public class EntityMdRayBarrage extends EntityRayBase {
         return false;
     }
 
-    public class SubRay {
+    public static class SubRay {
         public float yawOffset;
         public float pitchOffset;
         

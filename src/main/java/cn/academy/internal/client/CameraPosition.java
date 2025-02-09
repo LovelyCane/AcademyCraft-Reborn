@@ -1,12 +1,9 @@
 package cn.academy.internal.client;
 
-import cn.lambdalib2.registry.StateEventCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,7 +13,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW_MATRIX;
+import static org.lwjgl.opengl.GL11.glGetFloat;
 
 /**
  * This class stores render camera position in world space each frame.
@@ -24,12 +22,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 public class CameraPosition {
-    @StateEventCallback
-    private static void _init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new CameraPosition());
+    private CameraPosition() {
     }
-
-    private CameraPosition() {}
 
     private static Vector3f result;
 
@@ -53,7 +47,7 @@ public class CameraPosition {
     }
 
     @SubscribeEvent
-    public void onRender(RenderWorldLastEvent evt) {
+    public static void onRender(RenderWorldLastEvent evt) {
         // update result
         floatBuffer.clear();
 
@@ -68,5 +62,4 @@ public class CameraPosition {
 
         result.set(matrix.m30, matrix.m31, matrix.m32);
     }
-
 }

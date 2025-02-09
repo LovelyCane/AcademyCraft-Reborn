@@ -16,11 +16,6 @@ public class MusicApp extends App {
         super("media_player");
     }
 
-    @StateEventCallback
-    private static void init(FMLPreInitializationEvent event) {
-        AppRegistry.register(new MusicApp());
-    }
-
     @SideOnly(Side.CLIENT)
     public AppEnvironment createEnvironment() {
         return new AppEnvironment() {
