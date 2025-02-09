@@ -1,30 +1,22 @@
 /**
-* Copyright (c) Lambda Innovation, 2013-2016
-* This file is part of LambdaLib modding library.
-* https://github.com/LambdaInnovation/LambdaLib
-* Licensed under MIT, see project root for more information.
-*/
+ * Copyright (c) Lambda Innovation, 2013-2016
+ * This file is part of LambdaLib modding library.
+ * https://github.com/LambdaInnovation/LambdaLib
+ * Licensed under MIT, see project root for more information.
+ */
 package cn.lambdalib2.cgui.component;
 
-import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
+import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
 import org.lwjgl.opengl.GL11;
-
-import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.cgui.event.FrameEvent;
 import org.lwjgl.util.Color;
 
 /**
  * @author WeAthFolD
  */
-@CGuiEditorComponent
 public class Tint extends Component {
-    
-    public Color
-        idleColor,
-        hoverColor;
-    
+    public Color idleColor, hoverColor;
     public boolean affectTexture = false;
 
     public double zLevel = 0.0;
@@ -37,23 +29,23 @@ public class Tint extends Component {
         this(idle, hover);
         affectTexture = _affectTexture;
     }
-    
+
     public Tint(Color idle, Color hover) {
         super("Tint");
 
         idleColor = idle;
         hoverColor = hover;
-        
+
         listen(FrameEvent.class, (w, event) -> {
-            if(affectTexture) {
+            if (affectTexture) {
                 DrawTexture dt = w.getComponent(DrawTexture.class);
-                if(dt != null) {
+                if (dt != null) {
                     dt.color = event.hovering ? hoverColor : idleColor;
                 }
             } else {
-                if(event.hovering) Colors.bindToGL(hoverColor);
+                if (event.hovering) Colors.bindToGL(hoverColor);
                 else Colors.bindToGL(idleColor);
-                
+
                 GL11.glDisable(GL11.GL_ALPHA_TEST);
                 HudUtils.pushZLevel();
                 HudUtils.zLevel = zLevel;
@@ -61,10 +53,5 @@ public class Tint extends Component {
                 HudUtils.popZLevel();
             }
         });
-    }
-
-    public Tint setAffectTexture() {
-        affectTexture = true;
-        return this;
     }
 }

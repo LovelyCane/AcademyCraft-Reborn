@@ -11,7 +11,6 @@ package cn.lambdalib2.cgui.event;
  * (For convenience reasons, they are handled in {@link LeftClickEvent} and {@link RightClickEvent}.)
  */
 public class MouseClickEvent implements GuiEvent {
-
     /**
      * Mouse position in local coordinate space.
      */
@@ -27,5 +26,4 @@ public class MouseClickEvent implements GuiEvent {
         my = _my;
         button = bid;
     }
-
 }

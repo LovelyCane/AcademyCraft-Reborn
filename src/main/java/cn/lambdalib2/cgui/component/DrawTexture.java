@@ -1,7 +1,6 @@
 package cn.lambdalib2.cgui.component;
 
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.util.Colors;
 import cn.lambdalib2.util.HudUtils;
@@ -15,7 +14,6 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 /**
  * Draws a squared texture that fills the area of the given widget.
  */
-@CGuiEditorComponent
 public class DrawTexture extends Component {
     public static final ResourceLocation MISSING = new ResourceLocation("lambdalib2:textures/cgui/missing.png");
 
@@ -35,7 +33,7 @@ public class DrawTexture extends Component {
 
     public DepthTestMode depthTestMode = DepthTestMode.Default;
 
-    private int shaderId = 0;
+    private final int shaderId = 0;
 
     public DrawTexture() {
         this(MISSING);
@@ -97,10 +95,6 @@ public class DrawTexture extends Component {
 
     public DrawTexture(ResourceLocation _texture, Color _color) {
         this("DrawTexture", _texture, _color);
-    }
-
-    public void setShaderId(int id) {
-        shaderId = id;
     }
 
     public DrawTexture setTex(ResourceLocation t) {

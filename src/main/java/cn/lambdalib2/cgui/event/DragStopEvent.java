@@ -11,7 +11,4 @@ package cn.lambdalib2.cgui.event;
  * @author WeAthFolD
  */
 public class DragStopEvent implements GuiEvent {
-
-    public DragStopEvent() {}
-
 }

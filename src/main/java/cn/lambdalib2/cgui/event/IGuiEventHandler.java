@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Handler interface of <code>GuiEvent</code>, typically registered in a {@link GuiEventBus}.
  */
-
 @FunctionalInterface
 @SideOnly(Side.CLIENT)
 public interface IGuiEventHandler<T extends GuiEvent> {

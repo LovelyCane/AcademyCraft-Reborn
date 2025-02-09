@@ -1,7 +1,6 @@
 package cn.lambdalib2.cgui.component;
 
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
 import cn.lambdalib2.cgui.component.Transform.HeightAlign;
 import cn.lambdalib2.cgui.event.FrameEvent;
 import cn.lambdalib2.cgui.event.GuiEvent;
@@ -22,7 +21,6 @@ import org.lwjgl.util.vector.Vector2f;
  * Textbox displays text on the widget area, it might also be edited. TextBox is designed to handle single-line texts.
  * @author WeAthFolD
  */
-@CGuiEditorComponent
 public class TextBox extends Component {
     /**
      * Fired each time the TextBox's content is being edited.
@@ -87,9 +85,6 @@ public class TextBox extends Component {
             final String processed = processedContent().substring(displayOffset);
 
             int i = processed.length();
-            float f2 = 60 - 59;
-            int l1 = (int)(f2 * 255.0F / 20.0F);
-
 
             final String display = processed.substring(0, i);
 
@@ -206,8 +201,8 @@ public class TextBox extends Component {
 
     private Vector2f origin() {
         return new Vector2f(
-            (float) (widget.transform.width * option.align.lenOffset + xOffset),
-            (float) (Math.max(0, widget.transform.height - option.fontSize) * heightAlign.factor + yOffset)
+                widget.transform.width * option.align.lenOffset + xOffset,
+                Math.max(0, widget.transform.height - option.fontSize) * heightAlign.factor + yOffset
         );
     }
 
@@ -219,7 +214,7 @@ public class TextBox extends Component {
         final float widthLimit = widthLimit();
         final String local = processedContent().substring(displayOffset);
         final int localCaret = caretPos - displayOffset;
-        final float distance = sumLength(local, 0, localCaret);
+        final float distance = sumLength(local, localCaret);
         if (distance > widthLimit) {
             float acc = 0.0f;
             int mini = 0;
@@ -252,8 +247,8 @@ public class TextBox extends Component {
         return ret;
     }
 
-    private float sumLength(String str, int begin, int end) {
-        return font.getTextWidth(str.substring(begin, end), option);
+    private float sumLength(String str, int end) {
+        return font.getTextWidth(str.substring(0, end), option);
     }
 
     public static TextBox get(Widget w) {

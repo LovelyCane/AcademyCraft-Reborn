@@ -11,6 +11,5 @@ package cn.lambdalib2.cgui.event;
  *
  * @author WeAthFolD
  */
-
 public interface GuiEvent {
 }

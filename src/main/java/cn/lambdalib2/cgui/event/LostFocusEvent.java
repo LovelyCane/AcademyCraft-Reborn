@@ -15,11 +15,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public class LostFocusEvent implements GuiEvent {
-    
     public Widget newFocus;
     
     public LostFocusEvent(Widget _newFocus) {
         newFocus = _newFocus;
     }
-    
 }

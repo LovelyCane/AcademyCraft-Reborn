@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -25,15 +26,6 @@ public class WidgetContainer implements Iterable<Widget> {
     LinkedList<Widget> widgetList = new LinkedList<>(); //List sorted in non-descending widget zOrder.
     
     private static final String UNNAMED_PRE = "Unnamed ";
-    
-    /**
-     * Deep copy.
-     */
-    public void addAll(WidgetContainer container) {
-        for (Widget w : container.getDrawList()) {
-            addWidget(w.getName(), w.copy());
-        }
-    }
     
     /**
      * Walk the widget list and check their states. This should be called explicitly from tick check events.
@@ -63,8 +55,6 @@ public class WidgetContainer implements Iterable<Widget> {
     
     /**
      * Add a widget into the container.
-     * @param name
-     * @param add
      * @param begin If true the widget will be add at the begin of the draw list. (Draw first), otherwise the last.
      * @return if the operation is successful. (False for id duplication)
      */
@@ -185,6 +175,7 @@ public class WidgetContainer implements Iterable<Widget> {
         return ImmutableList.copyOf(widgetList);
     }
     
+    @Nonnull
     public Iterator<Widget> iterator() {
         return getDrawList().iterator();
     }

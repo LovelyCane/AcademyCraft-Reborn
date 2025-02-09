@@ -105,15 +105,12 @@ public class CGui extends WidgetContainer {
         if (this.hasWidget(name))
             return false;
         super.addWidget(name, w);
-        eventBus.postEvent(null, new AddWidgetEvent(w));
         return true;
     }
 
     /**
      * Standard GuiScreen class callback.
      *
-     * @param mx
-     * @param my
      * @param btn the mouse button ID.
      */
     public void mouseClickMove(int mx, int my, int btn) {
@@ -368,7 +365,6 @@ public class CGui extends WidgetContainer {
             }
         } catch (Exception e) {
             Debug.error("Error occured handling widget draw. instance class: " + cur.getClass().getName() + ", name: " + cur.getName());
-            e.printStackTrace();
         }
 
         if (cur == null || cur.isVisible()) {

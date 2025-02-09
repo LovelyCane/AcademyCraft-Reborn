@@ -11,7 +11,6 @@ package cn.lambdalib2.cgui.component;
  * @author WeAthFolD
  */
 public class Transform extends Component {
-    
     public enum WidthAlign { LEFT, CENTER, RIGHT;
         public final float factor;
         WidthAlign() {
@@ -65,16 +64,8 @@ public class Transform extends Component {
         return this;
     }
     
-    public Transform setCenteredAlign() {
+    public void setCenteredAlign() {
         alignWidth = WidthAlign.CENTER;
         alignHeight = HeightAlign.CENTER;
-        return this;
     }
-
-    public Transform setAlign(WidthAlign walign, HeightAlign halign) {
-        alignWidth = walign;
-        alignHeight = halign;
-        return this;
-    }
-    
 }

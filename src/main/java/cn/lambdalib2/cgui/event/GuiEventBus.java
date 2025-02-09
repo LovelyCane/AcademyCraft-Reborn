@@ -15,8 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class GuiEventBus {
-    
-    private class NodeCollection extends LinkedList<GuiHandlerNode> {
+    private static class NodeCollection extends LinkedList<GuiHandlerNode> {
         
         List<GuiHandlerNode> toadd = new ArrayList<>();
         List<Object> toremove = new ArrayList<>();
@@ -31,7 +30,7 @@ public final class GuiEventBus {
             } else {
                 boolean res = super.add(node);
                 if(res) {
-                    Collections.sort(this, priorityCmp);
+                    this.sort(priorityCmp);
                 }
                 return res;
             }
@@ -54,7 +53,7 @@ public final class GuiEventBus {
             addAll(toadd);
             removeAll(toremove);
             if(!toadd.isEmpty()) {
-                Collections.sort(this, priorityCmp);
+                this.sort(priorityCmp);
             }
             toadd.clear();
             toremove.clear();
@@ -66,7 +65,7 @@ public final class GuiEventBus {
     
     Map< Class<? extends GuiEvent>, NodeCollection > eventHandlers = new HashMap<>();
     
-    public final void postEvent(Widget widget, GuiEvent event) {
+    public void postEvent(Widget widget, GuiEvent event) {
         NodeCollection list = eventHandlers.get(event.getClass());
         if(list != null) {
             list.startIterating();
@@ -102,16 +101,6 @@ public final class GuiEventBus {
         getRawList(clazz).remove(new GuiHandlerNode(handler, 0, false));
     }
 
-    /**
-     * Remove the given listener from this event bus, if it is in the bus.
-     */
-    public <T extends GuiEvent> void unlisten(IGuiEventHandler<T> handler) {
-        GuiHandlerNode cmp = new GuiHandlerNode(handler);
-        for (NodeCollection col : eventHandlers.values()) {
-            col.remove(cmp);
-        }
-    }
-
     private NodeCollection getRawList(Class<? extends GuiEvent> clazz) {
         NodeCollection ret = eventHandlers.get(clazz);
         if(ret == null) {
@@ -139,15 +128,11 @@ public final class GuiEventBus {
         return ret;
     }
     
-    private class GuiHandlerNode {
+    private static class GuiHandlerNode {
         final IGuiEventHandler handler;
         final int priority;
         final boolean copySensitive;
 
-        public GuiHandlerNode(IGuiEventHandler _handler) {
-            this(_handler, 0, false);
-        }
-        
         public GuiHandlerNode(IGuiEventHandler _handler, int _priority, boolean _copySensitive) {
             handler = _handler;
             priority = _priority;
@@ -166,5 +151,4 @@ public final class GuiEventBus {
     }
 
     static final Comparator<GuiHandlerNode> priorityCmp = Comparator.comparingInt(n -> -n.priority);
-    
 }

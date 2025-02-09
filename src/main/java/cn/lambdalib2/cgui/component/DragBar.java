@@ -1,17 +1,15 @@
 package cn.lambdalib2.cgui.component;
 
 import cn.lambdalib2.cgui.Widget;
-import cn.lambdalib2.cgui.annotation.CGuiEditorComponent;
 import cn.lambdalib2.cgui.event.DragEvent;
 import cn.lambdalib2.cgui.event.GuiEvent;
 import cn.lambdalib2.util.MathUtils;
 
-@CGuiEditorComponent
 public class DragBar extends Component {
+    public static class DraggedEvent implements GuiEvent {
+    }
 
-    public static class DraggedEvent implements GuiEvent {}
-
-    public enum Axis { X, Y }
+    public enum Axis {X, Y}
 
     /**
      * Lower and upper bound of the drag area.
@@ -26,7 +24,7 @@ public class DragBar extends Component {
 
     public DragBar(Axis _axis, float _y0, float _y1) {
         this();
-        axis  = _axis;
+        axis = _axis;
         lower = _y0;
         upper = _y1;
     }
@@ -78,15 +76,6 @@ public class DragBar extends Component {
         }
 
         widget.dirty = true;
-    }
-
-    /**
-     * Set the drag area.
-     */
-    public DragBar setArea(float _lower, float _upper) {
-        lower = _lower;
-        upper = _upper;
-        return this;
     }
 
     public static DragBar get(Widget w) {
