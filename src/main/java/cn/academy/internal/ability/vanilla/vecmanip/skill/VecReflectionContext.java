@@ -1,13 +1,7 @@
 package cn.academy.internal.ability.vanilla.vecmanip.skill;
 
-import cn.academy.internal.ability.context.ClientContext;
-import cn.academy.internal.ability.context.ClientRuntime;
 import cn.academy.internal.ability.context.Context;
-import cn.academy.internal.ability.context.RegClientContext;
-import cn.academy.internal.ability.vanilla.vecmanip.client.effect.WaveEffect;
-import cn.academy.internal.ability.vanilla.vecmanip.client.effect.WaveEffectUI;
 import cn.academy.internal.event.ability.ReflectEvent;
-import cn.academy.internal.sound.ACSounds;
 import cn.lambdalib2.s11n.network.NetworkMessage;
 import cn.lambdalib2.util.RandUtils;
 import cn.lambdalib2.util.Raytrace;
@@ -19,16 +13,12 @@ import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityLargeFireball;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
@@ -37,7 +27,6 @@ import java.util.Set;
 
 import static cn.academy.internal.ability.vanilla.vecmanip.skill.VecReflection.MSG_EFFECT;
 import static cn.academy.internal.ability.vanilla.vecmanip.skill.VecReflection.MSG_REFLECT_ENTITY;
-import static cn.academy.internal.ability.vanilla.vecmanip.skill.VecReflectionContext.reflect;
 import static cn.lambdalib2.util.MathUtils.lerpf;
 import static cn.lambdalib2.util.VecUtils.*;
 
@@ -93,10 +82,13 @@ public class VecReflectionContext extends Context<VecReflection> {
     }
 
     public static void reflect(Entity entity, EntityPlayer player) {
-        Vec3d lookPos = Raytrace.getLookingPos(player, 20).getLeft();
-        double speed = new Vec3d(entity.motionX, entity.motionY, entity.motionZ).length();
-        Vec3d vel = multiply(subtract(lookPos, entityHeadPos(entity)).normalize(), speed);
-        setMotion(entity, vel);
+        Vec3d currentVelocity = new Vec3d(entity.motionX, entity.motionY, entity.motionZ);
+
+        // 计算投掷物的反向速度，实现原路返回
+        Vec3d reversedVelocity = currentVelocity.scale(-1);
+
+        // 设置新速度，使其按原路返回
+        setMotion(entity, reversedVelocity);
     }
 
     private void createNewFireball(EntityFireball source) {
